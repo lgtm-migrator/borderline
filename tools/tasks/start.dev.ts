@@ -1,7 +1,7 @@
 import * as gulpLoadPlugins from 'gulp-load-plugins';
 import * as path from 'path';
 
-import { APP_DEST, APP_SERVER } from '../config';
+import { APP_CLIENT, APP_DEST, APP_SERVER, APP_SOURCE } from '../config';
 
 const plugins = <any>gulpLoadPlugins();
 
@@ -12,19 +12,27 @@ export = () => {
 
     let stream = plugins.nodemon({
         cwd: APP_DEST,
-        ext: 'ts',
+        ext: 'js, ts, css, scss, svg, json, map',
         script: 'application.js',
         tasks: (changedFiles: string[]) => {
             let tasks: string[] = [];
             changedFiles.forEach((file: string) => {
                 console.error(require('chalk').white.bgBlue.bold(`File change : ${path.normalize(file)}`));
-                if (path.extname(file) === '.ts' && tasks.indexOf('build.server.ts.dev') === -1) {
-                    tasks.push('build.server.ts.dev');
+                if (path.extname(file) === '.ts') {
+                    if (file.indexOf(APP_SERVER.replace('/', path.sep)) !== -1 && tasks.indexOf('build.server.ts.dev') === -1) {
+                        tasks.push('build.server.ts.dev');
+                    } else if (file.indexOf(APP_CLIENT.replace('/', path.sep)) !== -1 && tasks.indexOf('build.client.ts.dev') === -1) {
+                        tasks.push('build.client.ts.dev');
+                    }
+                } else if (path.extname(file) === '.scss' && tasks.indexOf('build.client.scss.dev') === -1) {
+                    tasks.push('build.client.scss.dev');
+                } else {
+                    tasks.push('build.assets.dev');
                 }
             });
             return tasks;
         },
-        watch: [`../../${APP_SERVER}`],
+        watch: `../../${APP_SOURCE}`,
     });
 
     stream

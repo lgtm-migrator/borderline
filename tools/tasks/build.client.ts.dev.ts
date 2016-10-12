@@ -3,8 +3,8 @@ import * as gulpLoadPlugins from 'gulp-load-plugins';
 import * as merge from 'merge-stream';
 import { join } from 'path';
 
-import { JS_DEST, TS_SRC } from '../config';
-import { makeTsProject, templateLocals } from '../utils';
+import * as config from '../config';
+import { makeTsProject } from '../utils';
 
 const plugins = <any>gulpLoadPlugins();
 
@@ -21,9 +21,9 @@ export = () => {
   ]);
 
   let src = [
-    join(TS_SRC, '**/*.ts'),
-    '!' + join(TS_SRC, '**/*.spec.ts'),
-    '!' + join(TS_SRC, '**/*.e2e-spec.ts'),
+    join(config.TS_SRC, '**/*.ts'),
+    '!' + join(config.TS_SRC, '**/*.spec.ts'),
+    '!' + join(config.TS_SRC, '**/*.e2e-spec.ts'),
   ];
 
   let projectFiles = gulp.src(src)
@@ -37,6 +37,8 @@ export = () => {
 
   return result.js
     .pipe(plugins.sourcemaps.write())
-    .pipe(plugins.template(templateLocals()))
-    .pipe(gulp.dest(JS_DEST));
+    .pipe(plugins.template(() => {
+      return config;
+    }))
+    .pipe(gulp.dest(config.JS_DEST));
 };

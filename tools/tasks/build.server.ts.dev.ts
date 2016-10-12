@@ -3,8 +3,8 @@ import * as gulpLoadPlugins from 'gulp-load-plugins';
 import * as merge from 'merge-stream';
 import { join } from 'path';
 
-import { APP_DEST, APP_SERVER } from '../config';
-import { makeTsProject, templateLocals } from '../utils';
+import * as config from '../config';
+import { makeTsProject } from '../utils';
 
 const plugins = <any>gulpLoadPlugins();
 
@@ -21,9 +21,9 @@ export = () => {
   ]);
 
   let src = [
-    join(APP_SERVER, '**/*.ts'),
-    '!' + join(APP_SERVER, '**/*.spec.ts'),
-    '!' + join(APP_SERVER, '**/*.e2e-spec.ts'),
+    join(config.APP_SERVER, '**/*.ts'),
+    '!' + join(config.APP_SERVER, '**/*.spec.ts'),
+    '!' + join(config.APP_SERVER, '**/*.e2e-spec.ts'),
   ];
 
   let projectFiles = gulp.src(src)
@@ -37,6 +37,8 @@ export = () => {
 
   return result.js
     .pipe(plugins.sourcemaps.write())
-    .pipe(plugins.template(templateLocals()))
-    .pipe(gulp.dest(APP_DEST));
+    .pipe(plugins.template(() => {
+      return config;
+    }))
+    .pipe(gulp.dest(config.APP_DEST));
 };
