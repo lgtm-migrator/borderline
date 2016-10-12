@@ -27,11 +27,37 @@ coverage
 build/Release
 
 # Dependency directories
+# Commenting this out is preferred by some people, see
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
 jspm_packages
+typings
 
 # Optional npm cache directory
 .npm
 
 # Optional REPL history
 .node_repl_history
+
+
+# Users Environment Variables
+.lock-wscript
+.tsdrc
+.typingsrc
+
+#IDE configuration files
+.idea
+.vscode
+*.iml
+
+/tools/**/*.js
+dist
+dev
+docs
+lib
+test
+tmp
+
+gulpfile.js
+gulpfile.js.map
+
