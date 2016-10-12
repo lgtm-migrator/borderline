@@ -21,3 +21,10 @@ gulp.task('serve.dev', (done: any) =>
     'build.dev',
     'start.dev',
     done));
+
+gulp.task('watch.client.dev', (done: any) =>
+  runSequence(
+    'watch.assets.dev',
+    'watch.client.scss.dev',
+    'watch.client.ts.dev',
+    done));
