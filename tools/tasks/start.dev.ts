@@ -12,7 +12,7 @@ export = () => {
 
     let stream = plugins.nodemon({
         cwd: APP_DEST,
-        ext: 'js, ts, css, scss, svg, json, map',
+        ext: 'js, ts, css, scss, svg, json, map, handlebars, html',
         script: 'application.js',
         tasks: (changedFiles: string[]) => {
             let tasks: string[] = [];
