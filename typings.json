@@ -1,0 +1,33 @@
+{
+  "globalDependencies": {
+    "body-parser": "registry:dt/body-parser#0.0.0+20160619023215",
+    "chalk": "registry:dt/chalk#0.4.0+20160317120654",
+    "core-js": "registry:dt/core-js#0.0.0+20160914114559",
+    "debug": "registry:dt/debug#0.0.0+20160317120654",
+    "errorhandler": "registry:dt/errorhandler#0.0.0+20160316155526",
+    "express": "registry:dt/express#4.0.0+20160708185218",
+    "express-handlebars": "registry:dt/express-handlebars#0.0.0+20160316155526",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20161008174359",
+    "gulp": "registry:dt/gulp#3.8.0+20160907112908",
+    "gulp-debug": "registry:dt/gulp-debug#2.0.1+20160316155526",
+    "gulp-load-plugins": "registry:dt/gulp-load-plugins#0.0.0+20160316155526",
+    "gulp-sass": "registry:dt/gulp-sass#0.0.0+20160316155526",
+    "gulp-util": "registry:dt/gulp-util#0.0.0+20160316155526",
+    "gulp-watch": "registry:dt/gulp-watch#4.1.1+20160316155526",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "morgan": "registry:dt/morgan#1.7.0+20160524142355",
+    "node": "registry:dt/node#6.0.0+20161010101523",
+    "orchestrator": "registry:dt/orchestrator#0.0.0+20160316155526",
+    "q": "registry:dt/q#0.0.0+20161004185634",
+    "rimraf": "registry:dt/rimraf#0.0.0+20160317120654",
+    "run-sequence": "registry:dt/run-sequence#0.0.0+20160316155526",
+    "serve-favicon": "registry:dt/serve-favicon#0.0.0+20160316155526",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
+    "through2": "registry:dt/through2#2.0.0+20160926145203",
+    "vinyl": "registry:dt/vinyl#1.2.0+20160924121322",
+    "vinyl-buffer": "registry:dt/vinyl-buffer#0.0.0+20160316155526",
+    "vinyl-source-stream": "registry:dt/vinyl-source-stream#0.0.0+20160316155526",
+    "ws": "registry:dt/ws#0.0.0+20161003184106",
+    "yargs": "registry:dt/yargs#0.0.0+20161006150200"
+  }
+}
