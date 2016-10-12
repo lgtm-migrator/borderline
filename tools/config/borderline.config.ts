@@ -52,13 +52,6 @@ export class BorderlineConfig {
   public ENV = getEnvironment();
 
   /**
-   * The flag for the debug option of the application.
-   * The default value is `false`, which can be overriden by the `--debug` flag when running `npm start`.
-   * @type {boolean}
-   */
-  public DEBUG = argv.debug || false;
-
-  /**
    * The default title of the application as used in the `<title>` tag of the
    * `index.html`.
    * @type {string}
@@ -69,13 +62,6 @@ export class BorderlineConfig {
    * The version of the application as defined in the `package.json`.
    */
   public APP_VERSION = appVersion();
-
-  /**
-   * The default title of the application as used in the `<title>` tag of the
-   * `index.html`.
-   * @type {string}
-   */
-  public APP_TITLE = `${this.APP_NAME} :: ${this.APP_VERSION}`;
 
   /**
    * The path for the base of the application at runtime.
@@ -139,12 +125,6 @@ export class BorderlineConfig {
    * @type {string}
    */
   public APP_STATIC = `${this.APP_DEST}/public`;
-
-  /**
-   * The folder of the applications scss files.
-   * @type {string}
-   */
-  public ASSETS_SRC = `${this.APP_CLIENT}/assets`;
 
   /**
    * The folder of the applications scss files.

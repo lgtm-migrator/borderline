@@ -4,14 +4,15 @@ import * as express from 'express';
 import * as expressHb from 'express-handlebars';
 import * as expressWs from 'express-ws';
 
-import * as config from '../../tools/config';
-
 /**
  * The server.
  *
  * @class Application
  */
 export class Application {
+
+    // variable to hold application configuration
+    public static config = require('./config.json');
 
     // variable to hold express
     public app: express.Express;
@@ -46,6 +47,8 @@ export class Application {
         // configure the application
         this.HTTPconfig();
         this.WSconfig();
+        // start the server
+        this.listen();
     }
 
     /**
@@ -58,16 +61,16 @@ export class Application {
 
         // register the Handlebars templating engine
         this.app.engine('handlebars', expressHb({ defaultLayout: 'main' }));
-        this.app.set('views', `${config.APP_DEST}/views`);
+        this.app.set('views', `${__dirname}/views`);
         this.app.set('view engine', 'handlebars');
 
         // defines the listening port
-        this.app.set('port', config.PORT);
+        this.app.set('port', Application.config.default.port);
 
         // defines static content routes
-        this.app.use(`${config.APP_BASE}i`, express.static(`${config.APP_STATIC}/images`));
-        this.app.use(`${config.APP_BASE}j`, express.static(config.JS_DEST));
-        this.app.use(`${config.APP_BASE}c`, express.static(config.CSS_DEST));
+        this.app.use(`${Application.config.default.base}i`, express.static(`${__dirname}/public/images`));
+        this.app.use(`${Application.config.default.base}j`, express.static(`${__dirname}/public/js`));
+        this.app.use(`${Application.config.default.base}c`, express.static(`${__dirname}/public/css`));
 
         // sends HTTP requests through the action dispatcher
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -75,8 +78,8 @@ export class Application {
         });
 
         // delivers the front page
-        this.app.get(config.APP_BASE, (req, res) => {
-            res.render('index', { title: config.APP_TITLE });
+        this.app.get(Application.config.default.base, (req, res) => {
+            res.render('index', { title: Application.config.default.name + ' :: ' + Application.config.default.version });
         });
     }
 
@@ -89,7 +92,7 @@ export class Application {
     private WSconfig() {
 
         let ews = expressWs(this.app);
-        let wss = ews.getWss(config.APP_BASE);
+        let wss = ews.getWss(Application.config.default.base);
 
         // adds a broadcasting function to the websocket handle
         wss.broadcast = (data: string) => {
@@ -105,7 +108,7 @@ export class Application {
         };
 
         // defines the event function for the websockets
-        this.app.ws(config.APP_BASE, (ws: any, req: any) => {
+        this.app.ws(Application.config.default.base, (ws: any, req: any) => {
             ws.on('message', (msg: string) => {
                 let obj = JSON.parse(msg);
                 if (obj.verb && obj.verb === 'connect') {
@@ -150,3 +153,7 @@ export class Application {
         });
     }
 }
+
+// getting on with starting the NodeJS server
+let server = Application.bootstrap();
+module.exports = server.app;
