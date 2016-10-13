@@ -6,6 +6,7 @@
     "url": "https://github.com/fguitton/borderline"
   },
   "scripts": {
+    "gulp": "gulp",
     "postinstall": "typings install && gulp check.versions && npm prune",
     "reinstall": "npm cache clean && npm install",
     "start": "gulp serve.dev --color"
