@@ -1,0 +1,130 @@
+﻿* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    overflow: hidden;
+}
+
+html {
+    background: #000000;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+}
+
+.terminal-loader {
+    z-index: 3;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin-top: 0;
+    white-space: normal;
+    /* background: #383734; */
+    background: #000000;
+    transition: all 0.5s cubic-bezier(0.190, 1.000, 0.220, 1.000);
+
+    &.connected {
+        background: #346087;
+
+        .dot {
+            visibility: hidden;
+        }
+    }
+
+    &.open {
+        top: 100vh;
+
+        .terminal-loader-icon {
+            top: -50vh;
+        }
+    }
+
+    .dot {
+        position: absolute;
+        height: 0.5vw;
+        width: 0.5vw;
+        background-color: #fff;
+        border-radius: 50%;
+        opacity: 0;
+        bottom: 0px;
+
+        &.dot-1 {
+            left: 0px;
+            margin: 0 0 0 -0.25vw;
+            animation: spin 1s linear -.5s infinite;
+        }
+
+        &.dot-2 {
+            left: 25%;
+            margin: 0 0 0 -0.25vw;
+            animation: spin 1s linear -.375s infinite;
+        }
+
+        &.dot-3 {
+            left: 50%;
+            margin: 0 0 0 -0.25vw;
+            animation: spin 1s linear -.25s infinite;
+        }
+
+        &.dot-4 {
+            left: 75%;
+            margin: 0 0 0 -0.25vw;
+            animation: spin 1s linear -.125s infinite;
+        }
+
+        &.dot-5 {
+            right: 0px;
+            margin: 0 -0.25vw 0 0;
+            animation: spin 1s linear 0s infinite;
+        }
+    }
+
+    img {
+        height: 3vw;
+        width: 4vw;
+    }
+}
+
+.terminal-loader-icon {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    margin: -1.5vw 0 0 -2.25vw;
+    width: 5vw;
+    height: 4.5vw;
+    text-align: center;
+    overflow: visible;
+    transition: all 0.5s cubic-bezier(0.190, 1.000, 0.220, 1.000);
+    opacity: 0.5;
+}
+
+@keyframes spin {
+    0% {
+        opacity: 0;
+        transform: scale3d(0.1,.1,1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale3d(1.05,1.05,1);
+    }
+
+    90% {
+        opacity: 0;
+        transform: scale3d(1.05,1.05,1);
+    }
+
+    100% {
+        transform: scale3d(0,0,1);
+    }
+}

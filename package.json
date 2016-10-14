@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/fguitton/borderline#readme",
   "devDependencies": {
+    "autoprefixer": "^6.5.1",
     "debounce": "^1.0.0",
     "event-stream": "^3.3.4",
     "events": "^1.1.1",
@@ -29,7 +30,9 @@
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
     "gulp-bom": "^1.0.0",
+    "gulp-postcss": "^6.2.0",
     "gulp-prettyerror": "^1.1.1",
+    "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^2.1.1",
     "gulp-tsb": "^2.0.1",
     "gulp-watch": "^4.3.10",

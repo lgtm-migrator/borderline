@@ -25,4 +25,3 @@ export class Application {
 
 // getting on with starting the NodeJS server
 let server = new Application();
-module.exports = server;

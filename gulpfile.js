@@ -14,6 +14,8 @@ const glob = require('glob');
 const gulp = require('gulp');
 const tsb = require('gulp-tsb');
 const bom = require('gulp-bom');
+const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
 const plumber = require('gulp-prettyerror');
 const path = require('path');
 const util = require('./build/lib/util');
@@ -21,6 +23,7 @@ const server = require('./build/lib/server')();
 const watcher = require('./build/lib/watch');
 const reporter = require('./build/lib/reporter')();
 const sourcemaps = require('gulp-sourcemaps');
+const autoprefixer = require('autoprefixer');
 
 const rootDir = path.join(__dirname, 'src');
 const options = require('./src/tsconfig.json').compilerOptions;
@@ -39,6 +42,7 @@ function createCompile(build, emitError) {
     return function (token) {
         const utf8Filter = util.filter(data => /(\/|\\)test(\/|\\).*utf8/.test(data.path));
         const tsFilter = util.filter(data => /\.ts$/.test(data.path));
+        const scssFilter = util.filter(data => /\.scss$/.test(data.path));
         const noDeclarationsFilter = util.filter(data => !(/\.d\.ts$/.test(data.path)));
 
         const input = es.through();
@@ -59,6 +63,10 @@ function createCompile(build, emitError) {
                 sourceRoot: options.sourceRoot
             }))
             .pipe(tsFilter.restore)
+            .pipe(scssFilter)
+            .pipe(sass())
+            .pipe(postcss([autoprefixer()]))
+            .pipe(scssFilter.restore)
             .pipe(reporter.end(emitError));
 
         return es.duplex(input, output);
