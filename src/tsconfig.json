@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"declaration": true,
+		"removeComments": true,
+		"noLib": false,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"sourceMap": true,
+		"pretty": true,
+		"preserveConstEnums": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitUseStrict": true,
+		"noFallthroughCasesInSwitch": true
+	},
+	"compileOnSave": false
+}

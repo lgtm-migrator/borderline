@@ -1,0 +1,46 @@
+{
+  "name": "borderline",
+  "version": "0.0.3",
+  "description": "Multi-broswer visualization tool",
+  "author": "Florian Guitton",
+  "private": true,
+  "scripts": {
+    "gulp": "gulp",
+    "preinstall": "node build/npm/preinstall.js",
+    "postinstall": "node build/npm/postinstall.js",
+    "test": "mocha",
+    "watch": "gulp watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fguitton/borderline.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fguitton/borderline/issues"
+  },
+  "homepage": "https://github.com/fguitton/borderline#readme",
+  "devDependencies": {
+    "debounce": "^1.0.0",
+    "event-stream": "^3.3.4",
+    "events": "^1.1.1",
+    "express": "^4.14.0",
+    "express-ws": "^2.0.0",
+    "glob": "^7.1.1",
+    "gulp": "^3.9.1",
+    "gulp-bom": "^1.0.0",
+    "gulp-prettyerror": "^1.1.1",
+    "gulp-sourcemaps": "^2.1.1",
+    "gulp-tsb": "^2.0.1",
+    "gulp-watch": "^4.3.10",
+    "mocha": "^3.1.2",
+    "node": "0.0.0",
+    "path": "^0.12.7",
+    "rimraf": "^2.5.4",
+    "typescript": "^2.0.3",
+    "underscore": "^1.8.3"
+  },
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}
