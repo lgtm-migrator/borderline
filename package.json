@@ -7,7 +7,7 @@
   "scripts": {
     "gulp": "gulp",
     "preinstall": "node build/npm/preinstall.js",
-    "postinstall": "node build/npm/postinstall.js",
+    "postinstall": "node build/npm/postinstall.js && npm prune",
     "test": "mocha",
     "watch": "gulp watch"
   },
@@ -26,6 +26,7 @@
     "event-stream": "^3.3.4",
     "events": "^1.1.1",
     "express": "^4.14.0",
+    "express-serve-static-core": "^0.1.1",
     "express-ws": "^2.0.0",
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
@@ -36,6 +37,7 @@
     "gulp-sourcemaps": "^2.1.1",
     "gulp-tsb": "^2.0.1",
     "gulp-watch": "^4.3.10",
+    "mime": "^1.3.4",
     "mocha": "^3.1.2",
     "path": "^0.12.7",
     "rimraf": "^2.5.4",

@@ -14,7 +14,7 @@ const allErrors = [];
 let startTime = null;
 let count = 0;
 
-function onStart() {
+function start() {
 	if (count++ > 0) {
 		return;
 	}
@@ -23,7 +23,7 @@ function onStart() {
 	util.log(`Starting ${util.colors.green('compilation')}...`);
 }
 
-function onEnd() {
+function end() {
 	if (--count > 0) {
 		return;
 	}
@@ -44,10 +44,10 @@ module.exports = () => {
 
 	result.end = emitError => {
 		errors.length = 0;
-		onStart();
+		start();
 
 		return es.through(null, function () {
-			onEnd();
+			end();
 
 			if (emitError && errors.length > 0) {
 				this.emit('error', 'Errors occurred.');

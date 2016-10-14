@@ -27,7 +27,7 @@ const autoprefixer = require('autoprefixer');
 
 const rootDir = path.join(__dirname, 'src');
 const options = require('./src/tsconfig.json').compilerOptions;
-options.verbose = false;
+options.verbose = true;
 options.sourceMap = true;
 options.rootDir = rootDir;
 options.sourceRoot = util.toFileUri(rootDir);
@@ -55,7 +55,7 @@ function createCompile(build, emitError) {
             .pipe(util.loadSourcemaps())
             .pipe(ts(token))
             .pipe(noDeclarationsFilter)
-            .pipe(build ? nls() : es.through())
+            .pipe(build ? minify() : es.through())
             .pipe(noDeclarationsFilter.restore)
             .pipe(sourcemaps.write('.', {
                 addComment: false,
@@ -66,6 +66,7 @@ function createCompile(build, emitError) {
             .pipe(scssFilter)
             .pipe(sass())
             .pipe(postcss([autoprefixer()]))
+            .pipe(build ? minify() : es.through())
             .pipe(scssFilter.restore)
             .pipe(reporter.end(emitError));
 
@@ -106,14 +107,14 @@ function watchTask(out, build) {
 }
 
 // Fast compile for development time
-gulp.task('clean-client', util.rimraf('dist'));
-gulp.task('compile-client', ['clean-client'], compileTask('dist', false));
-gulp.task('watch-client', ['clean-client'], watchTask('dist', false));
+gulp.task('clean-client', util.rimraf('dist/dev'));
+gulp.task('compile-client', ['clean-client'], compileTask('dist/dev', false));
+gulp.task('watch-client', ['clean-client'], watchTask('dist/dev', false));
 
 // Full compile, including nls and inline sources in sourcemaps, for build
-gulp.task('clean-client-build', util.rimraf('dist-build'));
-gulp.task('compile-client-build', ['clean-client-build'], compileTask('dist-build', true));
-gulp.task('watch-client-build', ['clean-client-build'], watchTask('dist-build', true));
+gulp.task('clean-client-build', util.rimraf('dist/prod'));
+gulp.task('compile-client-build', ['clean-client-build'], compileTask('dist/prod', true));
+gulp.task('watch-client-build', ['clean-client-build'], watchTask('dist/prod', true));
 
 // Default
 gulp.task('default', ['compile']);
