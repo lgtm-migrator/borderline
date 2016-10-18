@@ -27,9 +27,7 @@ class Loader {
                 '@angular/router': 'lib:@angular/router/bundles/router.umd.js',
                 '@angular/forms': 'lib:@angular/forms/bundles/forms.umd.js',
                 // other libraries
-                'reflect-metadata': 'lib:reflect-metadata/Reflect.js',
                 rxjs: 'lib:rxjs',
-                'zone.js': 'lib:zone.js/dist/zone.js',
             },
             // packages tells the System loader how to load when no filename and/or no extension
             packages: {
