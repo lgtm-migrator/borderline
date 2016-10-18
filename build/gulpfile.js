@@ -12,17 +12,17 @@ var assign = require('object-assign');
 var compilation = tsb.create(assign({ verbose: true }, require('./tsconfig.json').compilerOptions));
 
 gulp.task('compile', function () {
-	return gulp.src('**/*.ts', { base: '.' })
-		.pipe(compilation())
-		.pipe(gulp.dest(''));
+    return gulp.src('**/*.ts', { base: '.' })
+        .pipe(compilation())
+        .pipe(gulp.dest(''));
 });
 
 gulp.task('watch', function () {
-	var src = gulp.src('**/*.ts', { base: '.' });
+    var src = gulp.src('**/*.ts', { base: '.' });
 
-	return watcher('**/*.ts', { base: '.' })
-		.pipe(util.incremental(compilation, src))
-		.pipe(gulp.dest(''));
+    return watcher('**/*.ts', { base: '.' })
+        .pipe(util.incremental(compilation, src))
+        .pipe(gulp.dest(''));
 });
 
 gulp.task('default', ['compile']);
