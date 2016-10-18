@@ -5,8 +5,11 @@
 
 'use strict';
 
+import * as parser from 'body-parser';
 import * as express from 'express';
 import * as expressWs from 'express-ws';
+import * as helmet from 'helmet';
+import * as logger from 'morgan';
 
 /**
  * The server.
@@ -65,6 +68,14 @@ export class Application {
 
         // defines the listening port
         this.app.set('port', Application.config.default.port);
+
+        // setting up the logger and body parser
+        this.app.use(logger('dev'));
+        this.app.use(parser.json());
+        this.app.use(parser.urlencoded({ extended: false }));
+
+        // adding security protections
+        this.app.use(helmet());
 
         // defines static content routes
         this.app.use(express.static(`${__dirname}/public`));
