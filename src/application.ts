@@ -10,6 +10,7 @@ import * as express from 'express';
 import * as expressWs from 'express-ws';
 import * as helmet from 'helmet';
 import * as logger from 'morgan';
+import * as favicon from 'serve-favicon';
 
 /**
  * The server.
@@ -78,6 +79,7 @@ export class Application {
         this.app.use(helmet());
 
         // defines static content routes
+        this.app.use(favicon(`${__dirname}/public/images/favicon.ico`));
         this.app.use(express.static(`${__dirname}/public`));
         this.app.use(`${Application.config.default.base}i`, express.static(`${__dirname}/public/images`));
         this.app.use(`${Application.config.default.base}j`, express.static(`${__dirname}/public/scripts`));
@@ -89,7 +91,7 @@ export class Application {
         });
 
         // delivers the front page
-        this.app.get(Application.config.default.base, (req, res) => {
+        this.app.get(Application.config.default.base, (req: express.Request, res: express.Response) => {
             res.sendFile(`${__dirname}/public/index.html`);
         });
     }
