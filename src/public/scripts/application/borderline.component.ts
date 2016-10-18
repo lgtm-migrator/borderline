@@ -3,7 +3,18 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { BorderlineModule } from './borderline.module';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { Component } from '@angular/core';
 
-platformBrowserDynamic().bootstrapModule(BorderlineModule).catch((err: any) => console.error(err));
+@Component({
+    moduleId: module.id,
+    selector: 'borderline',
+    template: 'Hello World',
+})
+
+export class BorderlineComponent {
+
+    constructor() {
+        //
+    }
+
+}

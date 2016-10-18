@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<!--
+ ! Copyright (c) Florian Guitton <f.guitton@imperial.ac.uk>. All rights reserved.
+ ! Licensed under the MIT License. See LICENSE in the project root for license information.
+-->
 <html>
 
 <head>
@@ -7,10 +11,10 @@
 </head>
 
 <body>
-	<script src="j/vendor/jquery.min.js"></script>
+	<borderline></borderline>
 	<div id="tmgdo-cover" class="terminal-loader">
 		<div class="terminal-loader-icon">
-			<img src="/i/loader.svg">
+			<img src="i/loader.svg">
 			<div class="dot dot-1"></div>
 			<div class="dot dot-2"></div>
 			<div class="dot dot-3"></div>
@@ -19,7 +23,15 @@
 		</div>
 	</div>
 
-	<script src="j/application/borderline.js"></script>
+	<script src="j/vendor/reflect-metadata/Reflect.js"></script>
+	<script src="j/vendor/zone.js/dist/zone.js"></script>
+	<script src="j/vendor/systemjs/dist/system.js"></script>
+	<script src="j/application/loader.js"></script>
+	<script>
+
+        System.import('borderline');
+
+    </script>
 </body>
 
 </html>

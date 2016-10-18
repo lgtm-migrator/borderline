@@ -32,6 +32,15 @@ options.sourceMap = true;
 options.rootDir = rootDir;
 options.sourceRoot = util.toFileUri(rootDir);
 
+const injectableDependencies = [
+    'core-js',
+    'reflect-metadata',
+    'zone.js',
+    'systemjs',
+    '@angular',
+    'rxjs'
+];
+
 function createCompile(build, emitError) {
     const opts = _.clone(options);
     opts.inlineSources = !!build;
@@ -47,26 +56,33 @@ function createCompile(build, emitError) {
 
         const input = es.through();
         const output = input
+            // Prevent Gulp pipe breakage
             .pipe(plumber())
             .pipe(utf8Filter)
             .pipe(bom())
             .pipe(utf8Filter.restore)
+            // Isolate Typscript files
             .pipe(tsFilter)
             .pipe(util.loadSourcemaps())
             .pipe(ts(token))
+            // Remove declaration files
             .pipe(noDeclarationsFilter)
             .pipe(build ? minify() : es.through())
+            // Adding back declaration files
             .pipe(noDeclarationsFilter.restore)
             .pipe(sourcemaps.write('.', {
                 addComment: false,
                 includeContent: !!build,
                 sourceRoot: options.sourceRoot
             }))
+            // Lift Typscript files isolation
             .pipe(tsFilter.restore)
+            // Isolate SASS files
             .pipe(scssFilter)
             .pipe(sass())
             .pipe(postcss([autoprefixer()]))
             .pipe(build ? minify() : es.through())
+            // Lift SASS files isolation
             .pipe(scssFilter.restore)
             .pipe(reporter.end(emitError));
 
@@ -90,7 +106,6 @@ function compileTask(out, build) {
     };
 }
 
-
 function watchTask(out, build) {
     const compile = createCompile(build);
 
@@ -106,15 +121,33 @@ function watchTask(out, build) {
     };
 }
 
+function cleanTask(out, build) {
+
+    return function () {
+        util.rimraf(out);
+    };
+}
+
+function copyTask(out, build) {
+
+    return function () {
+
+        gulp.src(`node_modules/*(${injectableDependencies.join('|')})/**`, { base: 'node_modules' })
+            .pipe(gulp.dest(`${out}/public/scripts/vendor`))
+    };
+}
+
 // Fast compile for development time
-gulp.task('clean-client', util.rimraf('dist/dev'));
-gulp.task('compile-client', ['clean-client'], compileTask('dist/dev', false));
-gulp.task('watch-client', ['clean-client'], watchTask('dist/dev', false));
+gulp.task('clean-client', cleanTask('dist/dev', false));
+gulp.task('copy-client', copyTask('dist/dev', false));
+gulp.task('compile-client', ['clean-client', 'copy-client'], compileTask('dist/dev', false));
+gulp.task('watch-client', ['clean-client', 'copy-client'], watchTask('dist/dev', false));
 
 // Full compile, including nls and inline sources in sourcemaps, for build
-gulp.task('clean-client-build', util.rimraf('dist/prod'));
-gulp.task('compile-client-build', ['clean-client-build'], compileTask('dist/prod', true));
-gulp.task('watch-client-build', ['clean-client-build'], watchTask('dist/prod', true));
+gulp.task('clean-client-build', cleanTask('dist/prod', true));
+gulp.task('copy-client-build', copyTask('dist/prod', true));
+gulp.task('compile-client-build', ['copy-client-build', 'clean-client-build'], compileTask('dist/prod', true));
+gulp.task('watch-client-build', ['copy-client-build', 'clean-client-build'], watchTask('dist/prod', true));
 
 // Default
 gulp.task('default', ['compile']);
