@@ -28,7 +28,7 @@ const autoprefixer = require('autoprefixer');
 const rootDir = path.join(__dirname, 'src');
 const options = require('./src/tsconfig.json').compilerOptions;
 options.verbose = true;
-options.sourceMap = true;
+options.sourceMap = false;
 options.rootDir = rootDir;
 options.sourceRoot = util.toFileUri(rootDir);
 
@@ -123,9 +123,7 @@ function watchTask(out, build) {
 
 function cleanTask(out, build) {
 
-    return function () {
-        util.rimraf(out);
-    };
+    return util.rimraf(out);
 }
 
 function copyTask(out, build) {
