@@ -5,6 +5,7 @@
     border: none;
     outline: none;
     overflow: hidden;
+    font-family: sans-serif;
 }
 
 html {
@@ -56,7 +57,7 @@ body {
         background-color: #fff;
         border-radius: 50%;
         opacity: 0;
-        bottom: 0px;
+        bottom: -1.8vw;
 
         &.dot-1 {
             left: 0px;
@@ -93,6 +94,7 @@ body {
         height: 3vw;
         width: 4vw;
     }
+
 }
 
 .terminal-loader-icon {
@@ -106,6 +108,19 @@ body {
     overflow: visible;
     transition: all 0.5s cubic-bezier(0.190, 1.000, 0.220, 1.000);
     opacity: 0.5;
+
+    #tmgdo-cover-message {
+        position: absolute;
+        padding-top: 0.2vw;
+        overflow: visible;
+        left: -47.5vw;
+        bottom: 0px;
+        width: 100vw;
+        height: 0.9vw;
+        text-align: center;
+        color: #ffffff;
+        font-size: 0.9vw;
+    }
 }
 
 @keyframes spin {

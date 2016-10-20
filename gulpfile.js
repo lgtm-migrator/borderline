@@ -1,6 +1,7 @@
 /*---------------------------------------------------------------------------------------------
- *  Copyright (c) Florian Guitton <f.guitton@imperial.ac.uk>. All rights reserved.
- *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * @license
+ * Copyright Florian Guitton (f.guitton@imperial.ac.uk). All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
 'use strict';
@@ -26,25 +27,26 @@ const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('autoprefixer');
 
 const rootDir = path.join(__dirname, 'src');
-const options = require('./src/tsconfig.json').compilerOptions;
+const options = require('./tsconfig.json').compilerOptions;
 options.verbose = true;
 options.sourceMap = false;
 options.rootDir = rootDir;
+options.traceResolution = true;
 options.sourceRoot = util.toFileUri(rootDir);
 
 const injectableDependencies = [
+    '@angular',
     'core-js',
     'reflect-metadata',
-    'zone.js',
+    'rxjs',
     'systemjs',
-    '@angular',
-    'rxjs'
+    'zone.js',
 ];
 
 function createCompile(build, emitError) {
     const opts = _.clone(options);
     opts.inlineSources = !!build;
-    opts.noFilesystemLookup = true;
+    //opts.noFilesystemLookup = true;
 
     const ts = tsb.create(opts, null, null, err => reporter(err.toString()));
 
@@ -96,7 +98,7 @@ function compileTask(out, build) {
     return function () {
         const src = es.merge(
             gulp.src('src/**', { base: 'src' }),
-            gulp.src('node_modules/typescript/lib/lib.d.ts')
+            gulp.src('node_modules/typescript/lib/lib.es6.d.ts')
         );
 
         return src
@@ -112,7 +114,7 @@ function watchTask(out, build) {
     return function () {
         const src = es.merge(
             gulp.src('src/**', { base: 'src' }),
-            gulp.src('node_modules/typescript/lib/lib.d.ts')
+            gulp.src('node_modules/typescript/lib/lib.es6.d.ts')
         );
 
         return watcher('src/**', { base: 'src' })
@@ -123,16 +125,17 @@ function watchTask(out, build) {
 
 function cleanTask(out, build) {
 
-    return util.rimraf(out);
+    return function () {
+        return util.rimraf(out);
+    }
 }
 
 function copyTask(out, build) {
 
     return function () {
-
-        gulp.src(`node_modules/*(${injectableDependencies.join('|')})/**`, { base: 'node_modules' })
-            .pipe(gulp.dest(`${out}/public/scripts/vendor`))
-    };
+        return gulp.src(`node_modules/*(${injectableDependencies.join('|')})/**`, { base: 'node_modules' })
+            .pipe(gulp.dest(`${out}/public/scripts/vendor`));
+    }
 }
 
 // Fast compile for development time

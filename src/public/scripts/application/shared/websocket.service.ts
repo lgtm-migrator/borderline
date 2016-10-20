@@ -6,19 +6,9 @@
 
 'use strict';
 
-import { WebSocketService } from './shared/websocket.service';
-import { Component } from '@angular/core';
+export class WebSocketService {
 
-@Component({
-    moduleId: module.id,
-    selector: 'borderline',
-    template: 'Hello World',
-})
-
-export class BorderlineComponent {
-
-    constructor() {
-        WebSocketService.initialize();
+    public static initialize() {
+        //
     }
-
 }

@@ -1,6 +1,6 @@
-declare module '@angular/common';
-declare module '@angular/core';
-declare module '@angular/forms';
-declare module '@angular/http';
-declare module '@angular/platform-browser';
-declare module '@angular/platform-browser-dynamic';
+import '../node_modules/@angular/common/index.d.ts';
+import '../node_modules/@angular/core/index.d.ts';
+import '../node_modules/@angular/forms/index.d.ts';
+import '../node_modules/@angular/http/index.d.ts';
+import '../node_modules/@angular/platform-browser/index.d.ts';
+import '../node_modules/@angular/platform-browser-dynamic/index.d.ts';
