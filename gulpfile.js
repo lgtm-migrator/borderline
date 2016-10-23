@@ -36,9 +36,9 @@ options.sourceRoot = util.toFileUri(rootDir);
 
 const injectableDependencies = [
     '@angular',
+    '@reactivex',
     'core-js',
     'reflect-metadata',
-    'rxjs',
     'systemjs',
     'zone.js',
 ];
