@@ -1,2 +1,2 @@
 # borderline
-Multi-broswer visualization tool
+Multi-browser visualization tool
