@@ -27,8 +27,10 @@ class Loader {
                 '@angular/http': 'lib:@angular/http/bundles/http.umd.js',
                 '@angular/router': 'lib:@angular/router/bundles/router.umd.js',
                 '@angular/forms': 'lib:@angular/forms/bundles/forms.umd.js',
+
                 // other libraries
-                rxjs: 'lib:rxjs',
+                '@reactivex/rxjs': 'lib:@reactivex/rxjs/index.js',
+                // rxjs: 'lib:rxjs',
             },
             // packages tells the System loader how to load when no filename and/or no extension
             packages: {
@@ -41,8 +43,8 @@ class Loader {
             },
             paths: {
                 // paths serve as alias
-                'lib:': 'j/vendor/',
                 'app:': 'j/application/',
+                'lib:': 'j/vendor/',
             },
         });
     }
