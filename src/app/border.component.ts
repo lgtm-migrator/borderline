@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Subject, Observable, Subscription } from 'rxjs/Rx';
-
 import { BorderDispatcherService } from './injectables/bl.dispatcher.service';
 
 @Component({
@@ -14,6 +13,9 @@ export class BorderComponent {
 
     constructor(dispatcher: BorderDispatcherService) {
         this.dispatcher = dispatcher;
-        this.dispatcher.advertise('plop', null);
+        this.dispatcher.register('test', () => {
+            console.log('TEST WEBSOCKET CALL');
+        });
+        this.dispatcher.advertise('test', null);
     }
 }
