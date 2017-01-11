@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { BorderComponent } from './border.component';
-import { BorderCoverComponent } from './miscellaneous/bl.cover';
+import { BorderWebsocketService } from './injectables/bl.websocket.service';
+import { BorderDispatcherService } from './injectables/bl.dispatcher.service';
+import { BorderCoverComponent } from './miscellaneous/bl.cover.component';
 
 @NgModule({
     declarations: [
@@ -16,7 +18,7 @@ import { BorderCoverComponent } from './miscellaneous/bl.cover';
         FormsModule,
         HttpModule
     ],
-    providers: [],
+    providers: [BorderWebsocketService, BorderDispatcherService],
     bootstrap: [BorderComponent]
 })
 export class BorderModule { }

@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Subject, Observable, Subscription } from 'rxjs/Rx';
+
+import { BorderDispatcherService } from './injectables/bl.dispatcher.service';
 
 @Component({
     selector: 'bl-root',
@@ -6,6 +9,11 @@ import { Component } from '@angular/core';
     styleUrls: ['./border.component.scss']
 })
 export class BorderComponent {
-    constructor() {
+
+    private dispatcher: BorderDispatcherService;
+
+    constructor(dispatcher: BorderDispatcherService) {
+        this.dispatcher = dispatcher;
+        this.dispatcher.advertise('plop', null);
     }
 }
