@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { BorderComponent } from './border.component';
+import { BorderCoverComponent } from './miscellaneous/bl.cover';
 
 @NgModule({
     declarations: [
-        BorderComponent
+        BorderComponent,
+        BorderCoverComponent
     ],
     imports: [
         BrowserModule,
