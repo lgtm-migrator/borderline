@@ -1,0 +1,14 @@
+// Visual Studio Code configuration file
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "coverage": true,
+        "node_modules": true,
+        "source/**/*.js": true,
+        "test/**/*.js": true
+    },
+    "editor.formatOnSave": true,
+    "workbench.editor.showIcons": true,
+    "typescript.check.workspaceVersion": false
+}
