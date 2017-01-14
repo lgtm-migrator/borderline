@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Borderline from './Borderline';
+import Borderline from './core/Borderline';
 import './index.scss';
 
 ReactDOM.render(
