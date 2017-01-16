@@ -1,0 +1,12 @@
+:root {
+    --blue: #00f;
+    --red: #f00;
+}
+
+.blue {
+    color:var(--blue);
+}
+
+.red {
+    color:var(--red);
+}

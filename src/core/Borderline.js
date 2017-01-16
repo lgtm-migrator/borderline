@@ -1,34 +1,71 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
-import logo from './logo.svg';
-import './Borderline.scss';
-import Home from './Home';
-import StoryLine from './StoryLine';
 
-const Empty = () => {
-    return (
-        <div>
-            Empty
-        </div>
-    );
-};
+import IncrementContainer from './containers/IncrementContainer';
+import DecrementContainer from './containers/DecrementContainer';
 
-class Borderline extends Component {
+export default class Borderline extends Component {
+
+    constructor() {
+
+        super(...arguments);
+        this.state = {
+            frontList: null,
+            frontLinkList: null,
+            frontMatchList: null,
+        };
+    }
+
+    componentWillMount() {
+
+        this.createList();
+    }
+
+    componentWillUpdate() {
+
+        this.createList();
+    }
+
+    createList() {
+
+        this.state.frontList = [IncrementContainer, DecrementContainer];
+        let pathname = this.props.pathname || '';
+        this.state.frontLinkList = this.state.frontList.map((connector) =>
+            <Link to={`${pathname}/${connector.child}`} key={connector.child}>{connector.child}</Link>
+        );
+        this.state.frontMatchList = this.state.frontList.map((connector) =>
+            <Match pattern={`${pathname}/${connector.child}`} key={connector.child} component={connector} />
+        );
+    }
+
     render() {
         return (
             <Router>
-                <div className="Borderline">
-                    <div className="Borderline-header">
-                        <img src={logo} className="Borderline-logo" alt="logo" />
-                        <h2>Welcome to <Link to='/story'>Borderline</Link> !</h2>
-                    </div>
-                    <Match exactly pattern='/' component={Home} />
-                    <Match pattern='/story' component={StoryLine} />
-                    <Miss component={Empty} />
+                <div>
+                    {this.state.frontLinkList}
+                    {this.state.frontMatchList}
                 </div>
             </Router>
-        );
+        )
     }
-}
+    /*
 
-export default Borderline;
+        render() {
+            return (
+                    <div>
+                        {this.state.frontLinkList}
+                        {this.state.frontMatchList}
+                        <br/>
+
+                         <Counter
+                            value={store.getState()}
+                            onIncrement={() => store.dispatch({ type: 'INCREMENT' })}
+                            onDecrement={() => store.dispatch({ type: 'DECREMENT' })}
+                        />
+                        }
+                    </div>
+            );
+        }
+    */
+
+}
