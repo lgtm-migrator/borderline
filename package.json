@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Multi-broswer visualization tool",
-  "author": "Florian Guitton <f.guitton@imperial.ac.uk",
+  "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/dsi-icl/borderline-ui#readme",
   "scripts": {
-    "start": "node server.js",
+    "start": "node src/server/index.js",
     "lint": "eslint src"
   },
   "devDependencies": {

@@ -31,7 +31,9 @@ export default class Borderline extends Component {
         this.state.frontList = [IncrementContainer, DecrementContainer];
         let pathname = this.props.pathname || '';
         this.state.frontLinkList = this.state.frontList.map((connector) =>
-            <Link to={`${pathname}/${connector.child}`} key={connector.child}>{connector.child}</Link>
+			<div key={connector.child}>
+				<Link to={`${pathname}/${connector.child}`}>{connector.child}</Link>
+			</div>
         );
         this.state.frontMatchList = this.state.frontList.map((connector) =>
             <Match pattern={`${pathname}/${connector.child}`} key={connector.child} component={connector} />
@@ -48,24 +50,4 @@ export default class Borderline extends Component {
             </Router>
         )
     }
-    /*
-
-        render() {
-            return (
-                    <div>
-                        {this.state.frontLinkList}
-                        {this.state.frontMatchList}
-                        <br/>
-
-                         <Counter
-                            value={store.getState()}
-                            onIncrement={() => store.dispatch({ type: 'INCREMENT' })}
-                            onDecrement={() => store.dispatch({ type: 'DECREMENT' })}
-                        />
-                        }
-                    </div>
-            );
-        }
-    */
-
 }

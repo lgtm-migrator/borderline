@@ -2,7 +2,7 @@ const { resolve } = require('path');
 const webpack = require('webpack');
 
 const distFolder = resolve(__dirname, 'dist');
-const sourceFolder = resolve(__dirname, 'src');
+const sourceFolder = resolve(__dirname, 'src/client');
 
 module.exports = {
     devtool: 'cheap-module-source-map',
@@ -15,7 +15,7 @@ module.exports = {
         'webpack-hot-middleware/client',
 
         // the entry point of our app
-        './src/index'
+        './src/client/index'
     ],
     output: {
         path: distFolder,
