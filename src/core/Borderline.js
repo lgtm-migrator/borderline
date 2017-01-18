@@ -1,71 +1,32 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
+import { BrowserRouter as Router } from 'react-router'
+import { connect } from 'react-redux';
 
-import IncrementContainer from './containers/IncrementContainer';
-import DecrementContainer from './containers/DecrementContainer';
+// We import plugin action as we need to use them upon component mount
+import { actions as pluginActions } from './flux/plugins'
 
-export default class Borderline extends Component {
+// We import the children component
+import MainMenu from './containers/MainMenuContainer';
 
-    constructor() {
+// Declaraction of the Borderline class
+class Borderline extends Component {
 
-        super(...arguments);
-        this.state = {
-            frontList: null,
-            frontLinkList: null,
-            frontMatchList: null,
-        };
+    componentDidMount() {
+        // After the component has mounted we load the plugins
+        this.props.dispatch(pluginActions.loadPlugins());
     }
 
-    componentWillMount() {
-
-        this.createList();
-    }
-
-    componentWillUpdate() {
-
-        this.createList();
-    }
-
-    createList() {
-
-        this.state.frontList = [IncrementContainer, DecrementContainer];
-        let pathname = this.props.pathname || '';
-        this.state.frontLinkList = this.state.frontList.map((connector) =>
-            <Link to={`${pathname}/${connector.child}`} key={connector.child}>{connector.child}</Link>
-        );
-        this.state.frontMatchList = this.state.frontList.map((connector) =>
-            <Match pattern={`${pathname}/${connector.child}`} key={connector.child} component={connector} />
-        );
-    }
-
+    // Here we do the top level rendering of our application
     render() {
         return (
             <Router>
                 <div>
-                    {this.state.frontLinkList}
-                    {this.state.frontMatchList}
+                    <MainMenu />
                 </div>
             </Router>
         )
     }
-    /*
-
-        render() {
-            return (
-                    <div>
-                        {this.state.frontLinkList}
-                        {this.state.frontMatchList}
-                        <br/>
-
-                         <Counter
-                            value={store.getState()}
-                            onIncrement={() => store.dispatch({ type: 'INCREMENT' })}
-                            onDecrement={() => store.dispatch({ type: 'DECREMENT' })}
-                        />
-                        }
-                    </div>
-            );
-        }
-    */
-
 }
+
+// We connect this component to the redux store and export it
+export default connect()(Borderline);
