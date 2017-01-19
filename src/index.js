@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BorderlineProvider from './core/BorderlineProvider';
 import store from './core/store';
-import load from 'little-loader';
 
 // We fetch the anchor of our app the the HTML template
 const root = document.getElementById('root');

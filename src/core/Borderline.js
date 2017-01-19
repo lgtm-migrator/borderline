@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router'
 import { connect } from 'react-redux';
 
 // We import plugin action as we need to use them upon component mount
-import { actions as pluginActions } from './flux/plugins'
+import { actions as subAppsManager } from './flux/subapps'
 
 // We import the children component
 import MainMenu from './containers/MainMenuContainer';
@@ -12,8 +12,16 @@ import MainMenu from './containers/MainMenuContainer';
 class Borderline extends Component {
 
     componentDidMount() {
-        // After the component has mounted we load the plugins
-        this.props.dispatch(pluginActions.loadPlugins());
+        this.loadSubApps();
+    }
+
+    componentDidUpdate() {
+        this.loadSubApps();
+    }
+
+    loadSubApps() {
+        // After the component has updated we load the plugins
+        this.props.dispatch(subAppsManager.loadSubApps());
     }
 
     // Here we do the top level rendering of our application
