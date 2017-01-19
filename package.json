@@ -14,7 +14,7 @@
     },
     "homepage": "https://github.com/dsi-icl/borderline-ui#readme",
     "scripts": {
-        "start": "node server.js",
+        "start": "node ./src/server/index.js",
         "lint": "eslint src"
     },
     "devDependencies": {
@@ -47,6 +47,9 @@
         "redux": "3.6.0",
         "redux-logger": "2.7.4",
         "redux-observable": "0.12.2",
-        "rxjs": "5.0.3"
+        "rxjs": "5.0.3",
+        "multer": "latest",
+        "adm-zip": "latest",
+        "fs-extra": "latest"
     }
 }

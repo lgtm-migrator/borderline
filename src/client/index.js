@@ -1,5 +1,4 @@
 import { AppContainer } from 'react-hot-loader';
-import Rx from 'rxjs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BorderlineProvider from './core/BorderlineProvider';

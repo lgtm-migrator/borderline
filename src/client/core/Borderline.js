@@ -11,6 +11,7 @@ import MainMenu from './containers/MainMenuContainer';
 // Declaraction of the Borderline class
 class Borderline extends Component {
 
+
     componentDidMount() {
         this.loadSubApps();
     }
