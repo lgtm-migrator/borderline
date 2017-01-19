@@ -1,6 +1,6 @@
 function myCustomPluginInitRoutesFunction(router) {
     router.get("/dummy", function(req, res) {
-        res.send("Dumb dummy", 200);
+        res.status(200).send("Dumb dummy");
     });
 }
 
