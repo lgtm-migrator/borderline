@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import store from '../store';
 import Display from '../components/Display';
 
-export class DecrementContainer extends Component {
+class DecrementContainer extends Component {
 
     componentDidMount() {
         this.interval = setInterval(() => {
             store.dispatch({
                 type: 'DECREMENT'
             });
-        }, 1000);
+        }, 10000);
     }
 
     componentWillUnmount() {
