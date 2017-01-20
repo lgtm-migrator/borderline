@@ -2,7 +2,7 @@
     "MongoDBHost": "127.0.0.1",
     "MongoDBPort": 4242,
     "PluginFolder": "C:\\Users\\grizet_j\\imperial\\borderline\\src\\server\\plugins",
-    "DataSources":
+    "DefaultDataSources":
         [
             {
                 "SourceName": "etricks",

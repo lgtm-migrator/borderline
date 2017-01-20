@@ -2,20 +2,20 @@ const path = require('path');
 const fs = require('fs-extra');
 const https = require('https');
 
-class Users {
+class UserAccounts {
     constructor() {
         this.users = [];
     }
 
     findByUsernameAndPassword(username, password) {
         return new Promise(function(resolve) {
-            resolve(null); //Fetch local DB here
+            resolve({id: 42, admin: true}); //Fetch local DB here
         });
     }
 
     findById(id) {
         return new Promise(function(resolve) {
-           resolve(null);
+           resolve({id: 42, admin: true});
         });
     }
 
@@ -39,4 +39,4 @@ class Users {
 
 }
 
-module.exports = Users;
+module.exports = UserAccounts;

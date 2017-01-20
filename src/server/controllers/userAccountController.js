@@ -1,20 +1,25 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const userModule = require('../core/users');
-var users = new userModule();
+const userAccountModule = require('../core/userAccounts');
+var users = new userAccountModule();
 
 module.exports.serializeUser = function(deserializedUser, done) {
     if (deserializedUser.hasOwnProperty('id') == false)
         done(`User has no ID`, null);
-    else
-        done(null, deserializedUser.id);
+    else {
+        done(null,
+            {
+                id: deserializedUser.id,
+                admin: deserializedUser.admin
+            });
+    }
 };
 
 module.exports.deserializeUser = function(serializedUser, done) {
-    users.findById(serializedUser).then(function (user) {
+    users.findById(serializedUser.id).then(function (user) {
         if (user == null)
-            done(`Unknown user ID ${serializedUser}`, null);
+            done(`Session broke for user ID ${serializedUser.id}`, null);
         else
             done(null, user);
     });
@@ -86,47 +91,47 @@ module.exports.getLoginForm = function(req, res) {
 };
 
 module.exports.getUserById = function(req, res, next) {
-    var id = req.params.id;
+    var user_id = req.params.user_id;
 
-    users.findById(id).then(function(user) {
+    users.findById(user_id).then(function(user) {
         if (user !== null) {
             res.status(200);
             res.json(user);
         }
         else {
             res.status(404);
-            res.json({error: `User with id: ${id} not found` });
+            res.json({error: `User with id: ${user_id} not found` });
         }
     });
 };
 
 module.exports.postUserById = function(req, res, next) {
-    var id = req.params.id;
+    var user_id = req.params.user_id;
 
-    users.updateById(id, req.body).then(function (success) {
+    users.updateById(user_id, req.body).then(function (success) {
        if (success == true) {
            res.status(200);
            res.json(req.body);
        }
        else {
            res.status(401);
-           res.json({ error: `Failed to update user with ID ${id}` });
+           res.json({ error: `Failed to update user with ID ${user_id}` });
        }
     });
 };
 
 
 module.exports.deleteUserById = function(req, res, next) {
-    var id = req.params.id;
+    var user_id = req.params.user_id;
 
-    users.deleteById(id).then(function (success) {
+    users.deleteById(user_id).then(function (success) {
         if (success == true) {
             res.status(200);
             res.json(req.body);
         }
         else {
             res.status(401);
-            res.json({ error: `Failed to delete user with ID ${id}` });
+            res.json({ error: `Failed to delete user with ID ${user_id}` });
         }
     });
 };

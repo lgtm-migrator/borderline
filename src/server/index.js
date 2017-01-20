@@ -16,12 +16,14 @@ var multer  = require('multer');
 //Configuration import
 global.config = require('./config.json');
 
-
 //Controllers imports
 var pluginStoreController = require('./controllers/pluginStoreController');
-var usersController = require('./controllers/usersController');
+var userAccountController = require('./controllers/userAccountController');
+var userDataSourcesController = require('./controllers/userDataSourcesController');
 
 //Setting up middlewares
+var userPermissions = require('./middlewares/userPermissions');
+
 app.use(devMiddleware(compiler, {
     publicPath: config.output.publicPath,
     historyApiFallback: true,
@@ -34,24 +36,36 @@ app.use(body_parser.json());
 app.use(expressSession({ secret: 'borderline', saveUninitialized: false, resave: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.serializeUser(usersController.serializeUser);
-passport.deserializeUser(usersController.deserializeUser);
+passport.serializeUser(userAccountController.serializeUser);
+passport.deserializeUser(userAccountController.deserializeUser);
 
 //[ Login and sessions Routes
 //TEMPORARY getter on login form
-app.get('/login/form', usersController.getLoginForm); //GET login form
+app.get('/login/form', userAccountController.getLoginForm); //GET login form
 
 app.route('/login')
-    .post(usersController.login); //POST login information
+    .post(userAccountController.login); //POST login information
 app.route('/logout')
-    .post(usersController.logout); //POST logout from session
+    .post(userAccountController.logout); //POST logout from session
 app.route('/users')
-    .get(usersController.getUsers);//GET returns the list of users
-app.route('/users/:id')
-    .get(usersController.getUserById) //GET user details by ID
-    .post(usersController.postUserById) //POST Update user details
-    .delete(usersController.deleteUserById); //DELETE Removes a user
+    .get(userPermissions.adminPrivileges, userAccountController.getUsers);//GET returns the list of users
+app.route('/users/:user_id')
+    .get(userAccountController.getUserById) //GET user details by ID
+    .post(userAccountController.postUserById) //POST Update user details
+    .delete(userAccountController.deleteUserById); //DELETE Removes a user
 // ] Login and sessions routes
+
+//[ Data sources routes
+app.route('/users/:user_id/data_source')
+    .get(userDataSourcesController.getDataSources)
+    .post(userDataSourcesController.postDataSources)
+    .delete(userDataSourcesController.deleteDataSources)
+    .put(userDataSourcesController.putDataSources);
+app.route('/users/:user_id/data_source/:data_source_id')
+    .get(userDataSourcesController.getUserDataSource)
+    .delete(userDataSourcesController.deleteUserDataSource)
+    .post(userDataSourcesController.postUserDataSource)
+// ] Data sources routes
 
 // [ Plugin Store Routes
 //TEMPORARY getter on a form to upload plugins zip file
