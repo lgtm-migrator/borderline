@@ -3,6 +3,7 @@ var path = require('path');
 var webpack = require('webpack');
 var express = require('express');
 var expressSession = require('express-session');
+var body_parser = require('body-parser');
 var devMiddleware = require('webpack-dev-middleware');
 var hotMiddleware = require('webpack-hot-middleware');
 var config = require('../../webpack.config');
@@ -25,6 +26,7 @@ app.use(devMiddleware(compiler, {
     },
 }));
 app.use(hotMiddleware(compiler));
+app.use(body_parser.json());
 app.use(expressSession({ secret: 'borderline', saveUninitialized: false, resave: false }));
 app.use(passport.initialize());
 app.use(passport.session());

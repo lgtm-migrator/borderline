@@ -2,38 +2,47 @@ const fs = require('fs-extra');
 const path = require('path');
 
 
-//const userModule = require('../core/users');
-var users = null;//new userModule();
+const userModule = require('../core/users');
+var users = new userModule();
 
 module.exports.getUsers = function(req, res, next) {
     res.status(401);
     res.json({error: "Not implemented"});
 };
 
-module.exports.login= function(req, res, next) {
+module.exports.login = function(req, res, next) {
 
     var username = req.params.username;
     var password = req.params.password;
 
-    var user = {id: 42, email: "", name: "zirg" };//users.login(username, password);
-    //If is user's first login
-    if (user === null)
-        user = users.firstLogin(username, password);
-
-    //Not a valid username/password
-    if (user === null) {
-        res.status(403);
-        res.json({ error: 'Incorrect username/password' });
-    }
-    else {
-        req.login(user, function(err) {
-            if (err) {
-                return next(err);
+    users.findByUsernameAndPassword(username, password)
+        .then(function (user) {
+            return new Promise(function (resolve) {
+                if (user !== null) { //Known user match
+                    resolve(user);
+                }
+                else { //Try to find user in external DB and create in local
+                    users.registerExternalByUsernameAndPassword(username, password).then(function (user) {
+                        resolve(user);
+                    });
+                }
+            });
+        })
+        .then(function(user) {
+            if (user === null) { //No user found in local and external
+                res.status(403);
+                res.json({error: 'Incorrect username/password'});
             }
-            res.status(200);
-            res.json(user);
+            else {
+                req.login(user, function (err) {
+                    if (err) {
+                        return next(err);
+                    }
+                    res.status(200);
+                    res.json(user);
+                });
+            }
         });
-    }
 };
 
 module.exports.logout = function(req, res) {
@@ -63,19 +72,46 @@ module.exports.getLoginForm = function(req, res) {
 
 module.exports.getUserById = function(req, res, next) {
     var id = req.params.id;
-    res.status(401);
-    res.json({error: "Not implemented"});
+
+    users.findById(id).then(function(user) {
+        if (user !== null) {
+            res.status(200);
+            res.json(user);
+        }
+        else {
+            res.status(404);
+            res.json({error: `User with id: ${id} not found` });
+        }
+    });
 };
 
 module.exports.postUserById = function(req, res, next) {
     var id = req.params.id;
-    res.status(401);
-    res.json({error: "Not implemented"});
+
+    users.updateById(id, req.body).then(function (success) {
+       if (success == true) {
+           res.status(200);
+           res.json(req.body);
+       }
+       else {
+           res.status(401);
+           res.json({ error: `Failed to update user with ID ${id}` });
+       }
+    });
 };
 
 
 module.exports.deleteUserById = function(req, res, next) {
     var id = req.params.id;
-    res.status(401);
-    res.json({error: "Not implemented"});
+
+    users.deleteById(id).then(function (success) {
+        if (success == true) {
+            res.status(200);
+            res.json(req.body);
+        }
+        else {
+            res.status(401);
+            res.json({ error: `Failed to delete user with ID ${id}` });
+        }
+    });
 };

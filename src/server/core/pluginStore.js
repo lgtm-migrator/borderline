@@ -130,11 +130,6 @@ class PluginStore {
 
         return {id : uuid};
     }
-/*
-
-.post(pluginStore.updatePlugin) //:id POST update a plugin content
-.delete(pluginStore.deletePlugin) //:id DELETE removes a specific plugin
-*/
 }
 
 module.exports = PluginStore;
