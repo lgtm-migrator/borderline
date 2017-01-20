@@ -5,6 +5,22 @@ const path = require('path');
 const userModule = require('../core/users');
 var users = new userModule();
 
+module.exports.serializeUser = function(deserializedUser, done) {
+    if (deserializedUser.hasOwnProperty('id') == false)
+        done(`User has no ID`, null);
+    else
+        done(null, deserializedUser.id);
+};
+
+module.exports.deserializeUser = function(serializedUser, done) {
+    users.findById(serializedUser).then(function (user) {
+        if (user == null)
+            done(`Unknown user ID ${serializedUser}`, null);
+        else
+            done(null, user);
+    });
+};
+
 module.exports.getUsers = function(req, res, next) {
     res.status(401);
     res.json({error: "Not implemented"});

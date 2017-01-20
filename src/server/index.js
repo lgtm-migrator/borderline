@@ -30,17 +30,8 @@ app.use(body_parser.json());
 app.use(expressSession({ secret: 'borderline', saveUninitialized: false, resave: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.serializeUser(function(user, done) {
-    done(null, user.id);
-});
-passport.deserializeUser(function(id, done) {
-    var user = {id: 42, test: "test"}//;null;//usersController.userModule.findUserById(id);
-    if (user === null)
-        done(`Unknown user ID ${id}`, null);
-    else
-        done(null, user);
-    }
-);
+passport.serializeUser(usersController.serializeUser);
+passport.deserializeUser(usersController.deserializeUser);
 
 //[ Login and sessions Routes
 //TEMPORARY getter on login form
