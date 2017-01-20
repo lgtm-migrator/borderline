@@ -2,11 +2,11 @@ var path = require('path');
 
 var pluginStoreModule = require('../core/pluginStore');
 
-var pluginStore = new pluginStoreModule(path.join(__dirname, "../plugins"));
+var pluginStore = new pluginStoreModule(path.normalize(global.config.PluginFolder));
 
 module.exports.getPluginStoreRouter = function() {
     return pluginStore.router;
-}
+};
 
 module.exports.getPluginStore = function(req, res, next) {
     var plugin_list = pluginStore.listPlugins();

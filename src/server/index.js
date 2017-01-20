@@ -13,6 +13,10 @@ const passport = require('passport');
 const passportLocal = require('passport-local').Strategy;
 var multer  = require('multer');
 
+//Configuration import
+global.config = require('./config.json');
+
+
 //Controllers imports
 var pluginStoreController = require('./controllers/pluginStoreController');
 var usersController = require('./controllers/usersController');

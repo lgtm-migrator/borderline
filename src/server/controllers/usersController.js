@@ -1,7 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-
 const userModule = require('../core/users');
 var users = new userModule();
 
