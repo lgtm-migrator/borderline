@@ -61,7 +61,7 @@ export const epics = combineEpics(...[
 
     (action) => action.ofType(types.SUBAPPS_LISTING)
         .mergeMap(action =>
-            Observable.from(fetch(`https://jsonplaceholder.typicode.com/posts`)
+            Observable.from(fetch('https://jsonplaceholder.typicode.com/posts')
                 .then(response => response.json()))
                 .map(response => actions.subAppsSuccess(/*response*/[
                     '8eba023',
@@ -78,7 +78,7 @@ export const epics = combineEpics(...[
 
     (action) => action.ofType(types.SINGLE_SUBAPP_LOAD)
         .mergeMap(action =>
-            Observable.from(fetch(`https://jsonplaceholder.typicode.com/posts/42`)
+            Observable.from(fetch('https://jsonplaceholder.typicode.com/posts/42')
                 .then(response => response.json()))
                 .map(response => actions.singleSubAppSucces(action.id, response))
         ),
@@ -117,13 +117,11 @@ const subAppsSuccess = (state, action) => {
             loaded: false
         }
     ).subscribe();
-    console.log(`Subapps list loaded ...`);
     return Immutable.fromJS(future);
 }
 
 const singleSubAppsSuccess = (state, action) => {
     let future = state.toJS()
     future.subapps[action.id].loaded = true;
-    console.log(`Subapp ${action.id} loaded with content`, action.subapp);
     return Immutable.fromJS(future);
 }

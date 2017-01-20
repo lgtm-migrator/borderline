@@ -21,6 +21,6 @@ const mapStateToProps = function (store) {
 }
 
 const result = connect(mapStateToProps)(StatusBarContainer);
-result.child = StatusBarContainer.name
+result.child = StatusBarContainer.name;
 
 export default result;
