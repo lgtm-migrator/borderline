@@ -1,6 +1,9 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import { List } from 'immutable';
+import Immutable, { Map, List } from 'immutable';
+
+// This is the state pointer name for subapps
+export const anchor = 'subAppsState';
 
 // These are the types of flux for the plugin manager
 export const types = {
@@ -58,7 +61,7 @@ export const epics = combineEpics(...[
 
     (action) => action.ofType(types.SUBAPPS_LISTING)
         .mergeMap(action =>
-            Observable.from(fetch(`https://api.github.com/users/fguitton`)
+            Observable.from(fetch(`https://jsonplaceholder.typicode.com/posts`)
                 .then(response => response.json()))
                 .map(response => actions.subAppsSuccess(/*response*/[
                     '8eba023',
@@ -68,30 +71,36 @@ export const epics = combineEpics(...[
 
     (action) => action.ofType(types.SUBAPPS_SUCCESS)
         .mergeMap(action =>
-            Observable.concat(
-                Observable.from(action.list).map(id =>
-                    actions.loadSingleSubApp(id)
-                ),
-                Observable.of(actions.subAppsLoaded())
+            Observable.from(action.list).map(id =>
+                actions.loadSingleSubApp(id)
             )
         ),
 
     (action) => action.ofType(types.SINGLE_SUBAPP_LOAD)
         .mergeMap(action =>
-            Observable.from(fetch(`https://api.github.com/users/tezirg`)
+            Observable.from(fetch(`https://jsonplaceholder.typicode.com/posts/42`)
                 .then(response => response.json()))
                 .map(response => actions.singleSubAppSucces(action.id, response))
         ),
 
-    (action) => action.ofType(types.SINGLE_SUBAPP_SUCCESS)
-        .mapTo(actions.singleSubAppLoaded()),
+    (action, store) => action.ofType(types.SINGLE_SUBAPP_SUCCESS)
+        .mergeMap(action =>
+            Observable.concat(
+                Observable.of(actions.singleSubAppLoaded(action.id)),
+                Observable.from(Object.values(store.getState(anchor)[anchor].toJS().subapps))
+                    .every(subapp => subapp.loaded === true)
+                    .filter(loaded => loaded === true)
+                    .mapTo(actions.subAppsLoaded())
+            )
+        ),
+
 ])
 
 // Here we find our state reducers
-export function reducer(state = List([]), action) {
+export function reducer(state = Map([]), action) {
 
     switch (action.type) {
-        case types.SUBAPPS_DID_LOAD:
+        case types.SUBAPPS_SUCCESS:
             return subAppsSuccess(state, action);
         case types.SINGLE_SUBAPP_SUCCESS:
             return singleSubAppsSuccess(state, action);
@@ -101,11 +110,20 @@ export function reducer(state = List([]), action) {
 }
 
 const subAppsSuccess = (state, action) => {
-    console.log(`All Subapps loaded ... but actually not yet ... bloody observables !`);
-    return state;
+    let future = state.toJS()
+    future.subapps = future.subapps || {}
+    Observable.from(action.list).map(id =>
+        future.subapps[id] = {
+            loaded: false
+        }
+    ).subscribe();
+    console.log(`Subapps list loaded ...`);
+    return Immutable.fromJS(future);
 }
 
 const singleSubAppsSuccess = (state, action) => {
+    let future = state.toJS()
+    future.subapps[action.id].loaded = true;
     console.log(`Subapp ${action.id} loaded with content`, action.subapp);
-    return state;
+    return Immutable.fromJS(future);
 }
