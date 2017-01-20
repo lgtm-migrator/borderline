@@ -7,6 +7,7 @@ import { actions as subAppsManager } from './flux/subapps'
 
 // We import the children component
 import MainMenu from './containers/MainMenuContainer';
+import StatusBar from './containers/StatusBarContainer';
 
 // Declaraction of the Borderline class
 class Borderline extends Component {
@@ -31,6 +32,7 @@ class Borderline extends Component {
             <Router>
                 <div>
                     <MainMenu />
+                    <StatusBar />
                 </div>
             </Router>
         )
