@@ -29,12 +29,18 @@ module.exports = {
     module: {
         rules: [{
             test: /\.js$/,
+            exclude: '/node_modules/',
+            enforce: 'pre',
+            use: [
+                'eslint-loader'
+            ],
+        }, {
+            test: /\.js$/,
             include: sourceFolder,
             use: [
                 'babel-loader'
             ],
-        },
-        {
+        }, {
             test: /\.css$/,
             include: sourceFolder,
             use: [
