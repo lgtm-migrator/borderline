@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import { actions as subAppsManager } from './flux/subapps'
 
 // We import the children component
+import Body from './containers/BodyContainer';
+import TopBar from './containers/TopBarContainer';
+import ContentBox from './containers/ContentBoxContainer';
 import StatusBar from './containers/StatusBarContainer';
 
 // Declaraction of the Borderline class
@@ -29,9 +32,11 @@ class Borderline extends Component {
     render() {
         return (
             <Router>
-                <div>
+                <Body>
+                    <TopBar />
+                    <ContentBox />
                     <StatusBar />
-                </div>
+                </Body>
             </Router>
         )
     }
