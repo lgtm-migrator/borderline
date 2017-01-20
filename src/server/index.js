@@ -21,9 +21,6 @@ app.use(devMiddleware(compiler, {
 }));
 app.use(hotMiddleware(compiler));
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../client/index.html'));
-});
 
 //TEMPORARY getter on a form to upload plugins zip file
 app.get("/plugin_store/upload", pluginStoreController.getPluginStoreUpload);
@@ -41,6 +38,10 @@ app.route('/plugin_store/:id')
     .delete(pluginStoreController.deletePluginByID); //:id DELETE removes a specific plugin
 // ] Plugin Store Routes
 app.use("/plugins", pluginStoreController.getPluginStoreRouter());
+
+app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../client/index.html'));
+});
 
 app.listen(3000, function (err) {
     if (err) {
