@@ -1,15 +1,15 @@
 var path = require('path');
 
-var pluginStore = require('../core/plugin_store');
+var pluginStoreModule = require('../core/pluginStore');
 
-var plugin_store = new pluginStore(path.join(__dirname, "../plugins"));
+var pluginStore = new pluginStoreModule(path.normalize(global.config.PluginFolder));
 
 module.exports.getPluginStoreRouter = function() {
-    return plugin_store.router;
-}
+    return pluginStore.router;
+};
 
 module.exports.getPluginStore = function(req, res, next) {
-    var plugin_list = plugin_store.listPlugins();
+    var plugin_list = pluginStore.listPlugins();
     res.status(200);
     res.jsonp(plugin_list);
 };
@@ -24,7 +24,7 @@ module.exports.postPluginStore = function(req, res, next) {
 
     var plugins =[];
     for (var i = 0; i < req.files.length; i++) {
-        var p = plugin_store.createPluginFromFile(req.files[i]);
+        var p = pluginStore.createPluginFromFile(req.files[i]);
         plugins.push(p);
     }
     res.status(200);
@@ -39,7 +39,7 @@ module.exports.deletePluginStore = function(req, res, next) {
 
 module.exports.getPluginByID = function(req, res) {
     var id = req.params.id;
-    var info = plugin_store.getPluginInfoById(id);
+    var info = pluginStore.getPluginInfoById(id);
     if (info !== null) {
         res.status(200);
         res.json(info);
@@ -57,7 +57,7 @@ module.exports.postPluginByID = function(req, res) {
         res.json({error: `No file uploaded for plugin ${id} update`});
         return;
     }
-    var updateReply = plugin_store.updatePluginById(id, req.files[0]);
+    var updateReply = pluginStore.updatePluginById(id, req.files[0]);
     if (updateReply.hasOwnProperty('error') == true)
         res.status(401);
     else
@@ -67,7 +67,7 @@ module.exports.postPluginByID = function(req, res) {
 
 module.exports.deletePluginByID = function(req, res) {
     var id = req.params.id;
-    var deleteReply = plugin_store.deletePluginById(id);
+    var deleteReply = pluginStore.deletePluginById(id);
     if (deleteReply.hasOwnProperty('error') == true)
         res.status(401);
     else
@@ -78,7 +78,7 @@ module.exports.deletePluginByID = function(req, res) {
 module.exports.getPluginStoreUpload = function(req, res, next) {
     res.status(200);
     res.send(
-        '<form action="/plugin_store" method="post" enctype="multipart/form-data">'+
+        '<form action="/pluginStore" method="post" enctype="multipart/form-data">'+
         '<input type="file" name="plugin-zip" accept=".zip">'+
         '<input type="submit" value="Upload">'+
         '</form>'
@@ -89,7 +89,7 @@ module.exports.getPluginStoreUploadByID = function(req, res, next) {
     var id = req.params.id;
     res.status(200);
     res.send(
-        '<form action="/plugin_store/${id}" method="post" enctype="multipart/form-data">'+
+        '<form action="/pluginStore/${id}" method="post" enctype="multipart/form-data">'+
         '<input type="file" name="plugin-zip" accept=".zip">'+
         '<input type="submit" value="Upload">'+
         '</form>'
