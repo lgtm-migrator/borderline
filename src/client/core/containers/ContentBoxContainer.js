@@ -1,12 +1,48 @@
 import React, { Component } from 'react';
+import { Match, Miss } from 'react-router';
 
-import ContentBox from '../components/ContentBoxComponent';
+import StoreConnectable from '../decorators/StoreConnectable';
+import WrapClear from '../components/WrapClearComponent';
+import styles from '../styles/ContentBox.css';
 
+@StoreConnectable(store => ({
+    list: store.subAppsState.toJS().subapps
+}))
 class ContentBoxContainer extends Component {
 
+    constructor() {
+        super(...arguments);
+        this.state = {
+            subappContainers: null,
+        };
+    }
+
+    componentWillMount() {
+        this.createSubappContainers();
+    }
+
+    componentWillUpdate() {
+        this.createSubappContainers();
+    }
+
+    createSubappContainers() {
+        let pathname = this.props.pathname || '';
+        this.state.subappContainers = Object.keys(this.props.list || {}).map((key, value) => (
+            <Match pattern={`${pathname}/${key}`} key={key} component={() =>
+                <div className={styles.contentcontainer}>
+                    {key}
+                </div>
+            } />
+        ));
+    }
     render() {
         return (
-            <ContentBox />
+            <div className={styles.contentbox}>
+                <WrapClear>
+                    {this.state.subappContainers}
+                    <div className={styles.placeholder}>&#9640;</div>
+                </WrapClear>
+            </div>
         );
     }
 }

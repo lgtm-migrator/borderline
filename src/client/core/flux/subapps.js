@@ -64,8 +64,8 @@ export const epics = combineEpics(...[
             Observable.from(fetch('https://jsonplaceholder.typicode.com/posts')
                 .then(response => response.json()))
                 .map(response => actions.subAppsSuccess(/*response*/[
-                    '8eba023',
-                    'f8d72ba'
+                    'Dashboard',
+                    'Store'
                 ]))
         ),
 
@@ -122,6 +122,7 @@ const subAppsSuccess = (state, action) => {
 
 const singleSubAppsSuccess = (state, action) => {
     let future = state.toJS()
+    future.subapps[action.id].module = action.subapp;
     future.subapps[action.id].loaded = true;
     return Immutable.fromJS(future);
 }

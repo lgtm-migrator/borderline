@@ -11,6 +11,7 @@
 .default {
     font: var(--font-familiy);
     font-size: 12px;
+    user-select: none;
 }
 
 .boxing {
