@@ -10,7 +10,8 @@ class TopBarComponent extends PureComponent {
             <div className={styles.backdrop}>
                 <ul className={styles.topbar}>
                     <WrapClear>
-                        <li className={styles.subappbutton}>Home</li>
+                        <li className={styles.subappbuttonactive}>Home</li>
+                        <li className={styles.subappbutton}>Store</li>
                     </WrapClear>
                 </ul>
             </div>

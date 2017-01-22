@@ -15,7 +15,15 @@
 .subappbutton {
     display: inline-block;
     padding: 0 15px;
+    cursor: pointer;
+}
+
+.subappbuttonactive {
+    composes: subappbutton;
     border-bottom: solid 5px var(--accent-color);
     color: rgba(255, 255, 255, 255);
-    cursor: pointer;
+}
+
+.subappbutton:hover {
+    background-color: var(--background-color-lighter);
 }
