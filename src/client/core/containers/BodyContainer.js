@@ -1,22 +1,22 @@
 import React, { Component, Children } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { List } from 'immutable';
 
-import layout from '../styles/layout.css';
+import WrapClear from '../components/WrapClearComponent';
+import styles from '../styles/Body.css';
 
 class BodyContainer extends Component {
 
     componentDidMount() {
-        document.getElementsByTagName('html')[0].classList.add(layout.reset)
-        document.body.classList.add(layout.reset)
+        document.documentElement.classList.add(...styles.general.split(' '))
+        document.body.classList.add(...styles.general.split(' '))
+        document.getElementById('root').classList.add(...styles.general.split(' '))
     }
 
     render() {
         return (
-            <div>
+            <WrapClear>
                 {Children.map(this.props.children, child => child)}
-            </div>
+            </WrapClear>
         )
     }
 }

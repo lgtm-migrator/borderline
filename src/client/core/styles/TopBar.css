@@ -1,0 +1,21 @@
+@import 'Theme.css';
+
+.topbar {
+    composes: reset boxing from "./Layout.css";
+    height: var(--topbar-height);
+    line-height: var(--topbar-height);
+    background-color: var(--background-color-light);
+}
+
+.backdrop {
+    height: calc(var(--topbar-height) + 5px);
+    background-color: var(--background-color-lighter);
+}
+
+.subappbutton {
+    display: inline-block;
+    padding: 0 15px;
+    border-bottom: solid 5px var(--accent-color);
+    color: rgba(255, 255, 255, 255);
+    cursor: pointer;
+}

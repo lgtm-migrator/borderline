@@ -1,0 +1,16 @@
+:root {
+
+    --font-familiy: menu;
+
+    /* COLORS */
+    --accent-color: rgba(40, 162, 182, 255);
+    --font-color-default: rgba(173, 173, 173, 255);
+    --font-color-active: rgba(255, 255, 255, 255);
+    --background-color-dark: rgba(30, 30, 30, 255);
+    --background-color-light: rgba(51, 51, 51, 255);
+    --background-color-lighter: rgba(65, 65, 65, 255);
+
+    /* DIMENSIONS */
+    --topbar-height: 40px;
+    --statusbar-height: 22px;
+}

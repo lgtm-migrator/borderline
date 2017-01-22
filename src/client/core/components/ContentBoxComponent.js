@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 
+import styles from '../styles/ContentBox.css';
+
 class ContentBoxComponent extends PureComponent {
 
     render() {
         return (
-            <div>Content</div>
+            <div className={styles.contentbox}>:)</div>
         );
     }
 }

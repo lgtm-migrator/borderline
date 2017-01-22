@@ -1,0 +1,19 @@
+@import 'Theme.css';
+
+.statusbar {
+    composes: reset boxing from "./Layout.css";
+    height: var(--statusbar-height);
+    line-height: var(--statusbar-height);
+    background-color: var(--accent-color);
+    color: var(--font-color-active);
+    position: absolute;
+    bottom: 0;
+    padding: 0 5px;
+}
+
+.statustext {
+    composes: reset from "./Layout.css";
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
