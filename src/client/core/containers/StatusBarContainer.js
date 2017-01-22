@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { List } from 'immutable';
 
+import StoreConnectable from '../decorators/StoreConnectable'
 import StatusBar from '../components/StatusBarComponent';
 
+@StoreConnectable(store => ({
+    status: store.statusState
+}))
 class StatusBarContainer extends Component {
 
     render() {
@@ -14,13 +15,4 @@ class StatusBarContainer extends Component {
     }
 }
 
-const mapStateToProps = function (store) {
-    return {
-        status: store.statusState
-    };
-}
-
-const result = connect(mapStateToProps)(StatusBarContainer);
-result.child = StatusBarContainer.name;
-
-export default result;
+export default StatusBarContainer;
