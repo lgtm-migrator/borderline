@@ -11,7 +11,7 @@ var app = express();
 var compiler = webpack(config);
 const passport = require('passport');
 const passportLocal = require('passport-local').Strategy;
-var multer  = require('multer');
+var multer = require('multer');
 
 //Configuration import
 global.config = require('./config.json');
@@ -69,11 +69,11 @@ app.route('/users/:user_id/data_source/:data_source_id')
 
 // [ Plugin Store Routes
 //TEMPORARY getter on a form to upload plugins zip file
-app.get("/plugin_store/upload", pluginStoreController.getPluginStoreUpload);
+app.get('/plugin_store/upload', pluginStoreController.getPluginStoreUpload);
 //TEMPORARY getter on a form to update plugins zip file
-app.get("/plugin_store/upload/:id", pluginStoreController.getPluginStoreUploadByID);
+app.get('/plugin_store/upload/:id', pluginStoreController.getPluginStoreUploadByID);
 
-app.use("/plugins", pluginStoreController.getPluginStoreRouter()); //Plugins routers connect here
+app.use('/plugins', pluginStoreController.getPluginStoreRouter()); //Plugins routers connect here
 app.route('/plugin_store')
     .get(pluginStoreController.getPluginStore) //GET returns the list of available plugins
     .post(multer().any(), pluginStoreController.postPluginStore) //POST upload a new plugin
