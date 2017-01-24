@@ -2,7 +2,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs-extra');
-const zlib = require("zlib");
+const zlib = require('zlib');
 const adm_zip = require('adm-zip');
 
 //Local modules
@@ -27,28 +27,53 @@ class PluginStore {
     }
 
     _scanLocalFolder() {
-        var dir_content = fs.readdirSync( this.pluginFolder );
+        var dir_content = fs.readdirSync(this.pluginFolder);
         var that = this;
 
-        dir_content.forEach(function(f) {
+        dir_content.forEach(function (f) {
             var file = path.join(that.pluginFolder, f);
-            var file_fd = fs.openSync(file, "r");
+            var file_fd = fs.openSync(file, 'r');
             var file_stats = fs.fstatSync(file_fd);
             if (file_stats.isDirectory()) {
                 var plugin = new Plugin(f, file);
 
-                that.router.use("/" + plugin.uuid, plugin.router);
+                that.router.use('/' + plugin.uuid, plugin.router);
                 that.plugins.push(plugin);
             }
+        });
+        this._updateBundlerHook();
+    }
+
+    _updateBundlerHook() {
+
+        var _counter = 0;
+        var _current = '';
+        var _dictionary = [];
+        var _base = '';
+
+        function __uniqueImport(i) {
+            return (i >= 26 ? __uniqueImport((i / 26 >> 0) - 1) : '') + 'abcdefghijklmnopqrstuvwxyz'[i % 26 >> 0];
+        }
+
+        this.plugins.forEach(function (p) {
+            _dictionary.push(_current = __uniqueImport(_counter++))
+            _base += 'import ' + _current + ' from \'../../../extensions/' + p.uuid + '\';';
+        });
+
+        _base += 'export default [' + _dictionary.join(',') + '];';
+
+        fs.writeFile('./src/client/extensions/externals.js', _base, (err) => {
+            if (err)
+                throw err;
         });
     }
 
     listPlugins() {
         var pluginList = {
             count: 0,
-            plugins : []
+            plugins: []
         };
-        this.plugins.forEach(function(p) {
+        this.plugins.forEach(function (p) {
             pluginList.count++;
             pluginList.plugins.push(p.infos());
         });
@@ -61,10 +86,10 @@ class PluginStore {
         var zip = new adm_zip(buf);
 
         if (zip.getEntry('package.json') === null) {
-            return { error: "Missing mandatory plugin file /package.json" };
+            return { error: 'Missing mandatory plugin file /package.json' };
         }
         if (zip.getEntry('index.js') === null) {
-            return { error: "Missing mandatory plugin file /index.js" };
+            return { error: 'Missing mandatory plugin file /index.js' };
         }
 
         //Generate a non-colliding plugin UUID
@@ -72,21 +97,21 @@ class PluginStore {
         while (that._findPluginById(pluginUuid) !== null)
             pluginUuid = Math.floor(Math.random() * 0xffffffffffff).toString(16);
 
-        zip.extractAllTo(that.pluginFolder + "/" + pluginUuid);
+        zip.extractAllTo(that.pluginFolder + '/' + pluginUuid);
 
-        var new_plugin = new Plugin(pluginUuid, that.pluginFolder + "/" + pluginUuid);
-        that.router.use("/" + new_plugin.uuid, new_plugin.router);
+        var new_plugin = new Plugin(pluginUuid, that.pluginFolder + '/' + pluginUuid);
+        that.router.use('/' + new_plugin.uuid, new_plugin.router);
         that.plugins.push(new_plugin);
-
-        return {id: pluginUuid};
+        this._updateBundlerHook();
+        return { id: pluginUuid };
     }
 
-    clearPlugins(){
+    clearPlugins() {
         this.plugins = [];
     }
 
     getPluginInfoById(id) {
-        var  p = this._findPluginById(id);
+        var p = this._findPluginById(id);
         if (p !== null)
             return p.metadata;
         return null;
@@ -94,13 +119,14 @@ class PluginStore {
 
     deletePluginById(uuid) {
         var that = this;
-        var res = {error: `Cannot delete plugin with ID ${uuid}` };
+        var res = { error: `Cannot delete plugin with ID ${uuid}` };
 
-        this.plugins.some(function(p, idx) {
+        this.plugins.some(function (p, idx) {
             if (p.uuid == uuid) {
                 that.plugins.splice(idx, 1);
-                fs.removeSync(that.pluginFolder + "/" + uuid);
-                res = {id: uuid};
+                this._updateBundlerHook();
+                fs.removeSync(that.pluginFolder + '/' + uuid);
+                res = { id: uuid };
                 return true;
             }
         });
@@ -111,24 +137,25 @@ class PluginStore {
         var buf = Buffer.from(file.buffer);
         var zip = new adm_zip(buf);
         if (zip.getEntry('package.json') === null) {
-            return { error: "Missing mandatory plugin file /package.json" };
+            return { error: 'Missing mandatory plugin file /package.json' };
         }
         if (zip.getEntry('index.js') === null) {
-            return { error: "Missing mandatory plugin file /index.js" };
+            return { error: 'Missing mandatory plugin file /index.js' };
         }
 
         var delReply = this.deletePluginById(uuid);
         if (delReply.hasOwnProperty('error')) {
-            return {error: `Cannot update unknown plugin ID: ${uuid}`};
+            return { error: `Cannot update unknown plugin ID: ${uuid}` };
         }
 
-        zip.extractAllTo(this.pluginFolder + "/" + uuid);
+        zip.extractAllTo(this.pluginFolder + '/' + uuid);
 
-        var new_plugin = new Plugin(uuid, this.pluginFolder + "/" + uuid);
-        this.router.use("/" + new_plugin.uuid, new_plugin.router);
+        var new_plugin = new Plugin(uuid, this.pluginFolder + '/' + uuid);
+        this.router.use('/' + new_plugin.uuid, new_plugin.router);
         this.plugins.push(new_plugin);
+        this._updateBundlerHook();
 
-        return {id : uuid};
+        return { id: uuid };
     }
 }
 

@@ -5,7 +5,6 @@ const distFolder = resolve(__dirname, 'dist');
 const sourceFolder = resolve(__dirname, 'src/client');
 
 module.exports = {
-    devtool: 'cheap-module-source-map',
     entry: [
         // activate HMR for React
         'react-hot-loader/patch',
@@ -56,5 +55,6 @@ module.exports = {
                 'postcss-loader',
             ]
         }]
-    }
+    },
+    devtool: 'cheap-module-source-map'
 };

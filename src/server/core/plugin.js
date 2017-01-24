@@ -12,7 +12,6 @@ class Plugin {
 
         this.controller.init(this.router);
         this.controller.static(this.router, function (staticPath) {
-            console.log(path.join(path.normalize(PluginPath) + path.normalize(staticPath)));
             return express.static(path.join(path.normalize(PluginPath) + path.normalize(staticPath)));
         });
     }

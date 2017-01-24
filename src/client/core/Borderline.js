@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router'
 
+// DANGEROUS !!!
+// We add an import over the known extensions
+// This is so WebPack knows they are here and compiles them
+import BorderlineExtensions from '../extensions';
+
 // Get decorator
 import StoreConnectable from './decorators/StoreConnectable';
 
@@ -11,12 +16,11 @@ import ContentBox from './containers/ContentBoxContainer';
 import StatusBar from './containers/StatusBarContainer';
 
 // We import plugin action as we need to use them upon component mount
-import { actions as subAppsManager } from './flux/subapps'
+import { actions as subAppsManager } from './flux/subapps';
 
 // Declaraction of the Borderline class
 @StoreConnectable()
 class Borderline extends Component {
-
 
     componentDidMount() {
         this.loadSubApps();

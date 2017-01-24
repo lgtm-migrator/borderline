@@ -14,7 +14,7 @@ const passportLocal = require('passport-local').Strategy;
 var multer = require('multer');
 
 //Configuration import
-global.config = require('./config.json');
+global.config = require('../../borderline.config.json');
 
 //Controllers imports
 var pluginStoreController = require('./controllers/pluginStoreController');
@@ -26,11 +26,22 @@ var userPermissions = require('./middlewares/userPermissions');
 
 app.use(devMiddleware(compiler, {
     publicPath: config.output.publicPath,
-    historyApiFallback: true,
     stats: {
-        colors: true
-    },
+        assets: true,
+        children: false,
+        chunks: false,
+        hash: false,
+        modules: false,
+        publicPath: false,
+        timings: true,
+        version: false,
+        warnings: true,
+        colors: {
+            green: '\u001b[32m',
+        }
+    }
 }));
+
 app.use(hotMiddleware(compiler));
 app.use(body_parser.json());
 app.use(expressSession({ secret: 'borderline', saveUninitialized: false, resave: false }));
@@ -93,6 +104,4 @@ app.listen(3000, function (err) {
     if (err) {
         return console.error(err);
     }
-
-    console.log('Listening at http://localhost:3000/');
 });
