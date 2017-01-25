@@ -16,9 +16,9 @@ function configureStore(initialState = {}) {
         stateTransformer: (state) => {
             let future = {};
             for (var name in state) {
-                future[name] = state[name].toJS ? state[name].toJS() : state[name]
+                future[name] = state[name].toJS ? state[name].toJS() : state[name];
             }
-            return future
+            return future;
         }
     })));
 
@@ -28,7 +28,7 @@ function configureStore(initialState = {}) {
     store.injectAsyncEpic = (name, asyncEpic) => {
         store.asyncEpics[name] = asyncEpic;
         epicMiddleware.replaceEpic(createEpics(store.asyncEpics));
-    }
+    };
 
     // We declare an array that will contain all post-build reducers
     // We creacte a function that will inject those reducers in the current store
@@ -36,7 +36,7 @@ function configureStore(initialState = {}) {
     store.injectAsyncReducer = (name, asyncReducer) => {
         store.asyncReducers[name] = asyncReducer;
         store.replaceReducer(createReducers(store.asyncReducers));
-    }
+    };
 
     // In case we are doing hot reloading
     if (module.hot) {

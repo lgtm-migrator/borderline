@@ -1,6 +1,6 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import Immutable, { Map, List } from 'immutable';
+import Immutable, { Map } from 'immutable';
 
 // This is the state pointer name for subapps
 export const anchor = 'subAppsState';
@@ -51,7 +51,7 @@ export const actions = {
         type: types.SINGLE_SUBAPP_DID_LOAD,
         id: id
     }),
-}
+};
 
 // These are event epics for redux observable
 export const epics = combineEpics(...[
@@ -60,10 +60,10 @@ export const epics = combineEpics(...[
         .mapTo(actions.subAppsListing()),
 
     (action) => action.ofType(types.SUBAPPS_LISTING)
-        .mergeMap(action =>
+        .mergeMap(/*action*/() =>
             Observable.from(fetch('https://jsonplaceholder.typicode.com/posts')
                 .then(response => response.json()))
-                .map(response => actions.subAppsSuccess(/*response*/[
+                .map(/*response*/() => actions.subAppsSuccess([
                     'Dashboard',
                     'Store'
                 ]))
@@ -94,7 +94,7 @@ export const epics = combineEpics(...[
             )
         ),
 
-])
+]);
 
 // Here we find our state reducers
 export function reducer(state = Map([]), action) {
@@ -105,24 +105,24 @@ export function reducer(state = Map([]), action) {
         case types.SINGLE_SUBAPP_SUCCESS:
             return singleSubAppsSuccess(state, action);
         default:
-            return state
+            return state;
     }
 }
 
 const subAppsSuccess = (state, action) => {
-    let future = state.toJS()
-    future.subapps = future.subapps || {}
+    let future = state.toJS();
+    future.subapps = future.subapps || {};
     Observable.from(action.list).map(id =>
         future.subapps[id] = {
             loaded: false
         }
     ).subscribe();
     return Immutable.fromJS(future);
-}
+};
 
 const singleSubAppsSuccess = (state, action) => {
-    let future = state.toJS()
+    let future = state.toJS();
     future.subapps[action.id].module = action.subapp;
     future.subapps[action.id].loaded = true;
     return Immutable.fromJS(future);
-}
+};

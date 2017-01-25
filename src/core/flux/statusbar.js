@@ -1,7 +1,3 @@
-import { combineEpics } from 'redux-observable';
-import { Observable } from 'rxjs';
-import Immutable, { Map, List } from 'immutable';
-
 import { types as subAppsTypes } from './subapps';
 
 // This is the state pointer name for status

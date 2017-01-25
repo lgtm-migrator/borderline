@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router'
-
-// DANGEROUS !!!
-// We add an import over the known extensions
-// This is so WebPack knows they are here and compiles them
-import BorderlineExtensions from '../extensions';
+import { BrowserRouter as Router } from 'react-router';
 
 // Get decorator
 import StoreConnectable from './decorators/StoreConnectable';
@@ -45,7 +40,7 @@ class Borderline extends Component {
                     <StatusBar />
                 </Body>
             </Router>
-        )
+        );
     }
 }
 

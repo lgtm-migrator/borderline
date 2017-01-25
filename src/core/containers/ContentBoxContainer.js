@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Match, Miss } from 'react-router';
+import { Match } from 'react-router';
 
 import StoreConnectable from '../decorators/StoreConnectable';
 import WrapClear from '../components/WrapClearComponent';
@@ -27,7 +27,7 @@ class ContentBoxContainer extends Component {
 
     createSubappContainers() {
         let pathname = this.props.pathname || '';
-        this.state.subappContainers = Object.keys(this.props.list || {}).map((key, value) => (
+        this.state.subappContainers = Object.keys(this.props.list || {}).map((key) => (
             <Match pattern={`${pathname}/${key}`} key={key} component={() =>
                 <div className={styles.contentcontainer}>
                     {key}

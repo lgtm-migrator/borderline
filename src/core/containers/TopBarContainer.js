@@ -27,12 +27,12 @@ class TopBarContainer extends Component {
 
     createSubappLinks() {
         let pathname = this.props.pathname || '';
-        this.state.subappLinks = Object.keys(this.props.list || {}).map((key, value) => {
+        this.state.subappLinks = Object.keys(this.props.list || {}).map((key) => {
             return (
                 <Link to={`${pathname}/${key}`} key={key} className={styles.subappbutton} activeClassName={styles.subappbuttonactive}>
                     {key}
                 </Link>
-            )
+            );
         });
     }
 

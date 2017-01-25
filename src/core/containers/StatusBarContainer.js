@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import StoreConnectable from '../decorators/StoreConnectable'
+import StoreConnectable from '../decorators/StoreConnectable';
 import StatusBar from '../components/StatusBarComponent';
 
 @StoreConnectable(store => ({
