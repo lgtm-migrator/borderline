@@ -1,30 +1,40 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
+const html = require('html-webpack-plugin');
+const pkg = require('./package.json');
 
 const distFolder = resolve(__dirname, 'dist');
-const sourceFolder = resolve(__dirname, 'src/client');
+const sourceFolder = resolve(__dirname, 'src');
 
 module.exports = {
-    entry: [
-        // activate HMR for React
-        'react-hot-loader/patch',
+    entry: {
+        // the vendor packages
+        vendor: Object.keys(pkg.dependencies),
 
-        // bundle the client for webpack-dev-server
-        // and connect to the provided endpoint
-        'webpack-hot-middleware/client',
+        borderline: [
 
-        // the entry point of our app
-        './src/client/index'
-    ],
+            // activate HMR for React
+            'react-hot-loader/patch',
+
+            // bundle the client for webpack-dev-server
+            // and connect to the provided endpoint
+            'webpack-hot-middleware/client',
+
+            // the entry point of our app
+            sourceFolder + '/index.js'
+        ],
+    },
     output: {
         path: distFolder,
-        filename: 'bundle.js',
-        publicPath: '/static/'
+        filename: '[name].[hash].js',
+        library: 'borderline',
+        libraryTarget: 'umd',
+        umdNamedDefine: true
     },
-    plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin(),
-    ],
+    externals: {
+        // TODO Consider removing external libraries from the bundle
+        // 'react': { ... }
+    },
     module: {
         rules: [{
             test: /\.js$/,
@@ -54,7 +64,30 @@ module.exports = {
                 },
                 'postcss-loader',
             ]
+        }, {
+            test: /\.html$/,
+            include: sourceFolder,
+            use: [
+                {
+                    loader: 'html-loader',
+                    options: {
+                        minimize: true
+                    }
+                }
+            ],
         }]
     },
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            name: ['vendor', 'manifest']
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new html({
+            filename: 'index.html',
+            template: sourceFolder + '/index.html',
+            inject: true
+        })
+    ],
     devtool: 'cheap-module-source-map'
 };
