@@ -1,0 +1,25 @@
+@import 'Theme.css';
+
+.contentbox {
+    composes: reset boxing from "./Layout.css";
+    padding-top: calc(var(--topbar-height) + 5px);
+    padding-bottom: var(--statusbar-height);
+}
+
+.placeholder {
+    composes: reset boxing from "./Layout.css";
+    font-size: 300px;
+    color: rgba(10, 10, 10, 255);
+    text-align: center;
+    top: 0;
+    left: 0;
+}
+
+.contentcontainer {
+    composes: reset boxing from "./Layout.css";
+    font-size: 35px;
+    font-weight: bold;
+    color: rgba(10, 10, 10, 255);
+    text-align: center;
+    padding-top: 50px;
+}
