@@ -1,6 +1,6 @@
 {
     "name": "borderline-ui",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "private": true,
     "description": "Storyline-based interface for translation bioinformatics",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
@@ -20,6 +20,9 @@
         "build": "rimraf ./dist/ && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js",
         "lint": "eslint ./config ./src ./tools -f table || true"
     },
+    "files": [
+        "dist"
+    ],
     "devDependencies": {
         "babel-core": "6.22.1",
         "babel-eslint": "7.1.1",
