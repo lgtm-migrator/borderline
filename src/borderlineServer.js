@@ -15,7 +15,7 @@ module.exports = function BorderlineServer(options) {
     global.config = options;
 
     var that = this;
-    mongodb.connect(global.config.MongoUrl, function(err, db) {
+    mongodb.connect(global.config.mongoUrl, function(err, db) {
         if (err !== null) {
           console.log(err);
           return;

@@ -3,7 +3,7 @@ var path = require('path');
 var pluginStoreModule = require('../core/pluginStore');
 
 function PluginStoreController() {
-    this.pluginStore = new pluginStoreModule(path.normalize(global.config.PluginFolder));
+    this.pluginStore = new pluginStoreModule(path.normalize(global.config.pluginFolder));
 
     this.getPluginStoreRouter = PluginStoreController.prototype.getPluginStoreRouter.bind(this);
     this.getPluginStore = PluginStoreController.prototype.getPluginStore.bind(this);
