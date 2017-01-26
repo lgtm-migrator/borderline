@@ -29,6 +29,26 @@ module.exports = function () {
         sourceFolder + '/index.js'
     );
 
+    const vendor = [];
+
+    if (!prod) {
+        vendor.push(
+            'react-hot-loader',
+            'redux-logger'
+        );
+    }
+
+    vendor.push(
+        'immutable',
+        'react',
+        'react-dom',
+        'react-redux',
+        'react-router',
+        'redux',
+        'redux-observable',
+        'rxjs'
+    );
+
     // defining the plugins to be used for bundling
     const plugins = [
         new webpack.optimize.CommonsChunkPlugin(prod ? {
@@ -36,8 +56,8 @@ module.exports = function () {
             filename: 'vendor.bundle.js',
             minChunks: Infinity
         } : {
-            name: ['vendor', 'manifest']
-        }),
+                name: ['vendor', 'manifest']
+            }),
         new webpack.DefinePlugin({
             'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }
         }),
@@ -86,7 +106,7 @@ module.exports = function () {
     return {
         entry: {
             // the vendor packages
-            vendor: Object.keys(pkg.dependencies),
+            vendor: vendor,
             borderline: borderline,
         },
         output: {
