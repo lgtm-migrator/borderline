@@ -4,6 +4,7 @@ var express = require('express');
 var devMiddleware = require('webpack-dev-middleware');
 var hotMiddleware = require('webpack-hot-middleware');
 var config = require('../config/webpack.config')();
+// var borderlineServer = require('borderline-server');
 
 var app = express();
 var compiler = webpack(config);
@@ -29,6 +30,7 @@ app.use(devMiddleware(compiler, {
 if (process.env.NODE_ENV !== 'production')
     app.use(hotMiddleware(compiler));
 
+// app.use(borderlineServer({}));
 app.use('*', function (req, res, next) {
     var filename = path.join(compiler.outputPath, 'index.html');
     compiler.outputFileSystem.readFile(filename, function (err, result) {
