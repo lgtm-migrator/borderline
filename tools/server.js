@@ -59,7 +59,7 @@ app.listen(3000, function (err) {
 });
 
 function cleanFolder() {
-    console.log(chalk.gray('Doing some cleanup first first ...'));
+    console.log(chalk.gray('Doing some cleanup first ...'));
     try {
         fs.removeSync(distributionFolder);
         fs.removeSync(publishingFolder);
