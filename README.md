@@ -1,2 +1,2 @@
 # borderline-server
-Multi-broswer visualization tool backend
+Multi-browser visualization tool backend

@@ -10,6 +10,7 @@
     "keywords":[ "borderline", "etricks", "zirg", "ZirgMaster" ],
     "author": "Jean Grizet <jean.grizet16@imperial.ac.uk>",
     "license": "MIT",
+    "readme": "README.md",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/dsi-icl/borderline-server.git"
