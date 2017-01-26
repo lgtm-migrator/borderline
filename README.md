@@ -1,2 +1,2 @@
-# borderline
-Multi-browser visualization tool
+# borderline-ui
+Storyline-based interface for translation bioinformatics
