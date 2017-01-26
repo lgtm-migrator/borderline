@@ -1,4 +1,4 @@
-@import  'Theme.css';
+@import './Theme.css';
 
 .general {
     composes: reset default boxing from "./Layout.css";

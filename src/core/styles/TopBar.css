@@ -1,4 +1,4 @@
-@import 'Theme.css';
+@import './Theme.css';
 
 .topbar {
     composes: reset boxing from "./Layout.css";

@@ -1,4 +1,4 @@
-@import "Theme.css";
+@import './Theme.css';
 
 .reset {
     padding: 0;

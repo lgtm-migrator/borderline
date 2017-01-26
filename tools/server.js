@@ -3,13 +3,13 @@ var webpack = require('webpack');
 var express = require('express');
 var devMiddleware = require('webpack-dev-middleware');
 var hotMiddleware = require('webpack-hot-middleware');
-var config = require('./webpack.config');
+var config = require('../config/webpack.config')();
 
 var app = express();
 var compiler = webpack(config);
 
 app.use(devMiddleware(compiler, {
-    publicPath: config.output.publicPath,
+    publicPath: '',
     stats: {
         assets: true,
         children: false,
@@ -26,7 +26,8 @@ app.use(devMiddleware(compiler, {
     }
 }));
 
-app.use(hotMiddleware(compiler));
+if (process.env.NODE_ENV !== 'production')
+    app.use(hotMiddleware(compiler));
 
 app.use('*', function (req, res, next) {
     var filename = path.join(compiler.outputPath, 'index.html');
