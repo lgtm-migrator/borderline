@@ -9,11 +9,11 @@ var publishingFolder = './package';
 startPublish();
 
 function startPublish() {
-    console.log(chalk.gray('Starting publishing process ...'));
-    purgeFolders();
+    console.log(chalk.gray(`Starting publishing process for v${pkg.version} ...`));
+    purgeFolders(createDestination);
 }
 
-function purgeFolders() {
+function purgeFolders(callback) {
     console.log(chalk.gray('Purging destination folders ...'));
     try {
         fs.removeSync(distributionFolder);
@@ -21,7 +21,7 @@ function purgeFolders() {
     } catch (err) {
         return console.error(chalk.red('Error purging destination folder ' + err));
     }
-    createDestination();
+    callback();
 }
 
 function createDestination() {
@@ -102,4 +102,5 @@ function finalizeExport(error) {
         console.error(chalk.red('Export has failed. Check package version and user credentials.'));
     else
         console.log(chalk.green('Export was a success !'));
+    purgeFolders(function () { });
 }

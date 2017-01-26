@@ -26,7 +26,7 @@
         "start": "npm run dev",
         "dev": "cross-env NODE_ENV=development node ./tools/server.js",
         "prod": "cross-env NODE_ENV=production node ./tools/server.js",
-        "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.js",
+        "build": "cross-env NODE_ENV=production node ./tools/build.js",
         "lint": "eslint ./config ./src ./tools -f table || true",
         "export": "node ./tools/publish.js",
         "publish": "node ./tools/blocker.js && exit 1",
