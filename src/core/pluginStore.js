@@ -14,7 +14,7 @@ var PluginStore = function(pluginFolder) {
     this.router = express.Router();
 
     this._scanLocalFolder();
-}
+};
 
 PluginStore.prototype._findPluginById = function(id) {
     for (var i = 0; i < this.plugins.length; i++) {
