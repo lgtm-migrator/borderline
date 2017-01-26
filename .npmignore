@@ -1,0 +1,6 @@
+/.gitignore
+/.eslintrc
+/.editorconfig
+
+/node_modules
+/src/plugins
