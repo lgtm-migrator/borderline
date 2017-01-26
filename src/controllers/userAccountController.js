@@ -16,7 +16,7 @@ function UserAccountController(mongoDBCollection) {
     this.getUserById = UserAccountController.prototype.getUserById.bind(this);
     this.postUserById = UserAccountController.prototype.postUserById.bind(this);
     this.deleteUserById = UserAccountController.prototype.deleteUserById.bind(this);
-};
+}
 
 UserAccountController.prototype.serializeUser = function(deserializedUser, done) {
     if (deserializedUser.hasOwnProperty('_id') == false)
@@ -54,7 +54,7 @@ UserAccountController.prototype.login = function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
     if (! username || ! password) {
-        rejected("Missing username or password");
+        rejected('Missing username or password');
         return;
     }
 

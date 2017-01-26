@@ -2,19 +2,31 @@ var path = require('path');
 
 var pluginStoreModule = require('../core/pluginStore');
 
-var pluginStore = new pluginStoreModule(path.normalize(global.config.PluginFolder));
+function PluginStoreController() {
+    this.pluginStore = new pluginStoreModule(path.normalize(global.config.PluginFolder));
 
-module.exports.getPluginStoreRouter = function() {
-    return pluginStore.router;
+    this.getPluginStoreRouter = PluginStoreController.prototype.getPluginStoreRouter.bind(this);
+    this.getPluginStore = PluginStoreController.prototype.getPluginStore.bind(this);
+    this.postPluginStore = PluginStoreController.prototype.postPluginStore.bind(this);
+    this.getPluginByID = PluginStoreController.prototype.getPluginByID.bind(this);
+    this.postPluginByID = PluginStoreController.prototype.postPluginByID.bind(this);
+    this. deletePluginByID = PluginStoreController.prototype.deletePluginByID.bind(this);
+    this.getPluginStoreUpload = PluginStoreController.prototype.getPluginStoreUpload.bind(this);
+    this.getPluginStoreUploadByID = PluginStoreController.prototype.getPluginStoreUploadByID.bind(this);
+}
+
+
+PluginStoreController.prototype.getPluginStoreRouter = function() {
+    return this.pluginStore.router;
 };
 
-module.exports.getPluginStore = function(req, res, next) {
-    var plugin_list = pluginStore.listPlugins();
+PluginStoreController.prototype.getPluginStore = function(req, res, next) {
+    var plugin_list = this.pluginStore.listPlugins();
     res.status(200);
     res.jsonp(plugin_list);
 };
 
-module.exports.postPluginStore = function(req, res, next) {
+PluginStoreController.prototype.postPluginStore = function(req, res, next) {
 
     if (typeof req.files === 'undefined' || req.files === null || req.files.length == 0){
         res.status(406);
@@ -24,22 +36,22 @@ module.exports.postPluginStore = function(req, res, next) {
 
     var plugins =[];
     for (var i = 0; i < req.files.length; i++) {
-        var p = pluginStore.createPluginFromFile(req.files[i]);
+        var p = this.pluginStore.createPluginFromFile(req.files[i]);
         plugins.push(p);
     }
     res.status(200);
     res.json(plugins);
 };
 
-module.exports.deletePluginStore = function(req, res, next) {
+PluginStoreController.prototype.deletePluginStore = function(req, res, next) {
     res.status(403);
     res.json({error: 'Permission denied: Nope you wont remove my plugins'});
 };
 
 
-module.exports.getPluginByID = function(req, res) {
+PluginStoreController.prototype.getPluginByID = function(req, res) {
     var id = req.params.id;
-    var info = pluginStore.getPluginInfoById(id);
+    var info = this.pluginStore.getPluginInfoById(id);
     if (info !== null) {
         res.status(200);
         res.json(info);
@@ -50,14 +62,14 @@ module.exports.getPluginByID = function(req, res) {
     }
 };
 
-module.exports.postPluginByID = function(req, res) {
+PluginStoreController.prototype.postPluginByID = function(req, res) {
     id = req.params.id;
     if (typeof req.files === 'undefined' || req.files.length == 0) {
         res.status(406);
         res.json({error: 'No file uploaded for plugin ' + id + ' update'});
         return;
     }
-    var updateReply = pluginStore.updatePluginById(id, req.files[0]);
+    var updateReply = this.pluginStore.updatePluginById(id, req.files[0]);
     if (updateReply.hasOwnProperty('error') == true)
         res.status(401);
     else
@@ -65,9 +77,9 @@ module.exports.postPluginByID = function(req, res) {
     res.json(updateReply);
 };
 
-module.exports.deletePluginByID = function(req, res) {
+PluginStoreController.prototype.deletePluginByID = function(req, res) {
     var id = req.params.id;
-    var deleteReply = pluginStore.deletePluginById(id);
+    var deleteReply = this.pluginStore.deletePluginById(id);
     if (deleteReply.hasOwnProperty('error') == true)
         res.status(401);
     else
@@ -75,7 +87,7 @@ module.exports.deletePluginByID = function(req, res) {
     res.json(deleteReply);
 };
 
-module.exports.getPluginStoreUpload = function(req, res, next) {
+PluginStoreController.prototype.getPluginStoreUpload = function(req, res, next) {
     res.status(200);
     res.send(
         '<form action="/pluginStore" method="post" enctype="multipart/form-data">'+
@@ -85,7 +97,7 @@ module.exports.getPluginStoreUpload = function(req, res, next) {
     );
 };
 
-module.exports.getPluginStoreUploadByID = function(req, res, next) {
+PluginStoreController.prototype.getPluginStoreUploadByID = function(req, res, next) {
     var id = req.params.id;
     res.status(200);
     res.send(
@@ -95,3 +107,5 @@ module.exports.getPluginStoreUploadByID = function(req, res, next) {
         '</form>'
     );
 };
+
+module.exports = PluginStoreController;

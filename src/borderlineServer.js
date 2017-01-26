@@ -25,12 +25,16 @@ function BorderlineServer() {
         that.userPermissionsMiddleware = require('./middlewares/userPermissions');
 
         //Controller imports
-        var pluginStoreController = require('./controllers/pluginStoreController')
-        that.pluginStoreController = pluginStoreController;
-        that.userDataSourcesController = require('./controllers/userDataSourcesController');
-
         var userAccountController = require('./controllers/userAccountController');
         that.userAccountController = new userAccountController(db.collection('users'));
+
+        var pluginStoreController = require('./controllers/pluginStoreController');
+        that.pluginStoreController = new pluginStoreController();
+
+        var userDataSourcesController = require('./controllers/userDataSourcesController');
+        that.userDataSourcesController = new userDataSourcesController(db.collection('users'));
+
+
 
         //Init external middleware
         that.app.use(body_parser.urlencoded({ extended: true }));
