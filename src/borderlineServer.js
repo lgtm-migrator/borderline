@@ -27,10 +27,8 @@ function BorderlineServer() {
         //Controller imports
         var userAccountController = require('./controllers/userAccountController');
         that.userAccountController = new userAccountController(db.collection('users'));
-
         var pluginStoreController = require('./controllers/pluginStoreController');
         that.pluginStoreController = new pluginStoreController();
-
         var userDataSourcesController = require('./controllers/userDataSourcesController');
         that.userDataSourcesController = new userDataSourcesController(db.collection('users'));
 

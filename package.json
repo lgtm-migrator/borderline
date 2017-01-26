@@ -1,8 +1,13 @@
 {
     "name": "borderline-server",
     "version": "0.1.0",
-    "private": true,
     "description": "Multi-broswer visualization tool server",
+    "main": "borderlineServer.js",
+    "scripts": {
+        "start": "node ./src/index.js",
+        "lint": "eslint src"
+    },
+    "keywords":[ "borderline", "etricks", "zirg", "ZirgMaster" ],
     "author": "Jean Grizet <jean.grizet16@imperial.ac.uk>",
     "license": "MIT",
     "repository": {
@@ -13,10 +18,6 @@
         "url": "https://github.com/dsi-icl/borderline-server/issues"
     },
     "homepage": "https://github.com/dsi-icl/borderline-server#readme",
-    "scripts": {
-        "start": "node ./src/index.js",
-        "lint": "eslint src"
-    },
     "devDependencies": {
         "babel-eslint": "7.1.1",
         "eslint": "3.14.0"
