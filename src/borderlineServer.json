@@ -1,6 +1,5 @@
 {
-    "MongoDBHost": "127.0.0.1",
-    "MongoDBPort": 4242,
+    "MongoUrl": "mongodb://jean:root@146.169.33.32:27020/borderline",
     "PluginFolder": "C:\\Users\\grizet_j\\imperial\\borderline-server\\src\\plugins",
     "DefaultDataSources":
         [

@@ -2,7 +2,7 @@ var express = require('express');
 var fs = require('fs-extra');
 var path = require('path');
 
-var Plugin = function(Uuid, PluginPath) {
+function Plugin(Uuid, PluginPath) {
     this.uuid = Uuid;
     this.metadata = require(PluginPath + '/package.json');
     this.controller = require(PluginPath);
