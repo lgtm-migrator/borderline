@@ -1,38 +1,43 @@
 {
-    "name": "borderline-server",
-    "version": "0.0.1",
-    "description": "Multi-broswer visualization tool server",
-    "main": "borderlineServer.js",
-    "scripts": {
-        "start": "node ./src/index.js",
-        "lint": "eslint src"
-    },
-    "keywords":[ "borderline", "etricks", "zirg", "ZirgMaster" ],
-    "author": "Jean Grizet <jean.grizet16@imperial.ac.uk>",
-    "license": "MIT",
-    "readme": "README.md",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/dsi-icl/borderline-server.git"
-    },
-    "bugs": {
-        "url": "https://github.com/dsi-icl/borderline-server/issues"
-    },
-    "homepage": "https://github.com/dsi-icl/borderline-server#readme",
-    "devDependencies": {
-        "babel-eslint": "7.1.1",
-        "eslint": "3.14.0"
-    },
-    "dependencies": {
-        "mongodb": "2.2.22",
-        "crypto": "0.0.3",
-        "express": "4.14.0",
-        "express-session": "1.14.2",
-        "multer": "1.2.1",
-        "adm-zip": "0.4.7",
-        "fs-extra": "2.0.0",
-        "passport": "0.3.2",
-        "passport-local": "1.0.0",
-        "body-parser": "1.16.0"
-    }
+  "name": "borderline-server",
+  "version": "0.0.2",
+  "description": "Multi-broswer visualization tool server",
+  "main": "borderlineServer.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "lint": "eslint src"
+  },
+  "keywords": [
+    "borderline",
+    "etricks",
+    "zirg",
+    "ZirgMaster"
+  ],
+  "author": "Jean Grizet <jean.grizet16@imperial.ac.uk>",
+  "license": "MIT",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsi-icl/borderline-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dsi-icl/borderline-server/issues"
+  },
+  "homepage": "https://github.com/dsi-icl/borderline-server#readme",
+  "devDependencies": {
+    "babel-eslint": "7.1.1",
+    "eslint": "3.14.0"
+  },
+  "dependencies": {
+    "mongodb": "2.2.22",
+    "crypto": "0.0.3",
+    "express": "4.14.0",
+    "express-session": "1.14.2",
+    "multer": "1.2.1",
+    "adm-zip": "0.4.7",
+    "fs-extra": "2.0.0",
+    "passport": "0.3.2",
+    "passport-local": "1.0.0",
+    "body-parser": "1.16.0"
+  }
 }
