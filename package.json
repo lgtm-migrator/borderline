@@ -24,13 +24,13 @@
     },
     "scripts": {
         "start": "npm run dev",
-        "dev": "rimraf ./dist/ && cross-env NODE_ENV=development node ./tools/server.js",
-        "prod": "rimraf ./dist/ && cross-env NODE_ENV=production node ./tools/server.js",
-        "build": "rimraf ./dist/ && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js",
+        "dev": "cross-env NODE_ENV=development node ./tools/server.js",
+        "prod": "cross-env NODE_ENV=production node ./tools/server.js",
+        "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.js",
         "lint": "eslint ./config ./src ./tools -f table || true",
         "export": "node ./tools/publish.js",
         "publish": "node ./tools/blocker.js && exit 1",
-        "prepublish": "node ./tools/blocker.js && exit 1"
+        "prepublishOnly": "node ./tools/blocker.js && exit 1"
     },
     "devDependencies": {
         "babel-core": "6.22.1",
@@ -52,7 +52,6 @@
         "postcss-import": "9.1.0",
         "postcss-loader": "1.2.2",
         "react-history": "0.18.2",
-        "rimraf": "^2.5.4",
         "style-loader": "0.13.1",
         "webpack": "2.2.0",
         "webpack-dev-middleware": "1.9.0",

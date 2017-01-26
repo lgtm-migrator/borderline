@@ -10,17 +10,23 @@ function configureStore(initialState = {}) {
     const epicMiddleware = createEpicMiddleware(createEpics());
 
     // This function creates the store
-    const store = createStore(createReducers(), initialState, applyMiddleware(epicMiddleware, createLogger({
-        duration: true,
-        collapsed: true,
-        stateTransformer: (state) => {
-            let future = {};
-            for (var name in state) {
-                future[name] = state[name].toJS ? state[name].toJS() : state[name];
+    let applicant = null;
+    if (process.env.NODE_ENV === 'development')
+        applicant = applyMiddleware(epicMiddleware, createLogger({
+            duration: true,
+            collapsed: true,
+            stateTransformer: (state) => {
+                let future = {};
+                for (var name in state) {
+                    future[name] = state[name].toJS ? state[name].toJS() : state[name];
+                }
+                return future;
             }
-            return future;
-        }
-    })));
+        }));
+    else
+        applicant = applyMiddleware(epicMiddleware);
+
+    const store = createStore(createReducers(), initialState, applicant);
 
     // We declare an array that will contain all post-build epics
     // We creacte a function that will inject those epics in the current epicMiddleware
