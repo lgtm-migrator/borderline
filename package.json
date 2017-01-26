@@ -2,7 +2,7 @@
   "name": "borderline-server",
   "version": "0.0.3",
   "description": "Multi-broswer visualization tool server",
-  "main": "borderlineServer.js",
+  "main": "./src/borderlineServer.js",
   "scripts": {
     "start": "node ./src/index.js",
     "lint": "eslint src"

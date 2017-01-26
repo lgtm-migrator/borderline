@@ -8,11 +8,11 @@ const passport = require('passport');
 const passportLocal = require('passport-local').Strategy;
 var multer  = require('multer');
 
-function BorderlineServer() {
+module.exports = function BorderlineServer(options) {
     this.app = express();
 
     //Configuration import
-    global.config = require('./borderlineServer.json');
+    global.config = options;
 
     var that = this;
     mongodb.connect(global.config.MongoUrl, function(err, db) {
@@ -91,5 +91,3 @@ function BorderlineServer() {
 
     return this.app;
 };
-
-module.exports = BorderlineServer;
