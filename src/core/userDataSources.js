@@ -1,10 +1,8 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-class UserDataSource {
-    constructor()  {
-
-    }
-}
+var UserDataSource = function() {
+    this.dataSources = [];
+};
 
 module.exports = UserDataSource;

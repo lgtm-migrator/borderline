@@ -19,7 +19,7 @@ module.exports.serializeUser = function(deserializedUser, done) {
 module.exports.deserializeUser = function(serializedUser, done) {
     users.findById(serializedUser.id).then(function (user) {
         if (user == null)
-            done(`Session broke for user ID ${serializedUser.id}`, null);
+            done('Session broke for user ID '  + serializedUser.id, null);
         else
             done(null, user);
     });
@@ -100,7 +100,7 @@ module.exports.getUserById = function(req, res, next) {
         }
         else {
             res.status(404);
-            res.json({error: `User with id: ${user_id} not found` });
+            res.json({error: 'User with id: ' + user_id + 'not found' });
         }
     });
 };
@@ -115,7 +115,7 @@ module.exports.postUserById = function(req, res, next) {
        }
        else {
            res.status(401);
-           res.json({ error: `Failed to update user with ID ${user_id}` });
+           res.json({ error: 'Failed to update user with ID ' + user_id });
        }
     });
 };
@@ -131,7 +131,7 @@ module.exports.deleteUserById = function(req, res, next) {
         }
         else {
             res.status(401);
-            res.json({ error: `Failed to delete user with ID ${user_id}` });
+            res.json({ error: 'Failed to delete user with ID ' + user_id });
         }
     });
 };

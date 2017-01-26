@@ -8,7 +8,7 @@ var userDataSources = new userDataSourcesModule();
 module.exports.getDataSources = function(req, res) {
     res.status(401);
     res.json({ error: 'Not implemented' });
-}
+};
 
 module.exports.postDataSources = function(req, res) {
     res.status(401);

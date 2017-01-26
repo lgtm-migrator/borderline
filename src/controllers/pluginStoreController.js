@@ -46,7 +46,7 @@ module.exports.getPluginByID = function(req, res) {
     }
     else {
         res.status(401);
-        res.json({error: `Unknown plugin Id ${id} ]`});
+        res.json({error: 'Unknown plugin Id ' +  id });
     }
 };
 
@@ -54,7 +54,7 @@ module.exports.postPluginByID = function(req, res) {
     id = req.params.id;
     if (typeof req.files === 'undefined' || req.files.length == 0) {
         res.status(406);
-        res.json({error: `No file uploaded for plugin ${id} update`});
+        res.json({error: 'No file uploaded for plugin ' + id + ' update'});
         return;
     }
     var updateReply = pluginStore.updatePluginById(id, req.files[0]);
