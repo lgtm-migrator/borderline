@@ -69,8 +69,8 @@ export const epics = combineEpics(...[
 
     (action) => action.ofType(types.SUBAPPS_SUCCESS)
         .mergeMap(action =>
-            Observable.from(action.list).map(id =>
-                actions.loadSingleSubApp(id)
+            Observable.from(action.list).defaultIfEmpty(null).map(id =>
+                id === null ? actions.subAppsLoaded() : actions.loadSingleSubApp(id)
             )
         ),
 
