@@ -60,13 +60,11 @@ export const epics = combineEpics(...[
         .mapTo(actions.subAppsListing()),
 
     (action) => action.ofType(types.SUBAPPS_LISTING)
-        .mergeMap(/*action*/() =>
-            Observable.from(fetch('https://jsonplaceholder.typicode.com/posts')
-                .then(response => response.json()))
-                .map(/*response*/() => actions.subAppsSuccess([
-                    'Dashboard',
-                    'Store'
-                ]))
+        .mergeMap(() =>
+            // Observable.from(fetch('/plugin_store')
+            //     .then(response => response.json()))
+            //     .map(response => actions.subAppsSuccess(response))
+            Observable.of(actions.subAppsSuccess([]))
         ),
 
     (action) => action.ofType(types.SUBAPPS_SUCCESS)
@@ -78,9 +76,10 @@ export const epics = combineEpics(...[
 
     (action) => action.ofType(types.SINGLE_SUBAPP_LOAD)
         .mergeMap(action =>
-            Observable.from(fetch('https://jsonplaceholder.typicode.com/posts/42')
-                .then(response => response.json()))
-                .map(response => actions.singleSubAppSucces(action.id, response))
+            // Observable.from(fetch('/plugin')
+            //     .then(response => response.json()))
+            //     .map(response => actions.singleSubAppSucces(action.id, response))
+            Observable.of(actions.singleSubAppSucces(action.id, {}))
         ),
 
     (action, store) => action.ofType(types.SINGLE_SUBAPP_SUCCESS)
