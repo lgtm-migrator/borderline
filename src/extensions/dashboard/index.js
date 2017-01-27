@@ -4,7 +4,7 @@ import { mainReducer } from './reducers';
 class DashboardPlugin {
 
     invocation() {
-        borderline.registerReducer('mainReducer', mainReducer);
+        borderline.registerReducer(mainReducer);
     }
 }
 
