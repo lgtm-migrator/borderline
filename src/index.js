@@ -5,7 +5,7 @@ var BorderlineServer = require('./borderlineServer.js');
 
 app.use(BorderlineServer({
         mongoUrl: 'mongodb://jean:root@146.169.33.32:27020/borderline',
-        pluginFolder: 'C:\\Users\\grizet_j\\imperial\\borderline-server\\src\\plugins',
+        pluginFolder: 'C:\\Users\\grizet_j\\imperial\\borderline-server\\src\\plugins_caca',
         defaultDataSources:
             [
                 {
@@ -16,11 +16,6 @@ app.use(BorderlineServer({
             ]
     }
 ));
-
-app.get('*', function (req, res) {
-    res.status(404);
-    res.send({error: '404 Not found'});
-});
 
 app.listen(3000, function (err) {
     if (err) {
