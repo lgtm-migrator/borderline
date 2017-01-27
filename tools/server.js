@@ -6,7 +6,8 @@ var express = require('express');
 var devMiddleware = require('webpack-dev-middleware');
 var hotMiddleware = require('webpack-hot-middleware');
 var config = require('../config/webpack.config')();
-// var borderlineServer = require('borderline-server');
+var defines = require('../config/borderline.config');
+var borderlineServer = require('borderline-server');
 
 var distributionFolder = './dist';
 var publishingFolder = './package';
@@ -39,12 +40,14 @@ app.use(devMiddleware(compiler, {
 if (process.env.NODE_ENV !== 'production')
     app.use(hotMiddleware(compiler));
 
-// app.use(borderlineServer({}));
+app.use(borderlineServer({
+    mongoUrl: defines.mongoURL
+}));
 app.use('*', function (req, res, next) {
     var filename = path.join(compiler.outputPath, 'index.html');
     compiler.outputFileSystem.readFile(filename, function (err, result) {
         if (err) {
-            return next(err);
+            return next(chalk.red(err));
         }
         res.set('content-type', 'text/html');
         res.send(result);
@@ -54,7 +57,8 @@ app.use('*', function (req, res, next) {
 
 app.listen(3000, function (err) {
     if (err) {
-        return console.error(err);
+        console.error(chalk.red('Could not start server ' + err));
+        process.exit(1);
     }
 });
 
@@ -64,6 +68,7 @@ function cleanFolder() {
         fs.removeSync(distributionFolder);
         fs.removeSync(publishingFolder);
     } catch (err) {
-        return console.error(chalk.red('Error purging destination folder ' + err));
+        console.error(chalk.red('Error purging destination folder ' + err));
+        process.exit(1);
     }
 }
