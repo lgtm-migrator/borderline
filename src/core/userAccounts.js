@@ -2,16 +2,31 @@ const path = require('path');
 const fs = require('fs-extra');
 const https = require('https');
 const crypto = require('crypto');
+const ObjectID = require('mongodb').ObjectID;
 
 function UserAccounts(userCollection) {
-    this.users = [];
     this.userCollection = userCollection;
 
+    this.findAll = UserAccounts.prototype.findAll.bind(this);
     this.findByUsernameAndPassword = UserAccounts.prototype.findByUsernameAndPassword.bind(this);
     this.registerExternalByUsernameAndPassword = UserAccounts.prototype.registerExternalByUsernameAndPassword.bind(this);
     this.findById = UserAccounts.prototype.findById.bind(this);
     this.updateById = UserAccounts.prototype.updateById.bind(this);
     this.deleteById = UserAccounts.prototype.deleteById.bind(this);
+}
+
+UserAccounts.prototype.findAll = function(){
+    var that = this;
+    return  new Promise(function(resolve, reject) {
+        that.userCollection.find().toArray().then(function(result) {
+            if (result === null || result === undefined)
+                reject('No users ?!');
+            else
+                resolve(result);
+        }, function(error) {
+            reject(error.toString());
+        });
+    });
 };
 
 UserAccounts.prototype.findByUsernameAndPassword = function(username, password) {
@@ -42,7 +57,7 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
 
     return new Promise(function(resolve, reject) {
         //Fetch default external DB here
-        reject('Invalid username/password first time login');
+        //reject('Invalid username/password first time login');
 
         //Register new Borderline user on success
         var salt = crypto.randomBytes(32).toString('hex').slice(0, 32);
@@ -67,20 +82,45 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
 };
 
 UserAccounts.prototype.findById = function(id) {
-    return new Promise(function(resolve) {
-        resolve({id: 42, admin: true});
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.userCollection.findOne({ _id : new ObjectID(id) }).then(function(result) {
+            if (result === null || result === undefined)
+                reject('No match for id: ' + id);
+            else
+                resolve(result);
+        },
+        function (error) {
+            reject(error);
+        });
     });
 };
 
 UserAccounts.prototype.updateById = function(id, data) {
-    return new Promise(function(resolve) {
-        resolve(false);
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        if (data.hasOwnProperty('_id')) //Transforms ID to mongo ObjectID type
+            delete data._id;
+        that.userCollection.findOneAndReplace({ _id : new ObjectID(id) }, data).then(function(result) {
+                if (result === null || result === undefined)
+                    reject('No match for id: ' + id);
+                else
+                    resolve(result);
+            },
+            function (error) {
+                reject(error);
+            });
     });
 };
 
 UserAccounts.prototype.deleteById = function(id) {
-    return new Promise(function(resolve) {
-        resolve(false);
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.userCollection.findOneAndDelete({ _id : new ObjectID(id) }).then(function(result) {
+            resolve(result);
+        }, function (error) {
+            reject(error);
+        });
     });
 };
 

@@ -32,16 +32,21 @@ UserAccountController.prototype.serializeUser = function(deserializedUser, done)
 
 UserAccountController.prototype.deserializeUser = function(serializedUser, done) {
     this.users.findById(serializedUser.id).then(function (user) {
-        if (user == null)
-            done('Session broke for user ID '  + serializedUser.id, null);
-        else
-            done(null, user);
+        done(null, user);
+    }, function(error) {
+        done('Session broke: ' + error, null);
     });
 };
 
 UserAccountController.prototype.getUsers = function(req, res, next) {
-    res.status(401);
-    res.json({error: 'Not implemented'});
+   this.users.findAll().then(function(users) {
+       res.status(200);
+       res.json(users);
+   },
+   function(error) {
+      res.status(401);
+      res.json({ error: 'Cannot list users: ' + error});
+   });
 };
 
 UserAccountController.prototype.login = function(req, res, next) {
@@ -115,46 +120,42 @@ UserAccountController.prototype.getUserById = function(req, res, next) {
     var user_id = req.params.user_id;
 
     this.users.findById(user_id).then(function(user) {
-        if (user !== null) {
-            res.status(200);
-            res.json(user);
-        }
-        else {
-            res.status(404);
-            res.json({error: 'User with id: ' + user_id + 'not found' });
-        }
+        res.status(200);
+        res.json(user);
+    },
+    function(error) {
+        res.status(404);
+        res.json({error: 'Can find user by ID: '+ error });
     });
 };
 
 UserAccountController.prototype.postUserById = function(req, res, next) {
     var user_id = req.params.user_id;
 
-    this.users.updateById(user_id, req.body).then(function (success) {
-       if (success == true) {
-           res.status(200);
-           res.json(req.body);
-       }
-       else {
-           res.status(401);
-           res.json({ error: 'Failed to update user with ID ' + user_id });
-       }
-    });
+    this.users.updateById(user_id, req.body).then(function (user)
+        {
+            res.status(200);
+            res.json(user);
+        },
+        function(error) {
+            res.status(401);
+            res.json({ error: 'Failed to update user: ' + error });
+        });
 };
-
 
 UserAccountController.prototype.deleteUserById = function(req, res, next) {
     var user_id = req.params.user_id;
 
-    this.users.deleteById(user_id).then(function (success) {
-        if (success == true) {
+    this.users.deleteById(user_id).then(function (user)
+        {
+            req.logout();
             res.status(200);
-            res.json(req.body);
-        }
-        else {
+            res.json({ deleted: user });
+        },
+        function(error) {
             res.status(401);
-            res.json({ error: 'Failed to delete user with ID ' + user_id });
-        }
-    });
+            res.json({ error: 'Failed to delete user: ' + error });
+        });
 };
 
 module.exports = UserAccountController;
