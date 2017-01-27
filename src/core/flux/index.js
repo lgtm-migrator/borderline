@@ -6,7 +6,7 @@ import { anchor as subAppsName, epics as subAppsEpics, reducer as subAppsReducer
 import { anchor as statusBarName, reducer as statusBarReducer } from './statusbar';
 
 // This collapses the list of epics across the borad in a single epic
-export function createEpics(asyncEpics = {}) {
+export function createEpics(asyncEpics = []) {
     return combineEpics(
         subAppsEpics,
         ...asyncEpics

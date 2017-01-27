@@ -33,7 +33,7 @@ function configureStore(initialState = {}) {
     store.asyncEpics = {};
     store.injectAsyncEpic = (name, asyncEpic) => {
         store.asyncEpics[name] = asyncEpic;
-        epicMiddleware.replaceEpic(createEpics(store.asyncEpics));
+        epicMiddleware.replaceEpic(createEpics(Object.values(store.asyncEpics)));
     };
 
     // We declare an array that will contain all post-build reducers

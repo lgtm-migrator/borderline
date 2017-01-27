@@ -5,10 +5,13 @@ import store from '../store';
 export const apiVersion = 1;
 
 // Function to allow reducer registration
-export const registerReducer = (reducer) => {
-    let name = (Math.random() * 0xFFFFFF << 0).toString(16);
+export const registerReducer = (name, reducer) => {
     store.injectAsyncReducer(name, reducer);
-    return name;
+};
+
+// Function to allow reducer registration
+export const registerEpic = (name, epic) => {
+    store.injectAsyncEpic(name, epic);
 };
 
 // Allow extensions to dispatch actions

@@ -15,6 +15,7 @@ export const types = {
     SINGLE_SUBAPP_SUCCESS: '@@core/extension/SINGLE_SUBAPP_SUCCESS',
     SINGLE_SUBAPP_DID_LOAD: '@@core/extension/SINGLE_SUBAPP_DID_LOAD',
     SINGLE_SUBAPP_CORRUPT: '@@core/extension/SINGLE_SUBAPP_CORRUPT',
+    ATTACH_SUBAPP: '@@borderline/ATTACH_SUBAPP'
 };
 
 // Here are the actionator available for the plugin managment flux
@@ -109,6 +110,12 @@ export function reducer(state = Map([]), action) {
             return subAppsSuccess(state, action);
         case types.SINGLE_SUBAPP_SUCCESS:
             return singleSubAppsSuccess(state, action);
+        case types.ATTACH_SUBAPP:
+            return singleSubAppsSuccess(state, {
+                id: Math.floor(Math.random() * 16777215).toString(16),
+                system: true,
+                subapp: action.component
+            });
         default:
             return state;
     }
@@ -127,6 +134,10 @@ const subAppsSuccess = (state, action) => {
 
 const singleSubAppsSuccess = (state, action) => {
     let future = state.toJS();
+    if (action.system) {
+        future.subapps = future.subapps || {};
+        future.subapps[action.id] = {};
+    }
     future.subapps[action.id].module = action.subapp;
     future.subapps[action.id].loaded = true;
     return Immutable.fromJS(future);
