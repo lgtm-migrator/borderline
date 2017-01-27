@@ -14,6 +14,7 @@ export const types = {
     SINGLE_SUBAPP_LOAD: '@@core/extension/SINGLE_SUBAPP_LOAD',
     SINGLE_SUBAPP_SUCCESS: '@@core/extension/SINGLE_SUBAPP_SUCCESS',
     SINGLE_SUBAPP_DID_LOAD: '@@core/extension/SINGLE_SUBAPP_DID_LOAD',
+    SINGLE_SUBAPP_CORRUPT: '@@core/extension/SINGLE_SUBAPP_CORRUPT',
 };
 
 // Here are the actionator available for the plugin managment flux
@@ -50,6 +51,11 @@ export const actions = {
     singleSubAppLoaded: (id) => ({
         type: types.SINGLE_SUBAPP_DID_LOAD,
         id: id
+    }),
+
+    singleSubAppCorrupted: (name) => ({
+        type: types.SINGLE_SUBAPP_CORRUPT,
+        name: name
     }),
 };
 

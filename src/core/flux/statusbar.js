@@ -15,6 +15,8 @@ export function reducer(state = '', action) {
             return 'All sub-applications loaded.';
         case subAppsTypes.SINGLE_SUBAPP_LOAD:
             return `Loading sub-application ${action.id} ...`;
+        case subAppsTypes.SINGLE_SUBAPP_CORRUPT:
+            return `Extension ${action.name} is corrupted !`;
         case '@@redux-observable/EPIC_END':
             return 'Epic processing chain interrupted !';
         default:
