@@ -15,16 +15,34 @@ function UserAccounts(userCollection) {
 };
 
 UserAccounts.prototype.findByUsernameAndPassword = function(username, password) {
-    return new Promise(function(resolve) {
-        resolve(null); //Fetch local DB here
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.userCollection.findOne({username: username}).then(function(result) {
+            if (result === null || result === undefined) {
+                reject('Invalid username/password');
+                return;
+            }
+            var salt = result.salt || '';
+            var hash = crypto.createHmac('sha512', salt);
+            hash.update(password);
+            var hash_pass = hash.digest('hex');
+            if (hash_pass == result.password)
+                resolve(result);
+            else
+                reject('Invalid username/password');
+        },
+        function(error) {
+            reject(error.toString()); //Fetch local DB here
+        });
     });
 };
 
 UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username, password) {
     var that = this;
 
-    return new Promise(function(resolve) {
+    return new Promise(function(resolve, reject) {
         //Fetch default external DB here
+        reject('Invalid username/password first time login');
 
         //Register new Borderline user on success
         var salt = crypto.randomBytes(32).toString('hex').slice(0, 32);
@@ -42,6 +60,8 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
         that.userCollection.insertOne(new_user).then(function(result) {
             new_user._id = result.insertedId;
             resolve(new_user);
+        }, function(error) {
+            reject(error.toString());
         });
     });
 };

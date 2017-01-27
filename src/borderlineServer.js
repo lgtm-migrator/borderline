@@ -85,7 +85,7 @@ BorderlineServer.prototype.setupUserAccount = function() {
 
 BorderlineServer.prototype.setupUserDataSources = function(){
     var userDataSourcesController = require('./controllers/userDataSourcesController');
-    this.userDataSourcesController = new userDataSourcesController(this.db.collection('users'));
+    this.userDataSourcesController = new userDataSourcesController(this.db.collection('data_sources'));
 
     //[ Data sources routes
     this.app.route('/users/:user_id/data_source')

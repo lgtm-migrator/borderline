@@ -6,14 +6,7 @@ var BorderlineServer = require('./borderlineServer.js');
 app.use(BorderlineServer({
         mongoUrl: 'mongodb://jean:root@146.169.33.32:27020/borderline',
         pluginFolder: 'C:\\Users\\grizet_j\\imperial\\borderline-server\\src\\plugins_caca',
-        defaultDataSources:
-            [
-                {
-                    sourceName: 'etricks',
-                    sourceHost: '127.0.0.1',
-                    sourcePort: 5555
-                }
-            ]
+        uiFolder: './node-modules/borderline-ui'
     }
 ));
 

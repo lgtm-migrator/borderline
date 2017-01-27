@@ -59,24 +59,23 @@ UserAccountController.prototype.login = function(req, res, next) {
     }
 
     this.users.findByUsernameAndPassword(username, password)
-        .then(function (user) {
-            return new Promise(function (resolve) {
-                if (user !== null) { //Known user match
+        .then(
+            function (user) {
+                return new Promise(function (resolve, reject) {
+                    //Known user match
                     resolve(user);
-                }
-                else { //Try to find user in external DB and create in local
-                    that.users.registerExternalByUsernameAndPassword(username, password).then(function (user) {
+                });
+            },
+            function(error) {
+                return new Promise(function(resolve, reject) {
+                //Try to find user in external DB and create in local
+                that.users.registerExternalByUsernameAndPassword(username, password).then(function (user) {
                         resolve(user);
-                    }, rejected);
-                }
-            }, rejected);
-        }, rejected)
-        .then(function(user) {
-            if (user === null) { //No user found in local and external
-                res.status(403);
-                res.json({error: 'Incorrect username/password'});
+                    }, reject);
+                });
             }
-            else {
+        )
+        .then(function(user) {
                 req.login(user, function (err) {
                     if (err) {
                         return next(err);
@@ -84,7 +83,6 @@ UserAccountController.prototype.login = function(req, res, next) {
                     res.status(200);
                     res.json(user);
                 });
-            }
         }, rejected);
 };
 
