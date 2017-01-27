@@ -8,14 +8,16 @@ import store from '../store';
 import DashboardPlugin from '../../extensions/dashboard';
 import StoryLinePlugin from '../../extensions/storyline';
 
+const defaultExtensions = [
+    DashboardPlugin,
+    StoryLinePlugin
+];
+
 class PluginInspector {
 
     constructor() {
         this.initialized = false;
-        this.systemExtensions = [
-            new DashboardPlugin(),
-            new StoryLinePlugin()
-        ];
+        this.systemExtensions = [];
 
         // For some unheard of reasons, borderline global is not yet available at this time.
         // We use Observable to delay the check and then carry on.
@@ -29,11 +31,13 @@ class PluginInspector {
     }
 
     loadSystemExtensions() {
-        this.systemExtensions.map((extension) => {
+        defaultExtensions.map((extension) => {
+            let current = new extension();
             try {
-                extension.invocation();
+                current.invocation();
+                this.systemExtensions.push(current);
             } catch (exception) {
-                store.dispatch(subAppsManager.singleSubAppCorrupted(extension.constructor.name));
+                store.dispatch(subAppsManager.singleSubAppCorrupted(current.constructor.name));
                 if (process.env.NODE_ENV === 'development')
                     console.error(exception); // eslint-disable-line no-console
             }
