@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router';
 
-// Get decorator
-import StoreConnectable from './decorators/StoreConnectable';
+// We import the plugin manager
+import pluginInspector from './utilities/PluginInspector';
 
 // We import the children component
 import Body from './containers/BodyContainer';
@@ -10,24 +10,15 @@ import TopBar from './containers/TopBarContainer';
 import ContentBox from './containers/ContentBoxContainer';
 import StatusBar from './containers/StatusBarContainer';
 
-// We import plugin action as we need to use them upon component mount
-import { actions as subAppsManager } from './flux/subapps';
-
 // Declaraction of the Borderline class
-@StoreConnectable()
 class Borderline extends Component {
 
     componentDidMount() {
-        this.loadSubApps();
+        pluginInspector.discover();
     }
 
     componentDidUpdate() {
-        this.loadSubApps();
-    }
-
-    loadSubApps() {
-        // After the component has updated we load the plugins
-        this.props.dispatch(subAppsManager.loadSubApps());
+        pluginInspector.discover();
     }
 
     // Here we do the top level rendering of our application
@@ -42,6 +33,12 @@ class Borderline extends Component {
             </Router>
         );
     }
+}
+
+if (module.hot) {
+    module.hot.accept('./utilities/PluginInspector', () => {
+        console.info('The pluginManager was reloaded'); // eslint-disable-line no-console
+    });
 }
 
 // We connect this component to the redux store and export it

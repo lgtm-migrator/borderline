@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { Match } from 'react-router';
 
-import StoreConnectable from '../decorators/StoreConnectable';
+// import storeManager from '../utilities/StoreManager';
 import WrapClear from '../components/WrapClearComponent';
 import styles from '../styles/ContentBox.css';
 
-@StoreConnectable(store => ({
-    list: store.subAppsState.toJS().subapps
-}))
+// @storeManager.retrieve(['plop'], (plop) => {
+//     console.log('ContentBoxContainer Store', plop); // eslint-disable-line no-console
+//     return {
+//         list: plop.subapps
+//     };
+// })
 class ContentBoxContainer extends Component {
 
     constructor() {

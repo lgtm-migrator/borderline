@@ -1,7 +1,6 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const html = require('html-webpack-plugin');
-const pkg = require('../package.json');
 
 const distFolder = resolve(__dirname, '../dist');
 const sourceFolder = resolve(__dirname, '../src');
@@ -173,6 +172,6 @@ module.exports = function () {
             }]
         },
         plugins: plugins,
-        devtool: prod ? 'nosources-source-map' : 'eval-source-map'
+        devtool: prod ? 'nosources-source-map' : 'source-map'
     };
 };

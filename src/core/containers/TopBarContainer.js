@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import StoreConnectable from '../decorators/StoreConnectable';
 import WrapClear from '../components/WrapClearComponent';
 import styles from '../styles/TopBar.css';
 
-@StoreConnectable(store => ({
-    list: store.subAppsState.toJS().subapps
-}))
 class TopBarContainer extends Component {
 
     constructor() {
