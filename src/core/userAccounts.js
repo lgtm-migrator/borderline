@@ -117,7 +117,7 @@ UserAccounts.prototype.deleteById = function(id) {
     var that = this;
     return new Promise(function(resolve, reject) {
         that.userCollection.findOneAndDelete({ _id : new ObjectID(id) }).then(function(result) {
-            resolve(result);
+            resolve(result.value);
         }, function (error) {
             reject(error);
         });

@@ -84,19 +84,22 @@ BorderlineServer.prototype.setupUserAccount = function() {
 };
 
 BorderlineServer.prototype.setupUserDataSources = function(){
-    var userDataSourcesController = require('./controllers/userDataSourcesController');
-    this.userDataSourcesController = new userDataSourcesController(this.db.collection('data_sources'));
+    var dataSourcesController = require('./controllers/dataSourcesController');
+    this.dataSourcesController = new dataSourcesController(this.db.collection('data_sources'));
 
     //[ Data sources routes
-    this.app.route('/users/:user_id/data_source')
-        .get(this.userDataSourcesController.getDataSources)
-        .post(this.userDataSourcesController.postDataSources)
-        .delete(this.userDataSourcesController.deleteDataSources)
-        .put(this.userDataSourcesController.putDataSources);
-    this.app.route('/users/:user_id/data_source/:data_source_id')
-        .get(this.userDataSourcesController.getUserDataSource)
-        .delete(this.userDataSourcesController.deleteUserDataSource)
-        .post(this.userDataSourcesController.postUserDataSource);
+    this.app.route('/data_sources/')
+        .get(this.dataSourcesController.getDataSources) // GET all data sources
+        .post(this.dataSourcesController.postDataSource);//POST New data source
+    this.app.route('/data_sources/:source_id')
+        .get(this.dataSourcesController.getDataSourceByID) //GET a single data source
+        .put(this.dataSourcesController.putDataSourceByID) // PUT Update a single data source
+        .delete(this.dataSourcesController.deleteDataSourceByID); //DELETE a single data source
+    this.app.route('/data_sources/users/:user_id')
+        .get(this.dataSourcesController.getUserDataSources); //GET all user's data sources
+    this.app.route('/data_sources/users/:user_id/:source_id')
+        .post(this.dataSourcesController.postUserDataSourceByID) //POST Subscribe a user to a data source
+        .delete(this.dataSourcesController.deleteUserDataSourceByID); //DELETE Unsubscribe user to data source
     // ] Data sources routes
 };
 
