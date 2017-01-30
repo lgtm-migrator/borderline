@@ -110,7 +110,7 @@ module.exports = function () {
         },
         output: {
             path: distFolder,
-            filename: '[name].[hash].js',
+            filename: prod ? '[name].' + pkg.version + '.js' : '[name].[hash].js',
             library: 'borderline',
             libraryTarget: 'umd',
             umdNamedDefine: true

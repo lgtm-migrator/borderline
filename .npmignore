@@ -1,7 +1,0 @@
-/config/
-/src/
-/tools/
-.eslintrc
-.babelrc
-.editorconfig
-.gitignore
