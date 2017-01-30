@@ -17,9 +17,16 @@ class PluginInspector {
 
     constructor() {
         this.initialized = false;
+
+        // We add hot reloading block here to prevent propagation
+        if (module.hot) {
+            return;
+        }
     }
 
     discover() {
+
+        console.info('Launching Plugin discovery ...'); // eslint-disable-line no-console
 
         // Here we prevent double initialization
         // We should make sure we handle reloading from there
@@ -33,6 +40,7 @@ class PluginInspector {
             .subscribe(() => {
                 wait.unsubscribe();
                 this.injectFlux();
+                this.initialized = true;
             });
     }
 
@@ -223,7 +231,6 @@ const singleExtensionSuccess = (state, action) => {
 };
 
 const checkExtensionValidity = (extension) => {
-    console.log('checkExtensionValidity', extension); // eslint-disable-line no-console
     if (!extension.__proto__.invocation)
         return false;
     return true;

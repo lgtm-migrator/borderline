@@ -35,5 +35,11 @@ class Borderline extends Component {
     }
 }
 
+if (module.hot) {
+    module.hot.accept('./utilities/PluginInspector', () => {
+        console.info('The pluginManager was reloaded'); // eslint-disable-line no-console
+    });
+}
+
 // We connect this component to the redux store and export it
 export default Borderline;

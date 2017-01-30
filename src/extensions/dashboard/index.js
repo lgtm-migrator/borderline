@@ -7,7 +7,7 @@ import { mainEpic } from './epics';
 class DashboardPlugin {
 
     invocation() {
-        console.log('Probing DashboardPlugin'); // eslint-disable-line no-console
+        // console.log('Probing DashboardPlugin'); // eslint-disable-line no-console
         // borderline.registerReducer('mainReducer', mainReducer);
         borderline.registerEpics(mainEpic);
     }
