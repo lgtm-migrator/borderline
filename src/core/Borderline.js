@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 // We import the plugin manager
 import pluginInspector from './utilities/PluginInspector';
