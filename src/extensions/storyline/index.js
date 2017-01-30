@@ -1,7 +1,14 @@
+/* globalborderline:true */
+// import { mainEpic } from './epics';
+
 class StoryLinePlugin {
 
-    invocation() {
+    probe() {
         console.log(this.constructor.name, 'is not implemented'); // eslint-disable-line no-console
+    }
+
+    invoke() {
+
     }
 
 }

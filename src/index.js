@@ -1,4 +1,4 @@
-export * from './core/utilities/APIDescriptor';
+export * from './core/utilities/InterfaceDescriptor';
 import Borderline from './core/BorderlineBootstrap';
 
 // This file should export the outside facing APIs available on global scope

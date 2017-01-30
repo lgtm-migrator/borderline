@@ -14,10 +14,11 @@ import StatusBar from './containers/StatusBarContainer';
 class Borderline extends Component {
 
     componentDidMount() {
+        pluginInspector.discover();
     }
 
     componentDidUpdate() {
-        pluginInspector.refreshExtensions();
+        pluginInspector.discover();
     }
 
     // Here we do the top level rendering of our application

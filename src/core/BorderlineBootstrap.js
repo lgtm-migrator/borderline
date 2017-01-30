@@ -2,7 +2,7 @@ import { AppContainer } from 'react-hot-loader';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BorderlineProvider from './BorderlineProvider';
-import store from './store';
+import storeManager from './utilities/StoreManager';
 
 export default class BorderlineBootstrap {
 
@@ -18,7 +18,7 @@ export default class BorderlineBootstrap {
         // We render the application
         ReactDOM.render(
             <AppContainer>
-                <BorderlineProvider store={store} />
+                <BorderlineProvider store={storeManager.getStore()} />
             </AppContainer>,
             root
         );
@@ -30,7 +30,7 @@ export default class BorderlineBootstrap {
                 var HotBorderlineProvider = require('./BorderlineProvider').default;
                 ReactDOM.render(
                     <AppContainer>
-                        <HotBorderlineProvider store={store} />
+                        <HotBorderlineProvider store={storeManager.getStore()} />
                     </AppContainer>,
                     root
                 );

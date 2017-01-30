@@ -1,3 +1,6 @@
-export const mainEpic = (action) => {
-    return action.ofType('Coucou').mapTo({ type: 'Holaaa' });
+export const mainEpic = {
+    main:
+    (action) => {
+        return action.ofType('Coucou').mapTo({ type: 'Holaaa' });
+    }
 };
