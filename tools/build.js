@@ -40,17 +40,15 @@ function buildBundle() {
     var command = 'webpack';
     var args = ['--config', configFile];
 
-    exec(command + ' ' + args.join(' '), {
-        stdio: 'ignore'
-    }, function (error) {
+    exec(command + ' ' + args.join(' '), function (error) {
         copyDistribution(error);
     });
 }
 
 function copyDistribution(error) {
     if (error) {
-        console.error(chalk.red('Building has failed.'));
+        console.error(chalk.red('Built has failed.'));
         process.exit(1);
     } else
-        console.log(chalk.green('Building was a success !'));
+        console.log(chalk.green('Built was a success !'));
 }

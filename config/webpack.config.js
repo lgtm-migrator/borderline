@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const html = require('html-webpack-plugin');
+const replace = require('replace-bundle-webpack-plugin');
 
 const distFolder = resolve(__dirname, '../dist');
 const sourceFolder = resolve(__dirname, '../src');
@@ -48,6 +49,9 @@ module.exports = function () {
         'rxjs'
     );
 
+    // defining reduction dictionnary for require
+    const dictionnary = {};
+
     // defining the plugins to be used for bundling
     const plugins = [
         new webpack.optimize.CommonsChunkPlugin(prod ? {
@@ -85,7 +89,15 @@ module.exports = function () {
                 output: {
                     comments: false,
                 },
-            })
+            }),
+            new replace([{
+                partten: /.\/node_modules\/.*?\.js(.)/g,
+                replacement: (match, end) => {
+                    if (dictionnary[match] === undefined)
+                        dictionnary[match] = Object.keys(dictionnary).length.toString(36) + end;
+                    return dictionnary[match];
+                }
+            }])
         );
     } else {
         plugins.push(
@@ -110,7 +122,7 @@ module.exports = function () {
         },
         output: {
             path: distFolder,
-            filename: prod ? '[name].' + pkg.version + '.js' : '[name].[hash].js',
+            filename: prod ? '[name].js' : '[name].[hash].js',
             library: 'borderline',
             libraryTarget: 'umd',
             umdNamedDefine: true

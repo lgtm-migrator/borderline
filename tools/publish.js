@@ -71,9 +71,7 @@ function ensureBuildIsReady() {
     var command = 'npm';
     var args = ['run', 'build'];
 
-    exec(command + ' ' + args.join(' '), {
-        stdio: 'ignore'
-    }, function (error) {
+    exec(command + ' ' + args.join(' '), function (error) {
         copyDistribution(error);
     });
 }
@@ -109,5 +107,5 @@ function finalizeExport(error) {
         process.exit(1);
     } else
         console.log(chalk.green('Export was a success !'));
-    purgeFolders(function () { });
+    purgeFolders(() => { });
 }
