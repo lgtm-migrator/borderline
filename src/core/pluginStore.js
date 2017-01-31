@@ -57,10 +57,11 @@ PluginStore.prototype.createPluginFromFile = function(file) {
     var that = this;
     var buf = Buffer.from(file.buffer);
     var zip = new adm_zip(buf);
-
+/*
     if (zip.getEntry('package.json') === null) {
         return { error: 'Missing mandatory plugin file /package.json' };
     }
+    */
     if (zip.getEntry('index.js') === null) {
         return { error: 'Missing mandatory plugin file /index.js' };
     }
@@ -108,9 +109,11 @@ PluginStore.prototype.deletePluginById = function(uuid) {
 PluginStore.prototype.updatePluginById = function(uuid, file) {
     var buf = Buffer.from(file.buffer);
     var zip = new adm_zip(buf);
+    /*
     if (zip.getEntry('package.json') === null) {
         return { error: 'Missing mandatory plugin file /package.json' };
     }
+    */
     if (zip.getEntry('index.js') === null) {
         return { error: 'Missing mandatory plugin file /index.js' };
     }
