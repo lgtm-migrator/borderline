@@ -4,16 +4,19 @@ import storeManager from '../utilities/StoreManager';
 
 class PluginContext {
 
-    constructor(extension) {
+    constructor(extension, scene) {
+
         this.extension = extension;
         this.reducers = {};
         this.epics = {};
         this.epicsTag = [];
         this.uniq = null;
+        this.scene = scene || 'extensions';
         this.bootstrap();
     }
 
     bootstrap() {
+
         this.validate();
         this.prepare();
         this.uniq = this.instance.identity();
@@ -21,6 +24,7 @@ class PluginContext {
     }
 
     validate() {
+
         this.instance = new this.extension();
         if (!this.instance.__proto__.identity)
             throw 'Extention cannot be identified';
@@ -29,14 +33,19 @@ class PluginContext {
     }
 
     prepare() {
+
         this.access = {
 
             declareReducers: (reducers) => {
+                if (reducers === undefined || reducers === null)
+                    return;
                 Object.assign(this.reducers, reducers);
                 this.declareReducers();
             },
 
             declareEpics: (epics) => {
+                if (epics === undefined || epics === null)
+                    return;
                 if (process.env.NODE_END !== 'production' && this.epicsTag.length > 0)
                     console.info(`In ${this.uniq} when declareEpics is called multiple time homonyms will be dropped`); // eslint-disable-line no-console
                 Object.assign(this.epics, epics);
@@ -73,17 +82,26 @@ class PluginContext {
         if (current.length === 0)
             return;
 
-        let chain = (epics) => (action, store) => epics.mergeMap(epic => epic(action.map(a => this.actionDetagger(a)), store)).map(a => this.actionTagger(a));
+        let chain = (epics) => (action, store) => epics.mergeMap(epic => epic(action.map(a => this.actionDetagger(a)), store.getState()[this.uniq])).map(a => this.actionTagger(a));
         storeManager.injectAsyncEpic(this.uniq, chain(new BehaviorSubject(combineEpics(...current))));
         this.epicsTag = Object.keys(this.epics);
     }
 
     actionTagger(action) {
-        return Object.assign({}, action, { type: `@@extensions/${this.uniq}/${action.type}` });
+        // We tag the action type provided by external developer
+        if (action.type.match(/@@.*?\/.*?\/.*/g) !== null)
+            return action;
+        return Object.assign({}, action, { type: `@@${this.scene}/${this.uniq}/${action.type}` });
     }
 
     actionDetagger(action) {
-        return Object.assign({}, action, { type: action.type.replace(`@@extensions/${this.uniq}/`, '') });
+        // We detag the action type provided by external developer
+        return Object.assign({}, action, { type: action.type.replace(`@@${this.scene}/${this.uniq}/`, '') });
+    }
+
+    getCurrentState() {
+        console.debug('GETTING CURRENT STATE'); // eslint-disable-line no-console
+        return storeManager.getStore().getState()[this.uniq];
     }
 }
 
