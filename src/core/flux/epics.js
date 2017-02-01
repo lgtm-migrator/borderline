@@ -14,7 +14,7 @@ export default {
     (action) => action.ofType(fluxTypes.EXTENSIONS_WILL_LOAD)
         .mapTo(fluxActions.extensionsLoad()),
 
-    extensionRetreiveLoad:
+    extensionRetrieveLoad:
     (action) => action.ofType(fluxTypes.EXTENSIONS_LOAD)
         .mergeMap(() =>
             // Observable.from(fetch('/plugin_store')
@@ -31,7 +31,7 @@ export default {
             )
         ),
 
-    extensionRetreiveSingle:
+    extensionRetrieveSingle:
     (action) => action.ofType(fluxTypes.SINGLE_EXTENSION_LOAD)
         .mergeMap(action =>
             // Observable.from(fetch('/plugin')
@@ -45,7 +45,7 @@ export default {
         .mergeMap(action =>
             Observable.concat(
                 Observable.of(fluxActions.singleExtensionLoaded(action.id)),
-                Observable.from(Object.values(state.toJS().extensions))
+                Observable.from(Object.values(state.retrieve().toJS().extensions))
                     .every(subapp => subapp.loaded === true)
                     .filter(loaded => loaded === true)
                     .mapTo(fluxActions.extensionsLoaded())
@@ -64,7 +64,7 @@ export default {
     (action, state) => action.ofType(fluxTypes.EXTENSIONS_INVOKE)
         .mergeMap(() => {
             let results = [];
-            let extensions = state.toJS().extensions || {};
+            let extensions = state.retrieve().toJS().extensions || {};
             Object.assign(extensions, systemExtensions);
             Object.keys(extensions).map((key) => {
                 try {

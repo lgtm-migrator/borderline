@@ -82,7 +82,9 @@ class PluginContext {
         if (current.length === 0)
             return;
 
-        let chain = (epics) => (action, store) => epics.mergeMap(epic => epic(action.map(a => this.actionDetagger(a)), store.getState()[this.uniq])).map(a => this.actionTagger(a));
+        let chain = (epics) => (action) => epics.mergeMap(epic => epic(action.map(a => this.actionDetagger(a)), {
+            retrieve: () => storeManager.getStore().getState()[this.uniq]
+        })).map(a => this.actionTagger(a));
         storeManager.injectAsyncEpic(this.uniq, chain(new BehaviorSubject(combineEpics(...current))));
         this.epicsTag = Object.keys(this.epics);
     }
