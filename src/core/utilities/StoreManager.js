@@ -2,7 +2,6 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { BehaviorSubject } from 'rxjs';
 import createLogger from 'redux-logger';
-// import { connect } from 'react-redux';
 
 import { Map } from 'immutable';
 
@@ -55,12 +54,6 @@ class StoreManager {
         this.behaviourEpic.next(asyncEpic);
     }
 
-    synchronise() {
-        this.behaviourEpic = new BehaviorSubject(...Object.values(this.asyncEpics));
-        this.epicMiddleware.replaceEpic(this.rootEpic);
-        this.store.replaceReducer(combineReducers(this.asyncReducers));
-    }
-
     dispatch(action) {
         this.store.dispatch(action);
     }
@@ -68,13 +61,6 @@ class StoreManager {
     getStore() {
         return this.store;
     }
-
-    // retrieve(states, mapping) {
-    //     console.log(states); // eslint-disable-line no-console
-    //     return (function (target) {
-    //         return connect(mapping)(target);
-    //     });
-    // }
 }
 
 const storeManager = new StoreManager();

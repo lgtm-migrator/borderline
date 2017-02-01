@@ -1,8 +1,5 @@
-/* globalborderline:true */
 import { dashboardReducers } from './reducers';
 import { dashboardEpics } from './epics';
-
-// import DashboardContainer from './DashboardContainer';
 
 class DashboardPlugin {
 
@@ -11,12 +8,8 @@ class DashboardPlugin {
     }
 
     invocation() {
-        // console.log('Probing DashboardPlugin'); // eslint-disable-line no-console
         this.declareReducers(dashboardReducers);
         this.declareEpics(dashboardEpics);
-        this.declareEpics(dashboardEpics);
-        this.declareLocation();
-        this.declareBinding();
     }
 }
 
