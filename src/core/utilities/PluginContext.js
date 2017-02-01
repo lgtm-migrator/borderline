@@ -100,11 +100,6 @@ class PluginContext {
         // We detag the action type provided by external developer
         return Object.assign({}, action, { type: action.type.replace(`@@${this.scene}/${this.uniq}/`, '') });
     }
-
-    getCurrentState() {
-        console.debug('GETTING CURRENT STATE'); // eslint-disable-line no-console
-        return storeManager.getStore().getState()[this.uniq];
-    }
 }
 
 export default PluginContext;
