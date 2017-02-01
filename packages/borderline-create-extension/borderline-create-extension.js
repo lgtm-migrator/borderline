@@ -70,6 +70,7 @@ var program = commander
         extensionName = name;
     })
     .option('--verbose', 'print additional logs')
+    .option('--scripts-version <alternative-package>', 'use a non-standard version of borderline-scripts')
     .allowUnknownOption()
     .on('--help', function () {
         console.log();
@@ -95,9 +96,9 @@ if (typeof extensionName === 'undefined') {
     process.exit(1);
 }
 
-createApp(extensionName, program.verbose);
+createApp(extensionName, program.verbose, program.scriptsVersion);
 
-function createApp(name, verbose) {
+function createApp(name, verbose, version) {
     var root = path.resolve(name);
     var appName = path.basename(root);
 
@@ -131,7 +132,7 @@ function createApp(name, verbose) {
     console.log('Installing ' + chalk.cyan('borderline-scripts') + '...');
     console.log();
 
-    run(root, appName, verbose, originalName);
+    run(root, appName, version, verbose, originalName);
 }
 
 function install(packageToInstall, verbose, callback) {
@@ -173,7 +174,7 @@ function run(root, appName, version, verbose, originalName, template) {
 }
 
 function getInstallPackage(version) {
-    var packageToInstall = 'react-scripts';
+    var packageToInstall = 'borderline-scripts';
     var validSemver = semver.valid(version);
     if (validSemver) {
         packageToInstall += '@' + validSemver;

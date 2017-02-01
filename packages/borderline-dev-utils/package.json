@@ -1,0 +1,22 @@
+{
+    "name": "borderline-dev-utils",
+    "version": "0.0.0",
+    "description": "Webpack utilities used by Borderline create extension",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dsi-icl/borderline-create-extensions.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/dsi-icl/borderline-create-extensions/issues"
+    },
+    "homepage": "https://github.com/dsi-icl/borderline-create-extensions#readme",
+    "engines": {
+        "node": ">=7"
+    },
+    "files": [
+        "prompt.js"
+    ],
+    "dependencies": {
+    }
+}
