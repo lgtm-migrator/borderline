@@ -1,22 +1,15 @@
-/* global borderline:true */
-// import { mainReducer } from './reducers';
-import { mainEpic } from './epics';
-
-// import DashboardContainer from './DashboardContainer';
+import { dashboardReducers } from './reducers';
+import { dashboardEpics } from './epics';
 
 class DashboardPlugin {
 
-    invocation() {
-        // console.log('Probing DashboardPlugin'); // eslint-disable-line no-console
-        // borderline.registerReducer('mainReducer', mainReducer);
-        borderline.registerEpics(mainEpic);
+    identity() {
+        return '0000-00-001';
     }
 
-    invoke() {
-        // borderline.dispatch({
-        //     type: '@@borderline/ATTACH_SUBAPP',
-        //     component: DashboardContainer
-        // });
+    invocation() {
+        this.declareReducers(dashboardReducers);
+        this.declareEpics(dashboardEpics);
     }
 }
 
