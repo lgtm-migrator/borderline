@@ -1,16 +1,14 @@
-/* globalborderline:true */
-// import { mainEpic } from './epics';
+/* global borderline:true */
+import { storylineReducers } from './reducers';
+import { storylineEpics } from './epics';
 
 class StoryLinePlugin {
 
-    probe() {
-        console.log(this.constructor.name, 'is not implemented'); // eslint-disable-line no-console
+    invocation_() {
+        // console.log('Probing DashboardPlugin'); // eslint-disable-line no-console
+        borderline.registerReducers(storylineReducers);
+        borderline.registerEpics(storylineEpics);
     }
-
-    invoke() {
-
-    }
-
 }
 
 export default StoryLinePlugin;

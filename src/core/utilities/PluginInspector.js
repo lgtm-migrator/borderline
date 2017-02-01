@@ -1,14 +1,17 @@
 import { Observable } from 'rxjs';
 import Immutable, { Map } from 'immutable';
+import PluginContext from './PluginContext';
 import * as api from './InterfaceDescriptor';
 
 // We import system extensions here
+// import ConstructionPlugin from '../../extensions/construction';
+// import LocationPlugin from '../../extensions/location';
 import DashboardPlugin from '../../extensions/dashboard';
-import StoryLinePlugin from '../../extensions/storyline';
+// import StoryLinePlugin from '../../extensions/storyline';
 
 const systemExtensions = {
     dashboard: DashboardPlugin,
-    storyLine: StoryLinePlugin
+    // storyLine: StoryLinePlugin
 };
 
 const activeExtensions = [];
@@ -63,6 +66,7 @@ const localTypes = {
     EXTENSIONS_WILL_INVOKE: '@@core/inspector/EXTENSIONS_WILL_INVOKE',
     EXTENSIONS_INVOKE: '@@core/inspector/EXTENSIONS_INVOKE',
     EXTENSIONS_DID_INVOKE: '@@core/inspector/EXTENSIONS_DID_INVOKE',
+    BORDERLINE_READY: '@@all/borderline/READY',
 };
 
 const localActions = {
@@ -106,15 +110,19 @@ const localActions = {
     }),
 
     extensionsWillInvoke: () => ({
-        type: localTypes.EXTENSIONS_WILL_INVOKE,
+        type: localTypes.EXTENSIONS_WILL_INVOKE
     }),
 
     extensionsInvoke: () => ({
-        type: localTypes.EXTENSIONS_INVOKE,
+        type: localTypes.EXTENSIONS_INVOKE
     }),
 
     extensionsDidInvoke: () => ({
-        type: localTypes.EXTENSIONS_DID_INVOKE,
+        type: localTypes.EXTENSIONS_DID_INVOKE
+    }),
+
+    borderlineReady: () => ({
+        type: localTypes.BORDERLINE_READY
     })
 };
 
@@ -178,12 +186,7 @@ const localEpics = {
             Object.assign(extensions, systemExtensions);
             Object.keys(extensions).map((key) => {
                 try {
-                    let current = new extensions[key]();
-                    if (!checkExtensionValidity(current)) {
-                        results.push(localActions.singleExtensionCorrupted(key));
-                        return;
-                    }
-                    current.invocation(api);
+                    let current = new PluginContext(extensions[key]);
                     activeExtensions.push(current);
                 } catch (exception) {
                     results.push(localActions.singleExtensionCorrupted(key));
@@ -194,6 +197,10 @@ const localEpics = {
             results.push(localActions.extensionsDidInvoke());
             return Observable.from(results);
         }),
+
+    extensionDidInvoke:
+    (action) => action.ofType(localTypes.EXTENSIONS_DID_INVOKE)
+        .mapTo(localActions.borderlineReady())
 };
 
 const localReducers = {
@@ -228,12 +235,6 @@ const singleExtensionSuccess = (state, action) => {
     future.extensions[action.id].module = action.subapp;
     future.extensions[action.id].loaded = true;
     return Immutable.fromJS(future);
-};
-
-const checkExtensionValidity = (extension) => {
-    if (!extension.__proto__.invocation)
-        return false;
-    return true;
 };
 
 const pluginInspector = new PluginInspector();

@@ -1,6 +1,6 @@
-export const mainEpic = {
-    main:
+export const dashboardEpics = {
+    mainEpic:
     (action) => {
-        return action.ofType('Coucou').mapTo({ type: 'Holaaa' });
+        return action.ofType('@@all/borderline/READY').mapTo({ type: 'Dashboard coming to life' });
     }
 };
