@@ -12,10 +12,12 @@ var WebpackDevServer = require('webpack-dev-server');
 var historyApiFallback = require('connect-history-api-fallback');
 var httpProxyMiddleware = require('http-proxy-middleware');
 var detect = require('detect-port');
+var formatWebpackMessages = require('borderline-dev-utils/formatWebpackMessages');
+
 /*
 var clearConsole = require('react-dev-utils/clearConsole');
 var checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-var formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+
 var getProcessForPort = require('react-dev-utils/getProcessForPort');
 var openBrowser = require('react-dev-utils/openBrowser');
 */
@@ -56,7 +58,7 @@ function setupCompiler(host, port, protocol) {
         // We have switched off the default Webpack output in WebpackDevServer
         // options so we are going to "massage" the warnings and errors and present
         // them in a readable focused way.
-        var messages = stats.toString();//formatWebpackMessages(stats.toJson({}, true));
+        var messages = formatWebpackMessages(stats.toJson({}, true));
         var isSuccessful = !messages.errors.length && !messages.warnings.length;
         var showInstructions = isSuccessful && (isInteractive || isFirstCompile);
 
@@ -225,7 +227,7 @@ function runDevServer(host, port, protocol) {
         hot: true,
         // It is important to tell WebpackDevServer to use the same "root" path
         // as we specified in the config. In development, we always serve from /.
-        publicPath: config.output.publicPath,
+        publicPath: config[0].output.publicPath,
         // WebpackDevServer is noisy by default so we emit custom message instead
         // by listening to the compiler events with `compiler.plugin` calls above.
         quiet: true,
