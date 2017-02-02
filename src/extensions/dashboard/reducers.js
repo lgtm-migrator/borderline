@@ -1,2 +1,2 @@
-export const dashboardReducers = {
+export default {
 };

@@ -1,5 +1,5 @@
-import { dashboardReducers } from './reducers';
-import { dashboardEpics } from './epics';
+import dashboardReducers from './reducers';
+import dashboardEpics from './epics';
 
 class DashboardPlugin {
 

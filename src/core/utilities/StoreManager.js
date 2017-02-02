@@ -1,6 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { BehaviorSubject } from 'rxjs';
+import { connect } from 'react-redux';
 import createLogger from 'redux-logger';
 
 import { Map } from 'immutable';
@@ -60,6 +61,26 @@ class StoreManager {
 
     getStore() {
         return this.store;
+    }
+
+    injectStates(...args) {
+
+        return (target) => {
+
+            return connect((state) => {
+
+                let result = [];
+                let func = null;
+                args.forEach(function (prop) {
+                    if (typeof prop === 'string')
+                        result.push(state[prop]);
+                    else
+                        func = prop;
+                });
+                return func(...result);
+            })(target);
+        };
+
     }
 }
 

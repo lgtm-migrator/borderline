@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { Match } from 'react-router';
+import { Route } from 'react-router-dom';
 
-// import storeManager from '../utilities/StoreManager';
+import storeManager from '../utilities/StoreManager';
 import WrapClear from '../components/WrapClearComponent';
 import styles from '../styles/ContentBox.css';
 
-// @storeManager.retrieve(['plop'], (plop) => {
-//     console.log('ContentBoxContainer Store', plop); // eslint-disable-line no-console
-//     return {
-//         list: plop.subapps
-//     };
-// })
+@storeManager.injectStates('0000-00-000', (page) => ({
+    list: page ? page.toJS().pages || [] : []
+}))
 class ContentBoxContainer extends Component {
 
     constructor() {
@@ -20,24 +17,25 @@ class ContentBoxContainer extends Component {
         };
     }
 
-    componentWillMount() {
-        this.createSubappContainers();
-    }
-
-    componentWillUpdate() {
-        this.createSubappContainers();
+    componentDidUpdate(prevProp) {
+        if (prevProp.list.length != this.props.list.length)
+            this.createSubappContainers();
     }
 
     createSubappContainers() {
         let pathname = this.props.pathname || '';
-        this.state.subappContainers = Object.keys(this.props.list || {}).map((key) => (
-            <Match pattern={`${pathname}/${key}`} key={key} component={() =>
-                <div className={styles.contentcontainer}>
-                    {key}
-                </div>
-            } />
-        ));
+        this.setState({
+            subappContainers: this.props.list.map((component) => {
+                let View = component.view;
+                return (
+                    <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
+                        <div className={styles.contentcontainer}><View /></div>
+                    )} key={`${component.particule}d`} />
+                );
+            })
+        });
     }
+
     render() {
         return (
             <div className={styles.contentbox}>

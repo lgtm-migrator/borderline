@@ -3,16 +3,16 @@ import React, { Component } from 'react';
 // import WrapClear from '../components/WrapClearComponent';
 // import styles from '../styles/Body.css';
 
-class DashboardContainer extends Component {
+class StorylineContainer extends Component {
 
     componentDidMount() {
     }
 
     render() {
         return (
-            <div>Hallo !</div>
+            <div>Bonjour !!!</div>
         );
     }
 }
 
-export default DashboardContainer;
+export default StorylineContainer;

@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs';
 import PluginContext from './PluginContext';
 import storeManager from '../utilities/StoreManager';
-import CoreFluxPlugin, { coreFluxPluginActions } from '../flux';
+import PagePlugin from '../flux/page';
+import CoreFluxPlugin, { coreFluxPluginActions } from '../flux/extensions';
 
 class PluginInspector {
 
@@ -36,6 +37,7 @@ class PluginInspector {
 
     injectFlux() {
 
+        new PluginContext(PagePlugin);
         new PluginContext(CoreFluxPlugin, 'core');
         storeManager.dispatch(coreFluxPluginActions.borderlineBoot());
     }

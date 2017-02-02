@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-import PluginContext from '../utilities/PluginContext';
+import PluginContext from '../../utilities/PluginContext';
 import fluxTypes from './types';
 import fluxActions from './actions';
-import systemExtensions from '../../extensions';
+import systemExtensions from '../../../extensions';
 
 export default {
 

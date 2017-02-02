@@ -1,3 +1,5 @@
+import storylineEpics from './epics';
+
 class StorylinePlugin {
 
     identity() {
@@ -5,6 +7,7 @@ class StorylinePlugin {
     }
 
     invocation() {
+        this.declareEpics(storylineEpics);
     }
 }
 

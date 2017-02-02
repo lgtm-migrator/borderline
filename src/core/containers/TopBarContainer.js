@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Route, Link } from 'react-router-dom';
 
+import storeManager from '../utilities/StoreManager';
 import WrapClear from '../components/WrapClearComponent';
 import styles from '../styles/TopBar.css';
 
+@storeManager.injectStates('0000-00-000', (page) => ({
+    list: page ? page.toJS().pages || [] : []
+}))
 class TopBarContainer extends Component {
 
     constructor() {
@@ -13,22 +17,19 @@ class TopBarContainer extends Component {
         };
     }
 
-    componentWillMount() {
-        this.createSubappLinks();
-    }
-
-    componentWillUpdate() {
-        this.createSubappLinks();
+    componentDidUpdate(prevProp) {
+        if (prevProp.list.length != this.props.list.length)
+            this.createSubappLinks();
     }
 
     createSubappLinks() {
         let pathname = this.props.pathname || '';
-        this.state.subappLinks = Object.keys(this.props.list || {}).map((key) => {
-            return (
-                <Link to={`${pathname}/${key}`} key={key} className={styles.subappbutton} activeClassName={styles.subappbuttonactive}>
-                    {key}
-                </Link>
-            );
+        this.setState({
+            subappLinks: this.props.list.map((component) => (
+                <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
+                    <Link to={`${pathname}/${component.particule}`} className={match ? styles.subappbuttonactive : styles.subappbutton}>{component.name}</Link>
+                )} key={component.particule} />
+            ))
         });
     }
 
