@@ -119,7 +119,7 @@ function createApp(name, verbose, version) {
     var packageJson = {
         name: appName,
         version: '0.0.1',
-        private: true,
+        private: true
     };
     fs.writeFileSync(
         path.join(root, 'package.json'),

@@ -1,6 +1,6 @@
 {
     "name": "borderline-dev-utils",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "description": "Webpack utilities used by Borderline create extension",
     "repository": {
         "type": "git",
@@ -15,7 +15,9 @@
         "node": ">=7"
     },
     "files": [
-        "prompt.js"
+        "prompt.js",
+        "webpackHotDevClient.js",
+        "formatWebpackMessages.js"
     ],
     "dependencies": {
     }
