@@ -4,16 +4,16 @@ const path = require('path');
 const mongodb = require('mongodb');
 
 
- var my_fs_module = {
-     existsSync: function(path) { console.log('overload fs-extra ' + path); return false; }
- };
+var my_fs_module = {
+    existsSync: function(path) { console.log('overload fs-extra ' + path); return false; }
+};
+
 var borderlineApi = {
     'fs-extra': my_fs_module,
     'fs': my_fs_module,
     'path': path,
     'mongodb': mongodb
 };
-var mod = require('module');
 
 function pluginImporter(path) {
     var m = { _cache: borderlineApi, _load: function(request, parent, isMain) { return m._cache[request]; } };
@@ -24,7 +24,7 @@ function pluginImporter(path) {
     var code = fs.readFileSync(path + '/index.js');
     var imported = eval(code1 + code + code2);
     console.log(imported);
-    imported(e, r, m, 'index.js', path);
+    imported(e, pluginImporter, m, 'index.js', path);
     console.log(m.exports);
     return m.exports;
 }

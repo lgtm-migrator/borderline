@@ -1,10 +1,5 @@
-const fs = require('fs-extra');
 
-function DummyPlugin(borderline) {
-    if (fs.existsSync(__dirname + '/po.jpg') == true)
-        console.log('required fs found po.jpg');
-    if (borderline.fs.existsSync(__dirname + '/po.jpg') == true)
-        console.log('borderline fs found po.jpg');
+function DummyPlugin() {
 };
 
 DummyPlugin.prototype.attach = function(borderline, expressAppRouter) {
@@ -20,4 +15,5 @@ DummyPlugin.prototype.dummy = function(req, res) {
     res.send('Dumb dummy');
 };
 
-module.exports = DummyPlugin;
+import { ImportedTester } from './testimport.js';
+
