@@ -28,7 +28,7 @@ class TopBarContainer extends Component {
             subappLinks: this.props.list.map((component) => (
                 <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
                     <Link to={`${pathname}/${component.particule}`} className={match ? styles.subappbuttonactive : styles.subappbutton}>{component.name}</Link>
-                )} key={component.particule} />
+                )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
             ))
         });
     }

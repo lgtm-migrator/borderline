@@ -16,14 +16,14 @@ class PluginInspector {
     }
 
     rediscover() {
-        this.initialized = false;
         storeManager.recreate();
+        this.initialized = false;
         this.discover();
     }
 
     discover() {
 
-        console.info('Launching Plugin discovery ...'); // eslint-disable-line no-console
+        console.info('Launching Extensions discovery ...'); // eslint-disable-line no-console
 
         // Here we prevent double initialization
         // We should make sure we handle reloading from there

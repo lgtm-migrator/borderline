@@ -7,7 +7,7 @@ class StorylineContainer extends Component {
 
     render() {
         return (
-            <div>Draw your cohorts ... ABOpl</div>
+            <div>Draw your cohorts ...</div>
         );
     }
 }

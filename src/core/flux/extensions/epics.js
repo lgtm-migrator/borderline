@@ -65,10 +65,10 @@ export default {
         .mergeMap(() => {
             let results = [];
             let extensions = state.retrieve().toJS().extensions || {};
-            Object.assign(extensions, systemExtensions);
-            Object.keys(extensions).map((key) => {
+            let stack = Object.assign({}, extensions, systemExtensions);
+            Object.keys(stack).map((key) => {
                 try {
-                    new PluginContext(extensions[key]);
+                    new PluginContext(stack[key]);
                 } catch (exception) {
                     results.push(fluxActions.singleExtensionCorrupted(key));
                     if (process.env.NODE_ENV === 'development')

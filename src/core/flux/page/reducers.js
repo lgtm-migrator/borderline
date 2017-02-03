@@ -15,6 +15,7 @@ export default {
 };
 
 const pageDock = (state, action) => {
+
     let future = state.toJS();
     future.pages = future.pages || [];
     future.pages.push({

@@ -34,7 +34,7 @@ class ContentBoxContainer extends Component {
                 return (
                     <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
                         <ContentBoxMountingContainer view={component.view} />
-                    )} key={`${component.particule}`} />
+                    )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
                 );
             })
         });
