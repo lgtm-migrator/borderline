@@ -37,7 +37,7 @@ class Borderline extends Component {
 
 if (module.hot) {
     module.hot.accept('./utilities/PluginInspector', () => {
-        console.info('The pluginManager was reloaded'); // eslint-disable-line no-console
+        console.info('The pluginManager was modified...'); // eslint-disable-line no-console
     });
 }
 

@@ -15,6 +15,12 @@ class PluginInspector {
         }
     }
 
+    rediscover() {
+        this.initialized = false;
+        storeManager.recreate();
+        this.discover();
+    }
+
     discover() {
 
         console.info('Launching Plugin discovery ...'); // eslint-disable-line no-console

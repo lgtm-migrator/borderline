@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-// import WrapClear from '../components/WrapClearComponent';
-// import styles from '../styles/Body.css';
-
 class DashboardContainer extends Component {
 
     componentDidMount() {
@@ -10,7 +7,7 @@ class DashboardContainer extends Component {
 
     render() {
         return (
-            <div>Hallo !</div>
+            <div>Welcome to borderline</div>
         );
     }
 }

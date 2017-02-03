@@ -6,15 +6,6 @@
     padding-bottom: var(--statusbar-height);
 }
 
-.placeholder {
-    composes: reset boxing from "./Layout.css";
-    font-size: 300px;
-    color: rgba(10, 10, 10, 255);
-    text-align: center;
-    top: 0;
-    left: 0;
-}
-
 .contentcontainer {
     composes: reset boxing from "./Layout.css";
     font-size: 35px;
@@ -22,4 +13,19 @@
     color: rgba(10, 10, 10, 255);
     text-align: center;
     padding-top: 50px;
+}
+
+.contentexpand {
+    height: 100%;
+    width: 100%;
+}
+
+.contentstale {
+    composes: reset boxing from "./Layout.css";
+    background-color: rgba(150, 10, 10, 255);
+    color: rgba(255, 255, 255, 255);
+    font-size: 300px;
+    text-align: center;
+    top: 0;
+    left: 0;
 }

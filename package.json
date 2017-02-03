@@ -53,11 +53,11 @@
         "postcss-import": "9.1.0",
         "postcss-loader": "1.2.2",
         "react-hot-loader": "3.0.0-beta.6",
-        "redux-logger": "2.7.4",
+        "redux-logger": "2.8.1",
         "replace-bundle-webpack-plugin": "^1.0.0",
         "style-loader": "0.13.1",
         "webpack": "2.2.1",
-        "webpack-dev-middleware": "1.9.0",
+        "webpack-dev-middleware": "1.10.0",
         "webpack-hot-middleware": "2.16.1"
     },
     "dependencies": {
@@ -65,10 +65,10 @@
         "react": "15.4.2",
         "react-dom": "15.4.2",
         "react-redux": "5.0.2",
-        "react-router": "4.0.0-beta.3",
-        "react-router-dom": "4.0.0-beta.3",
+        "react-router": "4.0.0-beta.4",
+        "react-router-dom": "4.0.0-beta.4",
         "redux": "3.6.0",
         "redux-observable": "0.13.0",
-        "rxjs": "5.0.3"
+        "rxjs": "5.1.0"
     }
 }

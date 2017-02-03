@@ -20,6 +20,10 @@ class StoreManager {
         this.configureStore();
     }
 
+    recreate() {
+        // THIS NEEDS TO BE IMPLEMENTED TO ALLOW FOR FULL PLUGIN RELOAD UPONG CHANGE
+    }
+
     configureStore() {
 
         this.rootEpic = (action, store) =>
@@ -80,7 +84,6 @@ class StoreManager {
                 return func(...result);
             })(target);
         };
-
     }
 }
 

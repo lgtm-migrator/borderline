@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Route } from 'react-router-dom';
 
 import storeManager from '../utilities/StoreManager';
@@ -17,6 +18,10 @@ class ContentBoxContainer extends Component {
         };
     }
 
+    componentDidMount() {
+        this.createSubappContainers();
+    }
+
     componentDidUpdate(prevProp) {
         if (prevProp.list.length != this.props.list.length)
             this.createSubappContainers();
@@ -26,11 +31,10 @@ class ContentBoxContainer extends Component {
         let pathname = this.props.pathname || '';
         this.setState({
             subappContainers: this.props.list.map((component) => {
-                let View = component.view;
                 return (
                     <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
-                        <div className={styles.contentcontainer}><View /></div>
-                    )} key={`${component.particule}d`} />
+                        <ContentBoxMountingContainer view={component.view} />
+                    )} key={`${component.particule}`} />
                 );
             })
         });
@@ -41,9 +45,45 @@ class ContentBoxContainer extends Component {
             <div className={styles.contentbox}>
                 <WrapClear>
                     {this.state.subappContainers}
-                    <div className={styles.placeholder}>&#9640;</div>
                 </WrapClear>
             </div>
+        );
+    }
+}
+
+class ContentBoxMountingContainer extends Component {
+
+    componentDidMount() {
+        this.renderView();
+    }
+
+    componentDidUpdate() {
+        this.renderView();
+    }
+
+    renderView() {
+        try {
+            let View = this.props.view;
+            ReactDOM.render(<View />, this.slot);
+        } catch (e) {
+            if (process.env.NODE_END !== 'production')
+                console.error(e); // eslint-disable-line no-console
+            ReactDOM.render(<ContentBoxStaleContainer />, this.slot);
+        }
+    }
+
+    render() {
+        return (
+            <div className={styles.contentexpand} ref={(slot) => { this.slot = slot; }} />
+        );
+    }
+}
+
+class ContentBoxStaleContainer extends Component {
+
+    render() {
+        return (
+            <div className={styles.contentstale} >△</div>
         );
     }
 }

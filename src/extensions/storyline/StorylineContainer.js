@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-// import WrapClear from '../components/WrapClearComponent';
-// import styles from '../styles/Body.css';
-
 class StorylineContainer extends Component {
 
     componentDidMount() {
@@ -10,7 +7,7 @@ class StorylineContainer extends Component {
 
     render() {
         return (
-            <div>Bonjour !!!</div>
+            <div>Draw your cohorts ... ABOpl</div>
         );
     }
 }
