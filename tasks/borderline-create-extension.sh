@@ -39,6 +39,9 @@ root_path=$PWD
 # Pack borderline-scripts so we can verify they work.
 # ******************************************************************************
 
+# Install all our packages
+$root_path/node_modules/.bin/lerna bootstrap
+
 cd packages/borderline-scripts
 
 # Save package.json because we're going to touch it

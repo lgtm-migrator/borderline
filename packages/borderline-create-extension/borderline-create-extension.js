@@ -39,7 +39,7 @@
 
 var chalk = require('chalk');
 
-var currentNodeVersion = process.versions.node
+var currentNodeVersion = process.versions.node;
 if (currentNodeVersion.split('.')[0] < 7) {
     console.log();
     console.error(
@@ -227,7 +227,7 @@ function checkNodeVersion(packageName) {
 function checkAppName(appName) {
     // TODO: there should be a single place that holds the dependencies
     var dependencies = ['react', 'react-dom'];
-    var devDependencies = ['borderline-scripts'];
+    var devDependencies = ['borderline-scripts', 'strip-ansi', 'sockjs-client' ];
     var allDependencies = dependencies.concat(devDependencies).sort();
 
     if (allDependencies.indexOf(appName) >= 0) {

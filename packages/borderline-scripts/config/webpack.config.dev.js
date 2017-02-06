@@ -2,6 +2,16 @@ const path  = require('path');
 const webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var paths = require('./paths');
+var getClientEnvironment = require('./env');
+var WatchMissingNodeModulesPlugin = require('borderline-dev-utils/WatchMissingNodeModulesPlugin');
+// Get environment variables to inject into our app.
+var env = getClientEnvironment('');
+
+var modulesList = [];
+modulesList = modulesList.concat(paths.appNodeModules);
+modulesList = modulesList.concat(paths.ownNodeModules);
+modulesList = modulesList.concat(paths.nodePaths);
+console.log(modulesList);
 
 module.exports = [
     {
@@ -9,8 +19,7 @@ module.exports = [
         devtool: 'cheap-module-source-map',
         entry: [
             //Alternative webpack server notify the ui updates
-            require.resolve('webpack-hot-middleware/client'),
-            require.resolve('./polyfills'),
+            require.resolve('webpack-dev-server/client'),
             //Ui extension main file
             paths.uiIndexJs
         ],
@@ -18,7 +27,7 @@ module.exports = [
             path: paths.appBuild,
             pathinfo: true,
             filename: 'ui-extension.js',
-            publicPath: '/'
+            publicPath: ''
         },
         resolve: {
             extensions: ['.js', '.json', '.jsx'],
@@ -69,8 +78,10 @@ module.exports = [
                 inject: true,
                 template: paths.appHtml
             }),
+            new webpack.DefinePlugin(env),
             new webpack.HotModuleReplacementPlugin(),
-            new webpack.NoEmitOnErrorsPlugin()
+            new webpack.NoEmitOnErrorsPlugin(),
+            new WatchMissingNodeModulesPlugin(paths.appNodeModules)
         ]
     },
     {
@@ -78,8 +89,8 @@ module.exports = [
         devtool: 'cheap-module-source-map',
         entry: [
             //Use a webpack server to update server side changes
-            require.resolve('webpack-hot-middleware/client'),
-            require.resolve('./polyfills'),
+            //require.resolve('webpack-dev-server/client'),
+            //require.resolve('./polyfills'),
             //Server extension main file
             paths.serverIndexJs
         ],
@@ -107,8 +118,10 @@ module.exports = [
             ]
         },
         plugins: [
+            new webpack.DefinePlugin(env),
             new webpack.HotModuleReplacementPlugin(),
-            new webpack.NoEmitOnErrorsPlugin()
+            new webpack.NoEmitOnErrorsPlugin(),
+            new WatchMissingNodeModulesPlugin(paths.appNodeModules)
         ]
     }
 ];

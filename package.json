@@ -9,9 +9,7 @@
         "publish": "tasks/publish.sh"
     },
     "devDependencies": {
-        "babel-eslint": "6.1.2",
         "babel-eslint": "7.1.1",
-        "babel-loader": "6.2.10",
         "babel-plugin-transform-decorators-legacy": "1.3.4",
         "babel-preset-es2015": "6.22.0",
         "babel-preset-react": "6.22.0",

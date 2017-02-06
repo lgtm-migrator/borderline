@@ -28,7 +28,7 @@ var paths = require('../config/paths');
 
 var useYarn = fs.existsSync(paths.yarnLockFile);
 var cli = useYarn ? 'yarn' : 'npm';
-
+var isInteractive = process.stdout.isTTY;
 
 // Tools like Cloud9 rely on this.
 var DEFAULT_PORT = process.env.PORT || 3000;
@@ -249,12 +249,9 @@ function runDevServer(host, port, protocol) {
         if (err) {
             return console.log(err);
         }
-
-
         console.log(chalk.cyan('Starting the development server...'));
-    console.log(protocol + '://' + host + ':' + port + '/');
-
-});
+        console.log(protocol + '://' + host + ':' + port + '/');
+    });
 }
 
 function run(port) {
