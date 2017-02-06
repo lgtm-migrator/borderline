@@ -4,9 +4,9 @@ var path = require('path');
 var fs = require('fs-extra');
 var express = require('express');
 var expressSession = require('express-session');
+const MongoStore = require('connect-mongo')(expressSession);
 var body_parser = require('body-parser');
 const passport = require('passport');
-const passportLocal = require('passport-local').Strategy;
 var multer  = require('multer');
 
 function BorderlineServer(options) {
@@ -35,6 +35,7 @@ function BorderlineServer(options) {
             return that.app;
         }
         that.db = db;
+        that.mongoStore = new MongoStore({ db: that.db });
 
         //Middleware imports
         that.userPermissionsMiddleware = require('./middlewares/userPermissions');
@@ -42,7 +43,7 @@ function BorderlineServer(options) {
         //Init external middleware
         that.app.use(body_parser.urlencoded({ extended: true }));
         that.app.use(body_parser.json());
-        that.app.use(expressSession({ secret: 'borderline', saveUninitialized: false, resave: false }));
+        that.app.use(expressSession({ secret: 'borderline', saveUninitialized: false, resave: false ,  cookie: { secure: false }, store: that.mongoStore } ));
         that.app.use(passport.initialize());
         that.app.use(passport.session());
 
@@ -62,7 +63,7 @@ BorderlineServer.prototype.setupUserAccount = function() {
     var userAccountController = require('./controllers/userAccountController');
     this.userAccountController = new userAccountController(this.db.collection('users'));
 
-    //Passport session serialize and desierialize
+    //Passport session serialize and deserialize
     passport.serializeUser(this.userAccountController.serializeUser);
     passport.deserializeUser(this.userAccountController.deserializeUser);
 

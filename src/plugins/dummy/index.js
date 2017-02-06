@@ -7,7 +7,6 @@ DummyPlugin.prototype.attach = function(borderline, expressAppRouter) {
 };
 
 DummyPlugin.prototype.detach = function(borderline) {
-
 };
 
 DummyPlugin.prototype.dummy = function(req, res) {
@@ -15,5 +14,4 @@ DummyPlugin.prototype.dummy = function(req, res) {
     res.send('Dumb dummy');
 };
 
-import { ImportedTester } from './testimport.js';
-
+module.exports = DummyPlugin;

@@ -16,17 +16,13 @@ var borderlineApi = {
 };
 
 function pluginImporter(path) {
-    var m = { _cache: borderlineApi, _load: function(request, parent, isMain) { return m._cache[request]; } };
-    var r = function(reqPath) { return m._load(reqPath, m, false); };
-    var e = {};
-    var code1 = '(function (exports, require, module, __filename, __dirname) {';
+    var code1 = '(function (borderline, module, __filename, __directory) {';
     var code2 = '});';
     var code = fs.readFileSync(path + '/index.js');
     var imported = eval(code1 + code + code2);
-    console.log(imported);
-    imported(e, pluginImporter, m, 'index.js', path);
-    console.log(m.exports);
-    return m.exports;
+    var pluginExport = {};
+    imported(borderlineApi, pluginExport, 'index.js', path);
+    return pluginExport.exports;
 }
 
 function Plugin(Uuid, PluginPath) {
@@ -35,7 +31,7 @@ function Plugin(Uuid, PluginPath) {
     //this.metadata = require(PluginPath + '/package.json');
 
     this.pluginModule = pluginImporter(PluginPath);
-    this.container = new this.pluginModule(borderlineApi);
+    this.container = new this.pluginModule();
 
     this.container.attach(borderlineApi, this.router);
     this.router.get('/*', function(req, res) {
