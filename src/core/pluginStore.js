@@ -14,6 +14,31 @@ var PluginStore = function(pluginFolder) {
     this.router = express.Router();
 
     this._scanLocalFolder();
+    if (global.config.development == true) {
+        this._watchLocalFolder();
+    }
+};
+
+PluginStore.prototype._attachPlugin = function(plugin) {
+    plugin.attach();
+    this.router.use('/' + plugin.uuid, plugin.router);
+};
+
+PluginStore.prototype._detachPlugin = function(plugin) {
+    plugin.detach();
+    if (Array.isArray(this.router.stack)) {
+        var pluginRoot = '/' + plugin.uuid;
+        var index = this.router.stack.findIndex(function (layer) {
+            if (layer.name === 'router' && pluginRoot.match(layer.regexp)) {
+                return true;
+            }
+        });
+        if (index !== -1) {
+            this.router.stack.splice(index, 1);
+            return true;
+        }
+    }
+    return false;
 };
 
 PluginStore.prototype._findPluginById = function(id) {
@@ -22,6 +47,20 @@ PluginStore.prototype._findPluginById = function(id) {
             return this.plugins[i];
     }
     return null;
+};
+
+PluginStore.prototype._watchLocalFolder = function() {
+    fs.watch(this.pluginFolder,
+            {
+                recursive: true,
+                encoding: 'utf8',
+                persistent: true
+            },
+            function(eventType, filename) {
+                console.log(eventType);
+                console.log(filename);
+            }
+    );
 };
 
 PluginStore.prototype._scanLocalFolder = function() {
@@ -34,9 +73,8 @@ PluginStore.prototype._scanLocalFolder = function() {
         var file_stats = fs.fstatSync(file_fd);
         if (file_stats.isDirectory()) {
             var plugin = new Plugin(f, file);
-
-            that.router.use('/' + plugin.uuid, plugin.router);
             that.plugins.push(plugin);
+            that._attachPlugin(plugin);
         }
     });
 };
@@ -71,23 +109,30 @@ PluginStore.prototype.createPluginFromFile = function(file) {
     while (that._findPluginById(pluginUuid) !== null)
         pluginUuid = Math.floor(Math.random() * 0xffffffffffff).toString(16);
 
-    zip.extractAllTo(that.pluginFolder + '/' + pluginUuid);
+    zip.extractAllTo(that.pluginFolder + '/' + pluginUuid, true);
 
     var new_plugin = new Plugin(pluginUuid, that.pluginFolder + '/' + pluginUuid);
-    that.router.use('/' + new_plugin.uuid, new_plugin.router);
     that.plugins.push(new_plugin);
+    that._attachPlugin(new_plugin);
 
     return {id: pluginUuid};
 };
 
 PluginStore.prototype.clearPlugins = function() {
+    var that = this;
+    this.plugins.forEach(function(plugin) {
+        //Disconnect routes
+        that._detachPlugin(plugin);
+        //Remove local directory
+        fs.removeSync(that.pluginFolder + '/' + plugin.uuid);
+    });
     this.plugins = [];
 };
 
 PluginStore.prototype.getPluginInfoById = function(id) {
     var  p = this._findPluginById(id);
     if (p !== null)
-        return p.metadata;
+        return p.infos();
     return null;
 };
 
@@ -97,10 +142,15 @@ PluginStore.prototype.deletePluginById = function(uuid) {
 
     this.plugins.some(function(p, idx) {
         if (p.uuid == uuid) {
-            that.plugins.splice(idx, 1);
-            fs.removeSync(that.pluginFolder + '/' + uuid);
-            res = {id: uuid};
-            return true;
+            //Detach plugin
+            if (that._detachPlugin(p) === true) {
+                //Remove from array
+                that.plugins.splice(idx, 1);
+                //Remove local directory
+                fs.removeSync(that.pluginFolder + '/' + uuid);
+                res = {id: uuid};
+                return true;
+            }
         }
     });
     return res;
@@ -123,10 +173,10 @@ PluginStore.prototype.updatePluginById = function(uuid, file) {
         return {error: 'Cannot update unknown plugin ID: ' + uuid };
     }
 
-    zip.extractAllTo(this.pluginFolder + '/' + uuid);
+    zip.extractAllTo(this.pluginFolder + '/' + uuid, true);
 
     var new_plugin = new Plugin(uuid, this.pluginFolder + '/' + uuid);
-    this.router.use('/' + new_plugin.uuid, new_plugin.router);
+    this._attachPlugin(new_plugin);
     this.plugins.push(new_plugin);
 
     return {id : uuid};

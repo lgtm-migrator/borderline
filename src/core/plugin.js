@@ -15,24 +15,40 @@ var borderlineApi = {
     'mongodb': mongodb
 };
 
-function pluginImporter(path) {
+
+function Plugin(Uuid, PluginPath) {
+    this.uuid = Uuid;
+    this.router = express.Router();
+
+    this.pluginModule = this.importer(PluginPath);
+    this.container = new this.pluginModule();
+
+    this.attach = Plugin.prototype.attach.bind(this);
+    this.detach = Plugin.prototype.detach.bind(this);
+    this.infos = Plugin.prototype.infos.bind(this);
+}
+
+Plugin.prototype.infos = function() {
+        return {
+            id: this.uuid,
+            meta: this.metadata,
+            router: this.router
+        }
+};
+
+Plugin.prototype.importer = function(path) {
     var code1 = '(function (borderline, module, __filename, __directory) {';
     var code2 = '});';
     var code = fs.readFileSync(path + '/index.js');
     var imported = eval(code1 + code + code2);
     var pluginExport = {};
+
     imported(borderlineApi, pluginExport, 'index.js', path);
+
     return pluginExport.exports;
-}
+};
 
-function Plugin(Uuid, PluginPath) {
-    this.uuid = Uuid;
-    this.router = express.Router();
-    //this.metadata = require(PluginPath + '/package.json');
-
-    this.pluginModule = pluginImporter(PluginPath);
-    this.container = new this.pluginModule();
-
+Plugin.prototype.attach = function() {
     this.container.attach(borderlineApi, this.router);
     this.router.get('/*', function(req, res) {
         var url = req.params[0];
@@ -46,13 +62,10 @@ function Plugin(Uuid, PluginPath) {
         res.status(404);
         res.json({ error: 'Unresolved plugin internal path' } );
     });
-}
+};
 
-Plugin.prototype.infos = function() {
-        return {
-            id: this.uuid,
-            infos: this.metadata
-        }
+Plugin.prototype.detach = function() {
+    this.container.detach(borderlineApi);
 };
 
 module.exports = Plugin;

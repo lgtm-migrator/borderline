@@ -8,9 +8,10 @@ function PluginStoreController() {
     this.getPluginStoreRouter = PluginStoreController.prototype.getPluginStoreRouter.bind(this);
     this.getPluginStore = PluginStoreController.prototype.getPluginStore.bind(this);
     this.postPluginStore = PluginStoreController.prototype.postPluginStore.bind(this);
+    this.deletePluginStore = PluginStoreController.prototype.deletePluginStore.bind(this);
     this.getPluginByID = PluginStoreController.prototype.getPluginByID.bind(this);
     this.postPluginByID = PluginStoreController.prototype.postPluginByID.bind(this);
-    this. deletePluginByID = PluginStoreController.prototype.deletePluginByID.bind(this);
+    this.deletePluginByID = PluginStoreController.prototype.deletePluginByID.bind(this);
     this.getPluginStoreUpload = PluginStoreController.prototype.getPluginStoreUpload.bind(this);
     this.getPluginStoreUploadByID = PluginStoreController.prototype.getPluginStoreUploadByID.bind(this);
 }
@@ -43,9 +44,10 @@ PluginStoreController.prototype.postPluginStore = function(req, res, next) {
     res.json(plugins);
 };
 
-PluginStoreController.prototype.deletePluginStore = function(req, res, next) {
-    res.status(403);
-    res.json({error: 'Permission denied: Nope you wont remove my plugins'});
+PluginStoreController.prototype.deletePluginStore = function(req, res) {
+    this.pluginStore.clearPlugins();
+    res.status(200);
+    res.json({ message: 'Removed all server plugins' });
 };
 
 

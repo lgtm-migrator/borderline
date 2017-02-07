@@ -1,13 +1,13 @@
 //External node module imports
-var mongodb = require('mongodb').MongoClient;
-var path = require('path');
-var fs = require('fs-extra');
-var express = require('express');
-var expressSession = require('express-session');
+const mongodb = require('mongodb').MongoClient;
+const path = require('path');
+const fs = require('fs-extra');
+const express = require('express');
+const expressSession = require('express-session');
 const MongoStore = require('connect-mongo')(expressSession);
-var body_parser = require('body-parser');
+const body_parser = require('body-parser');
 const passport = require('passport');
-var multer  = require('multer');
+const multer  = require('multer');
 
 function BorderlineServer(options) {
     this.options = options;
@@ -35,7 +35,7 @@ function BorderlineServer(options) {
             return that.app;
         }
         that.db = db;
-        that.mongoStore = new MongoStore({ db: that.db, ttl: 1 * (24 * 60 * 60) });
+        that.mongoStore = new MongoStore({ db: that.db, ttl: 6 * (24 * 60 * 60) });
 
         //Middleware imports
         that.userPermissionsMiddleware = require('./middlewares/userPermissions');
@@ -129,7 +129,7 @@ BorderlineServer.prototype.setupPluginStore = function() {
     this.app.route('/plugin_store')
         .get(this.pluginStoreController.getPluginStore) //GET returns the list of available plugins
         .post(multer().any(), this.pluginStoreController.postPluginStore) //POST upload a new plugin
-        .delete(this.pluginStoreController.deletePluginStore); //DELETE clears all the plugins
+        .delete(this.userPermissionsMiddleware.adminPrivileges, this.pluginStoreController.deletePluginStore); //DELETE clears all the plugins
     this.app.route('/plugin_store/:id')
         .get(this.pluginStoreController.getPluginByID) //:id GET returns plugin metadata
         .post(multer().any(), this.pluginStoreController.postPluginByID) //:id POST update a plugin content
