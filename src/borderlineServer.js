@@ -35,7 +35,7 @@ function BorderlineServer(options) {
             return that.app;
         }
         that.db = db;
-        that.mongoStore = new MongoStore({ db: that.db });
+        that.mongoStore = new MongoStore({ db: that.db, ttl: 1 * (24 * 60 * 60) });
 
         //Middleware imports
         that.userPermissionsMiddleware = require('./middlewares/userPermissions');
@@ -75,6 +75,8 @@ BorderlineServer.prototype.setupUserAccount = function() {
         .post(this.userAccountController.login); //POST login information
     this.app.route('/logout')
         .post(this.userAccountController.logout); //POST logout from session
+    this.app.route('/whoami')
+        .get(this.userAccountController.whoAmI); //GET current session user
     this.app.route('/users')
         .get(this.userPermissionsMiddleware.adminPrivileges, this.userAccountController.getUsers);//GET returns the list of users
     this.app.route('/users/:user_id')

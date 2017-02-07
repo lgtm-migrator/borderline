@@ -12,6 +12,7 @@ function UserAccountController(mongoDBCollection) {
     this.getUsers = UserAccountController.prototype.getUsers.bind(this);
     this.login = UserAccountController.prototype.login.bind(this);
     this.logout = UserAccountController.prototype.logout.bind(this);
+    this.whoAmI = UserAccountController.prototype.whoAmI.bind(this);
     this.getLoginForm = UserAccountController.prototype.getLoginForm.bind(this);
     this.getUserById = UserAccountController.prototype.getUserById.bind(this);
     this.postUserById = UserAccountController.prototype.postUserById.bind(this);
@@ -92,9 +93,29 @@ UserAccountController.prototype.login = function(req, res, next) {
 };
 
 UserAccountController.prototype.logout = function(req, res) {
-    req.logout();
-    res.status(200);
-    res.json({ message: 'Successful logout' });
+    req.session.destroy(function(err) {
+        req.logout();
+        if (err) {
+            res.status(500);
+            res.json({ error: 'Cannot destroy session: ' + err });
+        }
+        else {
+            res.status(200);
+            res.json({ message: 'Successful logout' });
+        }
+    });
+};
+
+UserAccountController.prototype.whoAmI = function(req, res) {
+    var Iam = req.user;
+    if (Iam === undefined || Iam === null) {
+        res.status(401);
+        res.json({ error: 'An unknown unicorn' });
+    }
+    else {
+        res.status(200);
+        res.json(Iam);
+    }
 };
 
 UserAccountController.prototype.getLoginForm = function(req, res) {
