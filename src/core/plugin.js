@@ -21,7 +21,9 @@ function Plugin(Uuid, PluginPath) {
     this.router = express.Router();
 
     this.pluginModule = this.importer(PluginPath);
-    this.container = new this.pluginModule();
+    this.container = null;
+    if (this.pluginModule !== null && this.pluginModule !== undefined)
+        this.container = new this.pluginModule();
 
     this.attach = Plugin.prototype.attach.bind(this);
     this.detach = Plugin.prototype.detach.bind(this);
@@ -36,20 +38,31 @@ Plugin.prototype.infos = function() {
         }
 };
 
-Plugin.prototype.importer = function(path) {
-    var code1 = '(function (borderline, module, __filename, __directory) {';
-    var code2 = '});';
-    var code = fs.readFileSync(path + '/index.js');
-    var imported = eval(code1 + code + code2);
-    var pluginExport = {};
+Plugin.prototype.importer = function(importPath) {
+    var serverFile = path.join(importPath, 'index.js');
+    try {
+        if (fs.existsSync(serverFile) === true) {
+            var code1 = '(function (borderline, module, __filename, __directory) {';
+            var code2 = '});';
+            var code = fs.readFileSync(serverFile);
+            var imported = eval(code1 + code + code2);
+            var pluginExport = {};
 
-    imported(borderlineApi, pluginExport, 'index.js', path);
+            imported(borderlineApi, pluginExport, 'index.js', importPath);
 
-    return pluginExport.exports;
+            return pluginExport.exports;
+        }
+    }
+    catch (err) {
+        return null;
+    }
+    return null;
 };
 
 Plugin.prototype.attach = function() {
-    this.container.attach(borderlineApi, this.router);
+    if (this.container) {
+        this.container.attach(borderlineApi, this.router);
+    }
     this.router.get('/*', function(req, res) {
         var url = req.params[0];
         if (req.params[0] === null || req.params[0] === undefined || req.params[0].length === 0) {
@@ -65,7 +78,9 @@ Plugin.prototype.attach = function() {
 };
 
 Plugin.prototype.detach = function() {
-    this.container.detach(borderlineApi);
+    if (this.container) {
+        this.container.detach(borderlineApi);
+    }
 };
 
 module.exports = Plugin;

@@ -50,6 +50,9 @@ PluginStore.prototype._findPluginById = function(id) {
 };
 
 PluginStore.prototype._watchLocalFolder = function() {
+    const pluginDirectoryExpr = /^(\w+)$/;
+
+    var that = this;
     fs.watch(this.pluginFolder,
             {
                 recursive: true,
@@ -57,8 +60,21 @@ PluginStore.prototype._watchLocalFolder = function() {
                 persistent: true
             },
             function(eventType, filename) {
-                console.log(eventType);
-                console.log(filename);
+                var pluginDirectory = filename.match(pluginDirectoryExpr);
+                if (pluginDirectory) {
+                    var uuid = pluginDirectory[0];
+                    var pluginPath = path.join(that.pluginFolder, uuid);
+                    var p = that._findPluginById(uuid);
+                    if (p !== null) {
+                        that._detachPlugin(p);
+                        that.plugins.splice(that.plugins.findIndex(function(p) { return p.uuid == uuid }), 1);
+                        if (fs.existsSync(pluginPath)) {
+                            var new_plugin = new Plugin(uuid, pluginPath);
+                            that._attachPlugin(new_plugin);
+                            that.plugins.push(new_plugin);
+                        }
+                    }
+                }
             }
     );
 };
@@ -95,11 +111,7 @@ PluginStore.prototype.createPluginFromFile = function(file) {
     var that = this;
     var buf = Buffer.from(file.buffer);
     var zip = new adm_zip(buf);
-/*
-    if (zip.getEntry('package.json') === null) {
-        return { error: 'Missing mandatory plugin file /package.json' };
-    }
-    */
+
     if (zip.getEntry('index.js') === null) {
         return { error: 'Missing mandatory plugin file /index.js' };
     }
@@ -137,22 +149,21 @@ PluginStore.prototype.getPluginInfoById = function(id) {
 };
 
 PluginStore.prototype.deletePluginById = function(uuid) {
-    var that = this;
-    var res = {error: 'Cannot delete plugin with ID' + uuid };
+    var res = { error: 'Cannot delete plugin with ID ' + uuid };
 
-    this.plugins.some(function(p, idx) {
-        if (p.uuid == uuid) {
-            //Detach plugin
-            if (that._detachPlugin(p) === true) {
-                //Remove from array
-                that.plugins.splice(idx, 1);
-                //Remove local directory
-                fs.removeSync(that.pluginFolder + '/' + uuid);
-                res = {id: uuid};
-                return true;
-            }
+    var p = this._findPluginById(uuid);
+    if (p !== null) {
+        if (this._detachPlugin(p) === true) {
+            //Remove from array
+            this.plugins.splice(this.plugins.findIndex(function(p) { return p.uuid == uuid }), 1);
+            //Remove local directory
+            fs.removeSync(this.pluginFolder + '/' + uuid);
+            res = {id: uuid};
         }
-    });
+        else {
+            res = { error: 'Detaching the plugin failed. ID ' + uuid };
+        }
+    }
     return res;
 };
 
