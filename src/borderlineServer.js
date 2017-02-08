@@ -10,7 +10,9 @@ const passport = require('passport');
 const multer  = require('multer');
 
 function BorderlineServer(options) {
-    this.options = options;
+    //@todo Defaults for some config values.
+    //@todo Check paths and make them absolute for use in application
+    this.config = options;
     this.app = express();
 
     this.mongoError = BorderlineServer.prototype.mongoError.bind(this);
@@ -21,9 +23,9 @@ function BorderlineServer(options) {
     this.setupPluginStore = BorderlineServer.prototype.setupPluginStore.bind(this);
 
     //Configuration import
-    global.config = options;
+    global.config = this.config;
 
-    if (options.hasOwnProperty('mongoUrl') == false) {
+    if (this.config.hasOwnProperty('mongoUrl') == false) {
         this.mongoError('No mongoUrl provided');
         return this.app;
     }

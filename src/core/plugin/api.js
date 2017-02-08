@@ -1,27 +1,14 @@
-const http = require('http');
+const http_api = require('./http');
 const url = require('url');
+const path_api = require('./path');
+const fs_api = require('./filesystem');
 
-function PluginApi() {
+function BorderlineApi(pluginUuid) {
     this.url = url;
-    this.http = {
-        request: http.request
-    };
-    this.fs = {
-        open: null,
-        openSync: null,
-        close: null,
-        closeSync: null,
-        rm: null,
-        rmSync: null,
-        stat: null,
-        statSync: null,
-        readdir: null,
-        readdirSync: null,
-        read: null,
-        readSync: null,
-        write: null,
-        writeSync: null
-    };
+    this.http = http_api.http;
+    this.https = http_api.https;
+    this.path = path_api;
+    this.fs = new fs_api(pluginUuid);
 }
 
-module.exports = PluginApi;
+module.exports = BorderlineApi;
