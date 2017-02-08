@@ -2,26 +2,17 @@ const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
 const mongodb = require('mongodb');
-
-
-var my_fs_module = {
-    existsSync: function(path) { console.log('overload fs-extra ' + path); return false; }
-};
-
-var borderlineApi = {
-    'fs-extra': my_fs_module,
-    'fs': my_fs_module,
-    'path': path,
-    'mongodb': mongodb
-};
+const borderlineApiModule = require('./plugin/api');
 
 
 function Plugin(Uuid, PluginPath) {
     this.uuid = Uuid;
     this.router = express.Router();
+    this.pluginPath = PluginPath;
 
-    this.pluginModule = this.importer(PluginPath);
     this.container = null;
+    this.borderlineApi = new borderlineApiModule(Uuid);
+    this.pluginModule = this.importer(PluginPath);
     if (this.pluginModule !== null && this.pluginModule !== undefined)
         this.container = new this.pluginModule();
 
@@ -40,16 +31,15 @@ Plugin.prototype.infos = function() {
 
 Plugin.prototype.importer = function(importPath) {
     var serverFile = path.join(importPath, 'index.js');
+    var pluginExport = {};
     try {
         if (fs.existsSync(serverFile) === true) {
-            var code1 = '(function (borderline, module, __filename, __directory) {';
+            var code1 = '(function (borderline, module, __filename, __directory) { ';
             var code2 = '});';
             var code = fs.readFileSync(serverFile);
             var imported = eval(code1 + code + code2);
-            var pluginExport = {};
 
-            imported(borderlineApi, pluginExport, 'index.js', importPath);
-
+            imported(this.borderlineApi, pluginExport, 'index.js', importPath);
             return pluginExport.exports;
         }
     }
@@ -61,16 +51,17 @@ Plugin.prototype.importer = function(importPath) {
 
 Plugin.prototype.attach = function() {
     if (this.container) {
-        this.container.attach(borderlineApi, this.router);
+        this.container.attach(this.router);
     }
+    var that = this;
     this.router.get('/*', function(req, res) {
         var url = req.params[0];
         if (req.params[0] === null || req.params[0] === undefined || req.params[0].length === 0) {
             url = 'index.html';
         }
-        var path = PluginPath + '/' + url;
-        if (path.indexOf('..') === -1 && fs.existsSync(path) === true) {
-            return res.sendFile(path);
+        var ressourcePath = that.pluginPath + '/' + url;
+        if (ressourcePath.indexOf('..') === -1 && fs.existsSync(ressourcePath) === true) {
+            return res.sendFile(ressourcePath);
         }
         res.status(404);
         res.json({ error: 'Unresolved plugin internal path' } );
@@ -79,7 +70,7 @@ Plugin.prototype.attach = function() {
 
 Plugin.prototype.detach = function() {
     if (this.container) {
-        this.container.detach(borderlineApi);
+        this.container.detach();
     }
 };
 

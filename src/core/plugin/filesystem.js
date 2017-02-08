@@ -66,8 +66,8 @@ PluginFileSystem.prototype.read = function(fd, buf, count) {
     return fs.readSync(fd, buf, 0, count, null) ;
 };
 
-PluginFileSystem.prototype.readFile = function(path) {
-    var filePath = path.join(this.root, path);
+PluginFileSystem.prototype.readFile = function(filePath) {
+    var filePath = path.join(this.root, filePath);
     if (this._isValidPath(filePath) === false)
         return null;
     return fs.readFileSync(filePath);

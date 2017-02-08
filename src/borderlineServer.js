@@ -109,12 +109,12 @@ BorderlineServer.prototype.setupUserDataSources = function(){
 };
 
 BorderlineServer.prototype.setupPluginStore = function() {
-    if (this.options.hasOwnProperty('pluginFolder') == false) {
+    if (this.config.hasOwnProperty('pluginFolder') == false) {
         this.pluginError('No pluginFolder in options');
         return;
     }
-    if (fs.existsSync(this.options.pluginFolder) == false) {
-        this.pluginError('Directory ' + this.options.pluginFolder + ' not found');
+    if (fs.existsSync(this.config.pluginFolder) == false) {
+        this.pluginError('Directory ' + this.config.pluginFolder + ' not found');
         return;
     }
 
