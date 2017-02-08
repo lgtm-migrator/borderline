@@ -1,21 +1,20 @@
 import React, { Component, Children } from 'react';
 
-import WrapClear from '../components/WrapClearComponent';
-import styles from '../styles/Body.css';
+// import WrapClear from '../components/WrapClearComponent';
+import bodyStyles from '../styles/Body.css';
+import layoutStyles from '../styles/Layout.css';
 
 class BodyContainer extends Component {
 
     componentDidMount() {
-        document.documentElement.classList.add(...styles.general.split(' '));
-        document.body.classList.add(...styles.general.split(' '));
-        document.getElementById('root').classList.add(...styles.general.split(' '));
+        document.documentElement.classList.add(...bodyStyles.general.split(' '));
     }
 
     render() {
         return (
-            <WrapClear>
+            <div className={layoutStyles.wrap}>
                 {Children.map(this.props.children, child => child)}
-            </WrapClear>
+            </div>
         );
     }
 }

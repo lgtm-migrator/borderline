@@ -61,6 +61,19 @@ module.exports = function () {
         } : {
                 name: ['vendor', 'manifest']
             }),
+        new webpack.LoaderOptionsPlugin({
+            test: /\.css$/,
+            options: {
+                postcss: [
+                    require('postcss-for')(),
+                    require('postcss-import')(),
+                    require('postcss-cssnext')({
+                        browsers: 'last 2 versions'
+                    })
+                ],
+                context: __dirname
+            }
+        }),
         new webpack.DefinePlugin({
             'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }
         }),
@@ -159,15 +172,7 @@ module.exports = function () {
                         }
                     },
                     {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: {
-                                'postcss-import': {},
-                                'postcss-cssnext': {
-                                    browsers: ['last 2 versions', '> 5%'],
-                                },
-                            }
-                        }
+                        loader: 'postcss-loader'
                     }
                 ]
             }, {

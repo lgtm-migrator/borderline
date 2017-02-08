@@ -1,0 +1,42 @@
+@import './Theme.css';
+
+.screen {
+
+    background-color: var(--background-color-010);
+}
+
+.box {
+
+    position: absolute;
+    top: calc(50% - 125px);
+    left: calc(50% - 200px);
+    height: 250px;
+    width: 400px;
+}
+
+.title {
+
+    padding-top: calc(50% - 200px);
+    text-align: center;
+    padding-bottom: 20px;
+
+    & span {
+
+        color: var(--background-color-100);
+        font-size: 40px;
+    }
+
+    & strong {
+
+        color: var(--accent-color);
+    }
+}
+
+.form {
+    text-align: center;
+
+    & input, & button {
+        width: 50%;
+    }
+
+}

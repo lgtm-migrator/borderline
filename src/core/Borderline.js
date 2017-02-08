@@ -7,6 +7,7 @@ import pluginInspector from './utilities/PluginInspector';
 // We import the children component
 import Body from './containers/BodyContainer';
 import TopBar from './containers/TopBarContainer';
+import LoginBox from './containers/LoginContainer';
 import ContentBox from './containers/ContentBoxContainer';
 import StatusBar from './containers/StatusBarContainer';
 
@@ -29,6 +30,7 @@ class Borderline extends Component {
                     <ContentBox />
                     <TopBar />
                     <StatusBar />
+                    <LoginBox />
                 </Body>
             </Router>
         );
@@ -37,7 +39,7 @@ class Borderline extends Component {
 
 if (module.hot) {
     module.hot.accept('./utilities/PluginInspector', () => {
-        console.info('An Extension Manager or a child dependencu was modified! Resetting...'); // eslint-disable-line no-console
+        console.info('An Extension Manager or a child dependency was modified! Resetting...'); // eslint-disable-line no-console
         var HotPluginInspector = require('./utilities/PluginInspector').default;
         HotPluginInspector.rediscover();
     });

@@ -4,12 +4,12 @@
     composes: reset boxing from "./Layout.css";
     height: var(--topbar-height);
     line-height: var(--topbar-height);
-    background-color: var(--background-color-light);
+    background-color: var(--background-color-010);
 }
 
 .backdrop {
     height: calc(var(--topbar-height) + 5px);
-    background-color: var(--background-color-lighter);
+    background-color: var(--background-color-010);
 }
 
 .subappbutton {
@@ -27,5 +27,5 @@
 }
 
 .subappbutton:hover {
-    background-color: var(--background-color-lighter);
+    background-color: var(--background-color-010);
 }

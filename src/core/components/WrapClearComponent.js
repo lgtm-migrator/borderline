@@ -6,7 +6,7 @@ class WrapClearComponent extends PureComponent {
 
     render() {
         return (
-            <div className={styles.wrap}>
+            <div className={`${styles.wrap} ${this.props.className}`}>
                 {Children.map(this.props.children, child => child)}
             </div>
         );
