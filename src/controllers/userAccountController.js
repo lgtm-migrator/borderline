@@ -1,5 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
+const speakeasy = require('speakeasy');
+const QRCode = require('qrcode');
 
 var userAccounts = require('../core/userAccounts');
 
@@ -13,6 +15,9 @@ function UserAccountController(mongoDBCollection) {
     this.login = UserAccountController.prototype.login.bind(this);
     this.logout = UserAccountController.prototype.logout.bind(this);
     this.whoAmI = UserAccountController.prototype.whoAmI.bind(this);
+    this.login2 = UserAccountController.prototype.login2.bind(this);
+    this.getQrCode = UserAccountController.prototype.getQrCode.bind(this);
+    this.putQrCode = UserAccountController.prototype.putQrCode.bind(this);
     this.getLoginForm = UserAccountController.prototype.getLoginForm.bind(this);
     this.getUserById = UserAccountController.prototype.getUserById.bind(this);
     this.postUserById = UserAccountController.prototype.postUserById.bind(this);
@@ -90,6 +95,118 @@ UserAccountController.prototype.login = function(req, res, next) {
                     res.json(user);
                 });
         }, rejected);
+};
+
+UserAccountController.prototype.login2 = function(req, res) {
+    var rejected = function(reason) {
+        res.status(401);
+        res.send({ error: 'Failed to login : ' + reason.toString() });
+    };
+
+    var username = req.body.username;
+    var password = req.body.password;
+    var token = req.body.token;
+    if (! username || ! password || ! token) {
+        rejected('Missing username or password or token');
+        return;
+    }
+
+    this.users.findByUsernameAndPassword(username, password)
+        .then(
+            function (user) {
+                var verified = speakeasy.totp.verify({
+                        secret: user.secret.base32,
+                        encoding: 'base32',
+                        token: token
+                    }
+                );
+                if (verified) {
+                    req.login(user, function(err) {
+                        if (err) {
+                            rejected(err.toString());
+                        }
+                        else {
+                            res.status(200);
+                            res.json(user);
+                        }
+                    });
+                } else {
+                    rejected('2 step identification failed');
+                }
+            },
+            function(error) {
+                rejected(error.toString());
+            }
+        );
+};
+
+UserAccountController.prototype.getQrCode = function(req, res) {
+    var user_id = req.params.user_id;
+    if (user_id === undefined || user_id === null) {
+        res.status(403);
+        res.json({ error : 'Unknown user id' });
+        return;
+    }
+
+    this.users.findById(user_id).then(function (user) {
+            if (user === undefined || user === null) {
+                res.status(403);
+                res.json({error: 'Unknown user id'});
+                return;
+            }
+
+            QRCode.toDataURL(user.secret.otpauth_url, function (err, data_url) {
+                if (err) {
+                    res.status(500);
+                    res.json({error: 'Error generating QR code'});
+                }
+                else {
+                    var qr = '<img src="' + data_url + '">';
+                    res.status(200);
+                    res.send(qr);
+                }
+            });
+        },
+        function(error) {
+            res.status(403);
+            res.json({error: error});
+        }
+    );
+};
+
+UserAccountController.prototype.putQrCode = function(req, res) {
+    var user_id = req.params.user_id;
+
+    if (user_id === undefined || user_id === null) {
+        res.status(403);
+        res.json({ error : 'Unknown user id' });
+        return;
+    }
+
+    this.users.regenerateSecret(user_id).then(function (user) {
+            if (user === undefined || user === null) {
+                res.status(403);
+                res.json({error: 'Unknown user id'});
+                return;
+            }
+
+            QRCode.toDataURL(user.secret.otpauth_url, function (err, data_url) {
+                if (err) {
+                    res.status(500);
+                    res.json({error: 'Error generating QR code'});
+                }
+                else {
+                    var qr = '<img src="' + data_url + '">';
+                    res.status(200);
+                    res.send(qr);
+                }
+            });
+        },
+        function(error) {
+            res.status(403);
+            res.json({error: error.toString()});
+        }
+    );
 };
 
 UserAccountController.prototype.logout = function(req, res) {

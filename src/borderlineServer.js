@@ -19,7 +19,7 @@ function BorderlineServer(options) {
     this.pluginError = BorderlineServer.prototype.pluginError.bind(this);
 
     this.setupUserAccount = BorderlineServer.prototype.setupUserAccount.bind(this);
-    this.setupUserDataSources = BorderlineServer.prototype.setupUserDataSources.bind(this);
+    this.setupDataSources = BorderlineServer.prototype.setupDataSources.bind(this);
     this.setupPluginStore = BorderlineServer.prototype.setupPluginStore.bind(this);
 
     //Configuration import
@@ -51,7 +51,7 @@ function BorderlineServer(options) {
 
         //Setup route using controllers
         that.setupUserAccount();
-        that.setupUserDataSources();
+        that.setupDataSources();
         that.setupPluginStore();
 
     });
@@ -79,6 +79,11 @@ BorderlineServer.prototype.setupUserAccount = function() {
         .post(this.userAccountController.logout); //POST logout from session
     this.app.route('/whoami')
         .get(this.userAccountController.whoAmI); //GET current session user
+    this.app.route('/2step/:user_id/')
+        .get(this.userAccountController.getQrCode) //GET qr code representation
+        .put(this.userAccountController.putQrCode); //PUT regenerate secret
+    this.app.route('/2step/login')
+        .post(this.userAccountController.login2); //POST login with 2 step ON
     this.app.route('/users')
         .get(this.userPermissionsMiddleware.adminPrivileges, this.userAccountController.getUsers);//GET returns the list of users
     this.app.route('/users/:user_id')
@@ -86,9 +91,19 @@ BorderlineServer.prototype.setupUserAccount = function() {
         .post(this.userAccountController.postUserById) //POST Update user details
         .delete(this.userAccountController.deleteUserById); //DELETE Removes a user
     // ] Login and sessions routes
+
+    /*
+    //[ Plugins subscriptions
+    this.app.route('/users/:user_id/plugins')
+        .get(this.userAccountController.getUserPlugins); //GET List user plugins
+    this.app.route('/users/:user_id/plugins/:plugin_id')
+        .put(this.userAccountController.putUserPlugin) //PUT Create a user subscription
+        .delete(this.userAccountController.deleteUserPlugin); //DELETE Unsubscribe from a plugin
+        */
+    //] Plugins subs
 };
 
-BorderlineServer.prototype.setupUserDataSources = function(){
+BorderlineServer.prototype.setupDataSources = function(){
     var dataSourcesController = require('./controllers/dataSourcesController');
     this.dataSourcesController = new dataSourcesController(this.db.collection('data_sources'));
 

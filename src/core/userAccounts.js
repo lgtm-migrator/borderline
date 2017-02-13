@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const https = require('https');
 const crypto = require('crypto');
 const ObjectID = require('mongodb').ObjectID;
+const speakeasy = require('speakeasy');
 
 function UserAccounts(userCollection) {
     this.userCollection = userCollection;
@@ -13,6 +14,7 @@ function UserAccounts(userCollection) {
     this.findById = UserAccounts.prototype.findById.bind(this);
     this.updateById = UserAccounts.prototype.updateById.bind(this);
     this.deleteById = UserAccounts.prototype.deleteById.bind(this);
+    this.regenerateSecret = UserAccounts.prototype.regenerateSecret.bind(this);
 }
 
 UserAccounts.prototype.findAll = function(){
@@ -68,7 +70,8 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
             username: username,
             salt: salt,
             password: hash_pass,
-            admin: false
+            admin: false,
+            secret: speakeasy.generateSecret({ length: 32, name: 'Borderline' })
         };
 
         //Resolve Promise on DB insert success
@@ -124,5 +127,24 @@ UserAccounts.prototype.deleteById = function(id) {
     });
 };
 
+UserAccounts.prototype.regenerateSecret = function(id) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.findById(id).then(
+            function (user) {
+                user.secret = speakeasy.generateSecret({ length: 32, name: 'Borderline' });
+                that.updateById(id, user).then(function (result) {
+                    resolve(user);
+                },
+                function (error) {
+                    reject(error);
+                });
+            },
+            function (error) {
+                reject(error);
+            }
+        );
+    });
+};
 
 module.exports = UserAccounts;
