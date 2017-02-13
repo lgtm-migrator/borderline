@@ -9,7 +9,7 @@
     --font-color-default: rgba(173, 173, 173, 255);
     --font-color-active: rgba(255, 255, 255, 255);
     --background-color-start: #ffffff;
-    --background-color-end: #000000;
+    --background-color-end: #202020;
 
     /* UTILITY COLORS */
     --background-color-100: color(var(--background-color-end) blend(var(--background-color-start) 100%));

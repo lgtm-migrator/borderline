@@ -2,23 +2,28 @@
 
 .screen {
 
-    background-color: var(--background-color-010);
+    background-color: var(--background-color-000);
+
+    &.hide {
+        visibility: hidden;
+    }
 }
 
 .box {
 
     position: absolute;
     top: calc(50% - 125px);
-    left: calc(50% - 200px);
+    left: calc(50% - 105px);
     height: 250px;
-    width: 400px;
+    width: 205px;
 }
 
 .title {
 
     padding-top: calc(50% - 200px);
     text-align: center;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
+    cursor: default;
 
     & span {
 
@@ -33,10 +38,14 @@
 }
 
 .form {
-    text-align: center;
 
-    & input, & button {
-        width: 50%;
+    text-align: center;
+    line-height: 40px;
+
+    & span {
+        cursor: pointer;
+        display: inline-block;
+        line-height: 10px;
     }
 
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 // We import the plugin manager
-import pluginInspector from './utilities/PluginInspector';
+import lifecycleManager from './utilities/LifecycleManager';
 
 // We import the children component
 import Body from './containers/BodyContainer';
@@ -15,11 +15,11 @@ import StatusBar from './containers/StatusBarContainer';
 class Borderline extends Component {
 
     componentDidMount() {
-        pluginInspector.discover();
+        lifecycleManager.discover();
     }
 
     componentDidUpdate() {
-        pluginInspector.discover();
+        lifecycleManager.discover();
     }
 
     // Here we do the top level rendering of our application
@@ -38,10 +38,10 @@ class Borderline extends Component {
 }
 
 if (module.hot) {
-    module.hot.accept('./utilities/PluginInspector', () => {
+    module.hot.accept('./utilities/LifecycleManager', () => {
         console.info('An Extension Manager or a child dependency was modified! Resetting...'); // eslint-disable-line no-console
-        var HotPluginInspector = require('./utilities/PluginInspector').default;
-        HotPluginInspector.rediscover();
+        var HotLifecycleManager = require('./utilities/LifecycleManager').default;
+        HotLifecycleManager.rediscover();
     });
 }
 

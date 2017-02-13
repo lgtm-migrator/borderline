@@ -88,19 +88,25 @@ class StoreManager {
     injectStates(...args) {
 
         return (target) => {
-            return connect((state) => {
+
+            let stateMapper = undefined;
+            let dispatchMapper = undefined;
+
+            while (args.length > 0 && typeof args[args.length - 1] !== 'string') {
+                dispatchMapper = dispatchMapper === undefined ? stateMapper : undefined;
+                stateMapper = args.pop();
+            }
+
+            return connect(state => {
 
                 let result = [];
-                let func = null;
                 args.forEach(function (prop) {
-                    if (typeof prop === 'string')
-                        result.push(state[prop]);
-                    else
-                        func = prop;
+                    result.push(state[prop]);
                 });
-                return func(...result);
 
-            })(target);
+                return stateMapper(...result);
+
+            }, dispatchMapper)(target);
         };
     }
 }

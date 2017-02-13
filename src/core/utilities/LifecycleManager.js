@@ -1,10 +1,11 @@
 import { Observable } from 'rxjs';
 import PluginContext from './PluginContext';
 import storeManager from '../utilities/StoreManager';
+import InspectorPlugin from '../flux/inspector';
+import SessionPlugin from '../flux/session';
 import PagePlugin from '../flux/page';
-import CoreFluxPlugin, { coreFluxPluginActions } from '../flux/extensions';
 
-class PluginInspector {
+class LifecycleManager {
 
     constructor() {
         this.initialized = false;
@@ -23,7 +24,7 @@ class PluginInspector {
 
     discover() {
 
-        console.info('Launching Extensions discovery ...'); // eslint-disable-line no-console
+        console.info('Injecting core applicaton fluxes ...'); // eslint-disable-line no-console
 
         // Here we prevent double initialization
         // We should make sure we handle reloading from there
@@ -43,11 +44,12 @@ class PluginInspector {
 
     injectFlux() {
 
-        new PluginContext(PagePlugin);
-        new PluginContext(CoreFluxPlugin, 'core');
-        storeManager.dispatch(coreFluxPluginActions.borderlineBoot());
+        new PluginContext(PagePlugin, 'core');
+        new PluginContext(InspectorPlugin, 'core');
+        new PluginContext(SessionPlugin, 'core');
+        storeManager.dispatch({ type: '@@all/borderline/BOOT' });
     }
 }
 
-const pluginInspector = new PluginInspector();
-export default pluginInspector;
+const lifecycleManager = new LifecycleManager();
+export default lifecycleManager;

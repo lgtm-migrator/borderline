@@ -6,7 +6,7 @@ import storeManager from '../utilities/StoreManager';
 import WrapClear from '../components/WrapClearComponent';
 import styles from '../styles/ContentBox.css';
 
-@storeManager.injectStates('0000-00-000', (page) => ({
+@storeManager.injectStates('page', (page) => ({
     list: page ? page.toJS().pages || [] : []
 }))
 class ContentBoxContainer extends Component {
@@ -23,14 +23,14 @@ class ContentBoxContainer extends Component {
     }
 
     componentDidUpdate(prevProp) {
-        if (prevProp.list.length != this.props.list.length)
+        if ((prevProp.list || []).length != (this.props.list || []).length)
             this.createSubappContainers();
     }
 
     createSubappContainers() {
         let pathname = this.props.pathname || '';
         this.setState({
-            subappContainers: this.props.list.map((component) => {
+            subappContainers: (this.props.list || []).map((component) => {
                 return (
                     <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
                         <ContentBoxMountingContainer view={component.view} />

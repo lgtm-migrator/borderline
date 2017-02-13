@@ -5,7 +5,7 @@ import storeManager from '../utilities/StoreManager';
 import WrapClear from '../components/WrapClearComponent';
 import styles from '../styles/TopBar.css';
 
-@storeManager.injectStates('0000-00-000', (page) => ({
+@storeManager.injectStates('page', (page) => ({
     list: page ? page.toJS().pages || [] : []
 }))
 class TopBarContainer extends Component {

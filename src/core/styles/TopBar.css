@@ -23,7 +23,7 @@
 .subappbuttonactive {
     composes: subappbutton;
     border-bottom: solid 5px var(--accent-color);
-    color: rgba(255, 255, 255, 255);
+    color: var(--font-color-default);
 }
 
 .subappbutton:hover {

@@ -1,16 +1,16 @@
 import { Observable } from 'rxjs';
 import Immutable, { Map } from 'immutable';
-import fluxTypes from './types';
+import inspectorTypes from './types';
 
 export default {
     extensionReducer:
     (state = Map([]), action) => {
 
         switch (action.type) {
-            case fluxTypes.EXTENSIONS_SUCCESS:
+            case inspectorTypes.EXTENSIONS_SUCCESS:
                 return extensionsSuccess(state, action);
-            case fluxTypes.SINGLE_EXTENSION_SUCCESS:
-                return singleExtensionSuccess(state, action);
+            case inspectorTypes.EXTENSION_UNIT_SUCCESS:
+                return extensionUnitSuccess(state, action);
             default:
                 return state;
         }
@@ -28,7 +28,7 @@ const extensionsSuccess = (state, action) => {
     return Immutable.fromJS(future);
 };
 
-const singleExtensionSuccess = (state, action) => {
+const extensionUnitSuccess = (state, action) => {
     let future = state.toJS();
     future.extensions[action.id].module = action.subapp;
     future.extensions[action.id].loaded = true;

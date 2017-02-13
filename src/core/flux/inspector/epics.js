@@ -1,67 +1,67 @@
 import { Observable } from 'rxjs';
 import PluginContext from '../../utilities/PluginContext';
-import fluxTypes from './types';
-import fluxActions from './actions';
+import inspectorTypes from './types';
+import inspectorActions from './actions';
 import systemExtensions from '../../../extensions';
 
 export default {
 
-    borderlineBoot:
-    (action) => action.ofType(fluxTypes.BORDERLINE_BOOT)
-        .mapTo(fluxActions.loadExtensions()),
+    sessionValid:
+    (action) => action.ofType('@@core/session/SESSION_VALID')
+        .mapTo(inspectorActions.extensionsWillLoad()),
 
     extensionListFromWillLoad:
-    (action) => action.ofType(fluxTypes.EXTENSIONS_WILL_LOAD)
-        .mapTo(fluxActions.extensionsLoad()),
+    (action) => action.ofType(inspectorTypes.EXTENSIONS_WILL_LOAD)
+        .mapTo(inspectorActions.extensionsLoad()),
 
     extensionRetrieveLoad:
-    (action) => action.ofType(fluxTypes.EXTENSIONS_LOAD)
+    (action) => action.ofType(inspectorTypes.EXTENSIONS_LOAD)
         .mergeMap(() =>
             // Observable.from(fetch('/plugin_store')
             //     .then(response => response.json()))
             //     .map(response => actions.subAppsSuccess(response))
-            Observable.of(fluxActions.extensionsSuccess([]))
+            Observable.of(inspectorActions.extensionsSuccess([]))
         ),
 
     extensionDownloadFromLoad:
-    (action) => action.ofType(fluxTypes.EXTENSIONS_SUCCESS)
+    (action) => action.ofType(inspectorTypes.EXTENSIONS_SUCCESS)
         .mergeMap(action =>
             Observable.from(action.list).defaultIfEmpty(null).map(id =>
-                id === null ? fluxActions.extensionsLoaded() : fluxActions.loadSingleExtension(id)
+                id === null ? inspectorActions.extensionsDidLoad() : inspectorActions.extensionUnitLoad(id)
             )
         ),
 
     extensionRetrieveSingle:
-    (action) => action.ofType(fluxTypes.SINGLE_EXTENSION_LOAD)
+    (action) => action.ofType(inspectorTypes.EXTENSION_UNIT_LOAD)
         .mergeMap(action =>
             // Observable.from(fetch('/plugin')
             //     .then(response => response.json()))
             //     .map(response => actions.singleSubAppSucces(action.id, response))
-            Observable.of(fluxActions.singleExtensionSucces(action.id, {}))
+            Observable.of(inspectorActions.extensionUnitSucces(action.id, {}))
         ),
 
     extensionSingleComplete:
-    (action, state) => action.ofType(fluxTypes.SINGLE_EXTENSION_SUCCESS)
+    (action, state) => action.ofType(inspectorTypes.EXTENSION_UNIT_SUCCESS)
         .mergeMap(action =>
             Observable.concat(
-                Observable.of(fluxActions.singleExtensionLoaded(action.id)),
+                Observable.of(inspectorActions.extensionUnitDidLoad(action.id)),
                 Observable.from(Object.values(state.retrieve().toJS().extensions))
                     .every(subapp => subapp.loaded === true)
                     .filter(loaded => loaded === true)
-                    .mapTo(fluxActions.extensionsLoaded())
+                    .mapTo(inspectorActions.extensionsDidLoad())
             )
         ),
 
     extensionDidLoad:
-    (action) => action.ofType(fluxTypes.EXTENSIONS_DID_LOAD)
-        .mapTo(fluxActions.extensionsWillInvoke()),
+    (action) => action.ofType(inspectorTypes.EXTENSIONS_DID_LOAD)
+        .mapTo(inspectorActions.extensionsWillInvoke()),
 
     extensionWillInvoke:
-    (action) => action.ofType(fluxTypes.EXTENSIONS_WILL_INVOKE)
-        .mapTo(fluxActions.extensionsInvoke()),
+    (action) => action.ofType(inspectorTypes.EXTENSIONS_WILL_INVOKE)
+        .mapTo(inspectorActions.extensionsInvoke()),
 
     extensionInvoke:
-    (action, state) => action.ofType(fluxTypes.EXTENSIONS_INVOKE)
+    (action, state) => action.ofType(inspectorTypes.EXTENSIONS_INVOKE)
         .mergeMap(() => {
             let results = [];
             let extensions = state.retrieve().toJS().extensions || {};
@@ -70,16 +70,16 @@ export default {
                 try {
                     new PluginContext(stack[key]);
                 } catch (exception) {
-                    results.push(fluxActions.singleExtensionCorrupted(key));
+                    results.push(inspectorActions.extensionUnitCorrupted(key));
                     if (process.env.NODE_ENV === 'development')
                         console.error(exception); // eslint-disable-line no-console
                 }
             });
-            results.push(fluxActions.extensionsDidInvoke());
+            results.push(inspectorActions.extensionsDidInvoke());
             return Observable.from(results);
         }),
 
     extensionDidInvoke:
-    (action) => action.ofType(fluxTypes.EXTENSIONS_DID_INVOKE)
-        .mapTo(fluxActions.borderlineReady())
+    (action) => action.ofType(inspectorTypes.EXTENSIONS_DID_INVOKE)
+        .mapTo({ type: '@@all/borderline/READY' })
 };
