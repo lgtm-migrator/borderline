@@ -25,8 +25,8 @@ dataSources.prototype.findAll = function() {
 dataSources.prototype.createDataSource = function(data_source) {
     var that = this;
     return new Promise(function(resolve, reject) {
-        for (var i = 0; i < data_source.subscribers.length; i++) {
-            data_source.subscribers[i] = new ObjectID(data_source.subscribers[i]);
+        for (var i = 0; i < data_source.users.length; i++) {
+            data_source.users[i] = new ObjectID(data_source.users[i]);
         }
         that.sourcesCollection.insertOne(data_source).then(function(success) {
             if (success.insertedCount == 1) {
@@ -60,8 +60,8 @@ dataSources.prototype.updateDataSourceByID = function(source_id, data) {
     return new Promise(function(resolve, reject) {
         if (data.hasOwnProperty('_id')) //Transforms ID to mongo ObjectID type
             delete data._id;
-        for (var i = 0; i < data.subscribers; i++) {
-            data.subscribers[i] = new ObjectID(data.subscribers[i]);
+        for (var i = 0; i < data.users; i++) {
+            data.users[i] = new ObjectID(data.users[i]);
         }
         that.sourcesCollection.findOneAndReplace({_id: new ObjectID(source_id) }, data).then(function(result) {
             if (result === null || result === undefined)
@@ -92,7 +92,7 @@ dataSources.prototype.deleteDataSourceByID = function(source_id) {
 dataSources.prototype.getDataSourcesByUserID = function(user_id) {
     var that = this;
     return  new Promise(function(resolve, reject) {
-        that.sourcesCollection.find({ subscribers: new ObjectID(user_id) }).toArray().then(function(result) {
+        that.sourcesCollection.find({ users: new ObjectID(user_id) }).toArray().then(function(result) {
             resolve(result);
         }, function(error) {
             reject(error);
@@ -106,7 +106,7 @@ dataSources.prototype.subscribeUserToDataSource = function(user_id, source_id) {
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
                                          {
                                              $addToSet: {
-                                                 subscribers: new ObjectID(user_id)
+                                                 users: new ObjectID(user_id)
                                              }
                                          })
             .then(function(success) {
@@ -132,7 +132,7 @@ dataSources.prototype.unsubscribeUserFromDataSource = function(user_id, source_i
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
             {
                 $pull: {
-                    subscribers: new ObjectID(user_id)
+                    users: new ObjectID(user_id)
                 }
             })
             .then(function(success) {

@@ -6,11 +6,12 @@ const zlib = require('zlib');
 const adm_zip = require('adm-zip');
 
 //Local modules
-var Plugin = require('./plugin');
+var Plugin = require('./plugin/plugin');
 
-var PluginStore = function(pluginFolder) {
+var PluginStore = function(pluginCollection) {
     this.plugins = [];
-    this.pluginFolder = pluginFolder;
+    this.pluginFolder = path.normalize(global.config.pluginSourcesFolder);
+    this.pluginCollection = pluginCollection;
     this.router = express.Router();
 
     this._scanLocalFolder();
@@ -18,6 +19,44 @@ var PluginStore = function(pluginFolder) {
         this._watchLocalFolder();
     }
 };
+
+PluginStore.prototype._syncPlugin = function(plugin, operation) {
+    var that = this;
+    operation =  typeof operation !== 'undefined' ? operation : 'update';
+    var model = {
+        _id : plugin.uuid,
+        sourcePath: plugin.pluginPath,
+        filesPath: path.join(global.config.pluginFileSystemFolder, plugin.uuid),
+        users: plugin.users ? plugin.users : []
+    };
+
+    return new Promise(function(resolve, reject) {
+        if (operation === 'update' || operation === 'create') {
+            that.pluginCollection.findOneAndReplace({_id: model._id}, model, {upsert: true}).then(
+                function (success) {
+                    resolve(success);
+                },
+                function (error) {
+                    reject(error);
+                }
+            );
+        }
+        else if (operation === 'delete' ) {
+            that.pluginCollection.findOneAndDelete({ _id: model._id }).then(
+              function (success) {
+                resolve(success);
+              },
+              function (error) {
+                reject(error);
+              }
+            );
+        }
+        else {
+            reject('Undefined plugin sync operation: ' + operation);
+        }
+    });
+};
+
 
 PluginStore.prototype._attachPlugin = function(plugin) {
     plugin.attach();
@@ -72,6 +111,7 @@ PluginStore.prototype._watchLocalFolder = function() {
                             var new_plugin = new Plugin(uuid, pluginPath);
                             that._attachPlugin(new_plugin);
                             that.plugins.push(new_plugin);
+                            that._syncPlugin(new_plugin, 'update');
                         }
                     }
                 }
@@ -89,8 +129,9 @@ PluginStore.prototype._scanLocalFolder = function() {
         var file_stats = fs.fstatSync(file_fd);
         if (file_stats.isDirectory()) {
             var plugin = new Plugin(f, file);
-            that.plugins.push(plugin);
             that._attachPlugin(plugin);
+            that.plugins.push(plugin);
+            that._syncPlugin(plugin, 'update');
         }
     });
 };
@@ -117,9 +158,9 @@ PluginStore.prototype.createPluginFromFile = function(file) {
     }
 
     //Generate a non-colliding plugin UUID
-    var pluginUuid = Math.floor(Math.random() * 0xffffffffffff).toString(16);
+    var pluginUuid = Math.floor(Math.random() * 0xffffffffffffffffffffffff).toString(16);
     while (that._findPluginById(pluginUuid) !== null)
-        pluginUuid = Math.floor(Math.random() * 0xffffffffffff).toString(16);
+        pluginUuid = Math.floor(Math.random() * 0xffffffffffffffffffffffff).toString(16);
 
     zip.extractAllTo(that.pluginFolder + '/' + pluginUuid, true);
 
@@ -137,6 +178,8 @@ PluginStore.prototype.clearPlugins = function() {
         that._detachPlugin(plugin);
         //Remove local directory
         fs.removeSync(that.pluginFolder + '/' + plugin.uuid);
+        //Remove from DB
+        that._syncPlugin(plugin, 'delete');
     });
     this.plugins = [];
 };
@@ -154,6 +197,8 @@ PluginStore.prototype.deletePluginById = function(uuid) {
     var p = this._findPluginById(uuid);
     if (p !== null) {
         if (this._detachPlugin(p) === true) {
+            //Remove from DB
+            this._syncPlugin(p, 'delete');
             //Remove from array
             this.plugins.splice(this.plugins.findIndex(function(p) { return p.uuid == uuid }), 1);
             //Remove local directory
@@ -189,6 +234,8 @@ PluginStore.prototype.updatePluginById = function(uuid, file) {
     var new_plugin = new Plugin(uuid, this.pluginFolder + '/' + uuid);
     this._attachPlugin(new_plugin);
     this.plugins.push(new_plugin);
+    //Insert in DB
+    this._syncPlugin(new_plugin, 'create');
 
     return {id : uuid};
 };

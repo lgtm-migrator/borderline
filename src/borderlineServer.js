@@ -21,6 +21,7 @@ function BorderlineServer(options) {
     this.setupUserAccount = BorderlineServer.prototype.setupUserAccount.bind(this);
     this.setupDataSources = BorderlineServer.prototype.setupDataSources.bind(this);
     this.setupPluginStore = BorderlineServer.prototype.setupPluginStore.bind(this);
+    this.setupUserPlugins = BorderlineServer.prototype.setupUserPlugins.bind(this);
 
     //Configuration import
     global.config = this.config;
@@ -53,6 +54,7 @@ function BorderlineServer(options) {
         that.setupUserAccount();
         that.setupDataSources();
         that.setupPluginStore();
+        that.setupUserPlugins();
 
     });
 
@@ -91,16 +93,6 @@ BorderlineServer.prototype.setupUserAccount = function() {
         .post(this.userAccountController.postUserById) //POST Update user details
         .delete(this.userAccountController.deleteUserById); //DELETE Removes a user
     // ] Login and sessions routes
-
-    /*
-    //[ Plugins subscriptions
-    this.app.route('/users/:user_id/plugins')
-        .get(this.userAccountController.getUserPlugins); //GET List user plugins
-    this.app.route('/users/:user_id/plugins/:plugin_id')
-        .put(this.userAccountController.putUserPlugin) //PUT Create a user subscription
-        .delete(this.userAccountController.deleteUserPlugin); //DELETE Unsubscribe from a plugin
-        */
-    //] Plugins subs
 };
 
 BorderlineServer.prototype.setupDataSources = function(){
@@ -124,17 +116,17 @@ BorderlineServer.prototype.setupDataSources = function(){
 };
 
 BorderlineServer.prototype.setupPluginStore = function() {
-    if (this.config.hasOwnProperty('pluginFolder') == false) {
-        this.pluginError('No pluginFolder in options');
+    if (this.config.hasOwnProperty('pluginSourcesFolder') == false) {
+        this.pluginError('No pluginSourcesFolder in options');
         return;
     }
-    if (fs.existsSync(this.config.pluginFolder) == false) {
-        this.pluginError('Directory ' + this.config.pluginFolder + ' not found');
+    if (fs.existsSync(this.config.pluginSourcesFolder) == false) {
+        this.pluginError('Directory ' + this.config.pluginSourcesFolder + ' not found');
         return;
     }
 
     var pluginStoreController = require('./controllers/pluginStoreController');
-    this.pluginStoreController = new pluginStoreController();
+    this.pluginStoreController = new pluginStoreController(this.db.collection('plugins'));
 
     // [ Plugin Store Routes
     //TEMPORARY getter on a form to upload plugins zip file
@@ -152,6 +144,20 @@ BorderlineServer.prototype.setupPluginStore = function() {
         .post(multer().any(), this.pluginStoreController.postPluginByID) //:id POST update a plugin content
         .delete(this.pluginStoreController.deletePluginByID); //:id DELETE removes a specific plugin
     // ] Plugin Store Routes
+};
+
+BorderlineServer.prototype.setupUserPlugins = function() {
+    var userPluginControllerModule = require('./controllers/userPluginController');
+    this.userPluginController = new userPluginControllerModule(this.db.collection('plugins'));
+
+     //[ Plugins subscriptions
+    this.app.route('/users/:user_id/plugins')
+        .get(this.userPluginController.getPlugins) //GET List user plugins
+        .delete(this.userPluginController.deletePlugins); //DELETE Forget all plugins for user
+    this.app.route('/users/:user_id/plugins/:plugin_id')
+        .put(this.userPluginController.subscribePlugin) //PUT Subscribe a user to plugin
+        .delete(this.userPluginController.unsubscribePlugin); //DELETE Un-subscribe from a plugin
+    //] Plugins subs
 };
 
 BorderlineServer.prototype.mongoError = function(message) {

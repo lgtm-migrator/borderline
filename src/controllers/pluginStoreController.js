@@ -2,8 +2,9 @@ var path = require('path');
 
 var pluginStoreModule = require('../core/pluginStore');
 
-function PluginStoreController() {
-    this.pluginStore = new pluginStoreModule(path.normalize(global.config.pluginFolder));
+function PluginStoreController(mongoDBCollection) {
+    this.mongoDBCollection = mongoDBCollection;
+    this.pluginStore = new pluginStoreModule(this.mongoDBCollection);
 
     this.getPluginStoreRouter = PluginStoreController.prototype.getPluginStoreRouter.bind(this);
     this.getPluginStore = PluginStoreController.prototype.getPluginStore.bind(this);
@@ -21,13 +22,13 @@ PluginStoreController.prototype.getPluginStoreRouter = function() {
     return this.pluginStore.router;
 };
 
-PluginStoreController.prototype.getPluginStore = function(req, res, next) {
+PluginStoreController.prototype.getPluginStore = function(req, res) {
     var plugin_list = this.pluginStore.listPlugins();
     res.status(200);
     res.jsonp(plugin_list);
 };
 
-PluginStoreController.prototype.postPluginStore = function(req, res, next) {
+PluginStoreController.prototype.postPluginStore = function(req, res) {
 
     if (typeof req.files === 'undefined' || req.files === null || req.files.length == 0){
         res.status(406);
@@ -35,11 +36,12 @@ PluginStoreController.prototype.postPluginStore = function(req, res, next) {
         return;
     }
 
-    var plugins =[];
+    var plugins = [];
     for (var i = 0; i < req.files.length; i++) {
         var p = this.pluginStore.createPluginFromFile(req.files[i]);
         plugins.push(p);
     }
+
     res.status(200);
     res.json(plugins);
 };

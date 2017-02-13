@@ -2,8 +2,8 @@ const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
 const mongodb = require('mongodb');
-const borderlineApiModule = require('./plugin/api');
 
+const borderlineApiModule = require('./api');
 
 function Plugin(Uuid, PluginPath) {
     this.uuid = Uuid;
@@ -59,12 +59,12 @@ Plugin.prototype.attach = function() {
         if (req.params[0] === null || req.params[0] === undefined || req.params[0].length === 0) {
             url = 'index.html';
         }
-        var ressourcePath = that.pluginPath + '/' + url;
-        if (ressourcePath.indexOf('..') === -1 && fs.existsSync(ressourcePath) === true) {
-            return res.sendFile(ressourcePath);
+        var resourcePath = that.pluginPath + '/' + url;
+        if (resourcePath.indexOf('..') === -1 && fs.existsSync(resourcePath) === true) {
+            return res.sendFile(resourcePath);
         }
         res.status(404);
-        res.json({ error: 'Unresolved plugin internal path' } );
+        res.json({ error: 'Unresolved plugin internal path /' + url } );
     });
 };
 

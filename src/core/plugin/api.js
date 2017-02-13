@@ -1,5 +1,6 @@
-const http_api = require('./http');
 const url = require('url');
+
+const http_api = require('./http');
 const path_api = require('./path');
 const fs_api = require('./filesystem');
 

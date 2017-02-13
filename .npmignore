@@ -39,4 +39,4 @@ Thumbs.db
 /.idea
 
 /node_modules
-/src/plugins
+/.plugins

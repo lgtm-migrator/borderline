@@ -8,8 +8,13 @@ function PluginFileSystem(pluginUuid) {
 }
 
 PluginFileSystem.prototype._bootstrap = function() {
-    if (fs.existsSync(this.root) === false) {
-        fs.mkdirSync(this.root);
+    var paths = this.root.split(path.sep);
+    var p = '/';
+    for (var i = 1; i < paths.length; i++) {
+        p = path.join(p, paths[i]);
+        if (fs.existsSync(p) === false) {
+            fs.mkdirSync(p);
+        }
     }
 };
 
