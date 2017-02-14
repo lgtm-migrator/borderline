@@ -211,6 +211,11 @@ UserAccountController.prototype.putQrCode = function(req, res) {
 
 UserAccountController.prototype.logout = function(req, res) {
     req.session.destroy(function(err) {
+        if (req.user === undefined || req.user === null) {
+            res.status(401);
+            res.json({ error: 'Not logged in' });
+            return;
+        }
         req.logout();
         if (err) {
             res.status(500);

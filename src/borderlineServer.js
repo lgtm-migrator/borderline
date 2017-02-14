@@ -19,7 +19,7 @@ function BorderlineServer(options) {
     this.pluginError = BorderlineServer.prototype.pluginError.bind(this);
 
     this.setupUserAccount = BorderlineServer.prototype.setupUserAccount.bind(this);
-    this.setupDataSources = BorderlineServer.prototype.setupDataSources.bind(this);
+    this.setupDataStore = BorderlineServer.prototype.setupDataStore.bind(this);
     this.setupPluginStore = BorderlineServer.prototype.setupPluginStore.bind(this);
     this.setupUserPlugins = BorderlineServer.prototype.setupUserPlugins.bind(this);
 
@@ -44,6 +44,7 @@ function BorderlineServer(options) {
         that.userPermissionsMiddleware = require('./middlewares/userPermissions');
 
         //Init external middleware
+
         that.app.use(body_parser.urlencoded({ extended: true }));
         that.app.use(body_parser.json());
         that.app.use(expressSession({ secret: 'borderline', saveUninitialized: false, resave: false ,  cookie: { secure: false }, store: that.mongoStore } ));
@@ -52,10 +53,12 @@ function BorderlineServer(options) {
 
         //Setup route using controllers
         that.setupUserAccount();
-        that.setupDataSources();
+        that.setupDataStore();
         that.setupPluginStore();
         that.setupUserPlugins();
 
+        //Remove unwanted express headers
+        that.app.set('x-powered-by', false);
     });
 
     return this.app;
@@ -95,23 +98,25 @@ BorderlineServer.prototype.setupUserAccount = function() {
     // ] Login and sessions routes
 };
 
-BorderlineServer.prototype.setupDataSources = function(){
-    var dataSourcesController = require('./controllers/dataSourcesController');
-    this.dataSourcesController = new dataSourcesController(this.db.collection('data_sources'));
+BorderlineServer.prototype.setupDataStore = function(){
+    // Data sources controller import
+    var dataStoreControllerModule = require('./controllers/dataStoreController');
+    this.dataStoreController = new dataStoreControllerModule(this.db.collection('data_sources'));
 
     //[ Data sources routes
     this.app.route('/data_sources/')
-        .get(this.dataSourcesController.getDataSources) // GET all data sources
-        .post(this.dataSourcesController.postDataSource);//POST New data source
+        .get(this.dataStoreController.getDataStore) // GET all data sources
+        .post(this.dataStoreController.postDataStore);//POST New data source
     this.app.route('/data_sources/:source_id')
-        .get(this.dataSourcesController.getDataSourceByID) //GET a single data source
-        .put(this.dataSourcesController.putDataSourceByID) // PUT Update a single data source
-        .delete(this.dataSourcesController.deleteDataSourceByID); //DELETE a single data source
-    this.app.route('/data_sources/users/:user_id')
-        .get(this.dataSourcesController.getUserDataSources); //GET all user's data sources
-    this.app.route('/data_sources/users/:user_id/:source_id')
-        .post(this.dataSourcesController.postUserDataSourceByID) //POST Subscribe a user to a data source
-        .delete(this.dataSourcesController.deleteUserDataSourceByID); //DELETE Unsubscribe user to data source
+        .get(this.dataStoreController.getDataStoreByID) //GET a single data source
+        .put(this.dataStoreController.putDataStoreByID) // PUT Update a single data source
+        .delete(this.dataStoreController.deleteDataStoreByID); //DELETE a single data source
+
+    this.app.route('/users/:user_id/data_sources')
+        .get(this.dataStoreController.getUserDataSources); //GET all user's data sources
+    this.app.route('/users/:user_id/data_sources/:source_id')
+        .post(this.dataStoreController.postUserDataSourceByID) //POST Subscribe a user to a data source
+        .delete(this.dataStoreController.deleteUserDataSourceByID); //DELETE Unsubscribe user to data source
     // ] Data sources routes
 };
 

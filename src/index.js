@@ -3,6 +3,9 @@ var app = express();
 
 var BorderlineServer = require('./borderlineServer.js');
 
+//Remove unwanted express headers
+app.set('x-powered-by', false);
+
 app.use(BorderlineServer({
         mongoUrl: 'mongodb://jean:root@146.169.33.32:27020/borderline',
         pluginSourcesFolder: 'C:\\Users\\grizet_j\\imperial\\borderline-server\\.plugins\\sources',

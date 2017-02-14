@@ -2,13 +2,13 @@ const fs = require('fs-extra');
 const path = require('path');
 const ObjectID = require('mongodb').ObjectID;
 
-function dataSources(dataSourcesCollection) {
-    this.sourcesCollection = dataSourcesCollection;
+function dataStore(dataStoreCollection) {
+    this.sourcesCollection = dataStoreCollection;
 
-    this.findAll = dataSources.prototype.findAll.bind(this);
+    this.findAll = dataStore.prototype.findAll.bind(this);
 }
 
-dataSources.prototype.findAll = function() {
+dataStore.prototype.findAll = function() {
     var that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.find().toArray().then(function(result) {
@@ -22,7 +22,7 @@ dataSources.prototype.findAll = function() {
     });
 };
 
-dataSources.prototype.createDataSource = function(data_source) {
+dataStore.prototype.createDataSource = function(data_source) {
     var that = this;
     return new Promise(function(resolve, reject) {
         for (var i = 0; i < data_source.users.length; i++) {
@@ -41,7 +41,7 @@ dataSources.prototype.createDataSource = function(data_source) {
     });
 };
 
-dataSources.prototype.getDataSourceByID = function(source_id) {
+dataStore.prototype.getDataSourceByID = function(source_id) {
     var that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.findOne({_id: new ObjectID(source_id) }).then(function(result) {
@@ -55,7 +55,7 @@ dataSources.prototype.getDataSourceByID = function(source_id) {
     });
 };
 
-dataSources.prototype.updateDataSourceByID = function(source_id, data) {
+dataStore.prototype.updateDataSourceByID = function(source_id, data) {
     var that = this;
     return new Promise(function(resolve, reject) {
         if (data.hasOwnProperty('_id')) //Transforms ID to mongo ObjectID type
@@ -77,7 +77,7 @@ dataSources.prototype.updateDataSourceByID = function(source_id, data) {
 };
 
 
-dataSources.prototype.deleteDataSourceByID = function(source_id) {
+dataStore.prototype.deleteDataSourceByID = function(source_id) {
     var that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.findOneAndDelete({_id: new ObjectID(source_id)}).then(function (result) {
@@ -89,7 +89,7 @@ dataSources.prototype.deleteDataSourceByID = function(source_id) {
 };
 
 
-dataSources.prototype.getDataSourcesByUserID = function(user_id) {
+dataStore.prototype.getdataStoreByUserID = function(user_id) {
     var that = this;
     return  new Promise(function(resolve, reject) {
         that.sourcesCollection.find({ users: new ObjectID(user_id) }).toArray().then(function(result) {
@@ -100,7 +100,7 @@ dataSources.prototype.getDataSourcesByUserID = function(user_id) {
     });
 };
 
-dataSources.prototype.subscribeUserToDataSource = function(user_id, source_id) {
+dataStore.prototype.subscribeUserToDataSource = function(user_id, source_id) {
     var that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
@@ -126,7 +126,7 @@ dataSources.prototype.subscribeUserToDataSource = function(user_id, source_id) {
     });
 };
 
-dataSources.prototype.unsubscribeUserFromDataSource = function(user_id, source_id) {
+dataStore.prototype.unsubscribeUserFromDataSource = function(user_id, source_id) {
     var that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
@@ -151,4 +151,4 @@ dataSources.prototype.unsubscribeUserFromDataSource = function(user_id, source_i
     });
 };
 
-module.exports = dataSources;
+module.exports = dataStore;
