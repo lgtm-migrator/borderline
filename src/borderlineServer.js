@@ -9,10 +9,10 @@ const body_parser = require('body-parser');
 const passport = require('passport');
 const multer  = require('multer');
 
-function BorderlineServer(options) {
-    //@todo Defaults for some config values.
-    //@todo Check paths and make them absolute for use in application
-    this.config = options;
+const borderlineOptions = require('./core/options');
+
+function BorderlineServer(config) {
+    this.config = new borderlineOptions(config);
     this.app = express();
 
     this.mongoError = BorderlineServer.prototype.mongoError.bind(this);

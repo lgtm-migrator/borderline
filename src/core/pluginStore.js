@@ -18,6 +18,18 @@ var PluginStore = function(pluginCollection) {
     if (global.config.development == true) {
         this._watchLocalFolder();
     }
+    this._scanDatabase();
+};
+
+PluginStore.prototype._scanDatabase = function() {
+    var that = this;
+    this.pluginCollection.find().toArray().then(function(results) {
+        for (var i = 0; i < results.length; i++) {
+            if (that._findPluginById(results[i]._id) === null) {
+                that._syncPlugin({ uuid: results[i]._id }, 'disable');
+            }
+        }
+    });
 };
 
 PluginStore.prototype._syncPlugin = function(plugin, operation) {
@@ -25,31 +37,29 @@ PluginStore.prototype._syncPlugin = function(plugin, operation) {
     operation =  typeof operation !== 'undefined' ? operation : 'update';
     var model = {
         _id : plugin.uuid,
-        sourcePath: plugin.pluginPath,
-        filesPath: path.join(global.config.pluginFileSystemFolder, plugin.uuid),
-        users: plugin.users ? plugin.users : []
+        users: plugin.users ? plugin.users : [],
+        enabled: true
     };
 
     return new Promise(function(resolve, reject) {
+        var sync_success = function(success) { resolve(success); };
+        var sync_error = function(error) { reject(error); };
+
         if (operation === 'update' || operation === 'create') {
-            that.pluginCollection.findOneAndReplace({_id: model._id}, model, {upsert: true}).then(
-                function (success) {
-                    resolve(success);
-                },
-                function (error) {
-                    reject(error);
-                }
-            );
+            that.pluginCollection.findOneAndReplace({_id: model._id}, model, {upsert: true})
+                .then(sync_success, sync_error);
+        }
+        else if (operation === 'disable') {
+            that.pluginCollection.findOneAndUpdate({ _id: model._id }, { $set: { enabled: false } })
+                .then(sync_success, sync_error);
+        }
+        else if (operation === 'enable') {
+            that.pluginCollection.findOneAndUpdate({ _id: model._id }, { $set: { enabled: true } })
+                .then(sync_success, sync_error);
         }
         else if (operation === 'delete' ) {
-            that.pluginCollection.findOneAndDelete({ _id: model._id }).then(
-              function (success) {
-                resolve(success);
-              },
-              function (error) {
-                reject(error);
-              }
-            );
+            that.pluginCollection.findOneAndDelete({ _id: model._id })
+                .then(sync_success, sync_error);
         }
         else {
             reject('Undefined plugin sync operation: ' + operation);
