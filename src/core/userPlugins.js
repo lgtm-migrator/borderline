@@ -12,7 +12,7 @@ function UserPlugins(pluginCollection) {
 UserPlugins.prototype.listPlugins = function(user_id) {
     var that = this;
     return new Promise(function (resolve, reject) {
-        that.pluginCollection.find({ user: [ new ObjectID(user_id) ] }).toArray().then(
+        that.pluginCollection.find({ users: [ new ObjectID(user_id) ] }).toArray().then(
             function (result) {
                 resolve(result);
             },
