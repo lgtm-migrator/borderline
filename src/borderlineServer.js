@@ -85,8 +85,7 @@ BorderlineServer.prototype.setupUserAccount = function() {
     this.app.route('/whoami')
         .get(this.userAccountController.whoAmI); //GET current session user
     this.app.route('/2step/:user_id/')
-        .get(this.userAccountController.getQrCode) //GET qr code representation
-        .put(this.userAccountController.putQrCode); //PUT regenerate secret
+        .put(this.userAccountController.put2step); //PUT regenerate secret
     this.app.route('/2step/login')
         .post(this.userAccountController.login2); //POST login with 2 step ON
     this.app.route('/users')
