@@ -18,7 +18,8 @@ class MainNavigationContainer extends Component {
                     <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
                         <Link to={`${pathname}/${component.particule}`} className={`${navigationStyles.button} ${match ? navigationStyles.active : ''}`}>
                             <div className={navigationStyles.link}>
-                                {component.name}
+                                <div className={navigationStyles.icon} dangerouslySetInnerHTML={{ __html: component.icon }} />
+                                <div className={navigationStyles.title}>{component.name}</div>
                             </div>
                         </Link>
                     )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />

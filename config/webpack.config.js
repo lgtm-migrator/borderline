@@ -175,6 +175,11 @@ module.exports = function () {
                     }
                 ]
             }, {
+                test: /\.svg$/,
+                use: [
+                    'svg-inline-loader'
+                ],
+            }, {
                 test: /\.html$/,
                 include: sourceFolder,
                 use: [

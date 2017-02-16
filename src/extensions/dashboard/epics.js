@@ -1,4 +1,5 @@
 import DashboardContainer from './DashboardContainer';
+import pageIcon from './images/pageIcon.svg';
 
 export default {
     onReady:
@@ -7,6 +8,7 @@ export default {
             type: '@@core/page/PAGE_DOCK',
             name: 'Dashboard',
             particule: 'dashboard',
-            view: DashboardContainer
+            view: DashboardContainer,
+            icon: pageIcon
         })
 };

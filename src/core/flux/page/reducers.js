@@ -22,6 +22,7 @@ const pageDock = (state, action) => {
         name: action.name,
         particule: action.particule,
         view: action.view,
+        icon: action.icon,
         origin: action.__origin__
     });
     return Immutable.fromJS(future);
