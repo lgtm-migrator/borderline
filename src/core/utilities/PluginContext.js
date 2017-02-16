@@ -2,6 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 import storeManager from '../utilities/StoreManager';
 
+const defaultScene = 'extensions';
 class PluginContext {
 
     constructor(extension, scene) {
@@ -11,7 +12,7 @@ class PluginContext {
         this.epics = {};
         this.epicsTag = [];
         this.uniq = null;
-        this.scene = scene || 'extensions';
+        this.scene = scene || defaultScene;
         this.bootstrap();
     }
 
@@ -90,16 +91,32 @@ class PluginContext {
     }
 
     actionTagger(action) {
-        // We tag the action type provided by external developer
-        if (action.type.match(/@@.*?\/.*?\/.*/g) !== null)
-            return action;
-        return Object.assign({}, action, { type: `@@${this.scene}/${this.uniq}/${action.type}` });
+        return actionTagger(action, this.scene, this.uniq);
     }
 
     actionDetagger(action) {
-        // We detag the action type provided by external developer
-        return Object.assign({}, action, { type: action.type.replace(`@@${this.scene}/${this.uniq}/`, '') });
+        return actionDetagger(action, this.scene, this.uniq);
     }
 }
 
 export default PluginContext;
+
+export const actionTagger = (action, scene, uniq) => {
+    // We trace the origin of the action here
+    action.__origin__ = uniq;
+    // We tag the action type provided by external developer
+    if (action.type.match(/@@.*?\/.*?\/.*/g) !== null)
+        return action;
+    return Object.assign({}, action, { type: `@@${scene}/${uniq}/${action.type}` });
+};
+
+export const actionDetagger = (action, scene, uniq) => {
+    // We detag the action type provided by external developer
+    return Object.assign({}, action, { type: action.type.replace(`@@${scene}/${uniq}/`, '') });
+};
+
+export const dispatchProxy = (uniq, scene) => {
+    return (action) => {
+        storeManager.dispatch(actionTagger(action, scene || defaultScene, uniq));
+    };
+};

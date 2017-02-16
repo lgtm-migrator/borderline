@@ -65,7 +65,6 @@ module.exports = function () {
             test: /\.css$/,
             options: {
                 postcss: [
-                    require('postcss-for')(),
                     require('postcss-import')(),
                     require('postcss-cssnext')({
                         browsers: 'last 2 versions'

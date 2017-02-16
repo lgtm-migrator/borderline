@@ -16,8 +16,9 @@ export default {
         session: session
     }),
 
-    sessionLoginFail: () => ({
-        type: sessionTypes.SESSION_LOGIN_FAILURE
+    sessionLoginFail: (error) => ({
+        type: sessionTypes.SESSION_LOGIN_FAILURE,
+        error: error
     }),
 
     sessionLogout: () => ({

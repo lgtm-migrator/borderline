@@ -21,6 +21,8 @@
         box-sizing: border-box;
         white-space: nowrap;
         vertical-align: top;
+        text-decoration: none;
+        color: color(var(--background-color-000) contrast(100%));
     }
 
     & body, & body > div {

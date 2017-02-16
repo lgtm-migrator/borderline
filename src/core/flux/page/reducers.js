@@ -21,7 +21,8 @@ const pageDock = (state, action) => {
     future.pages.push({
         name: action.name,
         particule: action.particule,
-        view: action.view
+        view: action.view,
+        origin: action.__origin__
     });
     return Immutable.fromJS(future);
 };

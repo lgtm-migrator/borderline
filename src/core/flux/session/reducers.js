@@ -7,12 +7,15 @@ export default {
 
         switch (action.type) {
             case sessionTypes.SESSION_RECOVER:
+                return sessionRecover(state);
             case sessionTypes.SESSION_LOGIN:
-                return sessionLoginOrRecover(state, action);
+                return sessionLogin(state);
             case sessionTypes.SESSION_LOGIN_SUCESS:
                 return sessionLoginSuccess(state, action);
             case sessionTypes.SESSION_LOGIN_FAILURE:
-                return sessionLoginFailure(state);
+                return sessionLoginFailure(state, action);
+            case sessionTypes.SESSION_LOGOUT:
+                return sessionLogout(state);
             case sessionTypes.SESSION_VALID:
                 return sessionValid(state);
             default:
@@ -21,9 +24,17 @@ export default {
     }
 };
 
-const sessionLoginOrRecover = (state) => {
+const sessionRecover = (state) => {
     let future = state.toJS();
     future.working = true;
+    return Immutable.fromJS(future);
+};
+
+const sessionLogin = (state) => {
+    let future = state.toJS();
+    future.working = true;
+    future.attempts = future.attempts++ || 1;
+    delete future.error;
     return Immutable.fromJS(future);
 };
 
@@ -34,10 +45,20 @@ const sessionLoginSuccess = (state, action) => {
     return Immutable.fromJS(future);
 };
 
-const sessionLoginFailure = (state) => {
+const sessionLoginFailure = (state, action) => {
     let future = state.toJS();
     future.working = false;
     future.ok = false;
+    future.error = action.error;
+    return Immutable.fromJS(future);
+};
+
+const sessionLogout = (state) => {
+    let future = state.toJS();
+    future.working = false;
+    future.ok = false;
+    future.attempts = 0;
+    delete future.error;
     return Immutable.fromJS(future);
 };
 

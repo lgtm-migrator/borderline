@@ -6,6 +6,7 @@
 
     /* MAIN COLORS */
     --accent-color: rgba(40, 162, 182, 255);
+    --error-color: rgba(191, 20, 80, 255);
     --font-color-default: rgba(173, 173, 173, 255);
     --font-color-active: rgba(255, 255, 255, 255);
     --background-color-start: #ffffff;

@@ -1,27 +1,47 @@
 import { Observable } from 'rxjs';
 
+export default {
+
+    fetchCurrentSession: () => query('/whoami', {
+        method: 'GET'
+    }),
+
+    userLogin: (credentials) => query('/login', {
+        method: 'POST',
+        body: credentials
+    }),
+
+    userLogout: () => query('/logout', {
+        method: 'POST'
+    })
+};
+
+const query = (url, params = {}) => Observable.fromPromise(fetch(url, defaults(params)))
+    .mergeMap(response =>
+        Observable.forkJoin(
+            Observable.of({
+                ok: response.ok,
+                type: response.type,
+                status: response.status,
+                headers: response.headers
+            }),
+            response.json()
+        )).map(values => Object.assign({}, values[0], { data: unbolt(values[1]) }));
+
+const defaults = (params) => {
+    params.credentials = 'include';
+    params.headers = Object.assign(params.headers || {}, {
+        'Content-Type': 'application/json;charset=UTF-8'
+    });
+    if (params.body)
+        params.body = bolt(params.body);
+    return params;
+};
+
 const unbolt = (payload) => {
     return payload;
 };
 
 const bolt = (payload) => {
     return JSON.stringify(payload);
-};
-
-export default {
-
-    fetchCurrentSession: () => Observable.from(fetch('/whoami', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-    }).then(response => unbolt(response))),
-
-    userLogin: (credentials) => Observable.from(fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-        body: bolt(credentials)
-    }).then(response => unbolt(response))),
 };

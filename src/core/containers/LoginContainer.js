@@ -19,7 +19,7 @@ class LoginContainer extends Component {
                     <div className={loginStyles.title}>
                         <span>borderline<strong>:</strong></span>
                     </div>
-                    <LoginForm />
+                    <LoginForm dispatch={this.props.dispatch} />
                 </div>
             </div>
         );
@@ -28,14 +28,18 @@ class LoginContainer extends Component {
 
 import sessionActions from '../flux/session/actions';
 
-@storeManager.injectStates('session', session => ({
-    isProcessing: session ? !!session.toJS().working : true
-}))
+@storeManager.injectStates('session', session => {
+    let s = session && session.toJS ? session.toJS() : {};
+    return {
+        isProcessing: session ? !!s.working : true,
+        hasAttempted: session ? !!s.attempts : false,
+        error: session ? s.error ? s.error.error : false : false,
+    };
+})
 class LoginForm extends Component {
 
     sumbit(e) {
         e.preventDefault();
-        console.info(this.refs); // eslint-disable-line no-console
         this.props.dispatch(sessionActions.sessionLogin({
             username: this.refs.username.value,
             password: this.refs.password.value
@@ -43,12 +47,13 @@ class LoginForm extends Component {
     }
 
     render() {
-        const { isProcessing } = this.props;
+        const { isProcessing, hasAttempted, error } = this.props;
         return (
             <form className={loginStyles.form} onSubmit={this.sumbit.bind(this)}>
                 <input type="text" placeholder="Username" ref="username" /><br />
                 <input type="password" placeholder="Password" ref="password" /><br />
                 {isProcessing ? (<Loader />) : (<button type="submit">Login</button>)}<br />
+                {hasAttempted && error ? (<div className={loginStyles.error}>{error}</div>) : ''}<br />
                 <span>I forgot my password</span>
             </form>
         );

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route } from 'react-router-dom';
 
+import { dispatchProxy } from '../utilities/PluginContext';
 import storeManager from '../utilities/StoreManager';
 import WrapClear from '../components/WrapClearComponent';
 import styles from '../styles/ContentBox.css';
@@ -33,7 +34,7 @@ class ContentBoxContainer extends Component {
             subappContainers: (this.props.list || []).map((component) => {
                 return (
                     <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
-                        <ContentBoxMountingContainer view={component.view} />
+                        <ContentBoxMountingContainer component={component} />
                     )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
                 );
             })
@@ -63,8 +64,8 @@ class ContentBoxMountingContainer extends Component {
 
     renderView() {
         try {
-            let View = this.props.view;
-            ReactDOM.render(<View />, this.slot);
+            let View = this.props.component.view;
+            ReactDOM.render(<View dispatch={dispatchProxy(this.props.component.origin)} />, this.slot);
         } catch (e) {
             if (process.env.NODE_END !== 'production')
                 console.error(e); // eslint-disable-line no-console

@@ -48,4 +48,16 @@
         line-height: 10px;
     }
 
+    & .error {
+        display: inline-block;
+        width: 100%;
+        line-height: 20px;
+        background-color: var(--error-color);
+        color: color(var(--error-color) contrast(100%));
+        padding: 5px;
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
 }

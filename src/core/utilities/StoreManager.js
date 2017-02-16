@@ -90,12 +90,8 @@ class StoreManager {
         return (target) => {
 
             let stateMapper = undefined;
-            let dispatchMapper = undefined;
-
-            while (args.length > 0 && typeof args[args.length - 1] !== 'string') {
-                dispatchMapper = dispatchMapper === undefined ? stateMapper : undefined;
+            while (args.length > 0 && typeof args[args.length - 1] !== 'string')
                 stateMapper = args.pop();
-            }
 
             return connect(state => {
 
@@ -106,7 +102,7 @@ class StoreManager {
 
                 return stateMapper(...result);
 
-            }, dispatchMapper)(target);
+            }, () => ({}))(target);
         };
     }
 }

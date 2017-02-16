@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { dispatchProxy } from './utilities/PluginContext';
+
 // We import the plugin manager
 import lifecycleManager from './utilities/LifecycleManager';
 
 // We import the children component
 import Body from './containers/BodyContainer';
-import TopBar from './containers/TopBarContainer';
 import LoginBox from './containers/LoginContainer';
 import ContentBox from './containers/ContentBoxContainer';
+import MainNavigation from './containers/MainNavigation';
 import StatusBar from './containers/StatusBarContainer';
 
 // Declaraction of the Borderline class
@@ -28,9 +30,9 @@ class Borderline extends Component {
             <Router>
                 <Body>
                     <ContentBox />
-                    <TopBar />
+                    <MainNavigation />
                     <StatusBar />
-                    <LoginBox />
+                    <LoginBox dispatch={dispatchProxy('session', 'core')} />
                 </Body>
             </Router>
         );
@@ -40,8 +42,8 @@ class Borderline extends Component {
 if (module.hot) {
     module.hot.accept('./utilities/LifecycleManager', () => {
         console.info('An Extension Manager or a child dependency was modified! Resetting...'); // eslint-disable-line no-console
-        var HotLifecycleManager = require('./utilities/LifecycleManager').default;
-        HotLifecycleManager.rediscover();
+        var hotLifecycleManager = require('./utilities/LifecycleManager').default;
+        hotLifecycleManager.rediscover();
     });
 }
 
