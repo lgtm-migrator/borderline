@@ -10,12 +10,14 @@ export default {
                 return sessionRecover(state);
             case sessionTypes.SESSION_LOGIN:
                 return sessionLogin(state);
-            case sessionTypes.SESSION_LOGIN_SUCESS:
+            case sessionTypes.SESSION_LOGIN_SUCCESS:
                 return sessionLoginSuccess(state, action);
             case sessionTypes.SESSION_LOGIN_FAILURE:
                 return sessionLoginFailure(state, action);
             case sessionTypes.SESSION_LOGOUT:
                 return sessionLogout(state);
+            case sessionTypes.SESSION_LOGOUT_SUCCESS:
+                return sessionLogoutSuccess();
             case sessionTypes.SESSION_VALID:
                 return sessionValid(state);
             default:
@@ -55,11 +57,14 @@ const sessionLoginFailure = (state, action) => {
 
 const sessionLogout = (state) => {
     let future = state.toJS();
-    future.working = false;
+    future.working = true;
     future.ok = false;
-    future.attempts = 0;
     delete future.error;
     return Immutable.fromJS(future);
+};
+
+const sessionLogoutSuccess = () => {
+    location.reload();
 };
 
 const sessionValid = (state) => {

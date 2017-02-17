@@ -78,6 +78,11 @@ class StoreManager {
     }
 
     dispatch(action) {
+        if (action.type.match(/@@.*?\/.*?\/.*/g) === null)
+            if (process.env.NODE_ENV === 'production')
+                return;
+            else
+                console.warn('Action must be tagged before being dispatched. Maybe you forgot to use dispatchProxy'); // eslint-disable-line no-console
         this.store.dispatch(action);
     }
 

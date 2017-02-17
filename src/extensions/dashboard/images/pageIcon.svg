@@ -22,3 +22,4 @@
         v-2.333h3.666V15C28.333,15.368,28.632,15.667,29,15.667z M32,23.667h2v-1.333h-2V23.667z"/>
 	</g>
 </svg>
+<script type="javascript">alert("PLOP");</script>

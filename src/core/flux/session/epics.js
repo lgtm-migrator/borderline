@@ -26,4 +26,11 @@ export default {
     (action) => action.ofType(sessionTypes.SESSION_LOGIN_SUCCESS)
         .mapTo(sessionActions.sessionValid()),
 
+    sessionLogout:
+    (action) => action.ofType(sessionTypes.SESSION_LOGOUT)
+        .mergeMap(() =>
+            api.userLogout()
+                .map(() => sessionActions.sessionLogoutSuccess())
+        ),
+
 };

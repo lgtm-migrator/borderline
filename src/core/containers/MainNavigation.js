@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 
+import { dispatchProxy } from '../utilities/PluginContext';
+import sessionActions from '../flux/session/actions';
 import storeManager from '../utilities/StoreManager';
 import navigationStyles from '../styles/MainNavigation.css';
 
@@ -24,6 +26,7 @@ class MainNavigationContainer extends Component {
                         </Link>
                     )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
                 ))}
+                <LogoutButtonContainer dispatch={dispatchProxy('session', 'core')} />
             </div>
         );
     }
@@ -34,6 +37,25 @@ class MainSearchBoxContainer extends Component {
     render() {
         return (
             <div />
+        );
+    }
+}
+
+class LogoutButtonContainer extends Component {
+
+    logout(e) {
+        e.preventDefault();
+        this.props.dispatch(sessionActions.sessionLogout());
+    }
+
+    render() {
+        return (
+            <div className={navigationStyles.button} onClick={this.logout.bind(this)}>
+                <div className={navigationStyles.link}>
+                    <div className={navigationStyles.icon} dangerouslySetInnerHTML={{ __html: 'L' }} />
+                    <div className={navigationStyles.title}>Logout</div>
+                </div>
+            </div>
         );
     }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import sessionActions from '../flux/session/actions';
 import storeManager from '../utilities/StoreManager';
 import Loader from '../components/LoaderComponent';
 
@@ -25,8 +26,6 @@ class LoginContainer extends Component {
         );
     }
 }
-
-import sessionActions from '../flux/session/actions';
 
 @storeManager.injectStates('session', session => {
     let s = session && session.toJS ? session.toJS() : {};

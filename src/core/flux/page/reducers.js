@@ -1,4 +1,5 @@
 import Immutable, { Map } from 'immutable';
+import DOMPurify from 'dompurify';
 import pageTypes from './types';
 
 export default {
@@ -8,6 +9,8 @@ export default {
         switch (action.type) {
             case pageTypes.PAGE_DOCK:
                 return pageDock(state, action);
+            case '@@core/session/SESSION_LOGOUT':
+                return logoutCleanup(state);
             default:
                 return state;
         }
@@ -22,8 +25,15 @@ const pageDock = (state, action) => {
         name: action.name,
         particule: action.particule,
         view: action.view,
-        icon: action.icon,
+        icon: DOMPurify.sanitize(action.icon),
         origin: action.__origin__
     });
+    return Immutable.fromJS(future);
+};
+
+const logoutCleanup = (state) => {
+
+    let future = state.toJS();
+    future.pages = [];
     return Immutable.fromJS(future);
 };

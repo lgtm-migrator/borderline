@@ -25,6 +25,10 @@ export default {
         type: sessionTypes.SESSION_LOGOUT
     }),
 
+    sessionLogoutSuccess: () => ({
+        type: sessionTypes.SESSION_LOGOUT_SUCCESS
+    }),
+
     sessionValid: () => ({
         type: sessionTypes.SESSION_VALID
     })
