@@ -19,7 +19,8 @@ function purgeFolders(callback) {
         fs.removeSync(distributionFolder);
         fs.removeSync(publishingFolder);
     } catch (err) {
-        return console.error(chalk.red('Error purging destination folder ' + err));
+        console.error(chalk.red('Error purging destination folder ' + err));
+        process.exit(1);
     }
     callback();
 }
@@ -27,8 +28,10 @@ function purgeFolders(callback) {
 function createDestination() {
     console.log(chalk.gray('Creating necessary folders ...'));
     fs.ensureDir(publishingFolder, function (err) {
-        if (err)
-            return console.error(chalk.red('Error creating destination folder ' + err));
+        if (err) {
+            console.error(chalk.red('Error creating destination folder ' + err));
+            process.exit(1);
+        }
         copyFiles();
     });
 }
@@ -41,7 +44,8 @@ function copyFiles() {
                 overwrite: true
             });
         } catch (err) {
-            return console.error(chalk.red('Error copying ' + err));
+            console.error(chalk.red('Error copying ' + err));
+            process.exit(1);
         }
     });
     wrapPackageDescription();
@@ -56,7 +60,8 @@ function wrapPackageDescription() {
     try {
         fs.writeJSONSync(publishingFolder + '/package.json', pkg);
     } catch (err) {
-        return console.error(chalk.red('Error writting ' + err));
+        console.error(chalk.red('Error writting ' + err));
+        process.exit(1);
     }
     ensureBuildIsReady();
 }
@@ -66,9 +71,7 @@ function ensureBuildIsReady() {
     var command = 'npm';
     var args = ['run', 'build'];
 
-    exec(command + ' ' + args.join(' '), {
-        stdio: 'ignore'
-    }, function (error) {
+    exec(command + ' ' + args.join(' '), function (error) {
         copyDistribution(error);
     });
 }
@@ -80,7 +83,8 @@ function copyDistribution() {
             overwrite: true
         });
     } catch (err) {
-        return console.error(chalk.red('Error copying ' + err));
+        console.error(chalk.red('Error copying ' + err));
+        process.exit(1);
     }
     sendToServer();
 }
@@ -98,9 +102,10 @@ function sendToServer() {
 }
 
 function finalizeExport(error) {
-    if (error)
+    if (error) {
         console.error(chalk.red('Export has failed. Check package version and user credentials.'));
-    else
+        process.exit(1);
+    } else
         console.log(chalk.green('Export was a success !'));
-    purgeFolders(function () { });
+    purgeFolders(() => { });
 }

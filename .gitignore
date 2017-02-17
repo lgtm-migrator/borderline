@@ -12,8 +12,9 @@ build
 # misc
 .DS_Store
 .env
-npm-debug.log
+npm-debug.log*
 .idea
 
 /dist/
 /package/
+/.vscode/

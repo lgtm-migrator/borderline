@@ -1,3 +1,0 @@
-.wrap {
-    composes: reset wrap from "./Layout.css";
-}

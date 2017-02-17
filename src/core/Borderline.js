@@ -1,33 +1,26 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-// Get decorator
-import StoreConnectable from './decorators/StoreConnectable';
+import { dispatchProxy } from './utilities/PluginContext';
+
+// We import the plugin manager
+import lifecycleManager from './utilities/LifecycleManager';
 
 // We import the children component
 import Body from './containers/BodyContainer';
-import TopBar from './containers/TopBarContainer';
+import LoginBox from './containers/LoginContainer';
 import ContentBox from './containers/ContentBoxContainer';
-import StatusBar from './containers/StatusBarContainer';
-
-// We import plugin action as we need to use them upon component mount
-import { actions as subAppsManager } from './flux/subapps';
+import MainNavigation from './containers/MainNavigation';
 
 // Declaraction of the Borderline class
-@StoreConnectable()
 class Borderline extends Component {
 
     componentDidMount() {
-        this.loadSubApps();
+        lifecycleManager.discover();
     }
 
     componentDidUpdate() {
-        this.loadSubApps();
-    }
-
-    loadSubApps() {
-        // After the component has updated we load the plugins
-        this.props.dispatch(subAppsManager.loadSubApps());
+        lifecycleManager.discover();
     }
 
     // Here we do the top level rendering of our application
@@ -36,12 +29,20 @@ class Borderline extends Component {
             <Router>
                 <Body>
                     <ContentBox />
-                    <TopBar />
-                    <StatusBar />
+                    <MainNavigation />
+                    <LoginBox dispatch={dispatchProxy('session', 'core')} />
                 </Body>
             </Router>
         );
     }
+}
+
+if (module.hot) {
+    module.hot.accept('./utilities/LifecycleManager', () => {
+        console.info('An Extension Manager or a child dependency was modified! Resetting...'); // eslint-disable-line no-console
+        var hotLifecycleManager = require('./utilities/LifecycleManager').default;
+        hotLifecycleManager.rediscover();
+    });
 }
 
 // We connect this component to the redux store and export it

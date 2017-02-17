@@ -1,7 +1,7 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const html = require('html-webpack-plugin');
-const pkg = require('../package.json');
+const replace = require('replace-bundle-webpack-plugin');
 
 const distFolder = resolve(__dirname, '../dist');
 const sourceFolder = resolve(__dirname, '../src');
@@ -49,6 +49,9 @@ module.exports = function () {
         'rxjs'
     );
 
+    // defining reduction dictionnary for require
+    const dictionnary = {};
+
     // defining the plugins to be used for bundling
     const plugins = [
         new webpack.optimize.CommonsChunkPlugin(prod ? {
@@ -58,6 +61,18 @@ module.exports = function () {
         } : {
                 name: ['vendor', 'manifest']
             }),
+        new webpack.LoaderOptionsPlugin({
+            test: /\.css$/,
+            options: {
+                postcss: [
+                    require('postcss-import')(),
+                    require('postcss-cssnext')({
+                        browsers: 'last 2 versions'
+                    })
+                ],
+                context: __dirname
+            }
+        }),
         new webpack.DefinePlugin({
             'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }
         }),
@@ -86,7 +101,15 @@ module.exports = function () {
                 output: {
                     comments: false,
                 },
-            })
+            }),
+            new replace([{
+                partten: /.\/node_modules\/.*?\.js(.)/g,
+                replacement: (match, end) => {
+                    if (dictionnary[match] === undefined)
+                        dictionnary[match] = Object.keys(dictionnary).length.toString(36) + end;
+                    return dictionnary[match];
+                }
+            }])
         );
     } else {
         plugins.push(
@@ -111,7 +134,7 @@ module.exports = function () {
         },
         output: {
             path: distFolder,
-            filename: prod ? '[name].' + pkg.version + '.js' : '[name].[hash].js',
+            filename: prod ? '[name].js' : '[name].[hash].js',
             library: 'borderline',
             libraryTarget: 'umd',
             umdNamedDefine: true
@@ -148,17 +171,14 @@ module.exports = function () {
                         }
                     },
                     {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: {
-                                'postcss-import': {},
-                                'postcss-cssnext': {
-                                    browsers: ['last 2 versions', '> 5%'],
-                                },
-                            }
-                        }
+                        loader: 'postcss-loader'
                     }
                 ]
+            }, {
+                test: /\.svg$/,
+                use: [
+                    'svg-inline-loader'
+                ],
             }, {
                 test: /\.html$/,
                 include: sourceFolder,
@@ -173,6 +193,6 @@ module.exports = function () {
             }]
         },
         plugins: plugins,
-        devtool: prod ? 'nosources-source-map' : 'eval-source-map'
+        devtool: prod ? 'nosources-source-map' : 'source-map'
     };
 };

@@ -1,47 +1,72 @@
 import React, { Component } from 'react';
-import { Match } from 'react-router';
+import ReactDOM from 'react-dom';
+import { Route } from 'react-router-dom';
 
-import StoreConnectable from '../decorators/StoreConnectable';
-import WrapClear from '../components/WrapClearComponent';
-import styles from '../styles/ContentBox.css';
+import { dispatchProxy } from '../utilities/PluginContext';
+import storeManager from '../utilities/StoreManager';
+import contentBoxStyles from '../styles/ContentBox.css';
+import layoutStyles from '../styles/Layout.css';
+import errorIcon from '../styles/images/errorIcon.svg';
 
-@StoreConnectable(store => ({
-    list: store.subAppsState.toJS().subapps
+@storeManager.injectStates('page', (page) => ({
+    pages: page ? page.toJS().pages || [] : []
 }))
 class ContentBoxContainer extends Component {
 
     constructor() {
         super(...arguments);
-        this.state = {
-            subappContainers: null,
-        };
     }
 
-    componentWillMount() {
-        this.createSubappContainers();
-    }
-
-    componentWillUpdate() {
-        this.createSubappContainers();
-    }
-
-    createSubappContainers() {
-        let pathname = this.props.pathname || '';
-        this.state.subappContainers = Object.keys(this.props.list || {}).map((key) => (
-            <Match pattern={`${pathname}/${key}`} key={key} component={() =>
-                <div className={styles.contentcontainer}>
-                    {key}
+    render() {
+        const { pages, pathname = '' } = this.props;
+        return (
+            <div className={contentBoxStyles.stage}>
+                <div className={layoutStyles.wrap}>
+                    {pages.map((component) => (
+                        <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
+                            <ContentBoxMountingContainer component={component} />
+                        )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
+                    ))}
                 </div>
-            } />
-        ));
+            </div>
+        );
     }
+}
+
+class ContentBoxMountingContainer extends Component {
+
+    componentDidMount() {
+        this.renderView();
+    }
+
+    componentDidUpdate() {
+        this.renderView();
+    }
+
+    renderView() {
+        try {
+            let View = this.props.component.view;
+            ReactDOM.render(<View dispatch={dispatchProxy(this.props.component.origin)} />, this.slot);
+        } catch (e) {
+            if (process.env.NODE_END !== 'production')
+                console.error(e); // eslint-disable-line no-console
+            ReactDOM.render(<ContentBoxStaleContainer />, this.slot);
+        }
+    }
+
     render() {
         return (
-            <div className={styles.contentbox}>
-                <WrapClear>
-                    {this.state.subappContainers}
-                    <div className={styles.placeholder}>&#9640;</div>
-                </WrapClear>
+            <div className={contentBoxStyles.box} ref={(slot) => { this.slot = slot; }} />
+        );
+    }
+}
+
+class ContentBoxStaleContainer extends Component {
+
+    render() {
+        return (
+            <div className={`${contentBoxStyles.stale} ${contentBoxStyles.box}`} >
+                <div className={contentBoxStyles.fab} dangerouslySetInnerHTML={{ __html: errorIcon }}></div>
             </div>
         );
     }

@@ -1,16 +1,41 @@
+@import './Font.css';
+
 :root {
 
-    --font-familiy: menu;
+    --font-family: 'Borderline', menu, sans-serif;
 
-    /* COLORS */
+    /* MAIN COLORS */
     --accent-color: rgba(40, 162, 182, 255);
+    --error-color: rgba(191, 20, 80, 255);
     --font-color-default: rgba(173, 173, 173, 255);
     --font-color-active: rgba(255, 255, 255, 255);
-    --background-color-dark: rgba(30, 30, 30, 255);
-    --background-color-light: rgba(51, 51, 51, 255);
-    --background-color-lighter: rgba(65, 65, 65, 255);
+    --background-color-start: #ffffff;
+    --background-color-end: #202020;
+
+    /* UTILITY COLORS */
+    --background-color-100: color(var(--background-color-end) blend(var(--background-color-start) 100%));
+    --background-color-095: color(var(--background-color-end) blend(var(--background-color-start) 095%));
+    --background-color-090: color(var(--background-color-end) blend(var(--background-color-start) 090%));
+    --background-color-085: color(var(--background-color-end) blend(var(--background-color-start) 085%));
+    --background-color-080: color(var(--background-color-end) blend(var(--background-color-start) 080%));
+    --background-color-075: color(var(--background-color-end) blend(var(--background-color-start) 075%));
+    --background-color-070: color(var(--background-color-end) blend(var(--background-color-start) 070%));
+    --background-color-065: color(var(--background-color-end) blend(var(--background-color-start) 065%));
+    --background-color-060: color(var(--background-color-end) blend(var(--background-color-start) 060%));
+    --background-color-055: color(var(--background-color-end) blend(var(--background-color-start) 055%));
+    --background-color-050: color(var(--background-color-end) blend(var(--background-color-start) 050%));
+    --background-color-045: color(var(--background-color-end) blend(var(--background-color-start) 045%));
+    --background-color-040: color(var(--background-color-end) blend(var(--background-color-start) 040%));
+    --background-color-035: color(var(--background-color-end) blend(var(--background-color-start) 035%));
+    --background-color-030: color(var(--background-color-end) blend(var(--background-color-start) 030%));
+    --background-color-025: color(var(--background-color-end) blend(var(--background-color-start) 025%));
+    --background-color-020: color(var(--background-color-end) blend(var(--background-color-start) 020%));
+    --background-color-015: color(var(--background-color-end) blend(var(--background-color-start) 015%));
+    --background-color-010: color(var(--background-color-end) blend(var(--background-color-start) 010%));
+    --background-color-005: color(var(--background-color-end) blend(var(--background-color-start) 005%));
+    --background-color-000: color(var(--background-color-end) blend(var(--background-color-start) 000%));
 
     /* DIMENSIONS */
-    --topbar-height: 40px;
-    --statusbar-height: 22px;
+    --sidebar-width: 60px;
+    --sidebar-expand-width: 250px;
 }
