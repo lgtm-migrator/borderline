@@ -5,6 +5,7 @@ import { dispatchProxy } from '../utilities/PluginContext';
 import sessionActions from '../flux/session/actions';
 import storeManager from '../utilities/StoreManager';
 import navigationStyles from '../styles/MainNavigation.css';
+import logoutIcon from '../styles/images/logoutIcon.svg';
 
 @storeManager.injectStates('page', (page) => ({
     pages: page ? page.toJS().pages || [] : []
@@ -50,9 +51,9 @@ class LogoutButtonContainer extends Component {
 
     render() {
         return (
-            <div className={navigationStyles.button} onClick={this.logout.bind(this)}>
+            <div className={`${navigationStyles.button} ${navigationStyles.logout}`} onClick={this.logout.bind(this)}>
                 <div className={navigationStyles.link}>
-                    <div className={navigationStyles.icon} dangerouslySetInnerHTML={{ __html: 'L' }} />
+                    <div className={navigationStyles.icon} dangerouslySetInnerHTML={{ __html: logoutIcon }} />
                     <div className={navigationStyles.title}>Logout</div>
                 </div>
             </div>

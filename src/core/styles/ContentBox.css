@@ -1,31 +1,38 @@
 @import './Theme.css';
 
-.contentbox {
-    composes: reset boxing from "./Layout.css";
-    padding-top: calc(var(--topbar-height) + 5px);
-    padding-bottom: var(--statusbar-height);
-}
+.stage {
 
-.contentcontainer {
-    composes: reset boxing from "./Layout.css";
-    font-size: 35px;
-    font-weight: bold;
-    color: rgba(10, 10, 10, 255);
-    text-align: center;
-    padding-top: 50px;
-}
-
-.contentexpand {
-    height: 100%;
+    padding-left: var(--sidebar-width);
     width: 100%;
-}
+    height: 100%;
 
-.contentstale {
-    composes: reset boxing from "./Layout.css";
-    background-color: rgba(150, 10, 10, 255);
-    color: rgba(255, 255, 255, 255);
-    font-size: 300px;
-    text-align: center;
-    top: 0;
-    left: 0;
+    & .box {
+        width: 100%;
+        height: 100%;
+    }
+
+    & .stale {
+        background-color: var(--error-color);
+        font-size: var(--sidebar-width);
+        text-align: center;
+        top: 0;
+        left: 0;
+
+        & .fab {
+            width: 20%;
+            height: 20%;
+            position: absolute;
+            top: 40%;
+            left: 40%;
+
+            & svg {
+                width: 100%;
+                height: 100%;
+
+                & * {
+                    fill: color(var(--error-color) contrast(100%));
+                }
+            }
+        }
+    }
 }

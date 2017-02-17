@@ -4,49 +4,30 @@ import { Route } from 'react-router-dom';
 
 import { dispatchProxy } from '../utilities/PluginContext';
 import storeManager from '../utilities/StoreManager';
-import WrapClear from '../components/WrapClearComponent';
-import styles from '../styles/ContentBox.css';
+import contentBoxStyles from '../styles/ContentBox.css';
+import layoutStyles from '../styles/Layout.css';
+import errorIcon from '../styles/images/errorIcon.svg';
 
 @storeManager.injectStates('page', (page) => ({
-    list: page ? page.toJS().pages || [] : []
+    pages: page ? page.toJS().pages || [] : []
 }))
 class ContentBoxContainer extends Component {
 
     constructor() {
         super(...arguments);
-        this.state = {
-            subappContainers: null,
-        };
-    }
-
-    componentDidMount() {
-        this.createSubappContainers();
-    }
-
-    componentDidUpdate(prevProp) {
-        if ((prevProp.list || []).length != (this.props.list || []).length)
-            this.createSubappContainers();
-    }
-
-    createSubappContainers() {
-        let pathname = this.props.pathname || '';
-        this.setState({
-            subappContainers: (this.props.list || []).map((component) => {
-                return (
-                    <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
-                        <ContentBoxMountingContainer component={component} />
-                    )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
-                );
-            })
-        });
     }
 
     render() {
+        const { pages, pathname = '' } = this.props;
         return (
-            <div className={styles.contentbox}>
-                <WrapClear>
-                    {this.state.subappContainers}
-                </WrapClear>
+            <div className={contentBoxStyles.stage}>
+                <div className={layoutStyles.wrap}>
+                    {pages.map((component) => (
+                        <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
+                            <ContentBoxMountingContainer component={component} />
+                        )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
+                    ))}
+                </div>
             </div>
         );
     }
@@ -75,7 +56,7 @@ class ContentBoxMountingContainer extends Component {
 
     render() {
         return (
-            <div className={styles.contentexpand} ref={(slot) => { this.slot = slot; }} />
+            <div className={contentBoxStyles.box} ref={(slot) => { this.slot = slot; }} />
         );
     }
 }
@@ -84,7 +65,9 @@ class ContentBoxStaleContainer extends Component {
 
     render() {
         return (
-            <div className={styles.contentstale} >△</div>
+            <div className={`${contentBoxStyles.stale} ${contentBoxStyles.box}`} >
+                <div className={contentBoxStyles.fab} dangerouslySetInnerHTML={{ __html: errorIcon }}></div>
+            </div>
         );
     }
 }

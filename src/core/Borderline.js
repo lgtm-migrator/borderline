@@ -11,7 +11,6 @@ import Body from './containers/BodyContainer';
 import LoginBox from './containers/LoginContainer';
 import ContentBox from './containers/ContentBoxContainer';
 import MainNavigation from './containers/MainNavigation';
-import StatusBar from './containers/StatusBarContainer';
 
 // Declaraction of the Borderline class
 class Borderline extends Component {
@@ -31,7 +30,6 @@ class Borderline extends Component {
                 <Body>
                     <ContentBox />
                     <MainNavigation />
-                    <StatusBar />
                     <LoginBox dispatch={dispatchProxy('session', 'core')} />
                 </Body>
             </Router>
