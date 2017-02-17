@@ -1,4 +1,5 @@
 import StoreContainer from './StoreContainer';
+import pageIcon from './images/pageIcon.svg';
 
 export default {
     onReady:
@@ -7,6 +8,7 @@ export default {
             type: '@@core/page/PAGE_DOCK',
             name: 'Extensions',
             particule: 'store',
-            view: StoreContainer
+            view: StoreContainer,
+            icon: pageIcon
         })
 };

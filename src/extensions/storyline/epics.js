@@ -1,4 +1,5 @@
 import StorylineContainer from './StorylineContainer';
+import pageIcon from './images/pageIcon.svg';
 
 export default {
     onReady:
@@ -7,6 +8,7 @@ export default {
             type: '@@core/page/PAGE_DOCK',
             name: 'Stories',
             particule: 'stories',
-            view: StorylineContainer
+            view: StorylineContainer,
+            icon: pageIcon
         })
 };
