@@ -52,7 +52,8 @@ class LoginForm extends Component {
                 <input type="text" placeholder="Username" ref="username" /><br />
                 <input type="password" placeholder="Password" ref="password" /><br />
                 {isProcessing ? (<Loader />) : (<button type="submit">Login</button>)}<br />
-                {hasAttempted && error ? (<div className={loginStyles.error}>{error}</div>) : ''}<br />
+                {hasAttempted && error ? (<div className={loginStyles.error}>{error}</div>) : ''}
+                {hasAttempted && error ? (<br />) : ''}
                 <span>I forgot my password</span>
             </form>
         );
