@@ -7,6 +7,8 @@ import storeManager from '../utilities/StoreManager';
 import navigationStyles from '../styles/MainNavigation.css';
 import logoutIcon from '../styles/images/logoutIcon.svg';
 
+import Icon from './SVGContainer';
+
 @storeManager.injectStates('page', (page) => ({
     pages: page ? page.toJS().pages || [] : []
 }))
@@ -21,7 +23,9 @@ class MainNavigationContainer extends Component {
                     <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
                         <Link to={`${pathname}/${component.particule}`} className={`${navigationStyles.button} ${match ? navigationStyles.active : ''}`}>
                             <div className={navigationStyles.link}>
-                                <div className={navigationStyles.icon} dangerouslySetInnerHTML={{ __html: component.icon }} />
+                                <div className={navigationStyles.icon}>
+                                    <Icon src={component.icon} />
+                                </div>
                                 <div className={navigationStyles.title}>{component.name}</div>
                             </div>
                         </Link>
@@ -53,7 +57,9 @@ class LogoutButtonContainer extends Component {
         return (
             <div className={`${navigationStyles.button} ${navigationStyles.logout}`} onClick={this.logout.bind(this)}>
                 <div className={navigationStyles.link}>
-                    <div className={navigationStyles.icon} dangerouslySetInnerHTML={{ __html: logoutIcon }} />
+                    <div className={navigationStyles.icon}>
+                        <Icon src={logoutIcon} />
+                    </div>
                     <div className={navigationStyles.title}>Logout</div>
                 </div>
             </div>

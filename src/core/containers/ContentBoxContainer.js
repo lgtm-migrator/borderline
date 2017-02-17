@@ -6,6 +6,8 @@ import { dispatchProxy } from '../utilities/PluginContext';
 import storeManager from '../utilities/StoreManager';
 import contentBoxStyles from '../styles/ContentBox.css';
 import layoutStyles from '../styles/Layout.css';
+
+import Icon from './SVGContainer';
 import errorIcon from '../styles/images/errorIcon.svg';
 
 @storeManager.injectStates('page', (page) => ({
@@ -66,7 +68,9 @@ class ContentBoxStaleContainer extends Component {
     render() {
         return (
             <div className={`${contentBoxStyles.stale} ${contentBoxStyles.box}`} >
-                <div className={contentBoxStyles.fab} dangerouslySetInnerHTML={{ __html: errorIcon }}></div>
+                <div className={contentBoxStyles.fab}>
+                    <Icon src={errorIcon} />
+                </div>
             </div>
         );
     }

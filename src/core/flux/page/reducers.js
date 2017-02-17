@@ -1,5 +1,4 @@
 import Immutable, { Map } from 'immutable';
-import DOMPurify from 'dompurify';
 import pageTypes from './types';
 
 export default {
@@ -25,7 +24,7 @@ const pageDock = (state, action) => {
         name: action.name,
         particule: action.particule,
         view: action.view,
-        icon: DOMPurify.sanitize(action.icon),
+        icon: action.icon,
         origin: action.__origin__
     });
     return Immutable.fromJS(future);
