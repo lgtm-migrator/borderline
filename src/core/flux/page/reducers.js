@@ -8,6 +8,8 @@ export default {
         switch (action.type) {
             case pageTypes.PAGE_DOCK:
                 return pageDock(state, action);
+            case pageTypes.PAGE_MENU_TOGGLE:
+                return pageMenuToggle(state);
             case '@@core/session/SESSION_LOGOUT':
                 return logoutCleanup(state);
             default:
@@ -27,6 +29,13 @@ const pageDock = (state, action) => {
         icon: action.icon,
         origin: action.__origin__
     });
+    return Immutable.fromJS(future);
+};
+
+const pageMenuToggle = (state) => {
+
+    let future = state.toJS();
+    future.expand = !future.expand;
     return Immutable.fromJS(future);
 };
 

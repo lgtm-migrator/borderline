@@ -36,6 +36,6 @@
     --background-color-000: color(var(--background-color-end) blend(var(--background-color-start) 000%));
 
     /* DIMENSIONS */
-    --sidebar-width: 60px;
+    --sidebar-width: 50px;
     --sidebar-expand-width: 250px;
 }

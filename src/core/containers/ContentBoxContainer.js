@@ -11,7 +11,8 @@ import Icon from './SVGContainer';
 import errorIcon from '../styles/images/errorIcon.svg';
 
 @storeManager.injectStates('page', (page) => ({
-    pages: page ? page.toJS().pages || [] : []
+    pages: page ? page.toJS().pages || [] : [],
+    contracted: page ? !page.toJS().expand : true
 }))
 class ContentBoxContainer extends Component {
 
@@ -20,9 +21,9 @@ class ContentBoxContainer extends Component {
     }
 
     render() {
-        const { pages, pathname = '' } = this.props;
+        const { pages, contracted, pathname = '' } = this.props;
         return (
-            <div className={contentBoxStyles.stage}>
+            <div className={`${contentBoxStyles.stage} ${contracted ? contentBoxStyles.contract : ''}`}>
                 <div className={layoutStyles.wrap}>
                     {pages.map((component) => (
                         <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (

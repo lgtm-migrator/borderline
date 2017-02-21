@@ -2,22 +2,28 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 
 import { dispatchProxy } from '../utilities/PluginContext';
+import pageActions from '../flux/page/actions';
 import sessionActions from '../flux/session/actions';
 import storeManager from '../utilities/StoreManager';
 import navigationStyles from '../styles/MainNavigation.css';
 import logoutIcon from '../styles/images/logoutIcon.svg';
+import searchIcon from '../styles/images/searchIcon.svg';
+import menuIcon from '../styles/images/menuIcon.svg';
 
 import Icon from './SVGContainer';
 
 @storeManager.injectStates('page', (page) => ({
-    pages: page ? page.toJS().pages || [] : []
+    pages: page ? page.toJS().pages || [] : [],
+    expanded: page ? page.toJS().expand || false : false
 }))
 class MainNavigationContainer extends Component {
 
     render() {
-        const { pages, pathname = '' } = this.props;
+        const { pages, expanded, pathname = '' } = this.props;
         return (
-            <div className={navigationStyles.bar}>
+            <div className={`${navigationStyles.bar} ${expanded ? navigationStyles.expand : ''}`}>
+                {expanded}
+                <ExpandMenuButtonContainer dispatch={dispatchProxy('page', 'core')} />
                 <MainSearchBoxContainer />
                 {pages.map((component) => (
                     <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
@@ -37,11 +43,37 @@ class MainNavigationContainer extends Component {
     }
 }
 
+class ExpandMenuButtonContainer extends Component {
+
+    expand(e) {
+        e.preventDefault();
+        this.props.dispatch(pageActions.pageMenuToggle());
+    }
+
+    render() {
+        return (
+            <div className={navigationStyles.button} onClick={this.expand.bind(this)}>
+                <div className={navigationStyles.link}>
+                    <div className={navigationStyles.icon}>
+                        <Icon src={menuIcon} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
 class MainSearchBoxContainer extends Component {
 
     render() {
         return (
-            <div />
+            <div className={navigationStyles.button}>
+                <div className={navigationStyles.link}>
+                    <div className={navigationStyles.icon}>
+                        <Icon src={searchIcon} />
+                    </div>
+                </div>
+            </div>
         );
     }
 }
