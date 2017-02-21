@@ -1,4 +1,7 @@
+/* global borderline:true */
 import React, { Component } from 'react';
+
+import containerStyles from './styles/Container.css';
 
 class StorylineContainer extends Component {
 
@@ -6,8 +9,9 @@ class StorylineContainer extends Component {
     }
 
     render() {
+        let TextEditor = borderline.components.textEditor;
         return (
-            <div>Draw your cohorts ...</div>
+            <TextEditor value='var jean = 1337 || "debugger";' language='javascript' className={containerStyles.box} />
         );
     }
 }

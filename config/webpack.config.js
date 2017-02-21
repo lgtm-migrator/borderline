@@ -2,6 +2,7 @@ const { resolve } = require('path');
 const webpack = require('webpack');
 const html = require('html-webpack-plugin');
 const replace = require('replace-bundle-webpack-plugin');
+const copy = require('copy-webpack-plugin');
 
 const distFolder = resolve(__dirname, '../dist');
 const sourceFolder = resolve(__dirname, '../src');
@@ -54,6 +55,10 @@ module.exports = function () {
 
     // defining the plugins to be used for bundling
     const plugins = [
+        new copy([{
+            from: 'node_modules/monaco-editor/min/vs',
+            to: 'vs',
+        }]),
         new webpack.optimize.CommonsChunkPlugin(prod ? {
             name: 'vendor',
             filename: 'vendor.bundle.js',
