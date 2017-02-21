@@ -2,7 +2,8 @@ import pageTypes from './types';
 
 export default {
 
-    pageMenuToggle: () => ({
-        type: pageTypes.PAGE_MENU_TOGGLE
+    pageMenuToggle: (state) => ({
+        type: pageTypes.PAGE_MENU_TOGGLE,
+        state: state
     })
 };

@@ -10,8 +10,8 @@ class SVGContainer extends React.Component {
                 return 'className';
             case 'style':
                 return null;
-            case (match = property.match(/(.*?)(:)(.)(.*)/) || {}).input:
-                return match[1] + match[3].toUpperCase() + match[4];
+            case (match = property.match(/(.*?):(.)(.*)/) || {}).input:
+                return match[1] + match[2].toUpperCase() + match[3];
             default:
                 return property;
         }

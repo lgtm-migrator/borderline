@@ -9,7 +9,7 @@ export default {
             case pageTypes.PAGE_DOCK:
                 return pageDock(state, action);
             case pageTypes.PAGE_MENU_TOGGLE:
-                return pageMenuToggle(state);
+                return pageMenuToggle(state, action);
             case '@@core/session/SESSION_LOGOUT':
                 return logoutCleanup(state);
             default:
@@ -32,10 +32,10 @@ const pageDock = (state, action) => {
     return Immutable.fromJS(future);
 };
 
-const pageMenuToggle = (state) => {
+const pageMenuToggle = (state, action) => {
 
     let future = state.toJS();
-    future.expand = !future.expand;
+    future.expand = action.state !== undefined ? action.state : !future.expand;
     return Immutable.fromJS(future);
 };
 

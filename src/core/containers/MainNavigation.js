@@ -8,6 +8,7 @@ import storeManager from '../utilities/StoreManager';
 import navigationStyles from '../styles/MainNavigation.css';
 import logoutIcon from '../styles/images/logoutIcon.svg';
 import searchIcon from '../styles/images/searchIcon.svg';
+import menuTitleIcon from '../styles/images/menuTitleIcon.svg';
 import menuIcon from '../styles/images/menuIcon.svg';
 
 import Icon from './SVGContainer';
@@ -23,7 +24,7 @@ class MainNavigationContainer extends Component {
         return (
             <div className={`${navigationStyles.bar} ${expanded ? navigationStyles.expand : ''}`}>
                 {expanded}
-                <ExpandMenuButtonContainer dispatch={dispatchProxy('page', 'core')} />
+                <ExpandMenuButtonContainer dispatch={dispatchProxy('page', 'core')} expanded={expanded} />
                 <MainSearchBoxContainer />
                 {pages.map((component) => (
                     <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
@@ -51,11 +52,12 @@ class ExpandMenuButtonContainer extends Component {
     }
 
     render() {
+        const { expanded } = this.props;
         return (
             <div className={navigationStyles.button} onClick={this.expand.bind(this)}>
                 <div className={navigationStyles.link}>
                     <div className={navigationStyles.icon}>
-                        <Icon src={menuIcon} />
+                        {expanded ? <Icon src={menuIcon} /> : <Icon src={menuTitleIcon} />}
                     </div>
                 </div>
             </div>
@@ -72,6 +74,7 @@ class MainSearchBoxContainer extends Component {
                     <div className={navigationStyles.icon}>
                         <Icon src={searchIcon} />
                     </div>
+                    <div className={navigationStyles.title}>Search</div>
                 </div>
             </div>
         );
