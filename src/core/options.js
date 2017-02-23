@@ -20,7 +20,6 @@ Options.prototype._ensureFolder = function(inputPath) {
     var currentPath = paths[0];
     for (var i = 1; i < paths.length; i++) {
         currentPath = path.resolve(path.join(currentPath, paths[i]));
-        console.log(currentPath);
         if (fs.existsSync(currentPath) === false) {
             fs.mkdirSync(currentPath);
         }
