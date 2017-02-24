@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+
 var fs = require('fs-extra');
 var chalk = require('chalk');
 var exec = require('child_process').exec;

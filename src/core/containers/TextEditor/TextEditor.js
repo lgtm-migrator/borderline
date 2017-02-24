@@ -1,7 +1,12 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+/* global borderline */
+
 import React, { Component } from 'react';
 
-import editorLoader from '../utilities/EditorLoader';
-import editorStyles from '../styles/TextEditor.css';
+import editorLoader from '../../utilities/EditorLoader';
 
 class TextEditor extends Component {
 
@@ -55,7 +60,7 @@ class TextEditor extends Component {
 
     render() {
         return (
-            <div className={editorStyles.editor} ref={(slot) => { this.slot = slot; }} />
+            <div className={borderline.styles.relativeExpand} ref={(slot) => { this.slot = slot; }} />
         );
     }
 }

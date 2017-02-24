@@ -1,7 +1,12 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+
 import { AppContainer } from 'react-hot-loader';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BorderlineProvider from './BorderlineProvider';
+import BorderlineStore from './BorderlineStore';
 import storeManager from './utilities/StoreManager';
 
 export default class BorderlineBootstrap {
@@ -18,19 +23,19 @@ export default class BorderlineBootstrap {
         // We render the application
         ReactDOM.render(
             <AppContainer>
-                <BorderlineProvider store={storeManager.getStore()} />
+                <BorderlineStore store={storeManager.getStore()} />
             </AppContainer>,
             root
         );
 
         if (module.hot) {
-            module.hot.accept('./BorderlineProvider', () => {
+            module.hot.accept('./BorderlineStore', () => {
 
                 // Upon hot reload we fetch a new instance of the application and render it
-                var HotBorderlineProvider = require('./BorderlineProvider').default;
+                var HotBorderlineStore = require('./BorderlineStore').default;
                 ReactDOM.render(
                     <AppContainer>
-                        <HotBorderlineProvider store={storeManager.getStore()} />
+                        <HotBorderlineStore store={storeManager.getStore()} />
                     </AppContainer>,
                     root
                 );

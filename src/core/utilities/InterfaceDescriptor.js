@@ -1,25 +1,25 @@
-import storeManager from './StoreManager';
-import serverCommunication from './ServerCommunication';
-import stylesHandle from '../styles/Layout.css';
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
 
+import serverCommunication from './ServerCommunication';
 import TextEditor from '../containers/TextEditor';
+import layoutStyles from '../styles/Layout.css';
 
 // This is the API version for good measure
-export const apiVersion = 1;
-
-// We export common styles from borderline
-export const styles = stylesHandle;
+export const apiVersion = 1.1;
 
 // We expose the server API
 export const api = serverCommunication;
 
+// Decorator for connecting external components to the store
+export { stateAware } from './StoreManager';
+
+// We export resuable components
 export const components = {
     textEditor: TextEditor
 };
 
-// Allow extensions to dispatch actions
-export const dispatch = (action) => {
-    storeManager.dispatch(action);
-};
-
-export const store = (() => process.env.NODE_ENV === 'production' ? null : storeManager.getStore())();
+// We export redundant styles
+export const styles = layoutStyles;

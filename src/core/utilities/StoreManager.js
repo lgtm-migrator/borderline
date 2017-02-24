@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { BehaviorSubject } from 'rxjs';
@@ -31,6 +36,7 @@ class StoreManager {
     }
 
     recreate() {
+
         if (process.env.NODE_ENV === 'production')
             throw 'Store Recreation should not be used at production runtime';
         this.dispatch({ type: storeResetSequence });
@@ -89,28 +95,14 @@ class StoreManager {
     getStore() {
         return this.store;
     }
-
-    injectStates(...args) {
-
-        return (target) => {
-
-            let stateMapper = undefined;
-            while (args.length > 0 && typeof args[args.length - 1] !== 'string')
-                stateMapper = args.pop();
-
-            return connect(state => {
-
-                let result = [];
-                args.forEach(function (prop) {
-                    result.push(state[prop]);
-                });
-
-                return stateMapper(...result);
-
-            }, () => ({}))(target);
-        };
-    }
 }
 
-const storeManager = new StoreManager();
-export default storeManager;
+export default new StoreManager();
+export const stateAware = () => {
+    return (target) => {
+        return connect(state => {
+            console.info('State control'); // eslint-disable-line no-console
+            return { state: state };
+        }, () => ({}))(target);
+    };
+};

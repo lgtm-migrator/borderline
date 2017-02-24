@@ -3,10 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-var chalk = require('chalk');
+import TextEditorHandle from './TextEditor';
 
-console.error(chalk.red('/!\\ Native NPM publishing command is not supported /!\\'));
-console.error('    Please use : npm run export');
-console.log('');
-process.exit(1);
-
+export default TextEditorHandle;
+export const TextEditor = TextEditorHandle;

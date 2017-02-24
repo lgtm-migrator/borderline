@@ -3,10 +3,13 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-var chalk = require('chalk');
+export default {
 
-console.error(chalk.red('/!\\ Native NPM publishing command is not supported /!\\'));
-console.error('    Please use : npm run export');
-console.log('');
-process.exit(1);
-
+    SESSION_RECOVER: 'SESSION_RECOVER',
+    SESSION_LOGIN: 'SESSION_LOGIN',
+    SESSION_LOGIN_SUCCESS: 'SESSION_LOGIN_SUCCESS',
+    SESSION_LOGIN_FAILURE: 'SESSION_LOGIN_FAILURE',
+    SESSION_LOGOUT: 'SESSION_LOGOUT',
+    SESSION_LOGOUT_SUCCESS: 'SESSION_LOGOUT_SUCCESS',
+    SESSION_VALID: 'SESSION_VALID'
+};

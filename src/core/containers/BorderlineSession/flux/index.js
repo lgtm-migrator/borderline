@@ -3,10 +3,17 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-var chalk = require('chalk');
+import sessionReducers from './reducers';
+import sessionEpics from './epics';
 
-console.error(chalk.red('/!\\ Native NPM publishing command is not supported /!\\'));
-console.error('    Please use : npm run export');
-console.log('');
-process.exit(1);
+export default class SessionPlugin {
 
+    identity() {
+        return 'session';
+    }
+
+    invocation() {
+        this.declareReducers(sessionReducers);
+        this.declareEpics(sessionEpics);
+    }
+}

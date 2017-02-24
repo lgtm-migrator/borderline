@@ -1,11 +1,17 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+/* global borderline */
+
 import sessionTypes from './types';
 import sessionActions from './actions';
-import api from '../../utilities/ServerCommunication';
+const { api } = borderline;
 
 export default {
 
     borderlineBoot:
-    (action) => action.ofType('@@all/borderline/BOOT')
+    (action) => action.ofType('START')
         .mapTo(sessionActions.sessionRecover()),
 
     sessionRecover:

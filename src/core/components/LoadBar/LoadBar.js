@@ -3,10 +3,17 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-var chalk = require('chalk');
+import React, { PureComponent } from 'react';
 
-console.error(chalk.red('/!\\ Native NPM publishing command is not supported /!\\'));
-console.error('    Please use : npm run export');
-console.log('');
-process.exit(1);
+import loaderStyles from './LoadBar.css';
 
+class LoadBar extends PureComponent {
+
+    render() {
+        return (
+            <div className={loaderStyles.loader}></div>
+        );
+    }
+}
+
+export default LoadBar;
