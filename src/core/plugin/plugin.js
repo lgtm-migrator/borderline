@@ -15,6 +15,8 @@ function Plugin(Uuid, PluginPath) {
     this.pluginModule = this.importer(PluginPath);
     if (this.pluginModule !== null && this.pluginModule !== undefined)
         this.container = new this.pluginModule();
+    else
+        console.error('Did not manage to evaluate plugin ' + Uuid);
 
     this.attach = Plugin.prototype.attach.bind(this);
     this.detach = Plugin.prototype.detach.bind(this);
