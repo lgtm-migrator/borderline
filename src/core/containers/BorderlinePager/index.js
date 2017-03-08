@@ -3,13 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import { Component } from 'react';
+import BorderlinePagerHandle from './PagerManager';
 
-class StoreContainer extends Component {
-
-    render() {
-        throw 'Extension manager is not implemented';
-    }
-}
-
-export default StoreContainer;
+export default BorderlinePagerHandle;
+export const BorderlinePager = BorderlinePagerHandle;

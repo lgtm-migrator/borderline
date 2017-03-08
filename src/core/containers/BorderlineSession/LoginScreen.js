@@ -38,11 +38,6 @@ export default class LoginScreen extends Component {
         }));
     }
 
-    componentDidUpdate(np) {
-        console.info('LoginScreen > componentDidUpdate', np, this.context.session); // eslint-disable-line no-console
-        return true;
-    }
-
     render() {
         let isSessionValid = false;
         let isProcessing = false;

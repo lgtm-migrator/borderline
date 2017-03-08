@@ -5,7 +5,9 @@
 
 import React, { Component } from 'react';
 
+import Body from './components/Body';
 import BorderlineSession from './containers/BorderlineSession';
+import BorderlinePager from './containers/BorderlinePager';
 
 // Declaraction of the Borderline class
 export default class BorderlineApplication extends Component {
@@ -16,12 +18,11 @@ export default class BorderlineApplication extends Component {
     // Here we do the top level rendering of our application
     render() {
         return (
-            <BorderlineSession>
-                <span>Logged in !</span>
-                {/* <ContentBox />
-                    <MainNavigation />
-                    <LoginBox dispatch={dispatchProxy('session', 'core')} /> */}
-            </BorderlineSession>
+            <Body>
+                <BorderlineSession>
+                    <BorderlinePager />
+                </BorderlineSession>
+            </Body>
         );
     }
 }

@@ -3,13 +3,8 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import { Component } from 'react';
+export default {
 
-class StoreContainer extends Component {
-
-    render() {
-        throw 'Extension manager is not implemented';
-    }
-}
-
-export default StoreContainer;
+    PAGE_DOCK: 'PAGE_DOCK',
+    PAGE_MENU_TOGGLE: 'PAGE_MENU_TOGGLE'
+};

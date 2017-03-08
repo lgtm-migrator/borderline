@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+
 import Immutable, { Map } from 'immutable';
 import pageTypes from './types';
 
@@ -29,6 +34,7 @@ const pageDock = (state, action) => {
         icon: action.icon,
         origin: action.__origin__
     });
+        console.error('pageDock > ', future); // eslint-disable-line no-console
     return Immutable.fromJS(future);
 };
 

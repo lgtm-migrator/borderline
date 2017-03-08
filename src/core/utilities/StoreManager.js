@@ -98,10 +98,10 @@ class StoreManager {
 }
 
 export default new StoreManager();
-export const stateAware = () => {
+export const stateAware = (...args) => {
     return (target) => {
         return connect(state => {
-            console.info('State control'); // eslint-disable-line no-console
+            console.info('======== State control', args); // eslint-disable-line no-console
             return { state: state };
         }, () => ({}))(target);
     };

@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+
 import inspectorTypes from './types';
 
 export default {
@@ -15,6 +20,10 @@ export default {
         list: list
     }),
 
+    extensionsFailure: () => ({
+        type: inspectorTypes.EXTENSIONS_FAILURE
+    }),
+
     extensionsDidLoad: () => ({
         type: inspectorTypes.EXTENSIONS_DID_LOAD
     }),
@@ -24,10 +33,10 @@ export default {
         id: id
     }),
 
-    extensionUnitSucces: (id, subapp) => ({
+    extensionUnitSucces: (id, seed) => ({
         type: inspectorTypes.EXTENSION_UNIT_SUCCESS,
         id: id,
-        subapp: subapp
+        seed: seed
     }),
 
     extensionUnitDidLoad: (id) => ({
