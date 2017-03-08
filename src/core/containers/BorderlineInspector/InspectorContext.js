@@ -7,11 +7,11 @@
 import { Component, Children, PropTypes as T } from 'react';
 
 // Container delcaration
-@borderline.stateAware('SessionContext')
-export default class SessionContext extends Component {
+@borderline.stateAware('InspectorContext')
+export default class InspectorContext extends Component {
 
     // Custom name for container
-    static displayName = 'SessionContext';
+    static displayName = 'InspectorContext';
 
     // Typechecking for container's props
     static propTypes = {
@@ -25,33 +25,33 @@ export default class SessionContext extends Component {
 
     // Typechecking for children's context
     static childContextTypes = {
-        session: T.object
+        extensions: T.object
     };
 
     constructor(props, context) {
         super(props, context);
-        this.session = {};
+        this.extensions = {};
     }
 
     getChildContext() {
         return {
-            session: this.session
+            extensions: this.extensions
         };
     }
 
     componentWillUpdate(next) {
         let state = next.state ? next.state[this.context.model] : null;
-        this.session = state ? state.toJS() : {};
+        this.extensions = state ? state.toJS() : {};
     }
 
     shouldComponentUpdate() {
-        console.warn('SessionContext > shouldComponentUpdate'); // eslint-disable-line no-console
-        // return true;
-        return !(this.session && this.session.ok);
+        return !(this.extensions && this.extensions.ok);
     }
 
     render() {
-        console.info('SessionContext > render'); // eslint-disable-line no-console
+        console.info('InspectorContext > render', this.extensions); // eslint-disable-line no-console
+        if (!(this.extensions && this.extensions.ok))
+            return null;
         const { children } = this.props;
         return children ? Children.only(children) : null;
     }

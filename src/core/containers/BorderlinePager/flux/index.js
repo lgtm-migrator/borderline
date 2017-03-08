@@ -3,13 +3,17 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import { Component } from 'react';
+import pageReducers from './reducers';
 
-class StoreContainer extends Component {
+class PagePlugin {
 
-    render() {
-        throw 'Extension manager is not implemented';
+    identity() {
+        return 'page';
+    }
+
+    invocation() {
+        this.declareReducers(pageReducers);
     }
 }
 
-export default StoreContainer;
+export default PagePlugin;

@@ -5,16 +5,20 @@
 
 import React, { Component } from 'react';
 
-class DashboardContainer extends Component {
+// Container delcaration
+export default class Content extends Component {
 
-    componentDidMount() {
+    // Custom name for container
+    static displayName = 'Content';
+
+    constructor(props, context) {
+        super(props, context);
     }
 
     render() {
+        console.info('Content > render'); // eslint-disable-line no-console
         return (
-            <div>Welcome to borderline</div>
+            <div>Content</div>
         );
     }
 }
-
-export default DashboardContainer;

@@ -5,6 +5,7 @@
 
 import serverCommunication from './ServerCommunication';
 import TextEditor from '../containers/TextEditor';
+import Wrapper from '../components/Wrapper';
 import layoutStyles from '../styles/Layout.css';
 
 // This is the API version for good measure
@@ -18,7 +19,8 @@ export { stateAware } from './StoreManager';
 
 // We export resuable components
 export const components = {
-    textEditor: TextEditor
+    textEditor: TextEditor,
+    wrapper: Wrapper
 };
 
 // We export redundant styles

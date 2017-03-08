@@ -3,13 +3,12 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import { Component } from 'react';
+import pageTypes from './types';
 
-class StoreContainer extends Component {
+export default {
 
-    render() {
-        throw 'Extension manager is not implemented';
-    }
-}
-
-export default StoreContainer;
+    pageMenuToggle: (state) => ({
+        type: pageTypes.PAGE_MENU_TOGGLE,
+        state: state
+    })
+};

@@ -3,13 +3,19 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import { Component } from 'react';
+import inspectorReducers from './reducers';
+import inspectorEpics from './epics';
 
-class StoreContainer extends Component {
+class InspectorPlugin {
 
-    render() {
-        throw 'Extension manager is not implemented';
+    identity() {
+        return 'inspector';
+    }
+
+    invocation() {
+        this.declareReducers(inspectorReducers);
+        this.declareEpics(inspectorEpics);
     }
 }
 
-export default StoreContainer;
+export default InspectorPlugin;

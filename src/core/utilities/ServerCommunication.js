@@ -13,6 +13,10 @@ export default {
 
     userLogout: () => query('/logout', {
         method: 'POST'
+    }),
+
+    fetchExtensionsList: () => query('/plugin_store', {
+        method: 'GET'
     })
 };
 

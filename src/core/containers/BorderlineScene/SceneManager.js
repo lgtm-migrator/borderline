@@ -43,6 +43,7 @@ export default class SceneManager extends Component {
         this.epics = {};
         this.epicsTags = [];
         this.model = this.props.model;
+        this.scene = this.props.scene;
     }
 
     getChildContext() {
@@ -138,18 +139,18 @@ export default class SceneManager extends Component {
         // We tag the action type provided by external developer
         if (action.type.match(/@@.*?\/.*?\/.*/g) !== null)
             return action;
-        return Object.assign({}, action, { type: `@@${this.props.scene}/${this.model}/${action.type}` });
+        return Object.assign({}, action, { type: `@@${this.scene}/${this.model}/${action.type}` });
     }
 
     actionDetagger(action) {
 
         // We detag the action type provided by external developer
-        return Object.assign({}, action, { type: action.type.replace(`@@${this.props.scene}/${this.model}/`, '') });
+        return Object.assign({}, action, { type: action.type.replace(`@@${this.scene}/${this.model}/`, '') });
     }
 
     dispatchProxy() {
         return (action) => {
-            storeManager.dispatch(this.actionTagger(action, this.props.scene, this.model));
+            storeManager.dispatch(this.actionTagger(action, this.scene, this.model));
         };
     }
 
@@ -161,16 +162,21 @@ export default class SceneManager extends Component {
         this.setState({
             valid: true
         });
-        storeManager.dispatch(this.actionTagger({ type: 'START' }, this.props.scene, this.model));
+        storeManager.dispatch(this.actionTagger({ type: 'START' }, this.scene, this.model));
     }
 
     componentWillUnmount() {
-        storeManager.dispatch(this.actionTagger({ type: 'STOP' }, this.props.scene, this.model));
+        storeManager.dispatch(this.actionTagger({ type: 'STOP' }, this.scene, this.model));
+    }
+
+    shouldComponentUpdate() {
+        console.warn(`SceneManager(${this.scene}, ${this.model}) > shouldComponentUpdate`); // eslint-disable-line no-console
+        return true;
     }
 
     render() {
-        console.info('SceneManager > render'); // eslint-disable-line no-console
-        let { children } = this.props;
+        console.info(`SceneManager(${this.scene}, ${this.model}) > render`); // eslint-disable-line no-console
+        const { children } = this.props;
         return children && this.state.valid ? Children.only(children) : null;
     }
 }
