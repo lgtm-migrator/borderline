@@ -15,8 +15,30 @@ function Plugin(Uuid, PluginPath) {
     this.pluginModule = this.importer(PluginPath);
     if (this.pluginModule !== null && this.pluginModule !== undefined)
         this.container = new this.pluginModule();
-    else
-        console.error('Did not manage to evaluate plugin ' + Uuid);
+    else {
+        console.error('Did not manage to evaluate plugin ' + Uuid + ' :' + PluginPath);
+        var serverFile = path.join(PluginPath, 'index.js');
+        var pluginExport = {
+            borderline: this.borderlineApi,
+            exports: {}
+        };
+        try {
+            if (fs.existsSync(serverFile) === true) {
+                var code = fs.readFileSync(serverFile);
+                var imported = eval(code.toString());
+
+                console.log(imported);
+
+                //imported(pluginExport);
+                this.pluginModule = imported;
+                console.log(this.pluginModule);
+                this.container = new this.pluginModule(pluginExport);
+            }
+        }
+        catch (err) {
+            console.error('Hard import failed: ' + err);
+        }
+    }
 
     this.attach = Plugin.prototype.attach.bind(this);
     this.detach = Plugin.prototype.detach.bind(this);
