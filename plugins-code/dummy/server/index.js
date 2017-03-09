@@ -1,5 +1,5 @@
 function DummyPlugin() {
-
+    this.dummy = this.prototype.dummy.bind(this);
 };
 
 DummyPlugin.prototype.attach = function(expressAppRouter) {
