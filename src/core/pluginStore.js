@@ -36,7 +36,8 @@ PluginStore.prototype._syncPlugin = function(plugin, operation) {
     var that = this;
     operation =  typeof operation !== 'undefined' ? operation : 'update';
     var model = {
-        _id : plugin.uuid,
+        uuid : plugin.uuid,
+        id: plugin.container ? plugin.container.id : null,
         users: plugin.users ? plugin.users : [],
         enabled: true
     };
@@ -46,19 +47,19 @@ PluginStore.prototype._syncPlugin = function(plugin, operation) {
         var sync_error = function(error) { reject(error); };
 
         if (operation === 'update' || operation === 'create') {
-            that.pluginCollection.findOneAndReplace({_id: model._id}, model, {upsert: true})
+            that.pluginCollection.findOneAndReplace({_id: model.uuid}, model, {upsert: true})
                 .then(sync_success, sync_error);
         }
         else if (operation === 'disable') {
-            that.pluginCollection.findOneAndUpdate({ _id: model._id }, { $set: { enabled: false } })
+            that.pluginCollection.findOneAndUpdate({ _id: model.uuid }, { $set: { enabled: false } })
                 .then(sync_success, sync_error);
         }
         else if (operation === 'enable') {
-            that.pluginCollection.findOneAndUpdate({ _id: model._id }, { $set: { enabled: true } })
+            that.pluginCollection.findOneAndUpdate({ _id: model.uuid }, { $set: { enabled: true } })
                 .then(sync_success, sync_error);
         }
         else if (operation === 'delete' ) {
-            that.pluginCollection.findOneAndDelete({ _id: model._id })
+            that.pluginCollection.findOneAndDelete({ _id: model.uuid })
                 .then(sync_success, sync_error);
         }
         else {
@@ -163,8 +164,8 @@ PluginStore.prototype.createPluginFromFile = function(file) {
     var buf = Buffer.from(file.buffer);
     var zip = new adm_zip(buf);
 
-    if (zip.getEntry('index.js') === null) {
-        return { error: 'Missing mandatory plugin file /index.js' };
+    if (zip.getEntry('server.js') === null) {
+        return { error: 'Missing mandatory plugin file /server.js' };
     }
 
     //Generate a non-colliding plugin UUID
@@ -231,7 +232,7 @@ PluginStore.prototype.updatePluginById = function(uuid, file) {
     }
     */
     if (zip.getEntry('index.js') === null) {
-        return { error: 'Missing mandatory plugin file /index.js' };
+        return { error: 'Missing mandatory plugin file /server.js' };
     }
 
     var delReply = this.deletePluginById(uuid);
