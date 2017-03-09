@@ -1,5 +1,15 @@
 var path = require('path');
 var webpack = require('webpack');
+var manifest = require('webpack-manifest-plugin');
+
+var manifest_cache = {
+    plugin: Math.floor(Math.random() * 0xffffffffffffffffffffffff).toString(32)
+};
+var manifest_plugin = new manifest({
+    fileName: 'plugin.json',
+    cache: manifest_cache,
+    writeToFileEmit: true
+});
 
 var server_config = {
     target: 'node',
@@ -7,9 +17,12 @@ var server_config = {
         server: './plugins-code/chat/server/index.js'
     },
     output: {
-        filename: '[name].[hash].js',
-        path: path.resolve(__dirname, './build')
-    }
+        filename: '[name].[chunkhash].js',
+        path: path.resolve('./plugins-code/chat/build')
+    },
+    plugins: [
+        manifest_plugin
+    ]
 };
 
 var client_config = {
@@ -18,10 +31,11 @@ var client_config = {
         client: './plugins-code/chat/client/index.js'
     },
     output: {
-        filename: '[name].[hash].js',
-        path: path.resolve(__dirname, './build')
+        filename: '[name].[chunkhash].js',
+        path: path.resolve('./plugins-code/chat/build')
     },
     plugins: [
+        manifest_plugin
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.json']

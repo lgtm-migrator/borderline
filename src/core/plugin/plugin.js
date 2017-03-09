@@ -25,9 +25,8 @@ function Plugin(Uuid, PluginPath) {
         try {
             if (fs.existsSync(serverFile) === true) {
                 var code = fs.readFileSync(serverFile);
+                var borderline = this.borderlineApi;
                 var imported = eval(code.toString());
-
-                console.log(imported);
 
                 //imported(pluginExport);
                 this.pluginModule = imported;

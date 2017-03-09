@@ -13,6 +13,9 @@ ChatServerPlugin.prototype.detach = function() {
 };
 
 ChatServerPlugin.prototype.getChat = function(req, res) {
+    var test_txt = borderline.fs.readFile('test.txt');
+    console.log(test_txt.toString());
+
     res.status(200);
     res.json(this.messages);
 };
