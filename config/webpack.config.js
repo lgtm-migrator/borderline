@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------------------------------------
+ *  Copyright (c) Florian Guitton. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ * ---------------------------------------------------------------------------------------- */
+
 const { resolve } = require('path');
 const webpack = require('webpack');
 const html = require('html-webpack-plugin');
@@ -147,6 +152,7 @@ module.exports = function () {
         externals: {
             // TODO Consider removing external libraries from the bundle
             // 'react': { ... }
+            fs: '{}'
         },
         module: {
             rules: [{
