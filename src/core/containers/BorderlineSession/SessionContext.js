@@ -45,13 +45,10 @@ export default class SessionContext extends Component {
     }
 
     shouldComponentUpdate() {
-        console.warn('SessionContext > shouldComponentUpdate'); // eslint-disable-line no-console
-        // return true;
         return !(this.session && this.session.ok);
     }
 
     render() {
-        console.info('SessionContext > render'); // eslint-disable-line no-console
         const { children } = this.props;
         return children ? Children.only(children) : null;
     }

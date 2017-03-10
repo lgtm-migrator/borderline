@@ -2,7 +2,6 @@
  *  Copyright (c) Florian Guitton. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
-/* global borderline */
 
 import React, { Component, Children, PropTypes as T } from 'react';
 import InspectorContext from './InspectorContext';
@@ -25,22 +24,13 @@ export default class InspectorManager extends Component {
         super(props, context);
     }
 
-    shouldComponentUpdate() {
-        console.warn('InspectorManager > shouldComponentUpdate'); // eslint-disable-line no-console
-        return true;
-    }
-
     render() {
-        console.info('InspectorManager > render'); // eslint-disable-line no-console
         const { children } = this.props;
-        const Wrapper = borderline.components.wrapper;
         return (
             <BorderlineScene scene={'core'} seed={inspectorFlux}>
                 <InspectorContext>
-                    <Wrapper>
-                        <ExtensionsInjector />
-                        {children ? Children.only(children) : null}
-                    </Wrapper>
+                    <ExtensionsInjector />
+                    {children ? Children.only(children) : null}
                 </InspectorContext>
             </BorderlineScene>
         );

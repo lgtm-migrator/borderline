@@ -4,7 +4,7 @@
  * ---------------------------------------------------------------------------------------- */
 /* global borderline */
 
-import { Component, Children, PropTypes as T } from 'react';
+import React, { Component, Children, PropTypes as T } from 'react';
 
 // Container delcaration
 @borderline.stateAware('InspectorContext')
@@ -15,7 +15,7 @@ export default class InspectorContext extends Component {
 
     // Typechecking for container's props
     static propTypes = {
-        children: T.element
+        children: T.array
     };
 
     // Types for available context
@@ -49,10 +49,14 @@ export default class InspectorContext extends Component {
     }
 
     render() {
-        console.info('InspectorContext > render', this.extensions); // eslint-disable-line no-console
         if (!(this.extensions && this.extensions.ok))
             return null;
         const { children } = this.props;
-        return children ? Children.only(children) : null;
+        const Wrapper = borderline.components.wrapper;
+        return (
+            <Wrapper>
+                {children ? Children.map(children, child => child) : null}
+            </Wrapper>
+        );
     }
 }

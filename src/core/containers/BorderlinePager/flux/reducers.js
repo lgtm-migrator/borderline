@@ -34,7 +34,6 @@ const pageDock = (state, action) => {
         icon: action.icon,
         origin: action.__origin__
     });
-        console.error('pageDock > ', future); // eslint-disable-line no-console
     return Immutable.fromJS(future);
 };
 

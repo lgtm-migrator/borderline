@@ -18,7 +18,7 @@ export default class SceneManager extends Component {
     static propTypes = {
         scene: T.string,
         model: T.string,
-        seed: T.func.isRequired,
+        seed: T.func,
         children: T.element
     };
 
@@ -31,7 +31,7 @@ export default class SceneManager extends Component {
     static defaultProps = {
         scene: 'extension',
         model: null,
-        seed: () => { }
+        seed: null
     };
 
     constructor(props, context) {
@@ -155,27 +155,25 @@ export default class SceneManager extends Component {
     }
 
     componentWillMount() {
-        this.bootstrap();
+        if (this.props.seed !== null)
+            this.bootstrap();
     }
 
     componentDidMount() {
         this.setState({
             valid: true
         });
-        storeManager.dispatch(this.actionTagger({ type: 'START' }, this.scene, this.model));
+        if (this.props.seed !== null)
+            storeManager.dispatch(this.actionTagger({ type: 'START' }, this.scene, this.model));
     }
 
     componentWillUnmount() {
-        storeManager.dispatch(this.actionTagger({ type: 'STOP' }, this.scene, this.model));
-    }
-
-    shouldComponentUpdate() {
-        console.warn(`SceneManager(${this.scene}, ${this.model}) > shouldComponentUpdate`); // eslint-disable-line no-console
-        return true;
+        if (this.props.seed !== null)
+            storeManager.dispatch(this.actionTagger({ type: 'STOP' }, this.scene, this.model));
     }
 
     render() {
-        console.info(`SceneManager(${this.scene}, ${this.model}) > render`); // eslint-disable-line no-console
+        console.log(`SceneManager(${this.scene}, ${this.model}) > render`); // eslint-disable-line no-console
         const { children } = this.props;
         return children && this.state.valid ? Children.only(children) : null;
     }

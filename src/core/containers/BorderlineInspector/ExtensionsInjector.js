@@ -23,7 +23,6 @@ export default class ExtensionsInjector extends Component {
     }
 
     render() {
-        console.info('ExtensionsInjector > render', this.context.extensions); // eslint-disable-line no-console
         let { list } = this.context.extensions;
         const Wrapper = borderline.components.wrapper;
         return (

@@ -9,7 +9,7 @@ import React, { Component, Children, PropTypes as T } from 'react';
 export default class Wrapper extends Component {
 
     // Custom name for container
-    static displayName = 'InspectorManager';
+    static displayName = 'Wrapper';
 
     // Typechecking for container's props
     static propTypes = {
@@ -17,9 +17,12 @@ export default class Wrapper extends Component {
     };
 
     render() {
+        const { children } = this.props;
+        if (children === undefined || children === null)
+            return null;
         return (
             <div className={borderline.styles[`${this.props.absolute ? 'absolute' : 'relative'}Expand`]}>
-                {Children.map(this.props.children, child => child)}
+                {children instanceof Array ? Children.map(children, child => child) : Children.only(children)}
             </div>
         );
     }

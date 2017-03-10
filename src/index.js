@@ -18,6 +18,16 @@ let wait = Observable.interval(100)
     .subscribe(() => {
         wait.unsubscribe();
         window.b = window.borderline;
+        window.c = window.nativeConsole = window.console;
+        window.console = {
+            log: (...args) => (process.env.NODE_ENV !== 'production' ? window.c.log(...args) : null),
+            info: (...args) => window.c.info(...args),
+            warn: (...args) => window.c.warn(...args),
+            error: (...args) => window.c.error(...args),
+            debug: (...args) => (process.env.NODE_ENV !== 'production' ? window.c.debug(...args) : null)
+        };
+        window.alert = () => null;
+        window.prompt = () => null;
         let BorderlineBootstrap = require('./core/BorderlineBootstrap').default;
         new BorderlineBootstrap();
     });
