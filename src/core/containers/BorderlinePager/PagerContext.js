@@ -36,7 +36,6 @@ export default class PagerContext extends Component {
     }
 
     getChildContext() {
-        console.warn('PagerContext > getChildContext'); // eslint-disable-line no-console
         return {
             pages: this.pages,
             expanded: this.expanded
@@ -44,7 +43,6 @@ export default class PagerContext extends Component {
     }
 
     componentWillUpdate(next) {
-        console.warn('PagerContext > componentWillUpdate'); // eslint-disable-line no-console
         let state = next.state ? next.state[this.context.model] : null;
         this.pages = state ? state.toJS().pages || [] : [];
         this.expanded = state ? state.toJS().expand || false : false;
@@ -54,14 +52,10 @@ export default class PagerContext extends Component {
         let state = next.state ? next.state[this.context.model] : null;
         let pages = state ? state.toJS().pages || [] : [];
         let expanded = state ? state.toJS().expand || false : false;
-
-        console.warn('PagerContext > shouldComponentUpdate', this.context.model, state.toJS(), this.expanded, expanded, this.pages.length, pages.length, (this.expanded != expanded || this.pages.length != pages.length)); // eslint-disable-line no-console
         return (this.expanded != expanded || this.pages.length != pages.length);
-        // return true;
     }
 
     render() {
-        console.info('PagerContext > render'); // eslint-disable-line no-console
         const { children } = this.props;
         return children ? Children.only(children) : null;
     }

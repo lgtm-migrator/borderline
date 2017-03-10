@@ -6,6 +6,7 @@
 import React, { Component } from 'react';
 
 import Body from './components/Body';
+import BorderlineInspector from './containers/BorderlineInspector';
 import BorderlineSession from './containers/BorderlineSession';
 import BorderlinePager from './containers/BorderlinePager';
 
@@ -20,7 +21,9 @@ export default class BorderlineApplication extends Component {
         return (
             <Body>
                 <BorderlineSession>
-                    <BorderlinePager />
+                    <BorderlineInspector>
+                        <BorderlinePager />
+                    </BorderlineInspector>
                 </BorderlineSession>
             </Body>
         );

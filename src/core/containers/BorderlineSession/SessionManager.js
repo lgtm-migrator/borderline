@@ -20,19 +20,14 @@ export default class SessionManager extends Component {
 
     // Typechecking for container's props
     static propTypes = {
-        children: T.oneOfType([T.array, T.element])
+        children: T.element
     };
 
     constructor(props, context) {
         super(props, context);
     }
 
-    shouldComponentUpdate() {
-        console.warn('SessionManager > shouldComponentUpdate'); // eslint-disable-line no-console
-    }
-
     render() {
-        console.info('SessionManager > render'); // eslint-disable-line no-console
         const { children } = this.props;
         const Wrapper = borderline.components.wrapper;
         return (
@@ -40,9 +35,7 @@ export default class SessionManager extends Component {
                 <SessionContext>
                     <Wrapper absolute>
                         <Authenticated>
-                            <Wrapper>
-                                {children ? Children.map(children, child => child) : null}
-                            </Wrapper>
+                            {children ? Children.only(children) : null}
                         </Authenticated>
                         <NotAuthenticated>
                             <LoginScreen />

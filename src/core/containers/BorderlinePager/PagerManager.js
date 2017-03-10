@@ -5,8 +5,6 @@
 /* global borderline */
 
 import React, { Component } from 'react';
-import BorderlineInspector from '../BorderlineInspector';
-import PagerContext from './PagerContext';
 import Navigation from './Navigation';
 import Content from './Content';
 import BorderlineScene from '../BorderlineScene';
@@ -22,25 +20,14 @@ export default class PagerManager extends Component {
         super(props, context);
     }
 
-    shouldComponentUpdate() {
-        console.warn('PagerManager > shouldComponentUpdate'); // eslint-disable-line no-console
-        return true;
-    }
-
     render() {
-        console.info('PagerManager > render'); // eslint-disable-line no-console
         const Wrapper = borderline.components.wrapper;
         return (
             <BorderlineScene scene={'core'} seed={pageFlux}>
-                <PagerContext>
-                    <BorderlineInspector>
-                        <Wrapper>
-                            <Content />
-                            <Content />
-                            <Navigation />
-                        </Wrapper>
-                    </BorderlineInspector>
-                </PagerContext>
+                <Wrapper>
+                    <Content />
+                    <Navigation />
+                </Wrapper>
             </BorderlineScene>
         );
     }

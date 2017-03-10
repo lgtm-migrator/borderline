@@ -2,19 +2,20 @@
  *  Copyright (c) Florian Guitton. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
+/* global borderline */
 
 import React, { Component, PropTypes as T } from 'react';
 import { Route, Link } from 'react-router-dom';
 
-
+import pageActions from './flux/actions';
 import navigationStyles from './Navigation.css';
 import logoutIcon from './images/logoutIcon.svg';
 import searchIcon from './images/searchIcon.svg';
 import menuTitleIcon from './images/menuTitleIcon.svg';
 import menuIcon from './images/menuIcon.svg';
 
-
 // Container delcaration
+@borderline.stateAware('Navigation')
 export default class Navigation extends Component {
 
     // Custom name for container
@@ -22,31 +23,30 @@ export default class Navigation extends Component {
 
     // Types for available context
     static contextTypes = {
-        dispatch: T.func,
-        pages: T.array,
-        expanded: T.bool
+        model: T.string
     };
 
     constructor(props, context) {
         super(props, context);
+        this.pages = [];
+        this.expanded = false;
     }
 
-    shouldComponentUpdate() {
-        console.warn('Navigation > shouldComponentUpdate'); // eslint-disable-line no-console
-        return true;
-        // return !(this.session && this.session.ok);
+    componentWillUpdate(next) {
+        let state = next.state ? next.state[this.context.model] : null;
+        this.pages = state ? state.toJS().pages || [] : [];
+        this.expanded = state ? state.toJS().expand || false : false;
     }
 
     render() {
-        console.info('Navigation > render', this.context); // eslint-disable-line no-console
         const { pathname = '' } = this.props;
-        const { pages, expanded = []} = this.context;
+        const Icon = borderline.components.svg;
         return (
-            <div className={`${navigationStyles.bar} ${expanded ? navigationStyles.expand : ''}`}>
-                {expanded}
-                <ExpandMenuButtonContainer expanded={expanded} />
+            <div className={`${navigationStyles.bar} ${this.expanded ? navigationStyles.expand : ''}`}>
+                {this.expanded}
+                <ExpandMenuButtonContainer expanded={this.expanded} />
                 <MainSearchBoxContainer />
-                {pages.map((component) => (
+                {this.pages.map((component) => (
                     <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
                         <Link to={`${pathname}/${component.particule}`} className={`${navigationStyles.button} ${match ? navigationStyles.active : ''}`}>
                             <div className={navigationStyles.link}>
@@ -66,13 +66,19 @@ export default class Navigation extends Component {
 
 class ExpandMenuButtonContainer extends Component {
 
+    // Types for available context
+    static contextTypes = {
+        dispatch: T.func
+    };
+
     expand(e) {
         e.preventDefault();
-        // this.props.dispatch(pageActions.pageMenuToggle());
+        this.context.dispatch(pageActions.pageMenuToggle());
     }
 
     render() {
         const { expanded } = this.props;
+        const Icon = borderline.components.svg;
         return (
             <div className={navigationStyles.button} onClick={this.expand.bind(this)}>
                 <div className={navigationStyles.link}>
@@ -88,6 +94,7 @@ class ExpandMenuButtonContainer extends Component {
 class MainSearchBoxContainer extends Component {
 
     render() {
+        const Icon = borderline.components.svg;
         return (
             <div className={navigationStyles.button}>
                 <div className={navigationStyles.link}>
@@ -103,12 +110,18 @@ class MainSearchBoxContainer extends Component {
 
 class LogoutButtonContainer extends Component {
 
+    // Types for available context
+    static contextTypes = {
+        dispatch: T.func
+    };
+
     logout(e) {
         e.preventDefault();
-        // this.props.dispatch(sessionActions.sessionLogout());
+        this.context.dispatch({type: 'NEED_TO_REWIRE_SESSION_CONTEXT_HERE'});
     }
 
     render() {
+        const Icon = borderline.components.svg;
         return (
             <div className={`${navigationStyles.button} ${navigationStyles.logout}`} onClick={this.logout.bind(this)}>
                 <div className={navigationStyles.link}>
