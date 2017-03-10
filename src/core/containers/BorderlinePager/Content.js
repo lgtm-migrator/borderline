@@ -37,7 +37,6 @@ export default class Content extends Component {
     }
 
     render() {
-        console.log('Content > render'); // eslint-disable-line no-console
         const { pathname = '' } = this.props;
         const Wrapper = borderline.components.wrapper;
         return (
@@ -45,9 +44,7 @@ export default class Content extends Component {
                 <Wrapper relative>
                     {this.pages.map((component) => (
                         <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
-                            <BorderlineScene model={component.origin}>
-                                <ContentBoxMountingContainer component={component} />
-                            </BorderlineScene>
+                            <ContentBoxMountingContainer component={component} />
                         )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
                     ))}
                 </Wrapper>
@@ -72,8 +69,11 @@ class ContentBoxMountingContainer extends Component {
 
     renderView() {
         try {
-            let View = this.props.component.view;
-            this.view = ReactDOM.render(<View />, this.slot);
+            const { component } = this.props;
+            this.view = ReactDOM.render(
+                <BorderlineScene model={component.origin} position={'pager'}>
+                    <component.view />
+                </BorderlineScene>, this.slot);
         } catch (e) {
             if (process.env.NODE_ENV !== 'production')
                 console.error(e); // eslint-disable-line no-console

@@ -10,9 +10,6 @@ import containerStyles from './styles/Container.css';
 
 class StorylineContainer extends Component {
 
-    componentDidMount() {
-    }
-
     render() {
         let TextEditor = borderline.components.textEditor;
         return (
