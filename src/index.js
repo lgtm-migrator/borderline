@@ -7,7 +7,7 @@ var BorderlineServer = require('./borderlineServer.js');
 app.set('x-powered-by', false);
 
 app.use(BorderlineServer({
-        mongoUrl: 'mongodb://jean:root@146.169.33.32:27020/borderline',
+        mongoUrl: 'mongodb://dev:borderline@211.152.59.220:27017/borderline',
         pluginSourcesFolder: 'C:\\Users\\grizet_j\\imperial\\borderline-server\\.plugins\\sources',
         pluginFileSystemFolder: 'C:\\Users\\grizet_j\\imperial\\borderline-server\\.plugins\\filesystem',
         uiFolder: './node-modules/borderline-ui',

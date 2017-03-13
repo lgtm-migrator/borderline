@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var manifest = require('webpack-manifest-plugin');
 
 var manifest_cache = {
-    id: Math.floor(Math.random() * 0xffffffffffffffffffffffff).toString(32)
+    id: Math.floor(Math.random() * 0xffffffffffffffff).toString(32)
 };
 var manifest_plugin = new manifest({
     fileName: 'plugin.json',
@@ -14,7 +14,7 @@ var manifest_plugin = new manifest({
 var server_config = {
     target: 'node',
     entry: {
-        server: './plugins-code/chat/server/server.js'
+        server: './plugins-code/chat/server/index.js'
     },
     output: {
         filename: '[name].[chunkhash].js',
@@ -28,7 +28,7 @@ var server_config = {
 var client_config = {
     target: 'web',
     entry: {
-        client: './plugins-code/chat/client/server.js'
+        client: './plugins-code/chat/client/index.js'
     },
     output: {
         filename: '[name].[chunkhash].js',
