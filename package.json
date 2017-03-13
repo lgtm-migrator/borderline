@@ -26,12 +26,15 @@
   "scripts": {
       "create": "borderline-create-extension.sh",
       "build": "borderline-build-extension.sh",
-      "dev": "./borderline-dev-server.sh"
+      "dev": "node ./borderline-dev-server.js"
   },
-  "devDependencies": {},
+  "devDependencies": {
+  },
   "dependencies": {
-    "chalk": "^1.1.3",
-    "commander": "^2.9.0",
-    "fs-extra": "^2.0.0"
+      "borderline-server": "0.1.8",
+      "chalk": "^1.1.3",
+      "commander": "^2.9.0",
+      "express": "^4.15.2",
+      "fs-extra": "^2.0.0"
   }
 }

@@ -1,0 +1,3 @@
+{
+    "mongo": "mongodb://dev:borderline@211.152.59.220:27017/borderline"
+}
