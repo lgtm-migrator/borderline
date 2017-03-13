@@ -1,1 +1,0 @@
-cd .. && rm -rf ./my-extension && npm install && ./tasks/borderline-create-extension.sh my-extension && cd my-extension && npm start

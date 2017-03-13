@@ -1,22 +1,37 @@
 {
-    "private": true,
-    "scripts": {
-        "postinstall": "lerna bootstrap",
-        "changelog": "lerna-changelog",
-        "build": "node packages/borderline-scripts/scripts/build.js",
-        "start": "node packages/borderline-scripts/scripts/start.js",
-        "borderline-create-extension": "tasks//borderline-create-extension.sh",
-        "publish": "tasks/publish.sh"
-    },
-    "devDependencies": {
-        "babel-eslint": "7.1.1",
-        "babel-plugin-transform-decorators-legacy": "1.3.4",
-        "babel-preset-es2015": "6.22.0",
-        "babel-preset-react": "6.22.0",
-        "babel-preset-stage-0": "6.22.0",
-        "eslint": "3.5.0",
-        "lerna": "2.0.0-beta.34",
-        "lerna-changelog": "^0.2.3",
-        "react-hot-loader": "3.0.0-beta.6"
-    }
+  "name": "borderline-extension",
+  "version": "0.0.1",
+  "description": "Create extensions for the Borderline platform",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsi-icl/borderline-create-extensions.git"
+  },
+  "author": "Jean Grizet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dsi-icl/borderline-create-extensions/issues"
+  },
+  "homepage": "https://github.com/dsi-icl/borderline-create-extensions#readme",
+  "engines": {
+    "node": ">=7"
+  },
+  "files": [
+    "template/package.json",
+    "template/webpack.config.json",
+    "template/client/index.js",
+    "template/server/index.js",
+    "borderline-create-extension.js",
+    "borderline-create-extension.sh"
+  ],
+  "scripts": {
+      "create": "borderline-create-extension.sh",
+      "build": "borderline-build-extension.sh",
+      "dev": "./borderline-dev-server.sh"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "fs-extra": "^2.0.0"
+  }
 }
