@@ -10,6 +10,7 @@ app.set('x-powered-by', false);
 
 app.use(BorderlineServer({
         mongoUrl: config.mongo,
+        pluginSourcesFolder: config.extension,
         development: true
     }
 ));
