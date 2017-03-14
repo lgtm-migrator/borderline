@@ -18,7 +18,7 @@ var server_config = {
     },
     output: {
         filename: '[name].[chunkhash].js',
-        path: path.resolve('./build')
+        path: path.resolve(path.join('./build/', manifest_cache.id.toString()))
     },
     plugins: [
         manifest_plugin
@@ -32,7 +32,7 @@ var client_config = {
     },
     output: {
         filename: '[name].[chunkhash].js',
-        path: path.resolve('./build')
+        path: path.resolve(path.join('./build/', manifest_cache.id.toString()))
     },
     plugins: [
         manifest_plugin
