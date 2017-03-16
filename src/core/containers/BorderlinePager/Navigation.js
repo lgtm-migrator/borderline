@@ -5,7 +5,7 @@
 /* global borderline */
 
 import React, { Component, PropTypes as T } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import pageActions from './flux/actions';
 import navigationStyles from './Navigation.css';
@@ -26,37 +26,40 @@ export default class Navigation extends Component {
         model: T.string
     };
 
-    constructor(props, context) {
-        super(props, context);
+    componentWillMount() {
         this.pages = [];
         this.expanded = false;
     }
 
     componentWillUpdate(next) {
+        console.log('Navigation > componentWillUpdate'); // eslint-disable-line no-console
         let state = next.state ? next.state[this.context.model] : null;
         this.pages = state ? state.toJS().pages || [] : [];
         this.expanded = state ? state.toJS().expand || false : false;
     }
 
+    shouldComponentUpdate() {
+        console.log('Navigation > shouldComponentUpdate'); // eslint-disable-line no-console
+        return true;
+    }
+
     render() {
+        console.log('Navigation > render'); // eslint-disable-line no-console
         const { pathname = '' } = this.props;
         const Icon = borderline.components.svg;
         return (
             <div className={`${navigationStyles.bar} ${this.expanded ? navigationStyles.expand : ''}`}>
-                {this.expanded}
                 <ExpandMenuButtonContainer expanded={this.expanded} />
                 <MainSearchBoxContainer />
                 {this.pages.map((component) => (
-                    <Route path={`${pathname}/${component.particule}`} exact={true} children={({ match }) => (
-                        <Link to={`${pathname}/${component.particule}`} className={`${navigationStyles.button} ${match ? navigationStyles.active : ''}`}>
-                            <div className={navigationStyles.link}>
-                                <div className={navigationStyles.icon}>
-                                    <Icon src={component.icon} />
-                                </div>
-                                <div className={navigationStyles.title}>{component.name}</div>
+                    <NavLink to={`${pathname}/${component.particule}`} activeClassName={navigationStyles.active} className={navigationStyles.button} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`}>
+                        <div className={navigationStyles.link}>
+                            <div className={navigationStyles.icon}>
+                                <Icon src={component.icon} />
                             </div>
-                        </Link>
-                    )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
+                            <div className={navigationStyles.title}>{component.name}</div>
+                        </div>
+                    </NavLink>
                 ))}
                 <LogoutButtonContainer />
             </div>

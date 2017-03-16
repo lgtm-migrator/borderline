@@ -6,7 +6,7 @@
 import sessionReducers from './reducers';
 import sessionEpics from './epics';
 
-export default class SessionPlugin {
+export default class SessionExtension {
 
     identity() {
         return 'session';

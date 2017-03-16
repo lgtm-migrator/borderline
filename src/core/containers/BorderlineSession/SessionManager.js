@@ -23,10 +23,6 @@ export default class SessionManager extends Component {
         children: T.element
     };
 
-    constructor(props, context) {
-        super(props, context);
-    }
-
     render() {
         const { children } = this.props;
         const Wrapper = borderline.components.wrapper;

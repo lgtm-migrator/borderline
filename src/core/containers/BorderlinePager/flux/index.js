@@ -5,7 +5,7 @@
 
 import pageReducers from './reducers';
 
-class PagePlugin {
+class PageExtension {
 
     identity() {
         return 'page';
@@ -16,4 +16,4 @@ class PagePlugin {
     }
 }
 
-export default PagePlugin;
+export default PageExtension;

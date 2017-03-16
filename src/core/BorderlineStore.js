@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import BorderlineRouter from './BorderlineRouter';
+import BorderlineApplication from './BorderlineApplication';
 
 export default class BorderlineStore extends Component {
 
@@ -15,7 +15,7 @@ export default class BorderlineStore extends Component {
     render() {
         return (
             <Provider store={this.props.store}>
-                <BorderlineRouter />
+                <BorderlineApplication/>
             </Provider>
         );
     }

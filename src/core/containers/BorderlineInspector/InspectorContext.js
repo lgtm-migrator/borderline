@@ -28,8 +28,7 @@ export default class InspectorContext extends Component {
         extensions: T.object
     };
 
-    constructor(props, context) {
-        super(props, context);
+    componentWillMount() {
         this.extensions = {};
     }
 
@@ -44,17 +43,13 @@ export default class InspectorContext extends Component {
         this.extensions = state ? state.toJS() : {};
     }
 
-    shouldComponentUpdate() {
-        return !(this.extensions && this.extensions.ok);
-    }
-
     render() {
         if (!(this.extensions && this.extensions.ok))
             return null;
         const { children } = this.props;
         const Wrapper = borderline.components.wrapper;
         return (
-            <Wrapper>
+            <Wrapper relative>
                 {children ? Children.map(children, child => child) : null}
             </Wrapper>
         );

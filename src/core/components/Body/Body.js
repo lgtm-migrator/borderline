@@ -3,8 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import React, { Component, Children, PropTypes as T } from 'react';
-import Wrapper from '../Wrapper';
+import { Component, Children, PropTypes as T } from 'react';
 import bodyStyles from './Body.css';
 
 export default class Body extends Component {
@@ -22,10 +21,7 @@ export default class Body extends Component {
     }
 
     render() {
-        return (
-            <Wrapper absolute>
-                {Children.map(this.props.children, child => child)}
-            </Wrapper>
-        );
+        const { children } = this.props;
+        return children ? Children.only(this.props.children) : null;
     }
 }

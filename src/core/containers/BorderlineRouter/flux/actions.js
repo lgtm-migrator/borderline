@@ -3,19 +3,12 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import inspectorReducers from './reducers';
-import inspectorEpics from './epics';
+import routerTypes from './types';
 
-class InspectorExtension {
+export default {
 
-    identity() {
-        return 'inspector';
-    }
-
-    invocation() {
-        this.declareReducers(inspectorReducers);
-        this.declareEpics(inspectorEpics);
-    }
-}
-
-export default InspectorExtension;
+    routerLocationChange: (location) => ({
+        type: routerTypes.LOCATION_CHANGE,
+        location: location
+    })
+};

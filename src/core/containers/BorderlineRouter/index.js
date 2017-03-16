@@ -3,19 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import inspectorReducers from './reducers';
-import inspectorEpics from './epics';
+import RouterManagerHandle from './RouterManager';
 
-class InspectorExtension {
-
-    identity() {
-        return 'inspector';
-    }
-
-    invocation() {
-        this.declareReducers(inspectorReducers);
-        this.declareEpics(inspectorEpics);
-    }
-}
-
-export default InspectorExtension;
+export default RouterManagerHandle;
+export const RouterManager = RouterManagerHandle;

@@ -28,8 +28,7 @@ export default class SessionContext extends Component {
         session: T.object
     };
 
-    constructor(props, context) {
-        super(props, context);
+    componentWillMount() {
         this.session = {};
     }
 
@@ -42,10 +41,6 @@ export default class SessionContext extends Component {
     componentWillUpdate(next) {
         let state = next.state ? next.state[this.context.model] : null;
         this.session = state ? state.toJS() : {};
-    }
-
-    shouldComponentUpdate() {
-        return !(this.session && this.session.ok);
     }
 
     render() {

@@ -6,7 +6,7 @@
 import dashboardReducers from './reducers';
 import dashboardEpics from './epics';
 
-class DashboardPlugin {
+class DashboardExtension {
 
     identity() {
         return '0000-00-001';
@@ -18,4 +18,4 @@ class DashboardPlugin {
     }
 }
 
-export default DashboardPlugin;
+export default DashboardExtension;

@@ -10,11 +10,10 @@ import editorLoader from '../../utilities/EditorLoader';
 
 class TextEditor extends Component {
 
-    constructor(...args) {
-        super(...args);
-        this.state = {
+    componentWillMount() {
+        this.setState({
             value: ''
-        };
+        });
     }
 
     componentDidMount() {
