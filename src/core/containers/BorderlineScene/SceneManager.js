@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import React, { Component, Children, PropTypes as T } from 'react';
+import { Component, Children, PropTypes as T } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 import storeManager from '../../utilities/StoreManager';
@@ -169,29 +169,7 @@ export default class SceneManager extends Component {
     }
 
     render() {
-        // console.log(`SceneManager(${this.scene}, ${this.model}) > render`); // eslint-disable-line no-console
         const { children } = this.props;
-        let result = null;
-        try {
-            result = children && this.state.valid ? Children.only(children) : null;
-        } catch (e) {
-            console.log('`Total Boom !!!`'); // eslint-disable-line no-console
-            result = <div>Nope</div>;
-        }
-        return result;
+        return children && this.state.valid ? Children.only(children) : null;
     }
 }
-
-/* class SceneFallback extends Component {
-
-    render() {
-        const Icon = borderline.components.svg;
-        return (
-            <div className={`${contentBoxStyles.stale} ${contentBoxStyles.box}`} >
-                <div className={contentBoxStyles.fab}>
-                    <Icon src={errorIcon} />
-                </div>
-            </div>
-        );
-    }
-}*/

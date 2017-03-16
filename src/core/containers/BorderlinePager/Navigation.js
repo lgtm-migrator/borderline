@@ -108,12 +108,12 @@ class LogoutButtonContainer extends Component {
 
     // Types for available context
     static contextTypes = {
-        dispatch: T.func
+        dispatch: T.func,
     };
 
     logout(e) {
         e.preventDefault();
-        this.context.dispatch({type: 'NEED_TO_REWIRE_SESSION_CONTEXT_HERE'});
+        this.context.dispatch({type: '@@core/session/SESSION_LOGOUT'});
     }
 
     render() {
