@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import { Component, Children, PropTypes as T } from 'react';
+import React, { Component, Children, PropTypes as T } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 import storeManager from '../../utilities/StoreManager';
@@ -171,7 +171,14 @@ export default class SceneManager extends Component {
     render() {
         // console.log(`SceneManager(${this.scene}, ${this.model}) > render`); // eslint-disable-line no-console
         const { children } = this.props;
-        return children && this.state.valid ? Children.only(children) : null;
+        let result = null;
+        try {
+            result = children && this.state.valid ? Children.only(children) : null;
+        } catch (e) {
+            console.log('`Total Boom !!!`'); // eslint-disable-line no-console
+            result = <div>Nope</div>;
+        }
+        return result;
     }
 }
 

@@ -21,11 +21,6 @@ export default class LoginScreen extends Component {
         session: T.object
     };
 
-    // Types for container's props
-    static propTypes = {
-        states: T.object
-    };
-
     sumbit(e) {
         e.preventDefault();
         this.context.dispatch(sessionActions.sessionLogin({
@@ -35,10 +30,10 @@ export default class LoginScreen extends Component {
     }
 
     render() {
-        let isSessionValid = false;
-        let isProcessing = false;
-        let hasAttempted = false;
-        let error = '';
+        let isSessionValid = this.context.session.ok;
+        let isProcessing = this.context.session.working;
+        let hasAttempted = this.context.session.attempts > 0;
+        let error = this.context.session.error;
         const Wrapper = borderline.components.wrapper;
         return (
             <Wrapper absolute className={`${loginStyles.screen} ${isSessionValid ? loginStyles.hide : ''}`}>

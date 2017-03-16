@@ -10,7 +10,6 @@ import { Route } from 'react-router-dom';
 
 import BorderlineScene from '../BorderlineScene';
 import contentBoxStyles from './Content.css';
-import errorIcon from './images/errorIcon.svg';
 
 // Container delcaration
 @borderline.stateAware('Content')
@@ -65,19 +64,12 @@ class ContentBoxMountingContainer extends Component {
     }
 
     renderView() {
-                console.debug('Content > renderView'); // eslint-disable-line no-console
-        try {
-            const { component } = this.props;
-            this.view = ReactDOM.render(
-                <BorderlineScene model={component.origin} position={'pager'}>
-                    <component.view />
-                </BorderlineScene>, this.slot);
-        } catch (e) {
-                console.debug('Content > renderView > catch'); // eslint-disable-line no-console
-            if (process.env.NODE_ENV !== 'production')
-                console.error(e); // eslint-disable-line no-console
-            ReactDOM.render(<ContentBoxStaleContainer />, this.slot);
-        }
+        const { component } = this.props;
+        this.view = ReactDOM.render(
+            <BorderlineScene model={component.origin} position={'pager'}>
+                <component.view />
+            </BorderlineScene>, this.slot
+        );
     }
 
     render() {
@@ -86,18 +78,3 @@ class ContentBoxMountingContainer extends Component {
         );
     }
 }
-
-class ContentBoxStaleContainer extends Component {
-
-    render() {
-        const Icon = borderline.components.svg;
-        return (
-            <div className={`${contentBoxStyles.stale} ${contentBoxStyles.box}`} >
-                <div className={contentBoxStyles.fab}>
-                    <Icon src={errorIcon} />
-                </div>
-            </div>
-        );
-    }
-}
-

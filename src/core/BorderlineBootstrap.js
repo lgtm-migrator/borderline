@@ -8,6 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BorderlineStore from './BorderlineStore';
 import storeManager from './utilities/StoreManager';
+import batchingStrategy from './utilities/BatchingStrategy';
 
 export default class BorderlineBootstrap {
 
@@ -16,6 +17,9 @@ export default class BorderlineBootstrap {
     }
 
     startBorderline() {
+
+        // We apply a custom batching strategy
+        batchingStrategy.inject();
 
         // We fetch the anchor of our app the the HTML template
         const root = document.getElementById('root');
