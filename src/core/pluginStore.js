@@ -125,6 +125,14 @@ PluginStore.prototype._watchLocalFolder = function() {
                             that._syncPlugin(new_plugin, 'update');
                         }
                     }
+                    else {
+                        if (fs.existsSync(pluginPath)) {
+                            var new_plugin = new Plugin(uuid, pluginPath);
+                            that._attachPlugin(new_plugin);
+                            that.plugins.push(new_plugin);
+                            that._syncPlugin(new_plugin, 'create');
+                        }
+                    }
                 }
             }
     );
