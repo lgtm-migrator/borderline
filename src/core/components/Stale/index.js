@@ -3,16 +3,7 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  * ---------------------------------------------------------------------------------------- */
 
-import { Component } from 'react';
+import StaleHandle from './Stale';
 
-class StoreContainer extends Component {
-
-    componentWillMount() {
-        throw 'Extension manager is not implemented in componentWillMount';
-    }
-    render() {
-        throw 'Extension manager is not implemented in render';
-    }
-}
-
-export default StoreContainer;
+export default StaleHandle;
+export const Stale = StaleHandle;
