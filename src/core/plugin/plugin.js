@@ -42,13 +42,15 @@ Plugin.prototype.infos = function() {
 
 Plugin.prototype.webpackImporter = function(importPath) {
     try {
-        var manifestPath = path.join(importPath, '/plugin.json');
+        var manifestPath = path.join(importPath, 'plugin.json');
         if (fs.existsSync(manifestPath) === false)
             return null;
         var manifestBytes = fs.readFileSync(manifestPath);
         var manifest = JSON.parse(manifestBytes);
         if (manifest === null || manifest === undefined ||
             manifest.id === null || manifest.id === undefined)
+            return null;
+        if (manifest.hasOwnProperty('server.js') == false || manifest.hasOwnProperty('client.js') == false)
             return null;
 
         var serverFile = path.join(importPath, manifest['server.js']);

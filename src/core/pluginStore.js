@@ -100,8 +100,6 @@ PluginStore.prototype._findPluginById = function(id) {
 };
 
 PluginStore.prototype._watchLocalFolder = function() {
-    const pluginDirectoryExpr = /^(\w+)$/;
-
     var that = this;
     fs.watch(this.pluginFolder,
             {
@@ -110,8 +108,11 @@ PluginStore.prototype._watchLocalFolder = function() {
                 persistent: true
             },
             function(eventType, filename) {
-                var pluginDirectory = filename.match(pluginDirectoryExpr);
-                if (pluginDirectory) {
+                if (!filename)
+                    return;
+                var re = /(\/|\\)/;
+                var pluginDirectory = filename.split(re);
+                if (pluginDirectory && pluginDirectory.length > 0) {
                     var uuid = pluginDirectory[0];
                     var pluginPath = path.join(that.pluginFolder, uuid);
                     var p = that._findPluginById(uuid);
