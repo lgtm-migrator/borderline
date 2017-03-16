@@ -20,10 +20,6 @@ export default class InspectorManager extends Component {
         children: T.element
     };
 
-    constructor(props, context) {
-        super(props, context);
-    }
-
     render() {
         const { children } = this.props;
         return (

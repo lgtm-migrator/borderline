@@ -15,7 +15,7 @@ export default class BorderlineBootstrap {
         this.startBorderline();
     }
 
-    startBorderline = () => {
+    startBorderline() {
 
         // We fetch the anchor of our app the the HTML template
         const root = document.getElementById('root');

@@ -18,15 +18,11 @@ export default class ExtensionsInjector extends Component {
         extensions: T.object
     };
 
-    constructor(props, context) {
-        super(props, context);
-    }
-
     render() {
         let { list } = this.context.extensions;
         const Wrapper = borderline.components.wrapper;
         return (
-            <Wrapper absolute>
+            <Wrapper>
                 {Object.keys(list).map(id => (
                     <BorderlineScene model={id} seed={list[id].seed} key={`_ext__${id}`}/>
                 ))}

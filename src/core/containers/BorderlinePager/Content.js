@@ -24,8 +24,7 @@ export default class Content extends Component {
         model: T.string
     };
 
-    constructor(props, context) {
-        super(props, context);
+    componentWillMount() {
         this.pages = [];
         this.contracted = true;
     }
@@ -37,18 +36,17 @@ export default class Content extends Component {
     }
 
     render() {
+        console.log('Content > render'); // eslint-disable-line no-console
         const { pathname = '' } = this.props;
         const Wrapper = borderline.components.wrapper;
         return (
-            <div className={`${contentBoxStyles.stage} ${this.contracted ? contentBoxStyles.contract : ''}`}>
-                <Wrapper relative>
-                    {this.pages.map((component) => (
-                        <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
-                            <ContentBoxMountingContainer component={component} />
-                        )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
-                    ))}
-                </Wrapper>
-            </div>
+            <Wrapper relative className={`${contentBoxStyles.stage} ${this.contracted ? contentBoxStyles.contract : ''}`}>
+                {this.pages.map((component) => (
+                    <Route path={`${pathname}/${component.particule}`} exact={true} component={() => (
+                        <ContentBoxMountingContainer component={component} />
+                    )} key={`${component.particule}_${(Math.random() * 1e32).toString(36)}}`} />
+                ))}
+            </Wrapper>
         );
     }
 }
@@ -68,13 +66,17 @@ class ContentBoxMountingContainer extends Component {
     }
 
     renderView() {
+                console.debug('Content > renderView'); // eslint-disable-line no-console
         try {
+                console.debug('Content > renderView > try'); // eslint-disable-line no-console
             const { component } = this.props;
             this.view = ReactDOM.render(
                 <BorderlineScene model={component.origin} position={'pager'}>
                     <component.view />
                 </BorderlineScene>, this.slot);
+                console.debug('Content > renderView > view', this.view); // eslint-disable-line no-console
         } catch (e) {
+                console.debug('Content > renderView > catch'); // eslint-disable-line no-console
             if (process.env.NODE_ENV !== 'production')
                 console.error(e); // eslint-disable-line no-console
             ReactDOM.render(<ContentBoxStaleContainer />, this.slot);

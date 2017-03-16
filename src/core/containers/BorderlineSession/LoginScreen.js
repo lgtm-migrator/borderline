@@ -26,10 +26,6 @@ export default class LoginScreen extends Component {
         states: T.object
     };
 
-    constructor(props, context) {
-        super(props, context);
-    }
-
     sumbit(e) {
         e.preventDefault();
         this.context.dispatch(sessionActions.sessionLogin({
@@ -43,8 +39,9 @@ export default class LoginScreen extends Component {
         let isProcessing = false;
         let hasAttempted = false;
         let error = '';
+        const Wrapper = borderline.components.wrapper;
         return (
-            <div className={`${borderline.styles.absoluteExpand} ${loginStyles.screen} ${isSessionValid ? loginStyles.hide : ''}`}>
+            <Wrapper absolute className={`${loginStyles.screen} ${isSessionValid ? loginStyles.hide : ''}`}>
                 <div className={loginStyles.box}>
                     <div className={loginStyles.title}>
                         <span>borderline<strong>:</strong></span>
@@ -58,7 +55,7 @@ export default class LoginScreen extends Component {
                         <span>I forgot my password</span>
                     </form>
                 </div>
-            </div>
+            </Wrapper>
         );
     }
 }

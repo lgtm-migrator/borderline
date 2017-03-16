@@ -5,7 +5,7 @@
 
 import storeEpics from './epics';
 
-class StorePlugin {
+class StoreExtension {
 
     identity() {
         return '0000-00-002';
@@ -16,4 +16,4 @@ class StorePlugin {
     }
 }
 
-export default StorePlugin;
+export default StoreExtension;

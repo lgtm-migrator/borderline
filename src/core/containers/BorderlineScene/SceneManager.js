@@ -34,18 +34,6 @@ export default class SceneManager extends Component {
         seed: null
     };
 
-    constructor(props, context) {
-        super(props, context);
-        this.state = {
-            valid: false
-        };
-        this.reducers = {};
-        this.epics = {};
-        this.epicsTags = [];
-        this.model = this.props.model;
-        this.scene = this.props.scene;
-    }
-
     getChildContext() {
         return {
             dispatch: this.dispatchProxy(),
@@ -155,6 +143,14 @@ export default class SceneManager extends Component {
     }
 
     componentWillMount() {
+        this.setState({
+            valid: false
+        });
+        this.reducers = {};
+        this.epics = {};
+        this.epicsTags = [];
+        this.model = this.props.model;
+        this.scene = this.props.scene;
         if (this.props.seed !== null)
             this.bootstrap();
     }
@@ -173,7 +169,22 @@ export default class SceneManager extends Component {
     }
 
     render() {
+        console.log(`SceneManager(${this.scene}, ${this.model}, ${this.props.position}) > render`); // eslint-disable-line no-console
         const { children } = this.props;
         return children && this.state.valid ? Children.only(children) : null;
     }
 }
+
+/* class SceneFallback extends Component {
+
+    render() {
+        const Icon = borderline.components.svg;
+        return (
+            <div className={`${contentBoxStyles.stale} ${contentBoxStyles.box}`} >
+                <div className={contentBoxStyles.fab}>
+                    <Icon src={errorIcon} />
+                </div>
+            </div>
+        );
+    }
+}*/
