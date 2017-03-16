@@ -36,7 +36,6 @@ export default class Content extends Component {
     }
 
     render() {
-        console.log('Content > render'); // eslint-disable-line no-console
         const { pathname = '' } = this.props;
         const Wrapper = borderline.components.wrapper;
         return (
@@ -68,13 +67,11 @@ class ContentBoxMountingContainer extends Component {
     renderView() {
                 console.debug('Content > renderView'); // eslint-disable-line no-console
         try {
-                console.debug('Content > renderView > try'); // eslint-disable-line no-console
             const { component } = this.props;
             this.view = ReactDOM.render(
                 <BorderlineScene model={component.origin} position={'pager'}>
                     <component.view />
                 </BorderlineScene>, this.slot);
-                console.debug('Content > renderView > view', this.view); // eslint-disable-line no-console
         } catch (e) {
                 console.debug('Content > renderView > catch'); // eslint-disable-line no-console
             if (process.env.NODE_ENV !== 'production')

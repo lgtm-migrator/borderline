@@ -32,19 +32,12 @@ export default class Navigation extends Component {
     }
 
     componentWillUpdate(next) {
-        console.log('Navigation > componentWillUpdate'); // eslint-disable-line no-console
         let state = next.state ? next.state[this.context.model] : null;
         this.pages = state ? state.toJS().pages || [] : [];
         this.expanded = state ? state.toJS().expand || false : false;
     }
 
-    shouldComponentUpdate() {
-        console.log('Navigation > shouldComponentUpdate'); // eslint-disable-line no-console
-        return true;
-    }
-
     render() {
-        console.log('Navigation > render'); // eslint-disable-line no-console
         const { pathname = '' } = this.props;
         const Icon = borderline.components.svg;
         return (

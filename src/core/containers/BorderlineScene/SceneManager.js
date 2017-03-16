@@ -169,7 +169,7 @@ export default class SceneManager extends Component {
     }
 
     render() {
-        console.log(`SceneManager(${this.scene}, ${this.model}, ${this.props.position}) > render`); // eslint-disable-line no-console
+        // console.log(`SceneManager(${this.scene}, ${this.model}) > render`); // eslint-disable-line no-console
         const { children } = this.props;
         return children && this.state.valid ? Children.only(children) : null;
     }

@@ -40,7 +40,6 @@ const extensionsSuccess = (state, action) => {
             loaded: true
         }
     ).subscribe();
-        console.log('InspectorReducer', future); // eslint-disable-line no-console
     return Immutable.fromJS(future);
 };
 

@@ -5,7 +5,7 @@
 
 import React, { Component, Children, PropTypes as T } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import routerActions from './flux/actions';
+import MountedRoute from './MountedRoute';
 
 // Container delcaration
 export default class ConnectedRouter extends Component {
@@ -18,24 +18,15 @@ export default class ConnectedRouter extends Component {
         children: T.element
     };
 
-    // Types for available context
-    static contextTypes = {
-        dispatch: T.func
-    };
-
     render() {
         const { children } = this.props;
         return (
             <Router>
-                 <Route render={({ location }) => {
-                    if (this.location != location) {
-                        this.location = location;
-                        console.error('ConnectedRouter', location); // eslint-disable-line no-console
-                        this.context.dispatch(routerActions.routerLocationChange(location));
-                    }
-                    return children ? Children.only(children) : null;
-                }} />
-                {/*{children ? Children.only(children) : null}*/}
+                <Route render={({ location }) => (
+                    <MountedRoute destination={location}>
+                        {children ? Children.only(children) : null}
+                    </MountedRoute>
+                )} />
             </Router>
         );
     }
