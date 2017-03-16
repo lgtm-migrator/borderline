@@ -2,7 +2,11 @@ var path = require('path');
 var webpack = require('webpack');
 var manifest = require('webpack-manifest-plugin');
 
+var package = require('./package.json');
+
 var manifest_cache = {
+    name: package.name,
+    version: package.version,
     id: Math.floor(Math.random() * 0xffffffffffffffff).toString(32)
 };
 var manifest_plugin = new manifest({
@@ -17,8 +21,8 @@ var server_config = {
         server: './code/server/index.js'
     },
     output: {
-        filename: '[name].[chunkhash].js',
-        path: path.resolve(path.join('./build/', manifest_cache.id.toString()))
+        filename: '[name].[hash].js',
+        path: path.resolve(path.join('../../.build/', manifest_cache.id.toString()))
     },
     plugins: [
         manifest_plugin
@@ -31,8 +35,8 @@ var client_config = {
         client: './code/client/index.js'
     },
     output: {
-        filename: '[name].[chunkhash].js',
-        path: path.resolve(path.join('./build/', manifest_cache.id.toString()))
+        filename: '[name].[hash].js',
+        path: path.resolve(path.join('../../.build/', manifest_cache.id.toString()))
     },
     plugins: [
         manifest_plugin
@@ -41,13 +45,53 @@ var client_config = {
         extensions: ['.js', '.jsx', '.json']
     },
     module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loaders: ["babel-loader"]
-            }
-        ]
+        rules: [{
+            test: /\.js$/,
+            exclude: '/node_modules/',
+            enforce: 'pre',
+            use: [
+                'eslint-loader'
+            ],
+        }, {
+            test: /\.js$/,
+            include: './code/client/',
+            use: [
+                'babel-loader'
+            ],
+        }, {
+            test: /\.css$/,
+            include: './code/client/',
+            use: [
+                'style-loader',
+                {
+                    loader: 'css-loader',
+                    options: {
+                        modules: true,
+                        importLoaders: 1,
+                        localIdentName: '[hash:base64:5]'
+                    }
+                },
+                {
+                    loader: 'postcss-loader'
+                }
+            ]
+        }, {
+            test: /\.svg$/,
+            use: [
+                'svg-inline-loader'
+            ],
+        }, {
+            test: /\.html$/,
+            include: './code/client/',
+            use: [
+                {
+                    loader: 'html-loader',
+                    options: {
+                        minimize: true
+                    }
+                }
+            ],
+        }]
     }
 };
 

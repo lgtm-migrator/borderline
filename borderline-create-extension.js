@@ -18,37 +18,33 @@ if (currentNodeVersion.split('.')[0] < 7) {
     process.exit(1);
 }
 
+var extensionName = undefined;
 var program = commander
     .version(package.version)
-    .option('-e, --extension <name>', 'extension name')
-    .option('-p, --path <path>', 'extension path')
+    .arguments('<name>')
     .option('--verbose', 'enable verbose [optional]')
-    .usage('--extension <name>')
+    .usage('<name>')
     .on('--help', function () {
         console.log();
         console.log(chalk.cyan('The extension will be created in a directory of the same name.'));
         console.log();
     })
+    .action(function (name) {
+        extensionName = name;
+    })
     .parse(process.argv);
 
 /* Ensure extension name is provided */
-if (typeof program.extension === 'undefined' || program.extension === '' || !program.extension  ) {
+if (typeof extensionName === 'undefined' || extensionName === '' || !extensionName  ) {
     console.log();
     console.error(chalk.red('Missing extension name'));
     console.error(program.help());
     console.log();
     process.exit(1);
 }
-/* Default path if no specified */
-if (typeof program.path === 'undefined' || program.path === '' || !program.path) {
-    program.path = __dirname;
-    console.log();
-    console.log('Using current directory : ' + chalk.cyan(__dirname));
-    console.log();
-}
 
 /* Creating the extension folder */
-createExtension(program.extension, program.path, program.verbose);
+createExtension(extensionName, './src/', program.verbose);
 
 function createExtension(extensionName, extensionPath, verbose) {
     var templateDir = path.join(__dirname, 'template');

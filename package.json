@@ -20,12 +20,10 @@
     "template/webpack.config.json",
     "template/client/index.js",
     "template/server/index.js",
-    "borderline-create-extension.js",
-    "borderline-create-extension.sh"
+    "borderline-create-extension.js"
   ],
   "scripts": {
-      "create": "borderline-create-extension.sh",
-      "build": "borderline-build-extension.sh",
+      "create": "node ./borderline-create-extension.js",
       "dev": "node ./borderline-dev-server.js"
   },
   "devDependencies": {
