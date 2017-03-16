@@ -6,11 +6,14 @@ var express = require('express');
 
 var config = require('./borderline-dev-config.json');
 
+//Cleanups previous dev environments
+fs.emptyDirSync(config.pluginBuildFolder);
+fs.emptyDirSync(config.pluginFileSystemFolder);
+
 //Creating webpack processes to compile extensions
 var extensions = fs.readdirSync(config.pluginSourcesFolder);
 for (var i = 0; i < extensions.length; i++) {
     var extensionDirectory = path.join(config.pluginSourcesFolder, extensions[i]);
-    console.log(extensionDirectory);
 
     //Navigate to extension dir
     process.chdir(extensionDirectory);
