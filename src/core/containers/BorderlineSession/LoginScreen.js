@@ -7,7 +7,7 @@
 import React, { Component, PropTypes as T } from 'react';
 import LoaderBar from '../../components/LoadBar';
 import sessionActions from './flux/actions';
-import loginStyles from './Login.css';
+import loginStyles from './styles/Login.css';
 
 // Container delcaration
 export default class LoginScreen extends Component {

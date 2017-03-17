@@ -4,7 +4,7 @@
  * ---------------------------------------------------------------------------------------- */
 
 import { Component, Children, PropTypes as T } from 'react';
-import bodyStyles from './Body.css';
+import bodyStyles from './styles/Body.css';
 
 export default class Body extends Component {
 

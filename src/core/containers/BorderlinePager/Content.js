@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import { Route } from 'react-router-dom';
 
 import BorderlineScene from '../BorderlineScene';
-import contentBoxStyles from './Content.css';
+import contentBoxStyles from './styles/Content.css';
 
 // Container delcaration
 @borderline.stateAware('Content')
