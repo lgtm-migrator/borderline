@@ -5,7 +5,7 @@
 
 import React, { PureComponent } from 'react';
 
-import loaderStyles from './LoadBar.css';
+import loaderStyles from './styles/LoadBar.css';
 
 class LoadBar extends PureComponent {
 

@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 
-import staleStyles from './Stale.css';
+import staleStyles from './styles/Stale.css';
 import errorIcon from './images/errorIcon.svg';
 
 export default class Stale extends Component {

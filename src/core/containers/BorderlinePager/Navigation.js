@@ -8,7 +8,7 @@ import React, { Component, PropTypes as T } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import pageActions from './flux/actions';
-import navigationStyles from './Navigation.css';
+import navigationStyles from './styles/Navigation.css';
 import logoutIcon from './images/logoutIcon.svg';
 import searchIcon from './images/searchIcon.svg';
 import menuTitleIcon from './images/menuTitleIcon.svg';
