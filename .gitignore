@@ -9,7 +9,8 @@ coverage
 # dev
 .build/
 .filesystem/
-src/
+src
+packages/
 
 # misc
 .DS_Store

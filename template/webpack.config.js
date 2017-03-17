@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var manifest = require('webpack-manifest-plugin');
+var fs = require('fs-extra');
 
 var package = require('./package.json');
 
@@ -14,6 +15,8 @@ var manifest_plugin = new manifest({
     cache: manifest_cache,
     writeToFileEmit: true
 });
+//Write build trace
+fs.writeJSONSync('./.build.json', manifest_cache);
 
 var server_config = {
     target: 'node',
@@ -21,7 +24,7 @@ var server_config = {
         server: './code/server/index.js'
     },
     output: {
-        filename: '[name].[hash].js',
+        filename: '[name].[chunkhash].js',
         path: path.resolve(path.join('../../.build/', manifest_cache.id.toString()))
     },
     plugins: [
@@ -35,7 +38,7 @@ var client_config = {
         client: './code/client/index.js'
     },
     output: {
-        filename: '[name].[hash].js',
+        filename: '[name].[chunkhash].js',
         path: path.resolve(path.join('../../.build/', manifest_cache.id.toString()))
     },
     plugins: [
@@ -51,13 +54,13 @@ var client_config = {
             enforce: 'pre',
             use: [
                 'eslint-loader'
-            ],
+            ]
         }, {
             test: /\.js$/,
             include: './code/client/',
             use: [
                 'babel-loader'
-            ],
+            ]
         }, {
             test: /\.css$/,
             include: './code/client/',
@@ -79,7 +82,7 @@ var client_config = {
             test: /\.svg$/,
             use: [
                 'svg-inline-loader'
-            ],
+            ]
         }, {
             test: /\.html$/,
             include: './code/client/',
@@ -90,7 +93,7 @@ var client_config = {
                         minimize: true
                     }
                 }
-            ],
+            ]
         }]
     }
 };
