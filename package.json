@@ -27,6 +27,9 @@
         "borderline-dev": "node ./borderline-dev-server.js"
     },
     "scripts": {
+        "create": "node ./borderline-create-extension.js",
+        "package": "node ./borderline-package-extension.js",
+        "dev": "node ./borderline-dev-server.js"
     },
     "devDependencies": {
     },
