@@ -63,8 +63,18 @@ function createExtension(extensionName, extensionPath, verbose) {
     var extensionPackage = fs.readJsonSync(extensionPackagePath);
     extensionPackage.name = extensionName;
     fs.writeJsonSync(extensionPackagePath, extensionPackage);
-
     if (verbose)
         console.log(chalk.cyan('Rewrite package.json successful'));
+
+    var manifestPackagePath = path.join(extensionDir, 'manifest.json');
+    var manifestPackage = fs.readJsonSync(manifestPackagePath);
+    manifestPackage.name = extensionName;
+    manifestPackage.id =  Math.floor(Math.random() * 0xffffffffffffffff).toString(32); //Careful with collision
+    fs.writeJsonSync(manifestPackagePath, manifestPackage);
+    if (verbose)
+        console.log(chalk.cyan('Rewrite manifest.json successful'));
+
     console.log(chalk.green('Creating extension success :D'));
+
+
 }

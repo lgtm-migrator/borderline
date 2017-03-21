@@ -3,20 +3,18 @@ var webpack = require('webpack');
 var manifest = require('webpack-manifest-plugin');
 var fs = require('fs-extra');
 
-var package = require('./package.json');
+//Get manifest file
+var manifest_cache = fs.readJsonSync('manifest.json');
+//Generate build ID
+manifest_cache.build = Math.floor(Math.random() * 0xffffffffffffffff).toString(32);
+//Write build trace
+fs.writeJSONSync('manifest.json', manifest_cache);
 
-var manifest_cache = {
-    name: package.name,
-    version: package.version,
-    id: Math.floor(Math.random() * 0xffffffffffffffff).toString(32)
-};
 var manifest_plugin = new manifest({
     fileName: 'plugin.json',
     cache: manifest_cache,
     writeToFileEmit: true
 });
-//Write build trace
-fs.writeJSONSync('./.build.json', manifest_cache);
 
 var server_config = {
     target: 'node',
@@ -25,7 +23,7 @@ var server_config = {
     },
     output: {
         filename: '[name].[chunkhash].js',
-        path: path.resolve(path.join('../../.build/', manifest_cache.id.toString()))
+        path: path.resolve(path.join('../../.build/', manifest_cache.build.toString()))
     },
     plugins: [
         manifest_plugin
@@ -39,16 +37,24 @@ var client_config = {
     },
     output: {
         filename: '[name].[chunkhash].js',
-        path: path.resolve(path.join('../../.build/', manifest_cache.id.toString()))
+        path: path.resolve(path.join('../../.build/', manifest_cache.build.toString()))
     },
     plugins: [
         manifest_plugin
     ],
     resolve: {
-        extensions: ['.js', '.jsx', '.json']
+        extensions: ['.js', '.json']
     },
     module: {
         rules: [{
+                test: /\.jsx?$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                query: {
+                    cacheDirectory: true,
+                    presets: ['react', 'es2015']
+                }
+            }, {
             test: /\.js$/,
             exclude: '/node_modules/',
             enforce: 'pre',
@@ -58,9 +64,10 @@ var client_config = {
         }, {
             test: /\.js$/,
             include: './code/client/',
-            use: [
-                'babel-loader'
-            ]
+            query: {
+                presets: ['react','es2015']
+            },
+            loaders: 'babel-loader'
         }, {
             test: /\.css$/,
             include: './code/client/',
