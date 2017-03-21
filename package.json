@@ -1,40 +1,41 @@
 {
-  "name": "borderline-extension",
-  "version": "0.0.1",
-  "description": "Create extensions for the Borderline platform",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dsi-icl/borderline-create-extensions.git"
-  },
-  "author": "Jean Grizet",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dsi-icl/borderline-create-extensions/issues"
-  },
-  "homepage": "https://github.com/dsi-icl/borderline-create-extensions#readme",
-  "engines": {
-    "node": ">=7"
-  },
-  "files": [
-    "template/package.json",
-    "template/webpack.config.json",
-    "template/client/index.js",
-    "template/server/index.js",
-    "borderline-create-extension.js"
-  ],
-  "scripts": {
-      "create": "node ./borderline-create-extension.js",
-      "dev": "node ./borderline-dev-server.js",
-      "package": "node ./borderline-package-extension.js"
-  },
-  "devDependencies": {
-  },
-  "dependencies": {
+    "name": "borderline-extension",
+    "version": "0.0.1",
+    "description": "Create extensions for the Borderline platform",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dsi-icl/borderline-create-extensions.git"
+    },
+    "author": "Jean Grizet",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/dsi-icl/borderline-create-extensions/issues"
+    },
+    "homepage": "https://github.com/dsi-icl/borderline-create-extensions#readme",
+    "engines": {
+        "node": ">=7"
+    },
+    "files": [
+        "template/",
+        "borderline-create-extension.js",
+        "borderline-package-extension.js",
+        "borderline-dev-server.js"
+    ],
+    "bin": {
+        "borderline-create": "node ./borderline-create-extension.js",
+        "borderline-package": "node ./borderline-package-extension.js",
+        "borderline-dev": "node ./borderline-dev-server.js"
+    },
+    "scripts": {
+    },
+    "devDependencies": {
+    },
+    "dependencies": {
       "borderline-server": "^0.1.11",
       "chalk": "^1.1.3",
       "commander": "^2.9.0",
       "express": "^4.15.2",
       "fs-extra": "^2.0.0",
       "archiver": "1.3.0"
-  }
+    }
 }
