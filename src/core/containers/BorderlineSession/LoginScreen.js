@@ -30,10 +30,10 @@ export default class LoginScreen extends Component {
     }
 
     render() {
-        let isSessionValid = this.context.session.ok;
-        let isProcessing = this.context.session.working;
+        let isSessionValid = this.context.session.ok || false;
+        let isProcessing = !!this.context.session.working;
         let hasAttempted = this.context.session.attempts > 0;
-        let error = this.context.session.error;
+        let error = this.context.session.error || '';
         const Wrapper = borderline.components.wrapper;
         return (
             <Wrapper absolute className={`${loginStyles.screen} ${isSessionValid ? loginStyles.hide : ''}`}>

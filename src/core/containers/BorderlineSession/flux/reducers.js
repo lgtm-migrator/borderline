@@ -56,7 +56,7 @@ const sessionLoginFailure = (state, action) => {
     let future = state.toJS();
     future.working = false;
     future.ok = false;
-    future.error = action.error;
+    future.error = action.error.error;
     return Immutable.fromJS(future);
 };
 
