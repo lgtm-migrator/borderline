@@ -19,14 +19,14 @@ export default {
     (action) => action.ofType(inspectorTypes.EXTENSIONS_LOAD)
         .mergeMap(() =>
             api.fetchExtensionsList()
-                .map(response => response.ok ? inspectorActions.extensionsSuccess([]) : inspectorActions.extensionsFailure())
+                .map(response => response.ok ? inspectorActions.extensionsSuccess(response.data.plugins) : inspectorActions.extensionsFailure())
         ),
 
     extensionDownloadFromLoad:
     (action) => action.ofType(inspectorTypes.EXTENSIONS_SUCCESS)
         .mergeMap(action =>
-            Observable.from(action.list).defaultIfEmpty(null).map(id =>
-                id === null ? inspectorActions.extensionsDidLoad() : inspectorActions.extensionUnitLoad(id)
+            Observable.from(action.list).defaultIfEmpty(null).map(extension =>
+                extension === null ? inspectorActions.extensionsDidLoad() : inspectorActions.extensionUnitLoad(extension)
             )
         ),
 
@@ -42,15 +42,15 @@ export default {
             // Observable.from(fetch('/plugin')
             //     .then(response => response.json()))
             //     .map(response => actions.singleSubAppSucces(action.id, response))
-            Observable.of(inspectorActions.extensionUnitSucces(action.id, {}))
+            Observable.of(inspectorActions.extensionUnitSucces(action.extension))
         ),
 
     extensionSingleComplete:
     (action, state) => action.ofType(inspectorTypes.EXTENSION_UNIT_SUCCESS)
         .mergeMap(action =>
             Observable.concat(
-                Observable.of(inspectorActions.extensionUnitDidLoad(action.id)),
-                Observable.from(Object.values(state.retrieve().toJS().extensions))
+                Observable.of(inspectorActions.extensionUnitDidLoad(action.extension)),
+                Observable.from(Object.values(state.retrieve().toJS().list))
                     .every(extension => extension.loaded === true)
                     .filter(loaded => loaded === true)
                     .mapTo(inspectorActions.extensionsDidLoad())

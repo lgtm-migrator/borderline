@@ -28,20 +28,19 @@ export default {
         type: inspectorTypes.EXTENSIONS_DID_LOAD
     }),
 
-    extensionUnitLoad: (id) => ({
+    extensionUnitLoad: (extension) => ({
         type: inspectorTypes.EXTENSION_UNIT_LOAD,
-        id: id
+        extension: extension
     }),
 
-    extensionUnitSucces: (id, seed) => ({
+    extensionUnitSucces: (extension) => ({
         type: inspectorTypes.EXTENSION_UNIT_SUCCESS,
-        id: id,
-        seed: seed
+        extension: extension
     }),
 
-    extensionUnitDidLoad: (id) => ({
+    extensionUnitDidLoad: (extension) => ({
         type: inspectorTypes.EXTENSION_UNIT_DID_LOAD,
-        id: id
+        id: extension
     }),
 
     extensionUnitCorrupted: (name) => ({

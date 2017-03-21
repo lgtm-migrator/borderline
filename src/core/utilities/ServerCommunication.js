@@ -22,6 +22,10 @@ export default {
 
     fetchExtensionsList: () => query('/plugin_store', {
         method: 'GET'
+    }),
+
+    fetchExtension: (id) => query(`/plugins/${id}/client`, {
+        method: 'GET'
     })
 };
 

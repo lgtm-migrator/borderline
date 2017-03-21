@@ -28,8 +28,8 @@ export default {
 const extensionsSuccess = (state, action) => {
     let future = state.toJS();
     future.list = future.list || {};
-    Observable.from(action.list).map(id =>
-        future.list[id] = {
+    Observable.from(action.list).map(extension =>
+        future.list[extension.id] = {
             loaded: false
         }
     ).subscribe();
@@ -52,7 +52,7 @@ const extensionsDidLoad = (state) => {
 
 const extensionUnitSuccess = (state, action) => {
     let future = state.toJS();
-    future.list[action.id].seed = action.seed;
-    future.list[action.id].loaded = true;
+    future.list[action.extension.id].seed = () => {};
+    future.list[action.extension.id].loaded = true;
     return Immutable.fromJS(future);
 };
