@@ -15,11 +15,12 @@ var extensions = fs.readdirSync(config.pluginSourcesFolder);
 for (var i = 0; i < extensions.length; i++) {
     var extensionDirectory = path.join(config.pluginSourcesFolder, extensions[i]);
 
-    //Navigate to extension dir
-    process.chdir(extensionDirectory);
+    buildExtension(extensionDirectory);
+}
 
+function buildExtension(extensionDirectory) {
     //Run npm build command from extension dir
-    var build_proc = spawn('npm', ['run', 'build-dev'], {stdio: 'inherit'});
+    var build_proc = spawn('npm', ['run', 'build-dev'], {stdio: 'inherit', cwd: extensionDirectory});
     build_proc.on('close', function (exitCode) {
         if (exitCode !== 0) {
             console.log(chalk.red('Install package dependencies failed'));
@@ -27,12 +28,8 @@ for (var i = 0; i < extensions.length; i++) {
         }
         else {
             console.log(chalk.green('Exiting webpack watcher'));
-            process.exit(0);
         }
     });
-
-    //Back to root directory
-    process.chdir(__dirname);
 }
 
 //Creating express server

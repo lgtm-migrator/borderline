@@ -5,8 +5,8 @@
     "author": "A script file",
     "license": "MIT",
     "scripts": {
-        "build-dev": "npm install && webpack --config ./webpack.config.js --colors --watch",
-        "build-prod": "npm install && webpack --config ./webpack.config.js --colors --progress"
+        "build-dev": "npm install && cross-env NODE_ENV=development webpack --config ./webpack.config.js --colors --watch",
+        "build-prod": "npm install && cross-env NODE_ENV=production webpack --config ./webpack.config.js --colors --progress"
     },
     "devDependencies": {
         "fs-extra": "^2.0.0",
@@ -21,6 +21,7 @@
         "babel-preset-es2015": "6.24.0",
         "babel-preset-react": "6.23.0",
         "babel-preset-stage-0": "6.22.0",
+        "cross-env": "3.2.4",
         "eslint": "3.17.1",
         "eslint-loader": "1.6.3",
         "eslint-plugin-react": "6.10.0",

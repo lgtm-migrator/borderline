@@ -3,12 +3,23 @@ var webpack = require('webpack');
 var manifest = require('webpack-manifest-plugin');
 var fs = require('fs-extra');
 
+//Get the production status
+const prod = process.env.NODE_ENV === 'production';
+
 //Get manifest file
 var manifest_cache = fs.readJsonSync('manifest.json');
 //Generate build ID
 manifest_cache.build = Math.floor(Math.random() * 0xffffffffffffffff).toString(32);
-//Write build trace
-fs.writeJSONSync('manifest.json', manifest_cache);
+
+var output_path = null;
+if (prod === true) {
+    //Write build trace
+    fs.writeJsonSync('manifest.json', manifest_cache);
+    output_path = path.resolve(path.join('../../.build/', manifest_cache.build.toString()));
+}
+else {
+    output_path = path.resolve(path.join('../../.build/', manifest_cache.id.toString()));
+}
 
 var manifest_plugin = new manifest({
     fileName: 'plugin.json',
@@ -23,7 +34,7 @@ var server_config = {
     },
     output: {
         filename: '[name].[chunkhash].js',
-        path: path.resolve(path.join('../../.build/', manifest_cache.build.toString()))
+        path: output_path
     },
     plugins: [
         manifest_plugin
@@ -37,7 +48,7 @@ var client_config = {
     },
     output: {
         filename: '[name].[chunkhash].js',
-        path: path.resolve(path.join('../../.build/', manifest_cache.build.toString()))
+        path: output_path
     },
     plugins: [
         manifest_plugin
@@ -46,62 +57,62 @@ var client_config = {
         extensions: ['.js', '.json']
     },
     module: {
-        rules: [{
+        rules: [
+            {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
-                    cacheDirectory: true,
+                    cacheDirectory: false,
                     presets: ['react', 'es2015']
                 }
-            }, {
-            test: /\.js$/,
-            exclude: '/node_modules/',
-            enforce: 'pre',
-            use: [
-                'eslint-loader'
-            ]
-        }, {
-            test: /\.js$/,
-            include: './code/client/',
-            query: {
-                presets: ['react','es2015']
             },
-            loaders: 'babel-loader'
-        }, {
-            test: /\.css$/,
-            include: './code/client/',
-            use: [
-                'style-loader',
-                {
-                    loader: 'css-loader',
-                    options: {
-                        modules: true,
-                        importLoaders: 1,
-                        localIdentName: '[hash:base64:5]'
-                    }
+            {
+                test: /\.js$/,
+                exclude: '/node_modules/',
+                enforce: 'pre',
+                use: ['eslint-loader']
+            },
+            {
+                test: /\.js$/,
+                include: './code/client/',
+                query: {
+                    presets: ['react','es2015']
                 },
-                {
-                    loader: 'postcss-loader'
-                }
-            ]
-        }, {
-            test: /\.svg$/,
-            use: [
-                'svg-inline-loader'
-            ]
-        }, {
-            test: /\.html$/,
-            include: './code/client/',
-            use: [
-                {
-                    loader: 'html-loader',
-                    options: {
-                        minimize: true
-                    }
-                }
-            ]
-        }]
+                loaders: 'babel-loader'
+            },
+            {
+                test: /\.css$/,
+                include: './code/client/',
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            importLoaders: 1,
+                            localIdentName: '[hash:base64:5]'
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader'
+                    }]
+            },
+            {
+                test: /\.svg$/,
+                use: ['svg-inline-loader']
+            },
+            {
+                test: /\.html$/,
+                include: './code/client/',
+                use: [
+                    {
+                        loader: 'html-loader',
+                        options: {
+                            minimize: true
+                        }
+                    }]
+            }]
     }
 };
 
