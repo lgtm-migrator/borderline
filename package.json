@@ -1,6 +1,6 @@
 {
     "name": "borderline-ui",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "Storyline-based interface for translation bioinformatics",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "license": "MIT",
