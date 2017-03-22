@@ -20,6 +20,8 @@ export default class ExtensionsInjector extends Component {
 
     render() {
         let { list } = this.context.extensions;
+        if (!list)
+            return null;
         const Wrapper = borderline.components.wrapper;
         return (
             <Wrapper>
