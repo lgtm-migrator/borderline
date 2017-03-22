@@ -58,12 +58,14 @@ module.exports = function () {
     // defining reduction dictionnary for require
     const dictionnary = {};
 
+    // defining editor copy parameters
+    const editor = {
+        to: 'vs',
+        ignore: ['**/*languages/**/!(r\.|python\.)*', '**/*nls\.*\.+(js|map)']
+    };
+
     // defining the plugins to be used for bundling
     const plugins = [
-        new copy([{
-            from: 'node_modules/monaco-editor/min/vs',
-            to: 'vs',
-        }]),
         new webpack.optimize.CommonsChunkPlugin(prod ? {
             name: 'vendor',
             filename: 'vendor.bundle.js',
@@ -91,6 +93,14 @@ module.exports = function () {
 
     if (prod) {
         plugins.push(
+            new copy([{
+                context: 'node_modules/monaco-editor/min/vs',
+                from: '**/*\.+(js|svg|css)',
+                to: editor.to,
+                transform: (content) => content.toString().replace('../../min-maps/vs/', '')
+            }], {
+                ignore: editor.ignore
+            }),
             new webpack.LoaderOptionsPlugin({
                 minimize: true,
                 debug: false
@@ -123,6 +133,13 @@ module.exports = function () {
         );
     } else {
         plugins.push(
+            new copy([{
+                context: 'node_modules/monaco-editor/dev/vs',
+                from: '**/*\.+(js|svg|css|map)',
+                to: editor.to
+            }], {
+                ignore: editor.ignore
+            }),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NoEmitOnErrorsPlugin()
         );
