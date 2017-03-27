@@ -52,7 +52,7 @@ export default class SceneManager extends Component {
         } else
             this.model = this.instance.identity();
         if (!this.instance.__proto__.invocation) {
-            console.error('Extention cannot be invoked'); // eslint-disable-line no-console
+            console.error(`Extention ${this.model} cannot be invoked`); // eslint-disable-line no-console
             return false;
         }
 
