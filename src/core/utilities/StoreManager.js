@@ -7,7 +7,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { BehaviorSubject } from 'rxjs';
 import { connect } from 'react-redux';
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
 import { Map } from 'immutable';
 
