@@ -244,7 +244,7 @@ definitions:
                 description: Job unique identifier
             status:
                 type: string
-                description: Job status display name (Pending, Scheduled, Running, Canceled or Done)
+                description: Job status display name (Pending, Scheduled, Running, Cancelled or Done)
             submit:
                 type: string
                 format: dateTime
