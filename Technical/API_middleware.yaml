@@ -1,0 +1,168 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Borderline middleware API
+  description: |
+    #### Middleware API
+    This API is designed to abstract Transmart and I2B2 backends, with possible support for other endpoints later on.
+    Query format is based on the Transmart 17.1 Rest API.
+    The abstraction layer this middleware provides allows for caching of the requests previously made, for resuming and tracking requests.
+schemes:
+  - http
+host: localhost:3000
+basePath: /
+paths:
+    /query:
+        post:
+            tags: [ ]
+            description: Creates a new query
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        properties:
+                            credentials:
+                                $ref: '#/definitions/CredentialsModel'
+                            endpoint:
+                                $ref: '#/definitions/DataSourceModel'
+            responses:
+                200:
+                    description: New query created
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: Creating a new query failed
+                    schema:
+                        $ref: "#/definitions/ErrorModel"
+    /query/{query_id}:
+        parameters:
+            -
+                name: query_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a query data model from unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a query from its unique identifier
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        description: Transmart 17.1 json query
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a query from its unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /execute:
+        parameters:
+            -
+                name: query
+                required: true
+                in: body
+                description: Query execution context
+                schema:
+                    type: object
+                    properties:
+                        query:
+                            type: string
+                            description: Query unique identifier to execute
+                        force:
+                            type: boolean
+                            description: Force the execution of the query, even if it is already cached
+                        nocache:
+                            type: boolean
+                            description: Prevents the middleware from caching the result
+                
+        get:
+            description: Perform the query on the underlying endpoint or retreive from cache
+            responses:
+                200:
+                    description: Success execution
+                    schema:
+                      type: object
+                      description: Transmart 17.1 json response, even for i2b2 backend
+                401:
+                    description: Failed to perform query
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        
+definitions:
+    ErrorModel:
+        type: object
+        properties:
+            error:
+                type: string
+                description: A more detailed error message
+    CredentialsModel:
+        type: object
+        properties:
+            _id:
+                type: string
+                description: User unique identifier
+            username:
+                type: string
+            password:
+                type: string
+                description: Password hash
+    DataSourceModel:
+        type: object
+        properties:
+            sourceType:
+                type: string
+                description: Type of the underlying endpoint. Supported values are [ transmart, i2b2 ]
+            sourceName:
+                type: string
+                description: Display name
+            sourceHost:
+                type: string
+                description: Url or Ip where the source is hosted
+            sourcePort:
+                type: integer
+                description: Port used by this endpoint
+            public:
+                type: boolean
+                description: Publicly available, without auth endpoint
+    QueryModel:
+        type: object
+        properties:
+            _id:
+                type: string
+                description: Query unique identifier
+            credentials:
+                $ref: '#/definitions/CredentialsModel'
+            endpoint:
+                $ref: '#/definitions/DataSourceModel'
+            query:
+                type: object
+                description: A transmart 17.1 json query object

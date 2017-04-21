@@ -1,0 +1,16 @@
+{
+	ip: '211.152.59.220',
+	port: 27017,
+	users: [
+		{
+			user: 'viacloud',
+			password: 'Password9988!',
+			database: 'admin'
+		},
+		{
+			user: 'dev',
+			password: 'borderline',
+			database: 'borderline'
+		}
+	]
+}
