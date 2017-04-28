@@ -148,9 +148,6 @@ text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 
 ubio_base_sputum_power = 7
 ubio_base_blood_power = 9
-
-
-#ecli_base_blood_power = 6
 ecli_base_blood_power = 16
 
 # Block-wise network construction and module detection
