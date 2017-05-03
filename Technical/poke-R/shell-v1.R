@@ -19,7 +19,7 @@ main <- function(ac, av) {
   args$params <- fromJSON(args$params);
   
   #Parse Input file list to Native R vector
-  args$cohorts <- unlist(strsplit(c(args$inputs), ',', fixed=TRUE));
+  args$inputs <- unlist(strsplit(c(args$inputs), ',', fixed=TRUE));
   
   source(args$script);
   borderlineJob(args$params, args$inputs);

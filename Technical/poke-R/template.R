@@ -8,5 +8,5 @@ borderlineJob <- function (formData, inputFiles) {
   print(inputFiles);
   
   print("Available R packages:");
-  printf(rownames(installed.packages()));
+  print(rownames(installed.packages()));
 }
