@@ -7,21 +7,27 @@ const endpointModel = {
 };
 
 const credentialsModel = {
-    _id: "",
     username: "",
     password: ""
 };
 
 const queryModel = {
-    _id: "",
     credentials: credentialsModel,
     endpoint: endpointModel,
     query: {}
 };
 
+const cacheModel = {
+    query: "",
+    data: {}
+};
+
 
 module.exports = {
+    queryCollectionName: 'borderline_middleware_queries',
+    cacheCollectionName: 'borderline_middleware_queries_cache',
     endpointModel: endpointModel,
     credentialsModel: credentialsModel,
-    queryModel: queryModel
+    queryModel: queryModel,
+    cacheModel: cacheModel
 };
