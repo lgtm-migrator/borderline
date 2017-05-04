@@ -1,6 +1,7 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
 const body_parser = require('body-parser');
+const defines = require('./defines.js');
 
 function BorderlineMiddleware(config) {
     this.config = config;
@@ -36,18 +37,20 @@ function BorderlineMiddleware(config) {
         _this.db = db;
         //Import & instantiate controller modules
         var queryControllerModule = require('./queryController.js');
-        _this.queryController = new queryControllerModule(_this.db.collection('queries'));
+        _this.queryController = new queryControllerModule(_this.db.collection(defines.queryCollectionName));
+        var executionControllerModule = require('./executionController.js');
+        _this.executionController = new executionControllerModule(_this.db.collection(defines.queryCollectionName), _this.db.collection(defines.cacheCollectionName));
 
         //Setup controllers endpoints
         _this.app.route('/query/new')
             .get(_this.queryController.getNewQuery)
             .post(_this.queryController.postNewQuery);
-        _this.app.route('/query/{query_id}')
+        _this.app.route('/query/:query_id')
             .get(_this.queryController.getQueryById)
             .put(_this.queryController.putQueryById)
             .delete(_this.queryController.deleteQueryById);
         _this.app.route('/execute')
-            .get(_this.queryController.executeQuery);
+            .get(_this.executionController.executeQuery);
     });
 
     return this.app;
