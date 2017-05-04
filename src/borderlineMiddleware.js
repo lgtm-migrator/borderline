@@ -50,7 +50,7 @@ function BorderlineMiddleware(config) {
             .put(_this.queryController.putQueryById)
             .delete(_this.queryController.deleteQueryById);
         _this.app.route('/execute')
-            .get(_this.executionController.executeQuery);
+            .post(_this.executionController.executeQuery);
     });
 
     return this.app;
