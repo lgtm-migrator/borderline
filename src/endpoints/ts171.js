@@ -14,20 +14,19 @@ function Transmart171(queryCollection) {
 }
 
 Transmart171.prototype.needsAuthentication = function(queryModel) {
-    //Needs re-auth if Oauth token details are missing
-  if (queryModel.credentials.hasOwnProperty('access_token') === false ||
-      queryModel.credentials.hasOwnProperty('expires_in') === false ||
-      queryModel.credentials.hasOwnProperty('generated') === false)
-      return true;
+    //Needs first auth if Oauth token details are missing
+    if (queryModel.credentials.hasOwnProperty('access_token') === false ||
+        queryModel.credentials.hasOwnProperty('expires_in') === false ||
+        queryModel.credentials.hasOwnProperty('generated') === false)
+        return true;
 
-  var now = new Date();
-  //compute expiration date for this token
-  var expires = new Date(queryModel.credentials.generated);
-  expires.setTime(expires.getTime() +  queryModel.credentials['expires_in'] * 1000);
+    var now = new Date();
+    //compute expiration date for this token
+    var expires = new Date(queryModel.credentials.generated);
+    expires.setTime(expires.getTime() +  queryModel.credentials['expires_in'] * 1000);
 
-  //Compares now and expiration date
-  return (now >= expires);
-
+    //Compares now and expiration date
+    return (now >= expires);
 };
 
 Transmart171.prototype.saveQuery = function(queryModel) {
