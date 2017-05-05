@@ -25,7 +25,7 @@ const cacheModel = {
 
 module.exports = {
     queryCollectionName: 'borderline_middleware_queries',
-    cacheCollectionName: 'borderline_middleware_queries_cache',
+    cacheCollectionName: 'borderline_middleware_cache',
     endpointModel: endpointModel,
     credentialsModel: credentialsModel,
     queryModel: queryModel,
