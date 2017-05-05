@@ -76,29 +76,6 @@ ExecutionController.prototype.executeQuery = function(req, res) {
     });
 };
 
-ExecutionController.prototype._execute_TS171 = function(queryModel) {
-    var _this = this;
-    //Call TS 17.1 backend here
-    return new Promise(function(resolve, reject) {
-        //Get new credentials
-        request.post({
-            method: 'POST',
-            json: true,
-            baseUrl: queryModel.endpoint.sourceHost + ':' + queryModel.endpoint.sourcePort,
-            uri: '/oauth/token?grant_type=password&client_id=glowingbear-js&client_secret=' +
-                  '&username=' + queryModel.credentials.username +
-                  '&password=' + queryModel.credentials.password
-        }, function(error, response, body) {
-            if (!response) {
-                reject(error);
-                return;
-            }
-            console.log(body);
-            resolve(body);
-        });
-    });
-};
-
 ExecutionController.prototype._executeFromQuery = function(queryModel) {
     var _this = this;
 
