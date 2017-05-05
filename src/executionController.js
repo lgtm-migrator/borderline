@@ -1,10 +1,14 @@
 const defines = require('./defines.js');
-const http = require('http');
+const request = require('request');
 const ObjectID = require('mongodb').ObjectID;
+
+const ts171 = require('./endpoints/ts171.js');
 
 function ExecutionController(queryCollection, cacheCollection) {
     this.queryCollection = queryCollection;
     this.cacheCollection = cacheCollection;
+
+    this.ts171 = new ts171(this.queryCollection);
 
     //Bind member functions
     this.executeQuery = ExecutionController.prototype.executeQuery.bind(this);
@@ -73,36 +77,62 @@ ExecutionController.prototype.executeQuery = function(req, res) {
 };
 
 ExecutionController.prototype._execute_TS171 = function(queryModel) {
+    var _this = this;
     //Call TS 17.1 backend here
     return new Promise(function(resolve, reject) {
-        resolve({/* Default empty object */});
+        //Get new credentials
+        request.post({
+            method: 'POST',
+            json: true,
+            baseUrl: queryModel.endpoint.sourceHost + ':' + queryModel.endpoint.sourcePort,
+            uri: '/oauth/token?grant_type=password&client_id=glowingbear-js&client_secret=' +
+                  '&username=' + queryModel.credentials.username +
+                  '&password=' + queryModel.credentials.password
+        }, function(error, response, body) {
+            if (!response) {
+                reject(error);
+                return;
+            }
+            console.log(body);
+            resolve(body);
+        });
     });
 };
 
 ExecutionController.prototype._executeFromQuery = function(queryModel) {
     var _this = this;
-    console.log("Execute");
-    console.log(queryModel);
+
     return new Promise(function (resolve, reject) {
+        //Pick the right handler
+        var handler = null;
         switch (queryModel.endpoint.sourceType) {
-            case "TS171" :
-                _this._execute_TS171(queryModel).then(function(result) {
-                    resolve(result)
-                }, function(error) {
-                    reject(error)
-                });
+            case 'TS171' :
+                handler = _this.ts171.execute;
+                break;
             default:
-                reject('Source type ' + queryModel.endpoint.sourceType + ' is not supported');
+                handler = function(queryModel) {
+                    return new Promise(function (_, default_reject) {
+                        default_reject('Source type ' + queryModel.endpoint.sourceType + ' is not supported');
+                    })
+                };
         }
+
+        //Execute this handler
+        handler(queryModel).then(function(result) {
+            resolve(result);
+        }, function (error) {
+            reject(error);
+        });
     });
 };
 
 ExecutionController.prototype._cacheQuery = function(query_id, query_data) {
+    var _this = this;
     return  new Promise(function (resolve, reject) {
         var cacheEntry = Object.assign({}, defines.cacheModel, { query: query_id, data: query_data });
-        this.cacheCollection.insertOne(cacheEntry).then(function(result) {
+        _this.cacheCollection.insertOne(cacheEntry).then(function(result) {
             if (result.insertedCount == 1) {
-                resolve(result.op[0]);
+                resolve(result.ops[0]);
             }
             else {
                 reject(result);
