@@ -24,7 +24,7 @@ ExecutionController.prototype.executeQuery = function(req, res) {
         return;
     }
     var query_id = req.body['query'];
-    var noCache = req.body.hasOwnProperty('nocache') ? false : req.body['nocache'];
+    var noCache = req.body.hasOwnProperty('nocache') ? req.body['nocache'] : false;
 
     var findQueryFn = function () {
         return new Promise(function (resolve, reject) {
@@ -55,7 +55,7 @@ ExecutionController.prototype.executeQuery = function(req, res) {
                     reject('Caching failed: ' + error);
                 });
             } else {
-                resolve.json({ query: query_id, data: query_data });
+                resolve({ query: query_id, data: query_data });
             }
         });
     };
