@@ -21,7 +21,7 @@ Transmart171.prototype.needsAuthentication = function(queryModel) {
         return true;
 
     var now = new Date();
-    //compute expiration date for this token
+    //Compute expiration date for this token
     var expires = new Date(queryModel.credentials.generated);
     expires.setTime(expires.getTime() +  queryModel.credentials['expires_in'] * 1000);
 
@@ -42,6 +42,7 @@ Transmart171.prototype.saveQuery = function(queryModel) {
 
 Transmart171.prototype.updateToken = function(queryModel) {
     return new Promise(function(resolve, reject) {
+        console.log('Updating token');
         //Get new credentials from data source
         request.post({
             method: 'POST',
@@ -65,7 +66,7 @@ Transmart171.prototype.updateToken = function(queryModel) {
 Transmart171.prototype.ensureAuthentication = function(queryModel) {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        if (_this.needsAuthentication(queryModel) == true) {
+        if (_this.needsAuthentication(queryModel) === true) {
             _this.updateToken(queryModel)
                 .then(_this.saveQuery,
                     function(error) {
@@ -96,8 +97,9 @@ Transmart171.prototype.perform = function(queryModel) {
             if (!response) {
                 reject(error); return;
             }
+            queryModel.data = body;
             //Success, resolve with the result data
-            resolve(body);
+            resolve(queryModel);
         });
     });
 };
