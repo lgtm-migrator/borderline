@@ -39,7 +39,7 @@ function BorderlineMiddleware(config) {
         var queryControllerModule = require('./queryController.js');
         _this.queryController = new queryControllerModule(_this.db.collection(defines.queryCollectionName));
         var executionControllerModule = require('./executionController.js');
-        _this.executionController = new executionControllerModule(_this.db.collection(defines.queryCollectionName), _this.db.collection(defines.cacheCollectionName));
+        _this.executionController = new executionControllerModule(_this.db.collection(defines.queryCollectionName));
 
         //Setup controllers endpoints
         _this.app.route('/query/new')

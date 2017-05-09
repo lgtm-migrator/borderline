@@ -14,20 +14,13 @@ const credentialsModel = {
 const queryModel = {
     credentials: credentialsModel,
     endpoint: endpointModel,
-    query: {}
-};
-
-const cacheModel = {
-    query: "",
+    query: {},
     data: {}
 };
 
-
 module.exports = {
     queryCollectionName: 'borderline_middleware_queries',
-    cacheCollectionName: 'borderline_middleware_cache',
     endpointModel: endpointModel,
     credentialsModel: credentialsModel,
-    queryModel: queryModel,
-    cacheModel: cacheModel
+    queryModel: queryModel
 };

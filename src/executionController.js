@@ -4,10 +4,8 @@ const ObjectID = require('mongodb').ObjectID;
 
 const ts171 = require('./endpoints/ts171.js');
 
-function ExecutionController(queryCollection, cacheCollection) {
+function ExecutionController(queryCollection) {
     this.queryCollection = queryCollection;
-    this.cacheCollection = cacheCollection;
-
     this.ts171 = new ts171(this.queryCollection);
 
     //Bind member functions
@@ -39,23 +37,24 @@ ExecutionController.prototype.executeQuery = function(req, res) {
     var executeQueryFn = function(queryModel) {
         return new Promise(function(resolve, reject) {
             _this._executeFromQuery(queryModel).then(function (result) {
-                resolve(result);
+                queryModel = result;
+                resolve(queryModel);
             }, function(error) {
                 reject(error);
             })
         });
     };
 
-    var cacheQueryFn = function(query_data) {
+    var cacheQueryFn = function(queryModel) {
         return new Promise(function(resolve, reject) {
             if (noCache === false) {
-                _this._cacheQuery(query_id, query_data).then(function(result) {
-                    resolve(result);
+                _this._cacheQuery(queryModel).then(function(queryModel) {
+                    resolve(queryModel);
                 }, function(error) {
                     reject('Caching failed: ' + error);
                 });
             } else {
-                resolve({ query: query_id, data: query_data });
+                resolve(queryModel);
             }
         });
     };
@@ -67,9 +66,9 @@ ExecutionController.prototype.executeQuery = function(req, res) {
     }).then(cacheQueryFn, function(error) {
         res.status(401);
         res.json({error: error});
-    }).then(function(result) {
+    }).then(function(queryModel) {
         res.status(200);
-        res.json(result);
+        res.json(queryModel.data);
     }, function(error) {
         res.status(401);
         res.json({error: error});
@@ -103,16 +102,15 @@ ExecutionController.prototype._executeFromQuery = function(queryModel) {
     });
 };
 
-ExecutionController.prototype._cacheQuery = function(query_id, query_data) {
+ExecutionController.prototype._cacheQuery = function(queryModel) {
     var _this = this;
     return  new Promise(function (resolve, reject) {
-        var cacheEntry = Object.assign({}, defines.cacheModel, { query: query_id, data: query_data });
-        _this.cacheCollection.insertOne(cacheEntry).then(function(result) {
-            if (result.insertedCount == 1) {
-                resolve(result.ops[0]);
+        _this.queryCollection.findOneAndReplace({_id: new ObjectID(queryModel['_id'])}, queryModel).then(function (result) {
+            if (result.ok == 1) {
+                resolve(queryModel);
             }
             else {
-                reject(result);
+                reject(result.lastErrorObject);
             }
         }, function (error) {
             reject(error);
