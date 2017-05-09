@@ -86,8 +86,8 @@ Transmart171.prototype.ensureAuthentication = function(queryModel) {
 
 Transmart171.prototype.perform = function(queryModel) {
     return new Promise(function(resolve, reject) {
-        request.get({
-            json: true,
+        var size = 0;
+        var r = request.get({
             baseUrl: queryModel.endpoint.sourceHost + ':' + queryModel.endpoint.sourcePort,
             uri: queryModel.query['uri'] + JSON.stringify(queryModel.query['params']),
             headers: {
@@ -97,10 +97,12 @@ Transmart171.prototype.perform = function(queryModel) {
             if (!response) {
                 reject(error); return;
             }
+            queryModel.dataSize = size;
             queryModel.data = body;
             //Success, resolve with the result data
             resolve(queryModel);
         });
+        r.on('data', function(chunk) { size += chunk.length });
     });
 };
 

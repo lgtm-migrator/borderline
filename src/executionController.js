@@ -4,8 +4,16 @@ const ObjectID = require('mongodb').ObjectID;
 
 const ts171 = require('./endpoints/ts171.js');
 
-function ExecutionController(queryCollection) {
+/**
+ * @fn ExecutionController
+ * @desc Manager for the execution related endpoints
+ * @param queryCollection MongoDB collection queries storage
+ * @param gridFs MongoDB GridFS storage collection used by some query results
+ * @constructor
+ */
+function ExecutionController(queryCollection, gridFs) {
     this.queryCollection = queryCollection;
+    this.grid = gridFs;
     this.ts171 = new ts171(this.queryCollection);
 
     //Bind member functions
@@ -68,7 +76,15 @@ ExecutionController.prototype.executeQuery = function(req, res) {
         res.json({error: error});
     }).then(function(queryModel) {
         res.status(200);
-        res.json(queryModel.data);
+        if (queryModel.isGridFS) {
+            var data = "";
+            var ds = _this.grid.openDownloadStreamByName(queryModel.data);
+            ds.on('data', function(chunk) { data += chunk });
+            ds.on('end', function() { res.json(data); } );
+        }
+        else {
+            res.json(queryModel.data);
+        }
     }, function(error) {
         res.status(401);
         res.json({error: error});
@@ -105,6 +121,16 @@ ExecutionController.prototype._executeFromQuery = function(queryModel) {
 ExecutionController.prototype._cacheQuery = function(queryModel) {
     var _this = this;
     return  new Promise(function (resolve, reject) {
+        if (queryModel.dataSize >= defines.thresholdGridFS) {
+            var dataFile = queryModel['_id'].toString() + '.dat';
+            var us = _this.grid.openUploadStream(dataFile);
+            us.end(JSON.stringify(queryModel.data));
+            queryModel.data = dataFile;
+            queryModel.isGridFS = true;
+        }
+        else {
+            queryModel.isGridFS = false;
+        }
         _this.queryCollection.findOneAndReplace({_id: new ObjectID(queryModel['_id'])}, queryModel).then(function (result) {
             if (result.ok == 1) {
                 resolve(queryModel);
