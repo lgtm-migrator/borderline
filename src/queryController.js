@@ -1,7 +1,10 @@
+const QueryFactory = require('./query/queryFactory.js');
+
 var defines = require('./defines.js');
 const ObjectID = require('mongodb').ObjectID;
 
-function QueryController(queryCollection) {
+function QueryController(queryCollection, queryGridFS) {
+    this.factory = new QueryFactory(queryCollection, queryGridFS);
     this.queryCollection = queryCollection;
 
     //Bind member functions to this instance
@@ -63,9 +66,14 @@ QueryController.prototype.getQueryById = function(req, res) {
         res.json({error: 'Missing query_id'});
         return;
     }
-    this.queryCollection.findOne({ _id: new ObjectID(query_id) }).then(function(result) {
-        res.status(200);
-        res.json(result);
+    this.factory.fromID(query_id).then(function(queryObject) {
+        queryObject.getInput().then(function(result) {
+            res.status(200);
+            res.json(result);
+        }, function(error) {
+           res.status(401);
+           res.json(error);
+        });
     }, function(error) {
         res.status(401);
         res.json({ error: 'Error retrieving query from ID: ' + error});

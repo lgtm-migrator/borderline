@@ -1,5 +1,7 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
+const GridFSBucket = require('mongodb').GridFSBucket;
+
 const body_parser = require('body-parser');
 const defines = require('./defines.js');
 
@@ -35,21 +37,27 @@ function BorderlineMiddleware(config) {
 
         //Store DB connection
         _this.db = db;
+        //Get GridFS for query result
+        _this.grid = new GridFSBucket(db, { bucketName: defines.queryGridFSCollectionName });
+        _this.queryCollection = _this.db.collection(defines.queryCollectionName);
         //Import & instantiate controller modules
         var queryControllerModule = require('./queryController.js');
-        _this.queryController = new queryControllerModule(_this.db.collection(defines.queryCollectionName));
+        _this.queryController = new queryControllerModule(_this.queryCollection, _this.grid);
         var executionControllerModule = require('./executionController.js');
-        _this.executionController = new executionControllerModule(_this.db.collection(defines.queryCollectionName));
+        _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
 
         //Setup controllers endpoints
         _this.app.route('/query/new')
             .get(_this.queryController.getNewQuery)
             .post(_this.queryController.postNewQuery);
-        _this.app.route('/query/:query_id')
+        //@todo Add /query/:query_id/endpoint
+        _this.app.route('/query/:query_id') //@todo Replace to /query/:query_id/input
             .get(_this.queryController.getQueryById)
             .put(_this.queryController.putQueryById)
             .delete(_this.queryController.deleteQueryById);
-        _this.app.route('/execute')
+        //@todo Add /query/:query_id/output
+
+        _this.app.route('/execute') //@todo /query/:query_id/execute
             .post(_this.executionController.executeQuery);
     });
 
