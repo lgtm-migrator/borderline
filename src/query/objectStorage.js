@@ -1,6 +1,11 @@
 const defines = require('../defines.js');
 const uuid = require('uuid');
 
+/**
+ * @fn ObjectStoreage
+ * @param queryGridFS GridFsBucket object to read/write objects into
+ * @constructor
+ */
 function ObjectStorage(queryGridFS) {
     this.gridfs = queryGridFS;
 

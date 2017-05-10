@@ -24,6 +24,12 @@ function ExecutionController(queryCollection, gridFs) {
     this.executeQuery = ExecutionController.prototype.executeQuery.bind(this);
 }
 
+/**
+ * @fn executeQuery
+ * @desc Executes the query identified by the query_id
+ * @param req Express.js request object
+ * @param res Express.js response object
+ */
 ExecutionController.prototype.executeQuery = function(req, res) {
     var _this = this;
     if (req.body === null || req.body === undefined ||
