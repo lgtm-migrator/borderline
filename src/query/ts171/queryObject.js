@@ -38,6 +38,12 @@ QueryTransmart17_1.prototype._isAuth = function() {
     return (now < expires);
 };
 
+/**
+ * @fn _doAuth
+ * @desc Gets a new token from TS endpoint and store it in DB
+ * @return {Promise}
+ * @private
+ */
 QueryTransmart17_1.prototype._doAuth = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
@@ -68,6 +74,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
 
 /**
  * @fn _ensureAuth
+ * @desc Makes sure this query has a valid OAuth Bearer token
  * @private
  */
 QueryTransmart17_1.prototype._ensureAuth = function() {
@@ -88,6 +95,7 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
 
 /**
  * @fn execute
+ * @desc Perform query on Transmart endpoint, stores and translate the outputs
  * @return {Promise} Execution summary object on success
  */
 QueryTransmart17_1.prototype.execute = function() {
