@@ -52,10 +52,7 @@ QueryAbstract.prototype.getInput = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
        try {
-           //Translate local data to std_format
-            var std_input = _this.input_local2standard(_this.model.input);
-            //Send back std format
-            resolve(std_input);
+            resolve(_this.model.input);
        }
        catch (error) {
            reject({error: error.toString()});
@@ -64,20 +61,72 @@ QueryAbstract.prototype.getInput = function() {
 };
 
 /**
- * @fn setInput
- * @param data The data object to transform and store
- * @return A Promise resolving the stored model to standard format
+ * @fn getInputLocal
+ * @return A promise resolving to the local input value
  */
-QueryAbstract.prototype.setInput = function(data) {
+QueryAbstract.prototype.getInputLocal = function() {
+    var _this = this;
+    return new Promise(function (resolve, reject) {
+        if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('local'))
+            resolve(_this.model.input.local);
+        else
+            reject('This query does\'nt have a local input');
+    });
+};
+
+/**
+ * @fn getInputStd
+ * @return A promise resolving to the standardized input
+ */
+QueryAbstract.prototype.getInputStd = function() {
+    var _this = this;
+    return new Promise(function (resolve, reject) {
+        if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('std'))
+            resolve(_this.model.input.std);
+        else
+            reject('This query does\'nt have a standard input');
+    });
+};
+
+/**
+ * @fn setInputStd
+ * @param std_data The data object to transform and store
+ * @return A Promise resolving the stored model in local format
+ */
+QueryAbstract.prototype.setInputStd = function(std_data) {
     var _this = this;
     return new Promise(function(resolve, reject) {
         try {
             //Transform to local format
-            var local_data = _this.input_standard2local(data);
+            var local_data = _this.input_standard2local(std_data);
             //Store into model
-            _this.model.input = local_data;
-            //Send back std format
-            resolve(data);
+            _this.model.input.local = local_data;
+            _this.model.input.std = std_data;
+            //Send back local input
+            resolve(_this.model.input.local);
+        }
+        catch (error) {
+            reject({error: error});
+        }
+    });
+};
+
+/**
+ * @fn setInputLocal
+ * @param local_data The data object to transform and store
+ * @return A Promise resolving the stored model to standard format
+ */
+QueryAbstract.prototype.setInputLocal = function(local_data) {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        try {
+            //Transform to local format
+            var std_data = _this.input_local2standard(local_data);
+            //Store into model
+            _this.model.input.local = local_data;
+            _this.model.input.std = std_data;
+            //Send back std input
+            resolve(_this.model.input.std);
         }
         catch (error) {
             reject({error: error});
@@ -94,8 +143,8 @@ QueryAbstract.prototype.getOutput = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
         try {
-            var data = null;
-            if (_this.model.output.isGridFS) {
+            var data = { local: null, std: null };
+            if (_this.model.output.local.isGridFS) {
                 data = "";
                 var ds = _this.queryGridFS.openDownloadStreamByName(this.model.output.data);
                 ds.on('data', function (chunk) {

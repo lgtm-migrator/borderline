@@ -7,12 +7,7 @@ var BorderlineMiddleware = require('./borderlineMiddleware.js');
 //Remove unwanted express headers
 app.set('x-powered-by', false);
 
-app.use(BorderlineMiddleware({
-        mongoUrl: config.mongoUrl,
-        development: true,
-        enableCors: config.enableCors
-    }
-));
+app.use(BorderlineMiddleware(config));
 
 app.listen(config.port, function (err) {
     if (err) {

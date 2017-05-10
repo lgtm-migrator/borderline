@@ -14,11 +14,22 @@ const credentialsModel = {
 const queryModel = {
     endpoint: endpointModel,
     credentials: credentialsModel,
-    input: {},
+    input: {
+        local: {},
+        std: {}
+    },
     output: {
-        isGridFS: false,
-        dataSize: 0,
-        data: {}
+        local: {
+            dataSize: 0,
+            dataId: ""
+        },
+        std: {
+            dataSize: 0,
+            dataId: ""
+        },
+        isGridFS: false, // rm
+        dataSize: 0, // rm
+        data: {} // rm
     }
 };
 

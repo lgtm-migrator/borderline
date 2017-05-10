@@ -1,5 +1,4 @@
 const defines = require('./defines.js');
-const request = require('request');
 const ObjectID = require('mongodb').ObjectID;
 
 const ts171 = require('./endpoints/ts171.js');
