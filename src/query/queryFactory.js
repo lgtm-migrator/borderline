@@ -1,4 +1,7 @@
+// Vendor modules
 const ObjectID = require('mongodb').ObjectID;
+
+// Project modules
 const Query_TS171 = require('./ts171/queryObject.js');
 
 /**
@@ -17,7 +20,7 @@ function QueryFactory(queryCollection, queryGridFS) {
  * @fn fromModel
  * @desc Construct implementation from its model
  * @param queryModel Plain JS object data model
- * @return A Promise resolving to the allocated implementation Object
+ * @return {Promise} A Promise resolving to the allocated implementation Object
  */
 QueryFactory.prototype.fromModel = function(queryModel) {
     var _this = this;
@@ -25,6 +28,8 @@ QueryFactory.prototype.fromModel = function(queryModel) {
         switch (queryModel.endpoint.sourceType) {
             case 'TS171':
                 resolve(new Query_TS171(queryModel, _this.queryCollection, _this.queryGridFS));
+            case 'eHS':
+                reject('eHS support is not implemented (yet ?)');
             default:
                 reject('Source type ' + queryModel.endpoint.sourceType + ' is not supported');
         }
@@ -34,7 +39,7 @@ QueryFactory.prototype.fromModel = function(queryModel) {
 /**
  * @fn fromID
  * @param query_id Unique identifier string used by MongoDB
- * @return A Promise resolving to the allocated implementation Object
+ * @return {Promise} A Promise resolving to the allocated implementation Object
  */
 QueryFactory.prototype.fromID = function(query_id) {
     var _this = this;
