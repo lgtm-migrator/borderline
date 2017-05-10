@@ -1,6 +1,6 @@
 const defines = require('../defines.js');
 const ObjectID = require('mongodb').ObjectID;
-
+const ObjectStorage = require('./objectStorage.js');
 /**
  * @fn QueryAbstract
  * @desc Implementation independent query representation. MUST be inherited by the specific implementations
@@ -13,6 +13,7 @@ function QueryAbstract(queryModel, queryCollection, queryGridFS) {
     this.model = queryModel;
     this.queryCollection = queryCollection;
     this.queryGridFS = queryGridFS;
+    this.storage = new ObjectStorage(this.queryGridFS);
 }
 
 /**
@@ -46,7 +47,7 @@ QueryAbstract.prototype.output_standard2local = function(data) {
 
 /**
  * @fn getInput
- * @return A Promise resolving model's input to standard format
+ * @return A Promise resolving model's input
  */
 QueryAbstract.prototype.getInput = function() {
     var _this = this;
@@ -114,7 +115,7 @@ QueryAbstract.prototype.setInputStd = function(std_data) {
 /**
  * @fn setInputLocal
  * @param local_data The data object to transform and store
- * @return A Promise resolving the stored model to standard format
+ * @return {Promise} A Promise resolving the stored model to standard format
  */
 QueryAbstract.prototype.setInputLocal = function(local_data) {
     var _this = this;
@@ -136,28 +137,25 @@ QueryAbstract.prototype.setInputLocal = function(local_data) {
 
 /**
  * @fn getOutput
- * @desc Retrieves standard output data from the local data format in the model
- * @return A Promise resolving the output to standard data model
+ * @desc Retrieves output data from the model
+ * @return {Promise} A Promise resolving to data model expanded with its content from storage
  */
 QueryAbstract.prototype.getOutput = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
         try {
-            var data = { local: null, std: null };
-            if (_this.model.output.local.isGridFS) {
-                data = "";
-                var ds = _this.queryGridFS.openDownloadStreamByName(this.model.output.data);
-                ds.on('data', function (chunk) {
-                    data += chunk
-                });
-                ds.on('end', function () {
-                    resolve(_this.output_local2standard(data));
-                })
-            }
-            else { //Is plain in the object
-                data = _this.model.output.data;
-                resolve(_this.output_local2standard(data));
-            }
+            var data = _this.model.output;
+            var promises = [
+                _this.storage.getObject(data.local.dataId),
+                _this.storage.getObject(data.std.dataId)
+            ];
+            Promise.all(promises).then(function (values) {
+                data.local.data = values[0];
+                data.std.data = values[1];
+                resolve(data);
+            }, function(error) {
+                reject({ error: error.toString() });
+            })
         }
         catch (error) {
             reject({ error: error });
@@ -166,36 +164,128 @@ QueryAbstract.prototype.getOutput = function() {
 };
 
 /**
- * @fn setOutput
- * @desc Stores the output data into the model, using local data format
- * @param data Output data in the standard format
- * @return A Promise resolving the output to standard data model
+ * @fn getOutputLocal
+ * @return {Promise} Resolves to output local data content
  */
-QueryAbstract.prototype.setOutput = function(data) {
+QueryAbstract.prototype.getOutputLocal = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('local')) {
+            _this.storage.getObject(_this.model.output.local.dataId).then(function(local_data) {
+                resolve(local_data);
+            }, function (error) {
+                reject({error: error.toString() });
+            });
+        }
+        else {
+            reject('This query doesn\'t have local output data');
+        }
+    });
+};
+
+/**
+ * @fn getOutputStd
+ * @return {Promise} Resolves to output standard data content
+ */
+QueryAbstract.prototype.getOutputLocal = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('std')) {
+            _this.storage.getObject(_this.model.output.std.dataId).then(function(std_data) {
+                resolve(std_data);
+            }, function (error) {
+                reject({error: error.toString() });
+            });
+        }
+        else {
+            reject('This query doesn\'t have std output data');
+        }
+    });
+};
+
+/**
+ * @fn setOutputLocal
+ * @desc Stores the output data into the model from the local data format
+ * @param data Output data in the local format
+ * @return {Promise} A Promise resolving the output to standard data model
+ */
+QueryAbstract.prototype.setOutputLocal = function(local_data) {
     var _this = this;
     return new Promise(function(resolve, reject) {
         try {
             //Compute std format
-            var local_data = _this.output_standard2local(data);
-            //Update output size
-            _this.model.output.dataSize = local_data.length;
+            var std_data = _this.output_local2standard(local_data);
 
-            if (_this.model.output.dataSize >= defines.thresholdGridFS) {
-                //Will be stored in grid FS
-                _this.model.output.isGridFS = true;
-
-                var dataFile = _this.model['_id'].toString() + '.output';
-                var us = _this.queryGridFS.openUploadStream(dataFile);
-                us.end(local_data);
-                _this.model.output.data = dataFile;
+            var promises = [];
+            //Is it an update or a creation
+            if (_this.model.output.local.hasOwnProperty('dataId') === false ||
+                _this.model.output.local.dataId === null ||
+                _this.model.output.local.dataId.length == 0 ||
+                _this.model.output.std.hasOwnProperty('dataId') === false ||
+                _this.model.output.std === null ||
+                _this.model.output.std.dataId.length == 0) {
+                promises.push(_this.storage.createObject(local_data));
+                promises.push(_this.storage.createObject(std_data));
+            } else {
+                promises.push(_this.storage.setObject(_this.model.output.local.dataId, local_data));
+                promises.push(_this.storage.setObject(_this.model.output.std.dataId, std_data));
             }
-            else {
-                //Will be stored in plain object
-                _this.model.output.isGridFS = false;
 
-                _this.model.output.data = local_data;
+            Promise.all(promises).then(function(values) {
+                //Update output model
+                _this.model.output.local.dataSize = local_data.length;
+                _this.model.output.std.dataSize = std_data.length;
+                _this.model.output.local.dataId = values[0];
+                _this.model.output.std.dataId = values[1];
+                resolve(std_data);
+            }, function(error) {
+                reject({ error: error });
+            });
+        }
+        catch (error) {
+            reject({ error: error });
+        }
+    });
+};
+
+/**
+ * @fn setOutputStd
+ * @desc Stores the output data into the model from the Std data format
+ * @param data Output data in the standard format
+ * @return {Promise} A Promise resolving the output to local data model
+ */
+QueryAbstract.prototype.setOutputStd = function(std_data) {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        try {
+            //Compute std format
+            var local_data = _this.output_standard2local(std_data);
+
+            var promises = [];
+            //Is it an update or a creation
+            if (_this.model.output.local.hasOwnProperty('dataId') === false ||
+                _this.model.output.local.dataId === null ||
+                _this.model.output.local.dataId.length == 0 ||
+                _this.model.output.std.hasOwnProperty('dataId') === false ||
+                _this.model.output.std === null ||
+                _this.model.output.std.dataId.length == 0) {
+                promises.push(_this.storage.createObject(local_data));
+                promises.push(_this.storage.createObject(std_data));
+            } else {
+                promises.push(_this.storage.setObject(_this.model.output.local.dataId, local_data));
+                promises.push(_this.storage.setObject(_this.model.output.std.dataId, std_data));
             }
-            resolve(data);
+
+            Promise.all(promises).then(function(values) {
+                //Update output model
+                _this.model.output.local.dataSize = local_data.length;
+                _this.model.output.std.dataSize = std_data.length;
+                _this.model.output.local.dataId = values[0];
+                _this.model.output.std.dataId = values[1];
+                resolve(local_data);
+            }, function(error) {
+                reject({ error: error });
+            });
         }
         catch (error) {
             reject({ error: error });
@@ -213,7 +303,7 @@ QueryAbstract.prototype.fetchModel = function() {
     return new Promise(function(resolve, reject) {
         _this.queryCollection.findOne({_id: new ObjectID(_this.model['_id'])}).then(function(result) {
             _this.model = result;
-            resolve(this._model);
+            resolve(this.model);
         }, function(error) {
             reject({error: error});
         });
