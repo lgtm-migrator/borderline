@@ -59,6 +59,11 @@ QueryController.prototype.postNewQuery = function(req, res) {
     });
 };
 
+/**
+ * @fn getQueryByID
+ * @param req Express.js request object
+ * @param res Express.js response object
+ */
 QueryController.prototype.getQueryById = function(req, res) {
     var query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
