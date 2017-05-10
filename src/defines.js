@@ -21,11 +21,11 @@ const queryModel = {
     output: {
         local: {
             dataSize: 0,
-            dataId: ""
+            dataId: null
         },
         std: {
             dataSize: 0,
-            dataId: ""
+            dataId: null
         },
         isGridFS: false, // rm
         dataSize: 0, // rm
