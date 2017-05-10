@@ -1,7 +1,7 @@
-const QueryFactory = require('./query/queryFactory.js');
-
-var defines = require('./defines.js');
 const ObjectID = require('mongodb').ObjectID;
+
+const QueryFactory = require('./query/queryFactory.js');
+var defines = require('./defines.js');
 
 function QueryController(queryCollection, queryGridFS) {
     this.factory = new QueryFactory(queryCollection, queryGridFS);
@@ -61,6 +61,7 @@ QueryController.prototype.postNewQuery = function(req, res) {
 
 /**
  * @fn getQueryByID
+ * @desc Controller method to retrieve a query input model
  * @param req Express.js request object
  * @param res Express.js response object
  */

@@ -31,7 +31,7 @@ ObjectStorage.prototype.createObject = function(object_data) {
 
            //Wait for operation to finish before resolving
            writable.on('finish', function() {
-               resolve(writeable.id);
+               resolve(writable.id);
            });
            //Handle errors
            writable.on('error', function (error) {
@@ -96,7 +96,7 @@ ObjectStorage.prototype.setObject = function(object_id, object_data) {
 
                 //Wait for operation to finish before resolving
                 writable.on('finish', function() {
-                    resolve(writeable.id);
+                    resolve(writable.id);
                 });
                 //Handle errors
                 writable.on('error', function (error) {

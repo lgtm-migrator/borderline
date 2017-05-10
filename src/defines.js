@@ -26,10 +26,7 @@ const queryModel = {
         std: {
             dataSize: 0,
             dataId: null
-        },
-        isGridFS: false, // rm
-        dataSize: 0, // rm
-        data: {} // rm
+        }
     }
 };
 

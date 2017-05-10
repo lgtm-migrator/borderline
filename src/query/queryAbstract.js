@@ -1,6 +1,10 @@
-const defines = require('../defines.js');
+// Vendor modules
 const ObjectID = require('mongodb').ObjectID;
+
+// Local modules
+const defines = require('../defines.js');
 const ObjectStorage = require('./objectStorage.js');
+
 /**
  * @fn QueryAbstract
  * @desc Implementation independent query representation. MUST be inherited by the specific implementations
@@ -15,6 +19,14 @@ function QueryAbstract(queryModel, queryCollection, queryGridFS) {
     this.queryGridFS = queryGridFS;
     this.storage = new ObjectStorage(this.queryGridFS);
 }
+
+/**
+ * @fn execute
+ * @pure
+ */
+QueryAbstract.prototype.execute = function() {
+  throw "Execute should be overloaded by implementations";
+};
 
 /**
  * @fn input_local2standard
@@ -318,7 +330,8 @@ QueryAbstract.prototype.fetchModel = function() {
 QueryAbstract.prototype.pushModel = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-       _this.queryCollection.findOneAndReplace({_id: new ObjectID(this.model['_id'])}, _this.model).then(function(result) {
+        console.log('pushModel');
+       _this.queryCollection.findOneAndReplace({_id: new ObjectID(_this.model._id)}, _this.model).then(function(result) {
             if (result.ok = 1)
                 resolve(_this.model);
             else
