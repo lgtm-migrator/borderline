@@ -4,8 +4,6 @@ const ObjectID = require('mongodb').ObjectID;
 // Project modules
 const defines = require('./defines.js');
 const QueryFactory = require('./query/queryFactory.js');
-const ObjectStorage = require('./query/objectStorage.js');
-const ts171 = require('./endpoints/ts171.js');
 
 /**
  * @fn ExecutionController
@@ -18,7 +16,6 @@ function ExecutionController(queryCollection, gridFs) {
     this.queryCollection = queryCollection;
     this.grid = gridFs;
     this.queryFactory = new QueryFactory(queryCollection, gridFs);
-    this.ts171 = new ts171(this.queryCollection);
 
     //Bind member functions
     this.executeQuery = ExecutionController.prototype.executeQuery.bind(this);
