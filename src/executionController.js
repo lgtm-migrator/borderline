@@ -44,12 +44,11 @@ ExecutionController.prototype.executeQuery = function(req, res) {
             res.json(result);
         }, function (error) {
             res.status(401);
-            res.json(error);
+            res.json({ error: error });
         });
     }, function (error) {
-        console.log(error);
         res.status(401);
-        res.json(error);
+        res.json({ error: error });
     })
 };
 

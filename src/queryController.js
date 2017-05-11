@@ -78,7 +78,7 @@ QueryController.prototype.getQueryById = function(req, res) {
             res.json(result);
         }, function(error) {
            res.status(401);
-           res.json(error);
+           res.json({ error: error });
         });
     }, function(error) {
         res.status(401);
