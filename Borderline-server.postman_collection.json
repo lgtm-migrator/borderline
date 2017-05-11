@@ -1,7 +1,7 @@
 {
 	"variables": [],
 	"info": {
-		"name": "Borderline",
+		"name": "Borderline-server",
 		"_postman_id": "10a8c0b6-32de-173e-6834-2b94956f686b",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
@@ -242,7 +242,7 @@
 					},
 					"response": [
 						{
-							"id": "a3697ab8-156f-480c-8b8f-568a6783e7d6",
+							"id": "314f05ed-b2dc-4fca-8e13-bb157000607e",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -303,7 +303,7 @@
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						},
 						{
-							"id": "ed850700-1884-4235-a59e-e30107e2e980",
+							"id": "78db5cd9-4a1d-4595-8499-63e1916ace15",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -405,7 +405,7 @@
 					},
 					"response": [
 						{
-							"id": "14d30590-e2e8-46f9-91d9-588dbe13f8f6",
+							"id": "aeb40aca-0da6-477d-9145-9b4bab8f1e56",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -463,7 +463,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "54133519-fe60-4e0b-afad-2b65db1b7753",
+							"id": "22bd8a1f-546b-4af1-ae8e-e9c048833823",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -603,7 +603,7 @@
 					},
 					"response": [
 						{
-							"id": "65d1e9b3-1842-4a05-b1ef-c7b3f30fefdd",
+							"id": "7f19ca40-17cd-4032-947e-55ae15fe5965",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -661,7 +661,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "c8c86384-6b17-4c6b-941e-c465bd3929c5",
+							"id": "e42d2bf4-cbc8-4760-b79b-89828666464d",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",

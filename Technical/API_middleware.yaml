@@ -13,10 +13,22 @@ schemes:
 host: localhost:3000
 basePath: /
 paths:
-    /query:
+    /query/new:
+        get:
+            tags: [ ]
+            description: Create a new empty query
+            responses:
+                200:
+                    description: New empty query created
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: New empty query error
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
         post:
             tags: [ ]
-            description: Creates a new query
+            description: Creates a new query from parameters
             parameters:
                 -
                     name: query
