@@ -2,7 +2,7 @@
 const request = require('request');
 
 // Local modules
-const defines = require('../defines.js');
+const defines = require('../../defines.js');
 const QueryAbstract = require('../queryAbstract.js');
 
 /**
