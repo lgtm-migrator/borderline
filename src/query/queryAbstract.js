@@ -308,7 +308,7 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
 /**
  * @fn fetchModel
  * @desc Overwrites this Query model with the one from the DB
- * @return A Promise resolving to the synchronised model
+ * @return {Promise} A Promise resolving to the synchronised model
  */
 QueryAbstract.prototype.fetchModel = function() {
     var _this = this;
@@ -325,12 +325,11 @@ QueryAbstract.prototype.fetchModel = function() {
 /**
  * @fn pushModel
  * @desc Overwrite the model inside the databasewith the current one.
- * @return A Promise resolving to the synchronised model
+ * @return {Promise} A Promise resolving to the synchronised model
  */
 QueryAbstract.prototype.pushModel = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        console.log('pushModel');
        _this.queryCollection.findOneAndReplace({_id: new ObjectID(_this.model._id)}, _this.model).then(function(result) {
             if (result.ok = 1)
                 resolve(_this.model);
