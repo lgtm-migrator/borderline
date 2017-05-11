@@ -9,6 +9,12 @@ function BorderlineMiddleware(config) {
     this.config = config;
     this.app = express();
 
+    //Bind member functions
+    this._connectDb = BorderlineMiddleware.prototype._connectDb.bind(this);
+    this._setupQueryEndpoints = BorderlineMiddleware.prototype._setupQueryEndpoints.bind(this);
+
+    //Setup Express Application
+
     //Parse JSON body when received
     this.app.use(body_parser.urlencoded({extended: true}));
     this.app.use(body_parser.json());
@@ -25,44 +31,75 @@ function BorderlineMiddleware(config) {
     }
 
     var _this = this;
-    mongodb.connect(this.config.mongoUrl, function (err, db) {
-        //MongoDB connection failed
-        if (err !== null) {
-            _this.app.all('*', function(req, res) {
-               res.status(501);
-               res.json({ error: 'Database connection failure: ' + err});
-            });
-            return;
-        }
-
-        //Store DB connection
-        _this.db = db;
-        //Get GridFS for query result
-        _this.grid = new GridFSBucket(db, { bucketName: defines.queryGridFSCollectionName });
-        _this.queryCollection = _this.db.collection(defines.queryCollectionName);
-        //Import & instantiate controller modules
-        var queryControllerModule = require('./queryController.js');
-        _this.queryController = new queryControllerModule(_this.queryCollection, _this.grid);
-        var executionControllerModule = require('./executionController.js');
-        _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
-
-        //Setup controllers endpoints
-        _this.app.route('/query/new')
-            .get(_this.queryController.getNewQuery)
-            .post(_this.queryController.postNewQuery);
-        //@todo Add /query/:query_id/endpoint
-        _this.app.route('/query/:query_id') //@todo Replace to /query/:query_id/input
-            .get(_this.queryController.getQueryById)
-            .put(_this.queryController.putQueryById)
-            .delete(_this.queryController.deleteQueryById);
-        //@todo Add /query/:query_id/output
-
-        _this.app.route('/execute') //@todo /query/:query_id/execute
-            .post(_this.executionController.executeQuery);
+    this._connectDb().then(function() {
+        _this._setupQueryEndpoints('/query');
+    }, function(error) {
+        _this.app.all('*', function(req, res) {
+            res.status(501);
+            res.json({ error: 'Database connection failure: ' + error});
+        });
     });
 
     return this.app;
 }
+
+BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
+    var _this = this;
+
+    //Import & instantiate controller modules
+    var queryControllerModule = require('./queryController.js');
+    _this.queryController = new queryControllerModule(_this.queryCollection, _this.grid);
+    var executionControllerModule = require('./executionController.js');
+    _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
+
+    //Setup controllers endpoints
+    _this.app.route(prefix + '/new')
+        .get(_this.queryController.getNewQuery)
+        .post(_this.queryController.postNewQuery);
+    //@todo Add /query/:query_id/endpoint
+    _this.app.route(prefix + '/:query_id') //@todo Replace to /query/:query_id/input
+        .get(_this.queryController.getQueryById)
+        .put(_this.queryController.putQueryById)
+        .delete(_this.queryController.deleteQueryById);
+    //@todo Add /query/:query_id/output
+
+    _this.app.route('/execute') //@todo /query/:query_id/execute
+        .post(_this.executionController.executeQuery);
+};
+
+BorderlineMiddleware.prototype._connectDb = function() {
+    var _this = this;
+    var urls_list = [
+        this.config.mongoUrl,
+        this.config.objectStorageUrl
+    ];
+    return new Promise(function(resolve, reject) {
+        //Create one Promise par DB to connect to
+        var promises = [];
+        for (var i = 0; i < urls_list.length; i++) {
+            var p = new Promise(function(resolve, reject) {
+                mongodb.connect(urls_list[i], function(err, db) {
+                    if (err !== null)
+                        reject('Database connection failure: ' + err);
+                    else
+                        resolve(db);
+                });
+            });
+            promises.push(p);
+        }
+        //Resolve all promises in parallel
+        Promise.all(promises).then(function(databases) {
+            _this.db = databases[0];
+            _this.queryCollection = _this.db.collection(defines.queryCollectionName);
+
+            _this.objectDb = databases[1];
+            _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.queryGridFSCollectionName });
+            resolve(true);
+        }, function (error) {
+            reject(error);
+        });
+    });
+};
 
 BorderlineMiddleware.prototype.dummy = function() {
   console.log("Dummy function");

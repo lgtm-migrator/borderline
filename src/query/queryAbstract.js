@@ -249,7 +249,11 @@ QueryAbstract.prototype.setOutputLocal = function(local_data) {
                 _this.model.output.std.dataSize = std_data.length;
                 _this.model.output.local.dataId = values[0];
                 _this.model.output.std.dataId = values[1];
-                resolve(std_data);
+                _this.pushModel().then(function() {
+                    resolve(std_data);
+                }, function (error) {
+                    reject(error);
+                });
             }, function(error) {
                 reject({ error: error });
             });
@@ -294,7 +298,11 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
                 _this.model.output.std.dataSize = std_data.length;
                 _this.model.output.local.dataId = values[0];
                 _this.model.output.std.dataId = values[1];
-                resolve(local_data);
+                _this.pushModel().then(function() {
+                    resolve(local_data);
+                }, function (error) {
+                    reject(error);
+                });
             }, function(error) {
                 reject({ error: error });
             });

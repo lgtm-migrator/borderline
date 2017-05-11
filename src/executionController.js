@@ -47,6 +47,7 @@ ExecutionController.prototype.executeQuery = function(req, res) {
             res.json(error);
         });
     }, function (error) {
+        console.log(error);
         res.status(401);
         res.json(error);
     })
