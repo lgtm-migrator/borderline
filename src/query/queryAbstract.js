@@ -59,7 +59,7 @@ QueryAbstract.prototype.output_standard2local = function(data) {
 
 /**
  * @fn getInput
- * @return A Promise resolving model's input
+ * @return {Promise} A Promise resolving model's input
  */
 QueryAbstract.prototype.getInput = function() {
     var _this = this;
@@ -68,14 +68,14 @@ QueryAbstract.prototype.getInput = function() {
             resolve(_this.model.input);
        }
        catch (error) {
-           reject({error: error.toString()});
+           reject(defines.errorStacker(error));
        }
     });
 };
 
 /**
  * @fn getInputLocal
- * @return A promise resolving to the local input value
+ * @return {Promise} A promise resolving to the local input value
  */
 QueryAbstract.prototype.getInputLocal = function() {
     var _this = this;
@@ -83,13 +83,13 @@ QueryAbstract.prototype.getInputLocal = function() {
         if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('local'))
             resolve(_this.model.input.local);
         else
-            reject('This query does\'nt have a local input');
+            reject(defines.errorStacker('No local input'));
     });
 };
 
 /**
  * @fn getInputStd
- * @return A promise resolving to the standardized input
+ * @return {Promise} A promise resolving to the standardized input
  */
 QueryAbstract.prototype.getInputStd = function() {
     var _this = this;
@@ -97,14 +97,14 @@ QueryAbstract.prototype.getInputStd = function() {
         if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('std'))
             resolve(_this.model.input.std);
         else
-            reject('This query does\'nt have a standard input');
+            reject(defines.errorStacker('Missing standard input'));
     });
 };
 
 /**
  * @fn setInputStd
  * @param std_data The data object to transform and store
- * @return A Promise resolving the stored model in local format
+ * @return {Promise} A Promise resolving the stored model in local format
  */
 QueryAbstract.prototype.setInputStd = function(std_data) {
     var _this = this;
@@ -119,7 +119,7 @@ QueryAbstract.prototype.setInputStd = function(std_data) {
             resolve(_this.model.input.local);
         }
         catch (error) {
-            reject({error: error});
+            reject(defines.errorStacker(error));
         }
     });
 };
@@ -142,7 +142,7 @@ QueryAbstract.prototype.setInputLocal = function(local_data) {
             resolve(_this.model.input.std);
         }
         catch (error) {
-            reject({error: error});
+            reject(defines.errorStacker(error));
         }
     });
 };
@@ -166,11 +166,11 @@ QueryAbstract.prototype.getOutput = function() {
                 data.std.data = values[1];
                 resolve(data);
             }, function(error) {
-                reject({ error: error.toString() });
+                reject(defines.errorStacker(error));
             })
         }
         catch (error) {
-            reject({ error: error });
+            reject(defines.errorStacker('getOutput caught error', error));
         }
     });
 };
@@ -186,11 +186,11 @@ QueryAbstract.prototype.getOutputLocal = function() {
             _this.storage.getObject(_this.model.output.local.dataId).then(function(local_data) {
                 resolve(local_data);
             }, function (error) {
-                reject({error: error.toString() });
+                reject(defines.errorStacker('Get local output failed', error));
             });
         }
         else {
-            reject('This query doesn\'t have local output data');
+            reject(defines.errorStacker('No local output data'));
         }
     });
 };
@@ -206,11 +206,11 @@ QueryAbstract.prototype.getOutputLocal = function() {
             _this.storage.getObject(_this.model.output.std.dataId).then(function(std_data) {
                 resolve(std_data);
             }, function (error) {
-                reject({error: error.toString() });
+                reject(defines.errorStacker('Get std output failed', error));
             });
         }
         else {
-            reject('This query doesn\'t have std output data');
+            reject(defines.errorStacker('No std output data'));
         }
     });
 };
@@ -252,14 +252,14 @@ QueryAbstract.prototype.setOutputLocal = function(local_data) {
                 _this.pushModel().then(function() {
                     resolve(std_data);
                 }, function (error) {
-                    reject(error);
+                    reject(defines.errorStacker('Save output locations failed', error));
                 });
             }, function(error) {
-                reject({ error: error });
+                reject(defines.errorStacker(error));
             });
         }
         catch (error) {
-            reject({ error: error });
+            reject(defines.errorStacker('Caught exception', error));
         }
     });
 };
@@ -301,14 +301,14 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
                 _this.pushModel().then(function() {
                     resolve(local_data);
                 }, function (error) {
-                    reject(error);
+                    reject(defines.errorStacker(error));
                 });
             }, function(error) {
-                reject({ error: error });
+                reject(defines.errorStacker('Storage failed', error));
             });
         }
         catch (error) {
-            reject({ error: error });
+            reject(defines.errorStacker('Caught exception', error));
         }
     });
 };
@@ -325,7 +325,7 @@ QueryAbstract.prototype.fetchModel = function() {
             _this.model = result;
             resolve(this.model);
         }, function(error) {
-            reject({error: error});
+            reject(defines.errorStacker(error));
         });
     });
 };
@@ -342,9 +342,10 @@ QueryAbstract.prototype.pushModel = function() {
             if (result.ok = 1)
                 resolve(_this.model);
             else
-                reject({ error : result.lastErrorObject.toString() });
+                reject(defines.errorStacker('Update query model failed',
+                    { error : result.lastErrorObject.toString() }));
        }, function (error) {
-          reject({error: error});
+          reject(defines.errorStacker(error));
        });
     });
 };

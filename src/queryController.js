@@ -39,7 +39,7 @@ QueryController.prototype.postNewQuery = function(req, res) {
     var endpoint = req.body.endpoint;
     if (endpoint == null || credentials == null) {
         res.status(401);
-        res.json({error: 'Missing query data'});
+        res.json(defines.errorStacker('Missing query data'));
         return;
     }
     var newQuery = Object.assign({}, defines.queryModel, { endpoint: endpoint }, {credentials: credentials});
@@ -51,11 +51,11 @@ QueryController.prototype.postNewQuery = function(req, res) {
         }
         else {
             res.status(401);
-            res.json({error: 'Insert a new query failed'});
+            res.json(defines.errorStacker('Insert a new query failed'));
         }
     }, function(error){
         res.status(501);
-        res.json({ error: error });
+        res.json(defines.errorStacker(error));
     });
 };
 
@@ -67,9 +67,9 @@ QueryController.prototype.postNewQuery = function(req, res) {
  */
 QueryController.prototype.getQueryById = function(req, res) {
     var query_id = req.params.query_id;
-    if (query_id === null || query_id === undefined) {
+    if (query_id === null || query_id === undefined || query_id.length == 0) {
         res.status(401);
-        res.json({error: 'Missing query_id'});
+        res.json(defines.errorStacker('Missing query_id'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
@@ -78,11 +78,11 @@ QueryController.prototype.getQueryById = function(req, res) {
             res.json(result);
         }, function(error) {
            res.status(401);
-           res.json({ error: error });
+           res.json(defines.errorStacker(error));
         });
     }, function(error) {
         res.status(401);
-        res.json({ error: 'Error retrieving query from ID: ' + error.toString()});
+        res.json(defines.errorStacker('Error retrieving query from ID', error));
     });
 };
 
@@ -91,7 +91,7 @@ QueryController.prototype.putQueryById = function(req, res) {
     var data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
         res.status(401);
-        res.json({error: 'Missing query_id'});
+        res.json(defines.errorStacker('Missing query_id'));
         return;
     }
     this.queryCollection.findOneAndReplace({ _id: new ObjectID(query_id)}, data, { returnOriginal: false }).then(function(result) {
@@ -105,7 +105,7 @@ QueryController.prototype.putQueryById = function(req, res) {
         }
     }, function(error) {
         res.status(401);
-        res.json({error: 'Updating query failed: ' + error});
+        res.json(defines.errorStacker('Updating query failed', error));
     });
 };
 
@@ -113,7 +113,7 @@ QueryController.prototype.deleteQueryById = function(req, res) {
     var query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
-        res.json({error: 'Missing query ID'});
+        res.json(defines.errorStacker('Missing query ID'));
         return;
     }
     this.queryCollection.findOneAndDelete({_id: new ObjectID(query_id) }).then(function(result) {
@@ -121,7 +121,7 @@ QueryController.prototype.deleteQueryById = function(req, res) {
         res.json(result);
     }, function(error) {
         res.status(401);
-        res.json({error: 'Delete failed: ' + error});
+        res.json(defines.errorStacker('Delete failed', error));
     });
 
 };

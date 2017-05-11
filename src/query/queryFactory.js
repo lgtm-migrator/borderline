@@ -3,6 +3,7 @@ const ObjectID = require('mongodb').ObjectID;
 
 // Project modules
 const Query_TS171 = require('./ts171/queryObject.js');
+const defines = require('../defines.js');
 
 /**
  * @fn QueryFactory
@@ -29,9 +30,9 @@ QueryFactory.prototype.fromModel = function(queryModel) {
             case 'TS171':
                 resolve(new Query_TS171(queryModel, _this.queryCollection, _this.queryGridFS));
             case 'eHS':
-                reject('eHS support is not implemented (yet ?)');
+                reject(defines.errorStacker('eHS support is not implemented (yet ?)'));
             default:
-                reject('Source type [' + queryModel.endpoint.sourceType + '] is not supported');
+                reject(defines.errorStacker('Type [' + queryModel.endpoint.sourceType + '] is unknown'));
         }
     });
 };
@@ -49,14 +50,14 @@ QueryFactory.prototype.fromID = function(query_id) {
                 _this.fromModel(queryModel).then(function (queryObj) {
                     resolve(queryObj);
                 }, function (error) {
-                    reject(error);
+                    reject(defines.errorStacker(error));
                 });
             }, function (error) {
-                reject(query_id + ' not found: ' + error);
+                reject(defines.errorStacker(query_id + ' not found', error));
             });
         }
         catch (error) {
-            reject('Caught error: ' + error);
+            reject(defines.errorStacker('From ID caught error', error));
         }
     });
 };
