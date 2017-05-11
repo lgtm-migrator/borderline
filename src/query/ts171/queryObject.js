@@ -2,6 +2,7 @@
 const request = require('request');
 
 // Local modules
+const defines = require('../defines.js');
 const QueryAbstract = require('../queryAbstract.js');
 
 /**
@@ -66,7 +67,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
             _this.pushModel().then(function() {
                 resolve(true);
             }, function (error) {
-                reject(error);
+                reject(defines.errorStacker('Auth save failed', error));
             });
         });
     });
@@ -84,7 +85,7 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
             _this._doAuth().then(function() {
                 resolve(true);
             }, function (error) {
-                reject(error);
+                reject(defines.errorStacker('Ensure auth failed', error));
             });
         }
         else {
@@ -105,7 +106,10 @@ QueryTransmart17_1.prototype.execute = function() {
         var fail_callback = function(error) {
             var fail_time = new Date();
             var delta_time = fail_time - start_time;
-            reject({ status: 'fail', time: delta_time.toString() + ' ms', error: error.toString() });
+            reject(defines.errorStacker('Execute failed', {
+                time: delta_time.toString() + ' ms',
+                error: defines.errorStacker(error)
+            }));
         };
         //Check for required fields
         if (!_this.model.hasOwnProperty('input') ||
@@ -126,7 +130,7 @@ QueryTransmart17_1.prototype.execute = function() {
                 }
             }, function (error, response, body) {
                 if (!response) {
-                    reject(error); return;
+                    reject(defines.errorStacker('Execute request failed', error)); return;
                 }
                 _this.setOutputLocal(body).then(function(std_data) {
                     var success_time = new Date();

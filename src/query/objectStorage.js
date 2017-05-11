@@ -40,11 +40,11 @@ ObjectStorage.prototype.createObject = function(object_data) {
            });
            //Handle errors
            writable.on('error', function (error) {
-                reject({ error: error.toString() });
+                reject(defines.errorStacker('Writable stream error', error));
            });
        }
        catch (error) {
-           reject({ error: error.toString() });
+           reject(defines.errorStacker('Creation caught exception', error));
        }
     });
 };
@@ -72,11 +72,11 @@ ObjectStorage.prototype.getObject = function(object_id) {
             });
             //Handling errors
             readable.on('error', function (error) {
-                reject ({ error: error.toString() });
+                reject (defines.errorStacker('Readable error', error));
             });
         }
         catch (error) {
-            reject({error: error.toString() });
+            reject(defines.errorStacker(error));
         }
     });
 };
@@ -105,14 +105,14 @@ ObjectStorage.prototype.setObject = function(object_id, object_data) {
                 });
                 //Handle errors
                 writable.on('error', function (error) {
-                    reject({ error: error.toString() });
+                    reject(defines.errorStacker('Writable stream failed', error));
                 });
             }, function (error) { //Delete failed
-                reject({error: error.toString() });
+                reject(defines.errorStacker('Updating operation failed', error));
             })
         }
         catch (error) {
-            reject({error: error.toString() });
+            reject(defines.errorStacker('Storage update caught error', error));
         }
     });
 };
@@ -129,11 +129,11 @@ ObjectStorage.prototype.deleteObject = function(object_id) {
             _this.gridfs.delete(object_id).then(function() {
                 resolve(object_id);
             }, function (error) {
-                reject({ error: error.toString() });
+                reject(defines.errorStacker(error));
             });
         }
         catch (error) {
-            reject({error: error.toString() });
+            reject(defines.errorStacker('Deleting storage caught error', error));
         }
     });
 };

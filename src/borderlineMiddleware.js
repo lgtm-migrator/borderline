@@ -91,7 +91,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             var p = new Promise(function(resolve, reject) {
                 mongodb.connect(urls_list[i], function(err, db) {
                     if (err !== null)
-                        reject('Database connection failure: ' + err);
+                        reject(defines.errorFormat('Database connection failure: ' + err));
                     else
                         resolve(db);
                 });
@@ -107,7 +107,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.queryGridFSCollectionName });
             resolve(true);
         }, function (error) {
-            reject(error);
+            reject(defines.eerror);
         });
     });
 };

@@ -28,7 +28,6 @@ function ExecutionController(queryCollection, gridFs) {
  * @param res Express.js response object
  */
 ExecutionController.prototype.executeQuery = function(req, res) {
-    var _this = this;
     if (req.body === null || req.body === undefined ||
         req.body.hasOwnProperty('query') === false) {
         res.status(401);
@@ -44,11 +43,11 @@ ExecutionController.prototype.executeQuery = function(req, res) {
             res.json(result);
         }, function (error) {
             res.status(401);
-            res.json({ error: error });
+            res.json(defines.errorStacker(error));
         });
     }, function (error) {
         res.status(401);
-        res.json({ error: error });
+        res.json(defines.errorStacker(error));
     })
 };
 
