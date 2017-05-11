@@ -82,7 +82,7 @@ QueryController.prototype.getQueryById = function(req, res) {
         });
     }, function(error) {
         res.status(401);
-        res.json({ error: 'Error retrieving query from ID: ' + error});
+        res.json({ error: 'Error retrieving query from ID: ' + error.toString()});
     });
 };
 

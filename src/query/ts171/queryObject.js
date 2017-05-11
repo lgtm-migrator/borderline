@@ -107,6 +107,16 @@ QueryTransmart17_1.prototype.execute = function() {
             var delta_time = fail_time - start_time;
             reject({ status: 'fail', time: delta_time.toString() + ' ms', error: error.toString() });
         };
+        //Check for required fields
+        if (!_this.model.hasOwnProperty('input') ||
+            !_this.model.input.hasOwnProperty('local') ||
+            !_this.model.input.local.hasOwnProperty('uri') ||
+            !_this.model.input.local.hasOwnProperty('params')) {
+           fail_callback('Query format is not valid');
+           return;
+        }
+
+        //Auth and perform execution against Transmart instance
         _this._ensureAuth().then(function() {
             request.get({
                 baseUrl: _this.model.endpoint.sourceHost + ':' + _this.model.endpoint.sourcePort,

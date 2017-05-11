@@ -44,15 +44,20 @@ QueryFactory.prototype.fromModel = function(queryModel) {
 QueryFactory.prototype.fromID = function(query_id) {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        _this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function(queryModel) {
-            _this.fromModel(queryModel).then(function(queryObj) {
-                resolve(queryObj);
+        try {
+            _this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function (queryModel) {
+                _this.fromModel(queryModel).then(function (queryObj) {
+                    resolve(queryObj);
+                }, function (error) {
+                    reject({error: error});
+                });
             }, function (error) {
-                reject({error: error});
+                reject({error: query_id + ' not found: ' + error});
             });
-        }, function(error) {
-           reject({error: error});
-        });
+        }
+        catch (error) {
+            reject({error: 'Caught error: ' + error});
+        }
     });
 };
 
