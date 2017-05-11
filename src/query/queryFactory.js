@@ -31,7 +31,7 @@ QueryFactory.prototype.fromModel = function(queryModel) {
             case 'eHS':
                 reject('eHS support is not implemented (yet ?)');
             default:
-                reject('Source type ' + queryModel.endpoint.sourceType + ' is not supported');
+                reject('Source type [' + queryModel.endpoint.sourceType + '] is not supported');
         }
     });
 };
@@ -49,14 +49,14 @@ QueryFactory.prototype.fromID = function(query_id) {
                 _this.fromModel(queryModel).then(function (queryObj) {
                     resolve(queryObj);
                 }, function (error) {
-                    reject({error: error});
+                    reject(error);
                 });
             }, function (error) {
-                reject({error: query_id + ' not found: ' + error});
+                reject(query_id + ' not found: ' + error);
             });
         }
         catch (error) {
-            reject({error: 'Caught error: ' + error});
+            reject('Caught error: ' + error);
         }
     });
 };

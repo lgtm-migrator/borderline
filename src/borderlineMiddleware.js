@@ -43,6 +43,11 @@ function BorderlineMiddleware(config) {
     return this.app;
 }
 
+/**
+ * @fn _setupQueryEndpoints
+ * @param prefix This string is appended before the uris definition
+ * @private
+ */
 BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     var _this = this;
 
@@ -67,6 +72,12 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .post(_this.executionController.executeQuery);
 };
 
+/**
+ * @fn _connectDb
+ * @desc Setup the connections with mongoDB
+ * @return {Promise} Resolves to true on success
+ * @private
+ */
 BorderlineMiddleware.prototype._connectDb = function() {
     var _this = this;
     var urls_list = [
@@ -99,10 +110,6 @@ BorderlineMiddleware.prototype._connectDb = function() {
             reject(error);
         });
     });
-};
-
-BorderlineMiddleware.prototype.dummy = function() {
-  console.log("Dummy function");
 };
 
 module.exports = BorderlineMiddleware;
