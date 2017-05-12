@@ -52,20 +52,20 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     var _this = this;
 
     //Import & instantiate controller modules
-    var queryControllerModule = require('./queryController.js');
-    _this.queryController = new queryControllerModule(_this.queryCollection, _this.grid);
+    var inputControllerModule = require('./inputController.js');
+    _this.inputController = new inputControllerModule(_this.queryCollection, _this.grid);
     var executionControllerModule = require('./executionController.js');
     _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
 
     //Setup controllers endpoints
     _this.app.route(prefix + '/new')
-        .get(_this.queryController.getNewQuery)
-        .post(_this.queryController.postNewQuery);
+        .get(_this.inputController.getNewQuery)
+        .post(_this.inputController.postNewQuery);
     //@todo Add /query/:query_id/endpoint
-    _this.app.route(prefix + '/:query_id') //@todo Replace to /query/:query_id/input
-        .get(_this.queryController.getQueryById)
-        .put(_this.queryController.putQueryById)
-        .delete(_this.queryController.deleteQueryById);
+    _this.app.route(prefix + '/:query_id/input')
+        .get(_this.inputController.getQueryById)
+        .put(_this.inputController.putQueryById)
+        .delete(_this.inputController.deleteQueryById);
     //@todo Add /query/:query_id/output
 
     _this.app.route('/execute') //@todo /query/:query_id/execute
