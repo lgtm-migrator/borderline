@@ -8,164 +8,579 @@
 	},
 	"item": [
 		{
-			"name": "Create empty query",
-			"event": [
+			"name": "Create",
+			"description": "",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;",
-							"",
-							"var jsonData = JSON.parse(responseBody);",
-							"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
-							"",
-							"var query_id = jsonData['_id'];",
-							"postman.setEnvironmentVariable(\"current_query\", query_id);",
-							"",
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{middleware_url}}/query/new",
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Create query",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;",
-							"",
-							"var jsonData = JSON.parse(responseBody);",
-							"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
-							"",
-							"var query_id = jsonData['_id'];",
-							"postman.setEnvironmentVariable(\"current_query\", query_id);",
-							"",
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{middleware_url}}/query/new",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
+					"name": "Create empty query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/new",
+						"method": "GET",
+						"header": [],
+						"body": {},
 						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"TS171\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n  \t\"local\": {},\r\n  \t\"std\": {}\r\n  },\r\n  \"output\": {\r\n  \t\"local\": {\r\n  \t\t\"dataSize\": 0,\r\n        \"dataId\": null\r\n  \t},\r\n  \t\"std\": {\r\n  \t\t\"dataSize\": 0,\r\n  \t\t\"dataId\": null\r\n  \t}\r\n  }\r\n}"
+					},
+					"response": []
 				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Get query by ID",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;",
-							"",
-							"var jsonData = JSON.parse(responseBody);",
-							"tests[\"Has credentials\"] = jsonData.hasOwnProperty('uri');",
-							"tests[\"Has endpoint\"] = jsonData.hasOwnProperty('params');",
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{middleware_url}}/query/{{current_query}}",
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Put query by ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;",
-							"",
-							"var jsonData = JSON.parse(responseBody);",
-							"tests[\"Has credentials\"] = jsonData.hasOwnProperty('credentials');",
-							"tests[\"Has endpoint\"] = jsonData.hasOwnProperty('endpoint');",
-							"tests[\"Has query\"] = jsonData.hasOwnProperty('input');",
-							"",
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{middleware_url}}/query/{{current_query}}",
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
+					"name": "Create query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/new",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"TS171\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n  \t\"local\": {},\r\n  \t\"std\": {}\r\n  },\r\n  \"output\": {\r\n  \t\"local\": {\r\n  \t\t\"dataSize\": 0,\r\n        \"dataId\": null\r\n  \t},\r\n  \t\"std\": {\r\n  \t\t\"dataSize\": 0,\r\n  \t\t\"dataId\": null\r\n  \t}\r\n  }\r\n}"
+						},
 						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\",\r\n    \"access_token\": \"aa91d04f-4e7c-4369-b9db-1d9866485e75\",\r\n    \"token_type\": \"bearer\",\r\n    \"expires_in\": 2,\r\n    \"scope\": \"read write\",\r\n    \"generated\": \"2017-05-05T13:00:00.625Z\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"TS171\",\r\n    \"sourceName\": \"Transmart updated put request\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": { \r\n  \t\"local\": {\r\n\t  \t\"uri\": \"/v2/observations?constraint=\",\r\n\t  \t\"params\": {\r\n\t\t  \t\"type\": \"Combination\", \r\n\t\t  \t\"operator\": \"and\", \r\n\t\t  \t\"args\": [\r\n\t\t  \t\t{\r\n\t\t  \t\t\t\"type\":\"ConceptConstraint\",\r\n\t\t  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\r\n\t\t  \t\t},\r\n\t\t  \t\t{\r\n\t\t  \t\t\t\"type\":\"ConceptConstraint\",\r\n\t\t  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\r\n\t\t  \t\t}\r\n\t\t  \t]\r\n\t  \t},\r\n\t\"std\": {\r\n\t\t\r\n\t\t}\r\n  \t}\r\n  },\r\n  \"output\": {\r\n  \t\"local\": {\r\n  \t\t\"dataSize\": 0,\r\n        \"dataId\": null\r\n  \t},\r\n  \t\"std\": {\r\n  \t\t\"dataSize\": 0,\r\n  \t\t\"dataId\": null\r\n  \t}\r\n  }\r\n}"
-				},
-				"description": ""
-			},
-			"response": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "Delete query by ID",
-			"event": [
+			"name": "Credentials",
+			"description": "",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;",
-							"postman.clearEnvironmentVariable(\"current_query\");"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{middleware_url}}/query/{{current_query}}",
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
+					"name": "Get query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Username\"] = jsonData.hasOwnProperty('username');",
+									"tests[\"Password\"] = jsonData.hasOwnProperty('password');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/credentials",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
 				},
-				"description": ""
-			},
-			"response": []
+				{
+					"name": "Put query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Username\"] = jsonData.hasOwnProperty('username');",
+									"tests[\"Password\"] = jsonData.hasOwnProperty('password');",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setEnvironmentVariable(\"date_now\", new Date().toString());"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/credentials",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"admin\",\n\t\"password\": \"admin\",\n\t\"access_token\": \"d5263a5b-c639-4ec6-8676-5aa0605feffd\",\n\t\"expires_in\": 10,\n\t\"generated\": \"{{date_now}}\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/credentials",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get isAuth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Username\"] = jsonData.hasOwnProperty('username');",
+									"tests[\"Password\"] = jsonData.hasOwnProperty('password');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/credentials/isAuth",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Endpoint",
+			"description": "",
+			"item": [
+				{
+					"name": "Get query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/endpoint",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Put query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/endpoint",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"sourceType\": \"TS171\",\r\n\t\"sourceName\": \"Transmart the hyve\",\r\n\t\"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n\t\"sourcePort\": 80,\r\n\t\"public\": false\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/endpoint",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Full",
+			"description": "",
+			"item": [
+				{
+					"name": "Get query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Has credentials\"] = jsonData.hasOwnProperty('uri');",
+									"tests[\"Has endpoint\"] = jsonData.hasOwnProperty('params');",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Put query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Has credentials\"] = jsonData.hasOwnProperty('credentials');",
+									"tests[\"Has endpoint\"] = jsonData.hasOwnProperty('endpoint');",
+									"tests[\"Has query\"] = jsonData.hasOwnProperty('input');",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\",\r\n    \"access_token\": \"aa91d04f-4e7c-4369-b9db-1d9866485e75\",\r\n    \"token_type\": \"bearer\",\r\n    \"expires_in\": 2,\r\n    \"scope\": \"read write\",\r\n    \"generated\": \"2017-05-05T13:00:00.625Z\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"TS171\",\r\n    \"sourceName\": \"Transmart updated put request\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": { \r\n  \t\"local\": {\r\n\t  \t\"uri\": \"/v2/observations?constraint=\",\r\n\t  \t\"params\": {\r\n\t\t  \t\"type\": \"Combination\", \r\n\t\t  \t\"operator\": \"and\", \r\n\t\t  \t\"args\": [\r\n\t\t  \t\t{\r\n\t\t  \t\t\t\"type\":\"ConceptConstraint\",\r\n\t\t  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\r\n\t\t  \t\t},\r\n\t\t  \t\t{\r\n\t\t  \t\t\t\"type\":\"ConceptConstraint\",\r\n\t\t  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\r\n\t\t  \t\t}\r\n\t\t  \t]\r\n\t  \t},\r\n\t\"std\": {\r\n\t\t\r\n\t\t}\r\n  \t}\r\n  },\r\n  \"output\": {\r\n  \t\"local\": {\r\n  \t\t\"dataSize\": 0,\r\n        \"dataId\": null\r\n  \t},\r\n  \t\"std\": {\r\n  \t\t\"dataSize\": 0,\r\n  \t\t\"dataId\": null\r\n  \t}\r\n  }\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"postman.clearEnvironmentVariable(\"current_query\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Input",
+			"description": "",
+			"item": [
+				{
+					"name": "Get query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Has std\"] = jsonData.hasOwnProperty('std');",
+									"tests[\"Has local\"] = jsonData.hasOwnProperty('local');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/input",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Put query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Has uri\"] = jsonData.hasOwnProperty('uri');",
+									"tests[\"Has params\"] = jsonData.hasOwnProperty('params');",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/input",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n \"uri\": \"/v2/observations?constraint=\",\r\n  \"params\": {\r\n  \t\"type\": \"Combination\", \r\n  \t\"operator\": \"and\", \r\n  \t\"args\": [\r\n  \t\t{\r\n  \t\t\t\"type\":\"ConceptConstraint\",\r\n  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\r\n  \t\t},\r\n  \t\t{\r\n  \t\t\t\"type\":\"ConceptConstraint\",\r\n  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\r\n  \t\t}]\r\n  \t}\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/input",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Output",
+			"description": "",
+			"item": [
+				{
+					"name": "Get query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/output",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Put query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/output",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n\t\"coucou\": \"hibou\",\r\n\t\"ZirgMaster\": true\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete query by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}/output",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Execute query",
