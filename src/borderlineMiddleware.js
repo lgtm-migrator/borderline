@@ -52,6 +52,8 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     var _this = this;
 
     //Import & instantiate controller modules
+    var endpointControllerModule = require('./endpointController.js');
+    _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.grid);
     var inputControllerModule = require('./inputController.js');
     _this.inputController = new inputControllerModule(_this.queryCollection, _this.grid);
     var outputControllerModule = require('./outputController.js');
@@ -59,22 +61,23 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     var executionControllerModule = require('./executionController.js');
     _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
 
-    //Setup controllers endpoints
+    //Setup controllers URIs
     _this.app.route(prefix + '/new')
         .get(_this.inputController.getNewQuery)
         .post(_this.inputController.postNewQuery);
-    //@todo Add /query/:query_id/endpoint
+    _this.app.route(prefix + '/:query_id/endpoint')
+        .get(_this.endpointController.getQueryById)
+        .put(_this.endpointController.putQueryById)
+        .delete(_this.endpointController.deleteQueryById);
     _this.app.route(prefix + '/:query_id/input')
         .get(_this.inputController.getQueryById)
         .put(_this.inputController.putQueryById)
         .delete(_this.inputController.deleteQueryById);
-
     _this.app.route(prefix + '/:query_id/output')
         .get(_this.outputController.getQueryById)
         .put(_this.outputController.putQueryById)
         .delete(_this.outputController.deleteQueryById);
-
-    _this.app.route('/execute') //@todo /query/:query_id/execute
+    _this.app.route('/execute')
         .post(_this.executionController.executeQuery);
 };
 

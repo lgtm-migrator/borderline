@@ -2,29 +2,29 @@ const QueryFactory = require('./core/queryFactory.js');
 var defines = require('./defines.js');
 
 /**
- * @fn OutputController
- * @desc Controller for queries results management.
+ * @fn EndpointController
+ * @desc Controller for queries data sources management.
  * @param queryCollection MongoDb collection where the queries are stored
  * @param queryGridFS ObjectStore to build the queries
  * @constructor
  */
-function OutputController(queryCollection, queryGridFS) {
+function EndpointController(queryCollection, queryGridFS) {
     this.factory = new QueryFactory(queryCollection, queryGridFS);
     this.queryCollection = queryCollection;
 
     //Bind member functions to this instance
-    this.getQueryById = OutputController.prototype.getQueryById.bind(this);
-    this.putQueryById = OutputController.prototype.putQueryById.bind(this);
-    this.deleteQueryById = OutputController.prototype.deleteQueryById.bind(this);
+    this.getQueryById = EndpointController.prototype.getQueryById.bind(this);
+    this.putQueryById = EndpointController.prototype.putQueryById.bind(this);
+    this.deleteQueryById = EndpointController.prototype.deleteQueryById.bind(this);
 }
 
 /**
  * @fn getQueryByID
- * @desc Controller method to retrieve a query output
+ * @desc Controller method to retrieve a query data source
  * @param req Express.js request object
  * @param res Express.js response object
  */
-OutputController.prototype.getQueryById = function(req, res) {
+EndpointController.prototype.getQueryById = function(req, res) {
     var query_id = req.params.query_id;
     if (query_id === null || query_id === undefined || query_id.length == 0) {
         res.status(401);
@@ -32,13 +32,8 @@ OutputController.prototype.getQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.getOutputStd().then(function(result) {
-            res.status(200);
-            res.json(result);
-        }, function(error) {
-            res.status(401);
-            res.json(defines.errorStacker('Output std extract failed', error));
-        });
+        res.status(200);
+        res.json(queryObject.model.endpoint);
     }, function(error) {
         res.status(401);
         res.json(defines.errorStacker('Error retrieving query from ID', error));
@@ -48,11 +43,11 @@ OutputController.prototype.getQueryById = function(req, res) {
 
 /**
  * @fn putQueryById
- * @desc Controller used to update query output.
+ * @desc Controller used to update query data source
  * @param req Express.js request object
  * @param res Express.js response object
  */
-OutputController.prototype.putQueryById = function(req, res) {
+EndpointController.prototype.putQueryById = function(req, res) {
     var query_id = req.params.query_id;
     var data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
@@ -60,28 +55,36 @@ OutputController.prototype.putQueryById = function(req, res) {
         res.json(defines.errorStacker('Missing query_id'));
         return;
     }
+    if (data.hasOwnProperty('sourceType') == false || defines.endpointTypes.find(
+        function(val) {
+            return val === data.sourceType;
+        }) == undefined) {
+        res.status(401);
+        res.json(defines.errorStacker('Invalid sourceType'));
+        return;
+    }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.setOutputStd(JSON.stringify(data)).then(function(local_data) {
+        queryObject.model.endpoint = Object.assign({}, defines.endpointModel, data);
+        queryObject.pushModel().then(function() {
             res.status(200);
-            res.json(local_data);
+            res.json(data);
         }, function(error) {
-            res.status(401);
-            res.json(defines.errorStacker('Updating output failed', error));
+            res.status(501);
+            res.json(defines.errorStacker('Updating endpoint failed', error));
         });
     }, function(error) {
-        res.status(401);
+        res.status(501);
         res.json(defines.errorStacker('Updating query failed', error));
     });
 };
 
 /**
  * @fn deleteQueryById
- * @desc Removes output from target query.
- * Removes both std and local output and sets defaults from defines
+ * @desc Removes data source from target query.
  * @param req Express.js request object
  * @param res Express.js response object
  */
-OutputController.prototype.deleteQueryById = function(req, res) {
+EndpointController.prototype.deleteQueryById = function(req, res) {
     var query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
@@ -89,13 +92,14 @@ OutputController.prototype.deleteQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.model.output = Object.assign({}, defines.queryModel.output);
+        var type = queryObject.model.endpoint.sourceType;
+        queryObject.model.endpoint =Object.assign({}, defines.endpointModel, {sourceType: type});
         queryObject.pushModel().then(function() {
             res.status(200);
-            res.json(queryObject.model.output);
+            res.json(queryObject.model.endpoint);
         }, function(error) {
             res.status(401);
-            res.json(defines.errorStacker('Delete from model failed', error));
+            res.json(defines.errorStacker('Delete endpoint from model failed', error));
         });
     }, function(error) {
         res.status(401);
@@ -104,4 +108,4 @@ OutputController.prototype.deleteQueryById = function(req, res) {
 };
 
 
-module.exports = OutputController;
+module.exports = EndpointController;
