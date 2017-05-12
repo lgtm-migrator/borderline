@@ -199,10 +199,12 @@ QueryAbstract.prototype.getOutputLocal = function() {
  * @fn getOutputStd
  * @return {Promise} Resolves to output standard data content
  */
-QueryAbstract.prototype.getOutputLocal = function() {
+QueryAbstract.prototype.getOutputStd = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('std')) {
+        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('std') &&
+            _this.model.output.std.hasOwnProperty('dataId') &&
+            _this.model.output.std.dataId !== null) {
             _this.storage.getObject(_this.model.output.std.dataId).then(function(std_data) {
                 resolve(std_data);
             }, function (error) {
@@ -339,7 +341,7 @@ QueryAbstract.prototype.pushModel = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
        _this.queryCollection.findOneAndReplace({_id: new ObjectID(_this.model._id)}, _this.model).then(function(result) {
-            if (result.ok = 1)
+            if (result.ok == 1)
                 resolve(_this.model);
             else
                 reject(defines.errorStacker('Update query model failed',

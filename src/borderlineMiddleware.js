@@ -54,6 +54,8 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     //Import & instantiate controller modules
     var inputControllerModule = require('./inputController.js');
     _this.inputController = new inputControllerModule(_this.queryCollection, _this.grid);
+    var outputControllerModule = require('./outputController.js');
+    _this.outputController = new outputControllerModule(_this.queryCollection, _this.grid);
     var executionControllerModule = require('./executionController.js');
     _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
 
@@ -66,7 +68,11 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .get(_this.inputController.getQueryById)
         .put(_this.inputController.putQueryById)
         .delete(_this.inputController.deleteQueryById);
-    //@todo Add /query/:query_id/output
+
+    _this.app.route(prefix + '/:query_id/output')
+        .get(_this.outputController.getQueryById)
+        .put(_this.outputController.putQueryById)
+        .delete(_this.outputController.deleteQueryById);
 
     _this.app.route('/execute') //@todo /query/:query_id/execute
         .post(_this.executionController.executeQuery);

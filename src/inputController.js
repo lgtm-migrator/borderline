@@ -3,6 +3,13 @@ const ObjectID = require('mongodb').ObjectID;
 const QueryFactory = require('./core/queryFactory.js');
 var defines = require('./defines.js');
 
+/**
+ * @fn InputController
+ * @desc Controller for queries inputs management.
+ * @param queryCollection MongoDb collection where the queries are stored
+ * @param queryGridFS ObjectStore to build the queries
+ * @constructor
+ */
 function InputController(queryCollection, queryGridFS) {
     this.factory = new QueryFactory(queryCollection, queryGridFS);
     this.queryCollection = queryCollection;
@@ -86,6 +93,13 @@ InputController.prototype.getQueryById = function(req, res) {
     });
 };
 
+
+/**
+ * @fn putQueryById
+ * @desc Controller used to update query input. Expected format is STD
+ * @param req Express.js request object
+ * @param res Express.js response object
+ */
 InputController.prototype.putQueryById = function(req, res) {
     var query_id = req.params.query_id;
     var data = req.body;
@@ -94,21 +108,32 @@ InputController.prototype.putQueryById = function(req, res) {
         res.json(defines.errorStacker('Missing query_id'));
         return;
     }
-    this.queryCollection.findOneAndReplace({ _id: new ObjectID(query_id)}, data, { returnOriginal: false }).then(function(result) {
-        if (result.ok == 1) {
-            res.status(200);
-            res.json(result.value);
-        }
-        else {
-            res.status(501);
-            res.json(result);
-        }
+    this.factory.fromID(query_id).then(function(queryObject) {
+        queryObject.setInputStd(data).then(function(local_data) {
+            queryObject.pushModel().then(function() {
+                res.status(200);
+                res.json(local_data);
+            }, function(error) {
+                res.status(401);
+                res.json(defines.errorStacker('Updating input model failed', error));
+            });
+        }, function (error) {
+            res.status(401);
+            res.json(defines.errorStacker('Updating input from std failed', error));
+        });
     }, function(error) {
         res.status(401);
         res.json(defines.errorStacker('Updating query failed', error));
     });
 };
 
+/**
+ * @fn deleteQueryById
+ * @desc Removes input from target query.
+ * Removes both std and local inputs and sets defaults from defines
+ * @param req Express.js request object
+ * @param res Express.js response object
+ */
 InputController.prototype.deleteQueryById = function(req, res) {
     var query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
@@ -116,14 +141,19 @@ InputController.prototype.deleteQueryById = function(req, res) {
         res.json(defines.errorStacker('Missing query ID'));
         return;
     }
-    this.queryCollection.findOneAndDelete({_id: new ObjectID(query_id) }).then(function(result) {
-        res.status(200);
-        res.json(result);
+    this.factory.fromID(query_id).then(function(queryObject) {
+        queryObject.model.input = Object.assign({}, defines.queryModel.input);
+        queryObject.pushModel().then(function() {
+            res.status(200);
+            res.json(queryObject.model.input);
+        }, function(error) {
+          res.status(401);
+          res.json(defines.errorStacker('Delete from model failed', error));
+        });
     }, function(error) {
         res.status(401);
         res.json(defines.errorStacker('Delete failed', error));
     });
-
 };
 
 
