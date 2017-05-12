@@ -13,56 +13,10 @@ function InputController(queryCollection, queryGridFS) {
     this.queryCollection = queryCollection;
 
     //Bind member functions to this instance
-    this.getNewQuery = InputController.prototype.getNewQuery.bind(this);
-    this.postNewQuery = InputController.prototype.postNewQuery.bind(this);
     this.getQueryById = InputController.prototype.getQueryById.bind(this);
     this.putQueryById = InputController.prototype.putQueryById.bind(this);
     this.deleteQueryById = InputController.prototype.deleteQueryById.bind(this);
 }
-
-
-InputController.prototype.getNewQuery = function(req, res) {
-    var newQuery = Object.assign({}, defines.queryModel);
-
-    this.queryCollection.insertOne(newQuery).then(function(r) {
-        if (r.insertedCount == 1) {
-            res.status(200);
-            res.json(r.ops[0]);
-        }
-        else {
-            res.status(401);
-            res.json({error: 'Insert a new query failed'});
-        }
-    }, function(error){
-       res.status(501);
-       res.json({ error: error });
-    });
-};
-
-InputController.prototype.postNewQuery = function(req, res) {
-    var credentials = req.body.credentials;
-    var endpoint = req.body.endpoint;
-    if (endpoint == null || credentials == null) {
-        res.status(401);
-        res.json(defines.errorStacker('Missing query data'));
-        return;
-    }
-    var newQuery = Object.assign({}, defines.queryModel, { endpoint: endpoint }, {credentials: credentials});
-
-    this.queryCollection.insertOne(newQuery).then(function(r) {
-        if (r.insertedCount == 1) {
-            res.status(200);
-            res.json(r.ops[0]);
-        }
-        else {
-            res.status(401);
-            res.json(defines.errorStacker('Insert a new query failed'));
-        }
-    }, function(error){
-        res.status(501);
-        res.json(defines.errorStacker(error));
-    });
-};
 
 /**
  * @fn getQueryByID
