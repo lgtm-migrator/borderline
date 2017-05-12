@@ -61,6 +61,7 @@ function ErrorStack(error_obj, error_stack) {
 }
 
 module.exports = {
+    endpointTypes: ['TS171', 'eHS'],
     queryCollectionName: 'borderline_middleware_queries',
     queryGridFSCollectionName: 'borderline_middleware_gridFS',
     endpointModel: endpointModel,

@@ -1,5 +1,3 @@
-const ObjectID = require('mongodb').ObjectID;
-
 const QueryFactory = require('./core/queryFactory.js');
 var defines = require('./defines.js');
 
