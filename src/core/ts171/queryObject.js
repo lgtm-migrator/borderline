@@ -20,11 +20,10 @@ QueryTransmart17_1.prototype = Object.create(QueryAbstract.prototype); //Inherit
 QueryTransmart17_1.prototype.constructor = QueryTransmart17_1;
 
 /**
- * @fn _isAuth
+ * @fn isAuth
  * @desc Returns true if this query has a non-expired token
- * @private
  */
-QueryTransmart17_1.prototype._isAuth = function() {
+QueryTransmart17_1.prototype.isAuth = function() {
     //Needs first auth if Oauth token details are missing
     if (this.model.credentials.hasOwnProperty('access_token') === false ||
         this.model.credentials.hasOwnProperty('expires_in') === false ||
@@ -81,7 +80,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
 QueryTransmart17_1.prototype._ensureAuth = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        if (_this._isAuth() == false) {
+        if (_this.isAuth() == false) {
             _this._doAuth().then(function() {
                 resolve(true);
             }, function (error) {
