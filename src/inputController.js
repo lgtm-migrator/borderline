@@ -1,22 +1,22 @@
 const ObjectID = require('mongodb').ObjectID;
 
-const QueryFactory = require('./query/queryFactory.js');
+const QueryFactory = require('./core/queryFactory.js');
 var defines = require('./defines.js');
 
-function QueryController(queryCollection, queryGridFS) {
+function InputController(queryCollection, queryGridFS) {
     this.factory = new QueryFactory(queryCollection, queryGridFS);
     this.queryCollection = queryCollection;
 
     //Bind member functions to this instance
-    this.getNewQuery = QueryController.prototype.getNewQuery.bind(this);
-    this.postNewQuery = QueryController.prototype.postNewQuery.bind(this);
-    this.getQueryById = QueryController.prototype.getQueryById.bind(this);
-    this.putQueryById = QueryController.prototype.putQueryById.bind(this);
-    this.deleteQueryById = QueryController.prototype.deleteQueryById.bind(this);
+    this.getNewQuery = InputController.prototype.getNewQuery.bind(this);
+    this.postNewQuery = InputController.prototype.postNewQuery.bind(this);
+    this.getQueryById = InputController.prototype.getQueryById.bind(this);
+    this.putQueryById = InputController.prototype.putQueryById.bind(this);
+    this.deleteQueryById = InputController.prototype.deleteQueryById.bind(this);
 }
 
 
-QueryController.prototype.getNewQuery = function(req, res) {
+InputController.prototype.getNewQuery = function(req, res) {
     var newQuery = Object.assign({}, defines.queryModel);
 
     this.queryCollection.insertOne(newQuery).then(function(r) {
@@ -34,7 +34,7 @@ QueryController.prototype.getNewQuery = function(req, res) {
     });
 };
 
-QueryController.prototype.postNewQuery = function(req, res) {
+InputController.prototype.postNewQuery = function(req, res) {
     var credentials = req.body.credentials;
     var endpoint = req.body.endpoint;
     if (endpoint == null || credentials == null) {
@@ -65,7 +65,7 @@ QueryController.prototype.postNewQuery = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-QueryController.prototype.getQueryById = function(req, res) {
+InputController.prototype.getQueryById = function(req, res) {
     var query_id = req.params.query_id;
     if (query_id === null || query_id === undefined || query_id.length == 0) {
         res.status(401);
@@ -86,7 +86,7 @@ QueryController.prototype.getQueryById = function(req, res) {
     });
 };
 
-QueryController.prototype.putQueryById = function(req, res) {
+InputController.prototype.putQueryById = function(req, res) {
     var query_id = req.params.query_id;
     var data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
@@ -109,7 +109,7 @@ QueryController.prototype.putQueryById = function(req, res) {
     });
 };
 
-QueryController.prototype.deleteQueryById = function(req, res) {
+InputController.prototype.deleteQueryById = function(req, res) {
     var query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
@@ -127,4 +127,4 @@ QueryController.prototype.deleteQueryById = function(req, res) {
 };
 
 
-module.exports = QueryController;
+module.exports = InputController;

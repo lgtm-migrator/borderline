@@ -3,7 +3,7 @@ const ObjectID = require('mongodb').ObjectID;
 
 // Project modules
 const defines = require('./defines.js');
-const QueryFactory = require('./query/queryFactory.js');
+const QueryFactory = require('./core/queryFactory.js');
 
 /**
  * @fn ExecutionController
