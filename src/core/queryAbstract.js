@@ -21,6 +21,15 @@ function QueryAbstract(queryModel, queryCollection, queryGridFS) {
 }
 
 /**
+ * @fn isAuth
+ * @desc Returns true if this query has a non-expired token
+ * @pure
+ */
+QueryAbstract.prototype.isAuth = function() {
+    throw 'isAuth must be overloaded in implementation';
+};
+
+/**
  * @fn execute
  * @pure
  */
