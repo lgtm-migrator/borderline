@@ -53,9 +53,11 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
 
     //Import & instantiate controller modules
     var creationControllerModule = require('./creationController.js');
-    _this.creationController = new creationControllerModule(_this.queryCollection, _this.grid);
+    _this.creationController = new creationControllerModule(_this.queryCollection);
     var endpointControllerModule = require('./endpointController.js');
     _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.grid);
+    var credentialsControllerModule = require('./credentialsController.js');
+    _this.credentialsController = new credentialsControllerModule(_this.queryCollection, _this.grid);
     var inputControllerModule = require('./inputController.js');
     _this.inputController = new inputControllerModule(_this.queryCollection, _this.grid);
     var outputControllerModule = require('./outputController.js');
@@ -71,6 +73,12 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .get(_this.endpointController.getQueryById)
         .put(_this.endpointController.putQueryById)
         .delete(_this.endpointController.deleteQueryById);
+    _this.app.route(prefix + '/:query_id/credentials')
+        .get(_this.credentialsController.getQueryById)
+        .put(_this.credentialsController.putQueryById)
+        .delete(_this.credentialsController.deleteQueryById);
+    _this.app.route(prefix + '/:query_id/credentials/isAuth')
+        .get(_this.credentialsController.getQueryAuthById);
     _this.app.route(prefix + '/:query_id/input')
         .get(_this.inputController.getQueryById)
         .put(_this.inputController.putQueryById)
