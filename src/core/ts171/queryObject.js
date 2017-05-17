@@ -101,7 +101,7 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
 /**
  * @fn execute
  * @desc Perform query on Transmart endpoint, stores and translate the outputs
- * @return {Promise} Execution summary object on success
+ * @return {Promise} Execution status object on success
  */
 QueryTransmart17_1.prototype.execute = function() {
     var _this = this;

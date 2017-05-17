@@ -141,6 +141,8 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .delete(_this.outputController.deleteQueryById);
     _this.app.route('/execute')
         .post(_this.executionController.executeQuery);
+    _this.app.route('/execute/:query_id')
+        .get(_this.executionController.getQueryById);
 };
 
 /**
