@@ -7,9 +7,10 @@ const ip = require('ip');
 const body_parser = require('body-parser');
 const defines = require('./defines.js');
 const package = require('../package.json');
+const Options = require('./core/options.js');
 
 function BorderlineMiddleware(config) {
-    this.config = config;
+    this.config = new Options(config);
     this.app = express();
 
     //Bind member functions
@@ -161,7 +162,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             var p = new Promise(function(resolve, reject) {
                 mongodb.connect(urls_list[i], function(err, db) {
                     if (err !== null)
-                        reject(defines.errorFormat('Database connection failure: ' + err));
+                        reject(defines.errorStacker('Database connection failure', err));
                     else
                         resolve(db);
                 });
@@ -177,7 +178,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.queryGridFSCollectionName });
             resolve(true);
         }, function (error) {
-            reject(defines.eerror);
+            reject(defines.errorStacker(error));
         });
     });
 };
