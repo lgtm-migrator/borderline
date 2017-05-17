@@ -7,8 +7,8 @@ const expressSession = require('express-session');
 const MongoStore = require('connect-mongo')(expressSession);
 const body_parser = require('body-parser');
 const passport = require('passport');
-const multer  = require('multer');
-const timer= require('timers');
+const multer = require('multer');
+const timer = require('timers');
 const ip = require('ip');
 
 const borderlineOptions = require('./core/options');
@@ -45,18 +45,18 @@ function BorderlineServer(config) {
     }
 
     var _this = this;
-    this._connectDb().then(function() {
+    this._connectDb().then(function () {
         //Middleware imports
         _this.userPermissionsMiddleware = require('./middlewares/userPermissions');
 
         //Init external middleware
-        _this.app.use(body_parser.urlencoded({extended: true}));
+        _this.app.use(body_parser.urlencoded({ extended: true }));
         _this.app.use(body_parser.json());
         _this.app.use(expressSession({
             secret: 'borderline',
             saveUninitialized: false,
             resave: false,
-            cookie: {secure: false},
+            cookie: { secure: false },
             store: _this.mongoStore
         }));
         _this.app.use(passport.initialize());
@@ -71,7 +71,7 @@ function BorderlineServer(config) {
 
         //Setup Registry update
         _this._registryHandler();
-    }, function(error) {
+    }, function (error) {
         this.mongoError(error.toString());
     });
 
@@ -84,12 +84,12 @@ function BorderlineServer(config) {
  * Put a status object in the DB based on this current configuration
  * @private
  */
-BorderlineServer.prototype._registryHandler = function() {
+BorderlineServer.prototype._registryHandler = function () {
     var _this = this;
 
     //Connect to the registry collection
     this.registry = this.db.collection(defines.globalRegistryCollectionName);
-    var registry_update = function() {
+    var registry_update = function () {
         //Create status object
         var status = Object.assign({}, defines.registryModel, {
             type: 'borderline-server',
@@ -107,9 +107,9 @@ BorderlineServer.prototype._registryHandler = function() {
             port: status.port,
             type: status.type
         }, status, { upsert: true, returnOriginal: false })
-            .then(function(success) {
+            .then(function (success) {
                 //Nothing to do here
-            }, function(error) {
+            }, function (error) {
                 //Just log the error
                 // console.log(error);
             });
@@ -130,16 +130,16 @@ BorderlineServer.prototype._registryHandler = function() {
  * @return {Promise} Resolves to true on success
  * @private
  */
-BorderlineServer.prototype._connectDb = function() {
+BorderlineServer.prototype._connectDb = function () {
     var _this = this;
-    return new Promise(function(resolve, reject) {
-        mongodb.connect(this.config.mongoUrl, function (err, db) {
+    return new Promise(function (resolve, reject) {
+        mongodb.connect(this.config.mongoURL, function (err, db) {
             if (err !== null) {
                 reject('Failed to connect to mongoDB');
                 return;
             }
             _this.db = db;
-            _this.mongoStore = new MongoStore({db: db, ttl: defines.sessionTimeout, collection: defines.sessionCollectionName });
+            _this.mongoStore = new MongoStore({ db: db, ttl: defines.sessionTimeout, collection: defines.sessionCollectionName });
             resolve(true);
         });
     });
@@ -149,7 +149,7 @@ BorderlineServer.prototype._connectDb = function() {
  * @fn setupUserAccount
  * @desc Initialize users account management routes and controller
  */
-BorderlineServer.prototype.setupUserAccount = function() {
+BorderlineServer.prototype.setupUserAccount = function () {
     //Controller imports
     var userAccountController = require('./controllers/userAccountController');
     this.userAccountController = new userAccountController(this.db.collection(defines.userCollectionName));
@@ -185,7 +185,7 @@ BorderlineServer.prototype.setupUserAccount = function() {
  * @fn setupDataStore
  * @desc Initialize data sources management routes and controller
  */
-BorderlineServer.prototype.setupDataStore = function() {
+BorderlineServer.prototype.setupDataStore = function () {
     // Data sources controller import
     var dataStoreControllerModule = require('./controllers/dataStoreController');
     this.dataStoreController = new dataStoreControllerModule(this.db.collection(defines.dataSourcesCollectionName));
@@ -210,7 +210,7 @@ BorderlineServer.prototype.setupDataStore = function() {
  * @fn setupExtensionStore
  * @desc Initialize global extensions management routes and controller
  */
-BorderlineServer.prototype.setupExtensionStore = function() {
+BorderlineServer.prototype.setupExtensionStore = function () {
     if (this.config.hasOwnProperty('extensionSourcesFolder') == false) {
         this.extensionError('No extensionSourcesFolder in options');
         return;
@@ -245,11 +245,11 @@ BorderlineServer.prototype.setupExtensionStore = function() {
  * @fn setupUserExtensions
  * @desc Initialize users extensions management routes and controller
  */
-BorderlineServer.prototype.setupUserExtensions = function() {
+BorderlineServer.prototype.setupUserExtensions = function () {
     var userExtensionControllerModule = require('./controllers/userExtensionController');
     this.userExtensionController = new userExtensionControllerModule(this.db.collection(defines.extensionsCollectionName));
 
-     //[ Extensions subscriptions
+    //[ Extensions subscriptions
     this.app.route('/users/:user_id/extensions')
         .get(this.userExtensionController.getExtensions) //GET List user extensions
         .delete(this.userExtensionController.deleteExtensions); //DELETE Forget all extensions for user
@@ -263,7 +263,7 @@ BorderlineServer.prototype.setupUserExtensions = function() {
  * @fn setupWorkflows
  * @desc Initialize workflow management routes and controller
  */
-BorderlineServer.prototype.setupWorkflows = function() {
+BorderlineServer.prototype.setupWorkflows = function () {
     var workflowControllerModule = require('./controllers/workflowController');
     this.workflowController = new workflowControllerModule(this.db.collection(defines.workflowCollectionName), this.db.collection(defines.stepCollectionName));
 
@@ -278,7 +278,7 @@ BorderlineServer.prototype.setupWorkflows = function() {
     this.app.route('/workflow/:workflow_id/step')
         .get(this.workflowController.getStep) //GET A workflow steps from workflow ID
         .put(this.workflowController.putStep);//PUT A new workflow step from workflow ID
-   this.app.route('/workflow/:workflow_id/step/:step_id')
+    this.app.route('/workflow/:workflow_id/step/:step_id')
         .get(this.workflowController.getStepByID) //GET A step by ID from a workflow by ID
         .post(this.workflowController.postStepByID) //POST A step by ID in a Workflow by ID
         .delete(this.workflowController.deleteStepByID); //DELETE a step by ID in a workflow by ID
@@ -290,8 +290,8 @@ BorderlineServer.prototype.setupWorkflows = function() {
  * @desc Disables every routes of the app to send back an error message
  * @param message A message string to use in responses
  */
-BorderlineServer.prototype.mongoError = function(message) {
-    this.app.all('*', function(req, res) {
+BorderlineServer.prototype.mongoError = function (message) {
+    this.app.all('*', function (req, res) {
         res.status(401);
         res.json({ error: 'Could not connect to the database: [' + message + ']' });
     });
@@ -302,14 +302,14 @@ BorderlineServer.prototype.mongoError = function(message) {
  * @desc Disables extension routes to send error message instead
  * @param message A message string to use in responses
  */
-BorderlineServer.prototype.extensionError = function(message) {
-    this.app.all('/extension_store', function(req, res) {
+BorderlineServer.prototype.extensionError = function (message) {
+    this.app.all('/extension_store', function (req, res) {
         res.status(204);
         res.json({ error: 'Extension store is disabled: [' + message + ']' });
     });
-    this.app.all('/extensions/*', function(req, res) {
+    this.app.all('/extensions/*', function (req, res) {
         res.status(204);
-        res.json({ error: 'Extensions are disabled: [' + message + ']'});
+        res.json({ error: 'Extensions are disabled: [' + message + ']' });
     });
 };
 
