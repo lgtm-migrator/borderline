@@ -18,7 +18,21 @@ function QueryAbstract(queryModel, queryCollection, queryGridFS) {
     this.queryCollection = queryCollection;
     this.queryGridFS = queryGridFS;
     this.storage = new ObjectStorage(this.queryGridFS);
+
+    //Bind member functions
+    this.registerExecutionStart = QueryAbstract.prototype.registerExecutionStart.bind(this);
+    this.registerExecutionEnd = QueryAbstract.prototype.registerExecutionEnd.bind(this);
+    this.registerExecutionError = QueryAbstract.prototype.registerExecutionError.bind(this);
 }
+
+/**
+ * @fn isAuth
+ * @desc Returns true if this query has a non-expired token
+ * @pure
+ */
+QueryAbstract.prototype.isAuth = function() {
+    throw 'isAuth must be overloaded in implementation';
+};
 
 /**
  * @fn execute
@@ -199,10 +213,12 @@ QueryAbstract.prototype.getOutputLocal = function() {
  * @fn getOutputStd
  * @return {Promise} Resolves to output standard data content
  */
-QueryAbstract.prototype.getOutputLocal = function() {
+QueryAbstract.prototype.getOutputStd = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('std')) {
+        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('std') &&
+            _this.model.output.std.hasOwnProperty('dataId') &&
+            _this.model.output.std.dataId !== null) {
             _this.storage.getObject(_this.model.output.std.dataId).then(function(std_data) {
                 resolve(std_data);
             }, function (error) {
@@ -314,6 +330,73 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
 };
 
 /**
+ * @fn registerExecutionStart
+ * @desc Update current model status to running execution
+ * @return {Promise} Resolving to the new status
+ */
+QueryAbstract.prototype.registerExecutionStart = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        var new_status = Object.assign({}, defines.executionModel, {
+            status: 'running',
+            start: new Date(),
+            end: null,
+            info: 'Will perform query'
+        });
+        _this.model.status = new_status;
+        _this.pushModel().then(function(model) {
+            resolve(_this.model.status);
+        }, function(error) {
+            reject(defines.errorStacker('Starting execution update fail', error));
+        })
+    });
+};
+
+/**
+ * @fn registerExecutionEnd
+ * @desc Update current model status to execution success
+ * @return {Promise} Resolving to the new status
+ */
+QueryAbstract.prototype.registerExecutionEnd = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        var new_status = Object.assign({}, _this.model.status, {
+            status: 'done',
+            end: new Date(),
+            info: 'All good'
+        });
+        _this.model.status = new_status;
+        _this.pushModel().then(function(model) {
+            resolve(_this.model.status);
+        }, function(error) {
+            reject(defines.errorStacker('Ending execution update fail', error));
+        })
+    });
+};
+
+/**
+ * @fn registerExecutionError
+ * @desc Update current model status to error state
+ * @return {Promise} Resolving to the new status
+ */
+QueryAbstract.prototype.registerExecutionError = function(errorObject) {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        var new_status = Object.assign({}, _this.model.status, {
+            status: 'error',
+            end: new Date(),
+            info: errorObject
+        });
+        _this.model.status = new_status;
+        _this.pushModel().then(function(model) {
+            resolve(_this.model.status);
+        }, function(error) {
+            reject(defines.errorStacker('Error execution update fail', error));
+        })
+    });
+};
+
+/**
  * @fn fetchModel
  * @desc Overwrites this Query model with the one from the DB
  * @return {Promise} A Promise resolving to the synchronised model
@@ -339,7 +422,7 @@ QueryAbstract.prototype.pushModel = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
        _this.queryCollection.findOneAndReplace({_id: new ObjectID(_this.model._id)}, _this.model).then(function(result) {
-            if (result.ok = 1)
+            if (result.ok == 1)
                 resolve(_this.model);
             else
                 reject(defines.errorStacker('Update query model failed',

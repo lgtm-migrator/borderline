@@ -1,3 +1,12 @@
+const registryModel = {
+    type: 'borderline-component',
+    version: '0.0.1',
+    timestamp: '',
+    expires_in: 0,
+    port: 4242,
+    ip: 'localhost'
+};
+
 const endpointModel = {
     sourceType: "",
     sourceName: "",
@@ -11,6 +20,13 @@ const credentialsModel = {
     password: ""
 };
 
+const executionModel = {
+    status: 'unknown',
+    start: null,
+    end: null,
+    info: ''
+};
+
 const queryModel = {
     endpoint: endpointModel,
     credentials: credentialsModel,
@@ -18,6 +34,7 @@ const queryModel = {
         local: {},
         std: {}
     },
+    status: executionModel,
     output: {
         local: {
             dataSize: 0,
@@ -61,11 +78,15 @@ function ErrorStack(error_obj, error_stack) {
 }
 
 module.exports = {
+    globalRegistryCollectionName: 'borderline_global_registry',
     queryCollectionName: 'borderline_middleware_queries',
     queryGridFSCollectionName: 'borderline_middleware_gridFS',
-    thresholdGridFS: Math.pow(10, 7), //10 Mo
+    endpointTypes: ['TS171', 'eHS'],
+    executionModel: executionModel,
     endpointModel: endpointModel,
     credentialsModel: credentialsModel,
     queryModel: queryModel,
+    registryUpdateInterval: 60 * 1000, // 60 * 1000 ms = 1 minute
+    registryModel: registryModel,
     errorStacker: ErrorStack
 };

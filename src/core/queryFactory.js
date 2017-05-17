@@ -47,6 +47,10 @@ QueryFactory.prototype.fromID = function(query_id) {
     return new Promise(function(resolve, reject) {
         try {
             _this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function (queryModel) {
+                if (queryModel == null || queryModel == undefined) {
+                    reject(defines.errorStacker('Unknown id ' + query_id));
+                    return;
+                }
                 _this.fromModel(queryModel).then(function (queryObj) {
                     resolve(queryObj);
                 }, function (error) {

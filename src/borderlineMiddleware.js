@@ -1,20 +1,24 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
 const GridFSBucket = require('mongodb').GridFSBucket;
+const timer= require('timers');
+const ip = require('ip');
 
 const body_parser = require('body-parser');
 const defines = require('./defines.js');
+const package = require('../package.json');
+const Options = require('./core/options.js');
 
 function BorderlineMiddleware(config) {
-    this.config = config;
+    this.config = new Options(config);
     this.app = express();
 
     //Bind member functions
     this._connectDb = BorderlineMiddleware.prototype._connectDb.bind(this);
     this._setupQueryEndpoints = BorderlineMiddleware.prototype._setupQueryEndpoints.bind(this);
+    this._registryHandler = BorderlineMiddleware.prototype._registryHandler.bind(this);
 
     //Setup Express Application
-
     //Parse JSON body when received
     this.app.use(body_parser.urlencoded({extended: true}));
     this.app.use(body_parser.json());
@@ -33,6 +37,8 @@ function BorderlineMiddleware(config) {
     var _this = this;
     this._connectDb().then(function() {
         _this._setupQueryEndpoints('/query');
+
+        _this._registryHandler();
     }, function(error) {
         _this.app.all('*', function(req, res) {
             res.status(501);
@@ -44,6 +50,52 @@ function BorderlineMiddleware(config) {
 }
 
 /**
+ * @fn _registryHandler
+ * @desc Setup a routine to update the global registry
+ * Put a status object in the DB based on this current configuration
+ * @private
+ */
+BorderlineMiddleware.prototype._registryHandler = function() {
+    var _this = this;
+
+    //Connect to the registry collection
+    this.registry = this.db.collection(defines.globalRegistryCollectionName);
+    var registry_update = function() {
+        //Create status object
+        var status = Object.assign({}, defines.registryModel, {
+            type: 'borderline-middleware',
+            version: package.version,
+            timestamp: new Date(),
+            expires_in: defines.registryUpdateInterval / 1000,
+            port: _this.config.port,
+            ip: ip.address().toString()
+        });
+        //Write in DB
+        //Match by ip + port + type
+        //Create if does not exists.
+        _this.registry.findOneAndReplace({
+            ip: status.ip,
+            port: status.port,
+            type: status.type
+        }, status, { upsert: true, returnOriginal: false })
+            .then(function(success) {
+                //Nothing to do here
+            }, function(error) {
+                //Just log the error
+                console.log(error);
+            });
+    };
+
+    //Call the update every X milliseconds
+    var interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
+    //Do a first update now
+    registry_update();
+
+    return interval_timer;
+};
+
+
+/**
  * @fn _setupQueryEndpoints
  * @param prefix This string is appended before the uris definition
  * @private
@@ -52,24 +104,45 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     var _this = this;
 
     //Import & instantiate controller modules
-    var queryControllerModule = require('./queryController.js');
-    _this.queryController = new queryControllerModule(_this.queryCollection, _this.grid);
+    var creationControllerModule = require('./creationController.js');
+    _this.creationController = new creationControllerModule(_this.queryCollection);
+    var endpointControllerModule = require('./endpointController.js');
+    _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.grid);
+    var credentialsControllerModule = require('./credentialsController.js');
+    _this.credentialsController = new credentialsControllerModule(_this.queryCollection, _this.grid);
+    var inputControllerModule = require('./inputController.js');
+    _this.inputController = new inputControllerModule(_this.queryCollection, _this.grid);
+    var outputControllerModule = require('./outputController.js');
+    _this.outputController = new outputControllerModule(_this.queryCollection, _this.grid);
     var executionControllerModule = require('./executionController.js');
     _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
 
-    //Setup controllers endpoints
+    //Setup controllers URIs
     _this.app.route(prefix + '/new')
-        .get(_this.queryController.getNewQuery)
-        .post(_this.queryController.postNewQuery);
-    //@todo Add /query/:query_id/endpoint
-    _this.app.route(prefix + '/:query_id') //@todo Replace to /query/:query_id/input
-        .get(_this.queryController.getQueryById)
-        .put(_this.queryController.putQueryById)
-        .delete(_this.queryController.deleteQueryById);
-    //@todo Add /query/:query_id/output
-
-    _this.app.route('/execute') //@todo /query/:query_id/execute
+        .get(_this.creationController.getNewQuery)
+        .post(_this.creationController.postNewQuery);
+    _this.app.route(prefix + '/:query_id/endpoint')
+        .get(_this.endpointController.getQueryById)
+        .put(_this.endpointController.putQueryById)
+        .delete(_this.endpointController.deleteQueryById);
+    _this.app.route(prefix + '/:query_id/credentials')
+        .get(_this.credentialsController.getQueryById)
+        .put(_this.credentialsController.putQueryById)
+        .delete(_this.credentialsController.deleteQueryById);
+    _this.app.route(prefix + '/:query_id/credentials/isAuth')
+        .get(_this.credentialsController.getQueryAuthById);
+    _this.app.route(prefix + '/:query_id/input')
+        .get(_this.inputController.getQueryById)
+        .put(_this.inputController.putQueryById)
+        .delete(_this.inputController.deleteQueryById);
+    _this.app.route(prefix + '/:query_id/output')
+        .get(_this.outputController.getQueryById)
+        .put(_this.outputController.putQueryById)
+        .delete(_this.outputController.deleteQueryById);
+    _this.app.route('/execute')
         .post(_this.executionController.executeQuery);
+    _this.app.route('/execute/:query_id')
+        .get(_this.executionController.getQueryById);
 };
 
 /**
@@ -91,7 +164,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             var p = new Promise(function(resolve, reject) {
                 mongodb.connect(urls_list[i], function(err, db) {
                     if (err !== null)
-                        reject(defines.errorFormat('Database connection failure: ' + err));
+                        reject(defines.errorStacker('Database connection failure', err));
                     else
                         resolve(db);
                 });
@@ -107,7 +180,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.queryGridFSCollectionName });
             resolve(true);
         }, function (error) {
-            reject(defines.eerror);
+            reject(defines.errorStacker(error));
         });
     });
 };

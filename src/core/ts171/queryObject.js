@@ -20,11 +20,10 @@ QueryTransmart17_1.prototype = Object.create(QueryAbstract.prototype); //Inherit
 QueryTransmart17_1.prototype.constructor = QueryTransmart17_1;
 
 /**
- * @fn _isAuth
+ * @fn isAuth
  * @desc Returns true if this query has a non-expired token
- * @private
  */
-QueryTransmart17_1.prototype._isAuth = function() {
+QueryTransmart17_1.prototype.isAuth = function() {
     //Needs first auth if Oauth token details are missing
     if (this.model.credentials.hasOwnProperty('access_token') === false ||
         this.model.credentials.hasOwnProperty('expires_in') === false ||
@@ -42,7 +41,7 @@ QueryTransmart17_1.prototype._isAuth = function() {
 /**
  * @fn _doAuth
  * @desc Gets a new token from TS endpoint and store it in DB
- * @return {Promise}
+ * @return {Promise} Resolves ot true on success
  * @private
  */
 QueryTransmart17_1.prototype._doAuth = function() {
@@ -57,8 +56,13 @@ QueryTransmart17_1.prototype._doAuth = function() {
             '&username=' + _this.model.credentials.username +
             '&password=' + _this.model.credentials.password
         }, function (error, response, body) {
-            if (!response) { //Reject on errors
-                reject(error); return;
+            if (error !== null) {
+                reject(defines.errorStacker(error));
+                return;
+            }
+            else if (response === null || response.statusCode !== 200) { //Reject on errors
+                reject(defines.errorStacker('Authentication failed'));
+                return;
             }
             //Update queryModel
             var newCredentials = Object.assign({}, _this.model.credentials, body, {generated: new Date()});
@@ -81,7 +85,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
 QueryTransmart17_1.prototype._ensureAuth = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        if (_this._isAuth() == false) {
+        if (_this.isAuth() == false) {
             _this._doAuth().then(function() {
                 resolve(true);
             }, function (error) {
@@ -97,26 +101,24 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
 /**
  * @fn execute
  * @desc Perform query on Transmart endpoint, stores and translate the outputs
- * @return {Promise} Execution summary object on success
+ * @return {Promise} Execution status object on success
  */
 QueryTransmart17_1.prototype.execute = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        var start_time = new Date();
-        var fail_callback = function(error) {
-            var fail_time = new Date();
-            var delta_time = fail_time - start_time;
-            reject(defines.errorStacker('Execute failed', {
-                time: delta_time.toString() + ' ms',
-                error: defines.errorStacker(error)
-            }));
-        };
+
+        _this.registerExecutionStart().then(function(status) {
+            resolve(status);
+        }, function (error) {
+            reject(defines.errorStacker('Execution fail', error));
+        });
+
         //Check for required fields
         if (!_this.model.hasOwnProperty('input') ||
             !_this.model.input.hasOwnProperty('local') ||
             !_this.model.input.local.hasOwnProperty('uri') ||
             !_this.model.input.local.hasOwnProperty('params')) {
-           fail_callback('Query format is not valid');
+            _this.registerExecutionError('Query input is not valid');
            return;
         }
 
@@ -129,16 +131,19 @@ QueryTransmart17_1.prototype.execute = function() {
                     Authorization: 'Bearer ' + _this.model.credentials.access_token
                 }
             }, function (error, response, body) {
-                if (!response) {
-                    reject(defines.errorStacker('Execute request failed', error)); return;
+                if (error !== null || response === null || response.statusCode !== 200) {
+                    _this.registerExecutionError(defines.errorStacker('Execute request failed', error));
+                    return;
                 }
                 _this.setOutputLocal(body).then(function(std_data) {
-                    var success_time = new Date();
-                    var delta_time = success_time - start_time;
-                    resolve({status: 'success!', time: delta_time.toString() + ' ms', data: std_data});
-                }, fail_callback);
+                    _this.registerExecutionEnd(); //Update status to done
+                }, function(error) {
+                    _this.registerExecutionError(defines.errorStacker('Exectution failed while saving result', error));
+                });
             });
-        }, fail_callback);
+        }, function (error) {
+            _this.registerExecutionError(defines.errorStacker('Authentication error while executing', error));
+        });
     });
 };
 

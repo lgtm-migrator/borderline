@@ -3,7 +3,7 @@ const ObjectID = require('mongodb').ObjectID;
 
 // Project modules
 const defines = require('./defines.js');
-const QueryFactory = require('./query/queryFactory.js');
+const QueryFactory = require('./core/queryFactory.js');
 
 /**
  * @fn ExecutionController
@@ -19,6 +19,7 @@ function ExecutionController(queryCollection, gridFs) {
 
     //Bind member functions
     this.executeQuery = ExecutionController.prototype.executeQuery.bind(this);
+    this.getQueryById = ExecutionController.prototype.getQueryById.bind(this);
 }
 
 /**
@@ -49,6 +50,28 @@ ExecutionController.prototype.executeQuery = function(req, res) {
         res.status(401);
         res.json(defines.errorStacker(error));
     })
+};
+
+/**
+ * @fn getQueryById
+ * @desc Retreive the current execution status for a specific query
+ * @param req Express.js request object
+ * @param res Express.js response object
+ */
+ExecutionController.prototype.getQueryById = function(req, res) {
+    var query_id = req.params.query_id;
+    if (query_id === undefined || query_id === null) {
+        res.status(401);
+        res.json(defines.errorStacker('Missing query_id'));
+        return;
+    }
+    this.queryFactory.fromID(query_id).then(function(queryObject) {
+        res.status(200);
+        res.json(queryObject.model.status);
+    }, function (error) {
+       res.status(401);
+       res.json(defines.errorStacker('Get query execution status failed', error));
+    });
 };
 
 module.exports = ExecutionController;

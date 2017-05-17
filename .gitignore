@@ -38,3 +38,6 @@ jspm_packages
 
 # IntelliJ IDE
 .idea/
+
+#VSCode
+.vscode/
