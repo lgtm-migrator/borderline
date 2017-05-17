@@ -154,7 +154,7 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
 BorderlineMiddleware.prototype._connectDb = function() {
     var _this = this;
     var urls_list = [
-        this.config.mongoUrl,
+        this.config.mongoURL,
         this.config.objectStorageUrl
     ];
     return new Promise(function(resolve, reject) {

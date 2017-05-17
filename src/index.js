@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-var config = require('../borderline-config.js');
+var config = require('../config/borderline.config.js');
 var BorderlineMiddleware = require('./borderlineMiddleware.js');
 
 //Remove unwanted express headers
@@ -12,5 +12,6 @@ app.listen(config.port, function (err) {
     if (err) {
         return console.error(err);
     }
-    console.log('Listening at http://localhost:' + config.port.toString());
+
+    console.log(`Listening at http://localhost:${config.port}/`);
 });
