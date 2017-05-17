@@ -8,7 +8,6 @@ var BorderlineMiddleware = require('./borderlineMiddleware.js');
 app.set('x-powered-by', false);
 
 app.use(BorderlineMiddleware(config));
-
 app.listen(config.port, function (err) {
     if (err) {
         return console.error(err);
