@@ -18,6 +18,11 @@ function QueryAbstract(queryModel, queryCollection, queryGridFS) {
     this.queryCollection = queryCollection;
     this.queryGridFS = queryGridFS;
     this.storage = new ObjectStorage(this.queryGridFS);
+
+    //Bind member functions
+    this.registerExecutionStart = QueryAbstract.prototype.registerExecutionStart.bind(this);
+    this.registerExecutionEnd = QueryAbstract.prototype.registerExecutionEnd.bind(this);
+    this.registerExecutionError = QueryAbstract.prototype.registerExecutionError.bind(this);
 }
 
 /**
@@ -321,6 +326,73 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
         catch (error) {
             reject(defines.errorStacker('Caught exception', error));
         }
+    });
+};
+
+/**
+ * @fn registerExecutionStart
+ * @desc Update current model status to running execution
+ * @return {Promise} Resolving to the new status
+ */
+QueryAbstract.prototype.registerExecutionStart = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        var new_status = Object.assign({}, defines.executionModel, {
+            status: 'running',
+            start: new Date(),
+            end: null,
+            info: 'Will perform query'
+        });
+        _this.model.status = new_status;
+        _this.pushModel().then(function(model) {
+            resolve(_this.model.status);
+        }, function(error) {
+            reject(defines.errorStacker('Starting execution update fail', error));
+        })
+    });
+};
+
+/**
+ * @fn registerExecutionEnd
+ * @desc Update current model status to execution success
+ * @return {Promise} Resolving to the new status
+ */
+QueryAbstract.prototype.registerExecutionEnd = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        var new_status = Object.assign({}, _this.model.status, {
+            status: 'done',
+            end: new Date(),
+            info: 'All good'
+        });
+        _this.model.status = new_status;
+        _this.pushModel().then(function(model) {
+            resolve(_this.model.status);
+        }, function(error) {
+            reject(defines.errorStacker('Ending execution update fail', error));
+        })
+    });
+};
+
+/**
+ * @fn registerExecutionError
+ * @desc Update current model status to error state
+ * @return {Promise} Resolving to the new status
+ */
+QueryAbstract.prototype.registerExecutionError = function(errorObject) {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+        var new_status = Object.assign({}, _this.model.status, {
+            status: 'error',
+            end: new Date(),
+            info: errorObject
+        });
+        _this.model.status = new_status;
+        _this.pushModel().then(function(model) {
+            resolve(_this.model.status);
+        }, function(error) {
+            reject(defines.errorStacker('Error execution update fail', error));
+        })
     });
 };
 
