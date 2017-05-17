@@ -34,6 +34,7 @@ const registryModel = {
     type: 'borderline-component',
     version: '0.0.1',
     timestamp: '',
+    expires_in: 0,
     port: 4242,
     ip: 'localhost'
 };
