@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-var config = require('../borderline-config.js');
+var config = require('../config/borderline.config.js');
 var BorderlineMiddleware = require('./borderlineMiddleware.js');
 
 //Remove unwanted express headers
