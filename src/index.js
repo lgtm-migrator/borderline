@@ -13,6 +13,5 @@ app.listen(config.port, function (err) {
     if (err) {
         return console.error(err);
     }
-
     console.log('Listening at http://localhost:3042/');
 });
