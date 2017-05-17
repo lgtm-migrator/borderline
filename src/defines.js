@@ -30,6 +30,14 @@ const queryModel = {
     }
 };
 
+const registryModel = {
+    type: 'borderline-component',
+    version: '0.0.1',
+    timestamp: '',
+    port: 4242,
+    ip: 'localhost'
+};
+
 function ErrorStack(error_obj, error_stack) {
     var error = {};
     var error_message = '';
@@ -61,11 +69,14 @@ function ErrorStack(error_obj, error_stack) {
 }
 
 module.exports = {
-    endpointTypes: ['TS171', 'eHS'],
+    globalRegistryCollectionName: 'borderline_global_registry',
     queryCollectionName: 'borderline_middleware_queries',
     queryGridFSCollectionName: 'borderline_middleware_gridFS',
+    endpointTypes: ['TS171', 'eHS'],
     endpointModel: endpointModel,
     credentialsModel: credentialsModel,
     queryModel: queryModel,
+    registryUpdateInterval: 60 * 1000, // 60 * 1000 ms = 1 minute
+    registryModel: registryModel,
     errorStacker: ErrorStack
 };
