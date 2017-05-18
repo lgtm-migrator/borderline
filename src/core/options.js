@@ -14,7 +14,7 @@ var Options = function (configuration) {
     this.extensionFileSystemFolder = configuration.extensionFileSystemFolder ? configuration.extensionFileSystemFolder : './.extensions/filesystem';
     this.borderlineUiFolder = configuration.borderlineUiFolder ? configuration.borderlineUiFolder : './node-modules/borderline-ui';
     this.development = configuration.development ? configuration.development : false;
-    this.enableCors = configuration.enableCors ? configuration.enableCors : false;
+    this.enableCors = configuration.enableCors ? configuration.enableCors : true;
 
     this._ensureFolder(this.extensionSourcesFolder);
     this._ensureFolder(this.extensionFileSystemFolder);
