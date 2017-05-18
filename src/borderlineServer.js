@@ -293,7 +293,7 @@ BorderlineServer.prototype.setupWorkflows = function () {
 BorderlineServer.prototype.mongoError = function (message) {
     this.app.all('*', function (req, res) {
         res.status(401);
-        res.json({ error: 'Could not connect to the database: [' + message + ']' });
+        res.json(defines.errorStacker('Could not connect to the database', message));
     });
 };
 
@@ -305,11 +305,11 @@ BorderlineServer.prototype.mongoError = function (message) {
 BorderlineServer.prototype.extensionError = function (message) {
     this.app.all('/extension_store', function (req, res) {
         res.status(204);
-        res.json({ error: 'Extension store is disabled: [' + message + ']' });
+        res.json(defines.errorStacker('Extension store is disabled', message));
     });
     this.app.all('/extensions/*', function (req, res) {
         res.status(204);
-        res.json({ error: 'Extensions are disabled: [' + message + ']' });
+        res.json(defines.errorStacker('Extensions are disabled', message));
     });
 };
 
