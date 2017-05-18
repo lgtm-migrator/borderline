@@ -89,6 +89,7 @@ BorderlineServer.prototype._registryHandler = function () {
 
     //Connect to the registry collection
     this.registry = this.db.collection(defines.globalRegistryCollectionName);
+    global.registry = this.registry;
     var registry_update = function () {
         //Create status object
         var status = Object.assign({}, defines.registryModel, {
