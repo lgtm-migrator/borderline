@@ -193,16 +193,16 @@ BorderlineServer.prototype.setupDataStore = function () {
     //[ Data sources routes
     this.app.route('/data_sources/')
         .get(this.dataStoreController.getDataStore) // GET all data sources
-        .post(this.dataStoreController.postDataStore);//POST New data source
+        .post(this.dataStoreController.postDataStore); // POST New data source
     this.app.route('/data_sources/:source_id')
-        .get(this.dataStoreController.getDataStoreByID) //GET a single data source
+        .get(this.dataStoreController.getDataStoreByID) // GET a single data source
         .put(this.dataStoreController.putDataStoreByID) // PUT Update a single data source
         .delete(this.dataStoreController.deleteDataStoreByID); //DELETE a single data source
     this.app.route('/users/:user_id/data_sources')
-        .get(this.dataStoreController.getUserDataSources); //GET all user's data sources
+        .get(this.dataStoreController.getUserDataSources); // GET all user's data sources
     this.app.route('/users/:user_id/data_sources/:source_id')
         .post(this.dataStoreController.postUserDataSourceByID) //POST Subscribe a user to a data source
-        .delete(this.dataStoreController.deleteUserDataSourceByID); //DELETE Unsubscribe user to data source
+        .delete(this.dataStoreController.deleteUserDataSourceByID); // DELETE Unsubscribe user to data source
     // ] Data sources routes
 };
 
