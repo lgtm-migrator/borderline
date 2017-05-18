@@ -1,6 +1,6 @@
 {
   "name": "borderline-middleware",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "./src/borderlineMiddleware.js",
   "scripts": {
