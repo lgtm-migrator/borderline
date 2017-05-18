@@ -61,7 +61,7 @@ ExtensionStore.prototype._syncExtension = function(extension, operation) {
         delete info['server.js'];
         delete info['client.js'];
         delete info['id'];
-        var model = Object.assign({
+        var model = Object.assign({}, defines.extensionModel, {
             users: extension.users ? extension.users : [],
             enabled: true
         }, info);
@@ -72,7 +72,7 @@ ExtensionStore.prototype._syncExtension = function(extension, operation) {
         var sync_error = function(error) { reject(defines.errorStacker('Extension synchronise failed', error)); };
 
         if (operation === 'update' || operation === 'create') {
-            that.extensionCollection.findOneAndReplace({_id: extension.uuid}, model, {upsert: true})
+            that.extensionCollection.findOneAndReplace({_id: extension.uuid}, model, { upsert: true })
                 .then(sync_success, sync_error);
         }
         else if (operation === 'disable') {
@@ -353,7 +353,7 @@ ExtensionStore.prototype.updateExtensionById = function(uuid, file) {
 
     var delReply = this.deleteExtensionById(uuid);
     if (delReply.hasOwnProperty('error')) {
-        return defines.errorStacker('Cannot update unknown extension ID: ' + uuid + ' -- ' + delReply.error);
+        return defines.errorStacker('Cannot update unknown extension ID: ' + uuid, delReply.error);
     }
 
     zip.extractAllTo(this.extensionFolder, true);

@@ -91,13 +91,12 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
         var hash = crypto.createHmac('sha512', salt);
         hash.update(password);
         var hash_pass = hash.digest('hex');
-        var new_user = {
+        var new_user = Object.assign({}, defines.userModel, {
             username: username,
             salt: salt,
             password: hash_pass,
-            admin: false,
             secret: speakeasy.generateSecret({ length: 32, name: 'Borderline' })
-        };
+        });
 
         //Resolve Promise on DB insert success
         that.userCollection.insertOne(new_user).then(function(result) {
@@ -138,9 +137,12 @@ UserAccounts.prototype.findById = function(id) {
 UserAccounts.prototype.updateById = function(id, data) {
     var that = this;
     return new Promise(function(resolve, reject) {
-        if (data.hasOwnProperty('_id')) //Transforms ID to mongo ObjectID type
+        if (data.hasOwnProperty('_id')) //Removes ID field because its managed by mongoDB
             delete data._id;
-        that.userCollection.findOneAndReplace({ _id : new ObjectID(id) }, data).then(function(result) {
+        //Create object from model and data
+        var updated_user = Object.assign({}, defines.userModel, data);
+        //Perform database update
+        that.userCollection.findOneAndReplace({ _id : new ObjectID(id) }, updated_user).then(function(result) {
                 if (result === null || result === undefined)
                     reject(defines.errorStacker('No match for id: ' + id));
                 else

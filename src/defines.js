@@ -37,6 +37,56 @@ const registryModel = {
     ip: 'localhost'
 };
 
+
+const userModel = {
+    username: '',
+    password: '',
+    admin: false
+};
+
+const dataSourceModel = {
+    sourceType: '',
+    sourceName: '',
+    sourceHost: '',
+    sourcePort: 8080,
+    public: false,
+    users: []
+};
+
+const extensionModel = {
+    enabled: true,
+    name: '',
+    description: '',
+    author: '',
+    build: '',
+    version: '0.0.1'
+};
+
+const stepModel = {
+    create: '', //Datetime
+    update: '', //Datetime
+    workflow: '',
+    user: '',
+    extension: '',
+    action: '',
+    context: {}
+};
+
+const workflowStepModel = {
+    parent: null,
+    children: []
+};
+
+const workflowModel = {
+    create: '', //Datetime
+    update: '', //Datetime
+    owner: '',
+    read: [],
+    write: [],
+    graph: workflowStepModel
+};
+
+
 module.exports = {
     globalRegistryCollectionName: 'borderline_global_registry',
     userCollectionName: 'borderline_server_users',
@@ -48,5 +98,11 @@ module.exports = {
     sessionTimeout: 6 * (24 * 60 * 60), // 6 Days
     registryUpdateInterval: 60 * 1000, // 60 * 1000 ms = 1 minute
     registryModel: registryModel,
+    userModel: userModel,
+    dataSourceModel: dataSourceModel,
+    extensionModel:extensionModel,
+    stepModel : stepModel,
+    workflowStepModel: workflowStepModel,
+    workflowModel: workflowModel,
     errorStacker: ErrorStack
 };

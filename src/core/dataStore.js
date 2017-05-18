@@ -50,10 +50,14 @@ dataStore.prototype.findAll = function() {
 dataStore.prototype.createDataSource = function(data_source) {
     var that = this;
     return new Promise(function(resolve, reject) {
+        //Transform users ID string to objectID for Mongo
         for (var i = 0; i < data_source.users.length; i++) {
             data_source.users[i] = new ObjectID(data_source.users[i]);
         }
-        that.sourcesCollection.insertOne(data_source).then(function(success) {
+        //Create new data source from model default
+        var new_data_source = Object.assign({}, defines.dataSourceModel, data_source);
+        //Insert into database
+        that.sourcesCollection.insertOne(new_data_source).then(function(success) {
             if (success.insertedCount == 1) {
                 resolve(success.ops[0]);
             }
@@ -95,17 +99,19 @@ dataStore.prototype.getDataSourceByID = function(source_id) {
 dataStore.prototype.updateDataSourceByID = function(source_id, data) {
     var that = this;
     return new Promise(function(resolve, reject) {
-        if (data.hasOwnProperty('_id')) //Transforms ID to mongo ObjectID type
+        if (data.hasOwnProperty('_id')) //Remove _id from data to prevent replace error in mongo
             delete data._id;
+        //transform user IDs
         for (var i = 0; i < data.users; i++) {
             data.users[i] = new ObjectID(data.users[i]);
         }
-        that.sourcesCollection.findOneAndReplace({_id: new ObjectID(source_id) }, data).then(function(result) {
+        //Create new data source from model default
+        var updated_data_source = Object.assign({}, defines.dataSourceModel, data);
+        that.sourcesCollection.findOneAndReplace({_id: new ObjectID(source_id) }, updated_data_source).then(function(result) {
             if (result === null || result === undefined)
                 reject(defines.errorStacker('No match for id: ' + source_id));
             else {
-                data._id = result.value._id;
-                resolve(data);
+                resolve(result.value);
             }
         }, function(error) {
             reject(defines.errorStacker('Update datasource failed', error));

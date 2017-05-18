@@ -1,4 +1,5 @@
 var userExtensionModule = require('../core/userExtensions');
+const defines = require('../defines.js');
 
 /**
  * @fn UserExtensionController
@@ -30,7 +31,7 @@ UserExtensionController.prototype.getExtensions = function(req, res) {
     },
     function (error) {
         res.status(501);
-        res.json({ error: 'Cannot list extension for ' + user_id + ' user ID ' + error });
+        res.json(defines.errorStacker('Cannot list extension for ' + user_id + ' user ID', error));
     });
 };
 
@@ -48,7 +49,7 @@ UserExtensionController.prototype.deleteExtensions = function(req, res) {
     },
     function (error) {
         res.status(501);
-        res.json({ error: 'Cannot erase user extensions' + error.toString()});
+        res.json(defines.errorStacker('Cannot erase user extensions', error));
     });
 };
 
@@ -68,7 +69,7 @@ UserExtensionController.prototype.subscribeExtension = function(req, res) {
         },
         function (error) {
             res.status(501);
-            res.json({ error: 'Cannot register user extension: ' + error });
+            res.json(defines.errorStacker('Cannot register user extension', error));
         }
     );
 };
@@ -89,7 +90,7 @@ UserExtensionController.prototype.unsubscribeExtension = function(req, res) {
         },
         function (error) {
             res.status(501);
-            res.json({ error: 'Cannot remove user extension: ' + error });
+            res.json(defines.errorStacker('Cannot remove user extension', error));
         }
     );
 };

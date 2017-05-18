@@ -123,7 +123,7 @@ UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
                         return;
                     }
                     if (success.modifiedCount == 0) {
-                        reject(defines.errorStacker('Already subscribed'));
+                        reject(defines.errorStacker('Already unsubscribed'));
                         return;
                     }
                     resolve(success);

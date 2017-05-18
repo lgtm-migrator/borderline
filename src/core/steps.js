@@ -72,7 +72,7 @@ Steps.prototype._graphInsert = function(node, stepData) {
 Steps.prototype.create = function(workflow_id, step_data) {
     var that = this;
     var time = new Date();
-    var stepModel = Object.assign({
+    var stepModel = Object.assign({}, defines.workflowModel, {
         create: time,
         update: time,
         workflow: workflow_id,
@@ -81,11 +81,11 @@ Steps.prototype.create = function(workflow_id, step_data) {
     return new Promise(function(resolve, reject) {
         that.stepCollection.insertOne(stepModel).then(function (stepResult) {
             that.workflowCollection.findOne({_id: new ObjectID(workflow_id) }).then(function (foundWorkflow) {
-                var stepGraph = {
+                var stepGraph = Object.assign({}, defines.workflowStepModel, {
                     id: stepModel._id,
                     parent: step_data.parent,
                     children: []
-                };
+                });
                 foundWorkflow.graph = that._graphInsert(foundWorkflow.graph, stepGraph);
                 foundWorkflow.update = time;
                 that.workflowCollection.findOneAndReplace({_id: new ObjectID(workflow_id)}, foundWorkflow, {upsert: true}).then(function(updatedWorkflow) {
@@ -139,7 +139,8 @@ Steps.prototype.updateByID = function(step_id, step_data) {
         delete step_data._id;
         delete step_data.create;
         step_data.update = time;
-        that.stepCollection.findOneAndUpdate({_id: new ObjectID(step_id)}, {$set: step_data}, {returnOriginal: false}).then(function (success) {
+        var updated_step = Object.assign({}, defines.stepModel, step-data);
+        that.stepCollection.findOneAndUpdate({_id: new ObjectID(step_id)}, {$set: updated_step}, {returnOriginal: false}).then(function (success) {
             if (success === null || success === undefined || success.value === null || success.value === undefined) {
                 reject(defines.errorStacker('Unknown step with id ' + step_id));
             }

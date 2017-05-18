@@ -45,15 +45,12 @@ Workflows.prototype.createWorkflow = function(data) {
     var that = this;
 
     var time = new Date();
-    var workflowModel = {
+    var workflowModel = Object.assign({}, defines.workflowModel, {
         name: data.name,
         create: time,
         update: time,
-        owner: data.user,
-        read: [],
-        write: [],
-        graph: {}
-    };
+        owner: data.user
+    });
     return new Promise(function(resolve, reject) {
         that.workflowCollection.insertOne(workflowModel).then(function(success) {
             resolve(workflowModel);
@@ -119,7 +116,8 @@ Workflows.prototype.updateWorkflowByID = function(workflow_id, data) {
         delete data._id;
         delete data.create;
         data.update = time;
-        that.workflowCollection.findOneAndUpdate({_id: new ObjectID(workflow_id)}, { $set: data}, { returnOriginal: false })
+        var updated_workflow = Object.assign({}, defines.workflowModel, data);
+        that.workflowCollection.findOneAndUpdate({_id: new ObjectID(workflow_id)}, { $set: updated_workflow}, { returnOriginal: false })
             .then(function(result) {
                 if (result === null || result === undefined)
                     reject(defines.errorStacker('Update failed for workflow with id ' + workflow_id));
