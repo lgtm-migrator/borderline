@@ -24,8 +24,8 @@ ExtensionQuery.prototype._requestMaker = function(options, error_message) {
             var req_options = Object.assign({}, {
                 method: 'GET',
                 json: true,
-                baseUrl: 'http://127.0.0.1:' + middleware.port,
-//                baseUrl: 'http://' + middleware.ip + ':' + middleware.port,
+                baseURL: 'http://127.0.0.1:' + middleware.port,
+//              baseURL: 'http://' + middleware.ip + ':' + middleware.port,
                 uri: ''
             }, options);
             var req = request(req_options, function(error, response, body) {
