@@ -3,6 +3,7 @@ const path = require('path');
 const speakeasy = require('speakeasy');
 
 var userAccounts = require('../core/userAccounts');
+const defines = require('../defines.js');
 
 /**
  * @fn UserAccountController
@@ -88,7 +89,7 @@ UserAccountController.prototype.login = function(req, res) {
     var that = this;
     var rejected = function(reason) {
         res.status(401);
-        res.send({ error: 'Failed to login : ' + reason.toString() });
+        res.send(defines.errorStacker('Failed to login', reason));
     };
 
     var username = req.body.username;
@@ -291,7 +292,7 @@ UserAccountController.prototype.getUserById = function(req, res) {
     },
     function(error) {
         res.status(404);
-        res.json({error: 'Can find user by ID: '+ error });
+        res.json(defines.errorStacker('Can find user by ID', error));
     });
 };
 
@@ -311,7 +312,7 @@ UserAccountController.prototype.postUserById = function(req, res) {
         },
         function(error) {
             res.status(401);
-            res.json({ error: 'Failed to update user: ' + error });
+            res.json(defines.errorStacker('Failed to update user', error));
         });
 };
 
@@ -332,7 +333,7 @@ UserAccountController.prototype.deleteUserById = function(req, res) {
         },
         function(error) {
             res.status(401);
-            res.json({ error: 'Failed to delete user: ' + error });
+            res.json(defines.errorStacker('Failed to delete user', error));
         });
 };
 
