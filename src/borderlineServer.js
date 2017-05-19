@@ -163,7 +163,7 @@ BorderlineServer.prototype._connectDb = function () {
         Promise.all([main_db, object_db]).then(function(true_array) {
             resolve(true);
         }, function (error) {
-            reject(defines.errorStacker('One the db connection failed', error));
+            reject(defines.errorStacker('One of the db connection failed', error));
         });
     });
 };
