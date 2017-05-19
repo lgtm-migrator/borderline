@@ -42,7 +42,7 @@ function BorderlineMiddleware(config) {
     }, function(error) {
         _this.app.all('*', function(req, res) {
             res.status(501);
-            res.json({ error: 'Database connection failure: ' + error});
+            res.json(defines.errorStacker('Database connection failure', error));
         });
     });
 
