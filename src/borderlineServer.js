@@ -148,7 +148,7 @@ BorderlineServer.prototype._connectDb = function () {
     });
 
     var object_db = new Promise(function (resolve, reject) {
-        mongodb.connect(this.config.objectStorageUrl, function (err, db) {
+        mongodb.connect(this.config.objectStorageURL, function (err, db) {
             if (err !== null && err !== undefined) {
                 reject(defines.errorStacker('Failed to connect to mongoDB', err));
                 return;
