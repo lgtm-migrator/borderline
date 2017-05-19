@@ -7,9 +7,9 @@ var extensionStoreModule = require('../core/extensionStore');
  * @param mongoDBCollection Mongo collection where the extension are stored
  * @constructor
  */
-function ExtensionStoreController(mongoDBCollection) {
+function ExtensionStoreController(mongoDBCollection, gridFSObjectStorage) {
     this.mongoDBCollection = mongoDBCollection;
-    this.extensionStore = new extensionStoreModule(this.mongoDBCollection);
+    this.extensionStore = new extensionStoreModule(this.mongoDBCollection, gridFSObjectStorage);
 
     this.getExtensionStoreRouter = ExtensionStoreController.prototype.getExtensionStoreRouter.bind(this);
     this.getExtensionStore = ExtensionStoreController.prototype.getExtensionStore.bind(this);

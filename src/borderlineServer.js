@@ -1,5 +1,6 @@
 //External node module imports
 const mongodb = require('mongodb').MongoClient;
+const GridFSBucket = require('mongodb').GridFSBucket;
 const path = require('path');
 const fs = require('fs-extra');
 const express = require('express');
@@ -46,6 +47,9 @@ function BorderlineServer(config) {
 
     var _this = this;
     this._connectDb().then(function () {
+        //Setup Registry update
+        _this._registryHandler();
+
         //Middleware imports
         _this.userPermissionsMiddleware = require('./middlewares/userPermissions');
 
@@ -69,10 +73,8 @@ function BorderlineServer(config) {
         _this.setupUserExtensions();
         _this.setupWorkflows();
 
-        //Setup Registry update
-        _this._registryHandler();
     }, function (error) {
-        this.mongoError(error.toString());
+        this.mongoError(error);
     });
 
     return this.app;
@@ -133,15 +135,35 @@ BorderlineServer.prototype._registryHandler = function () {
  */
 BorderlineServer.prototype._connectDb = function () {
     var _this = this;
-    return new Promise(function (resolve, reject) {
+    var main_db = new Promise(function (resolve, reject) {
         mongodb.connect(this.config.mongoURL, function (err, db) {
-            if (err !== null) {
-                reject('Failed to connect to mongoDB');
+            if (err !== null && err !== undefined) {
+                reject(defines.errorStacker('Failed to connect to mongoDB', err));
                 return;
             }
             _this.db = db;
             _this.mongoStore = new MongoStore({ db: db, ttl: defines.sessionTimeout, collection: defines.sessionCollectionName });
             resolve(true);
+        });
+    });
+
+    var object_db = new Promise(function (resolve, reject) {
+        mongodb.connect(this.config.objectStorageUrl, function (err, db) {
+            if (err !== null && err !== undefined) {
+                reject(defines.errorStacker('Failed to connect to mongoDB', err));
+                return;
+            }
+            _this.objectStorage = db;
+            _this.grid = new GridFSBucket(this.objectStorage, { bucketName: defines.globalStorageCollectionName });
+            resolve(true);
+        });
+    });
+
+    return new Promise(function(resolve, reject) {
+        Promise.all([main_db, object_db]).then(function(true_array) {
+            resolve(true);
+        }, function (error) {
+            reject(defines.errorStacker('One the db connection failed', error));
         });
     });
 };
@@ -222,7 +244,7 @@ BorderlineServer.prototype.setupExtensionStore = function () {
     }
 
     var extensionStoreController = require('./controllers/extensionStoreController');
-    this.extensionStoreController = new extensionStoreController(this.db.collection(defines.extensionsCollectionName));
+    this.extensionStoreController = new extensionStoreController(this.db.collection(defines.extensionsCollectionName), this.grid);
 
     // [ Extension Store Routes
     //TEMPORARY getter on a form to upload extensions zip file

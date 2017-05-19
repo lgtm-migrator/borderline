@@ -89,6 +89,7 @@ const workflowModel = {
 
 module.exports = {
     globalRegistryCollectionName: 'borderline_global_registry',
+    globalStorageCollectionName: 'borderline_global_storage',
     userCollectionName: 'borderline_server_users',
     workflowCollectionName: 'borderline_server_workflows',
     stepCollectionName: 'borderline_server_steps',

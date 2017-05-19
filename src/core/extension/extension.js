@@ -4,14 +4,14 @@ const path = require('path');
 
 const borderlineApiModule = require('./api');
 
-function Extension(ExtensionPath) {
+function Extension(ExtensionPath, gridFSObjectStorage) {
     this.extensionPath = ExtensionPath;
     this.manifest = fs.readJsonSync(path.join(ExtensionPath, 'plugin.json'));
     this.router = express.Router();
     this.uuid = this.manifest.id;
 
     this.container = null;
-    this.borderlineApi = new borderlineApiModule(this.manifest.id);
+    this.borderlineApi = new borderlineApiModule(this.manifest.id, gridFSObjectStorage);
 
     //Importing the Extension
     this.container = this.webpackImporter(ExtensionPath);

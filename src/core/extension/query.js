@@ -20,11 +20,12 @@ function ExtensionQuery() {
 ExtensionQuery.prototype._requestMaker = function(options, error_message) {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        _this._pickMiddleware.then(function(middleware) {
+        _this._pickMiddleware().then(function(middleware) {
             var req_options = Object.assign({}, {
                 method: 'GET',
                 json: true,
-                baseUrl: middleware.ip + ':' + middleware.port,
+                baseUrl: 'http://127.0.0.1:' + middleware.port,
+//                baseUrl: 'http://' + middleware.ip + ':' + middleware.port,
                 uri: ''
             }, options);
             var req = request(req_options, function(error, response, body) {
@@ -33,7 +34,7 @@ ExtensionQuery.prototype._requestMaker = function(options, error_message) {
                     return;
                 }
                 if (response.statusCode !== 200) {
-                    reject(defines.errorStacker(error_message, error));
+                    reject(defines.errorStacker(error_message, response.body));
                     return;
                 }
                 resolve(body);
@@ -190,6 +191,7 @@ ExtensionQuery.prototype.setQueryConfig = function(query_id, config) {
     const req_options = {
         method: 'POST',
         uri: '/query/' + query_id + '/input',
+        json: true,
         body: config
     };
     return this._requestMaker(req_options, 'Middleware set config failed');
@@ -219,10 +221,13 @@ ExtensionQuery.prototype.executeQuery = function(query_id) {
     const req_options = {
         method: 'POST',
         uri: '/execute',
+        json: true,
         body: {
-            query_id: query_id,
+            query: query_id,
             nocache: false
         }
     };
     return this._requestMaker(req_options, 'Middleware execute failed');
 };
+
+module.exports = ExtensionQuery;

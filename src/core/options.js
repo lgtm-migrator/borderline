@@ -8,6 +8,7 @@ const fs = require('fs-extra');
  * @constructor
  */
 var Options = function (configuration) {
+    Object.assign(this, configuration);
     this.mongoURL = configuration.mongoURL ? configuration.mongoURL : 'mongodb://root:root@127.0.0.1:27020/borderline';
     this.port = configuration.port ? configuration.port : 8080;
     this.extensionSourcesFolder = configuration.extensionSourcesFolder ? configuration.extensionSourcesFolder : './.extensions/sources';

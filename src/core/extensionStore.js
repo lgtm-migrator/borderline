@@ -14,10 +14,11 @@ const defines = require('../defines.js');
  * @param extensionCollection MongoDB collection to sync against
  * @constructor
  */
-var ExtensionStore = function(extensionCollection) {
+var ExtensionStore = function(extensionCollection, gridFSObjectStorage) {
     this.extensions = [];
     this.extensionFolder = path.normalize(global.config.extensionSourcesFolder);
     this.extensionCollection = extensionCollection;
+    this.gridFSObjectStorage = gridFSObjectStorage;
     this.router = express.Router();
 
     //Look what's in the local folder
@@ -173,7 +174,7 @@ ExtensionStore.prototype._watchLocalFolder = function() {
                             return p.uuid == manifest.id
                         }), 1);
                         if (fs.existsSync(extensionPath)) {
-                            var new_extension = new Extension(extensionPath);
+                            var new_extension = new Extension(extensionPath, that.gridFSObjectStorage);
                             that._attachExtension(new_extension);
                             that.extensions.push(new_extension);
                             that._syncExtension(new_extension, 'update');
@@ -181,7 +182,7 @@ ExtensionStore.prototype._watchLocalFolder = function() {
                     }
                     else {
                         if (fs.existsSync(extensionPath)) {
-                            var new_extension = new Extension(extensionPath);
+                            var new_extension = new Extension(extensionPath, that.gridFSObjectStorage);
                             that._attachExtension(new_extension);
                             that.extensions.push(new_extension);
                             that._syncExtension(new_extension, 'create');
@@ -210,7 +211,7 @@ ExtensionStore.prototype._scanLocalFolder = function() {
         var file_fd = fs.openSync(file, 'r');
         var file_stats = fs.fstatSync(file_fd);
         if (file_stats.isDirectory()) {
-            var extension = new Extension(file);
+            var extension = new Extension(file, that.gridFSObjectStorage);
             that._attachExtension(extension);
             that.extensions.push(extension);
             that._syncExtension(extension, 'update');
@@ -267,7 +268,7 @@ ExtensionStore.prototype.createExtensionFromFile = function(file) {
     //overwrite manifest ofter extraction for non colliding ids
     fs.writeJsonSync(path.join(packageFolder, './plugin.json'), manifest);
 
-    var new_extension = new Extension(packageFolder);
+    var new_extension = new Extension(packageFolder, that.gridFSObjectStorage);
     that.extensions.push(new_extension);
     that._attachExtension(new_extension);
 
@@ -364,7 +365,7 @@ ExtensionStore.prototype.updateExtensionById = function(uuid, file) {
     }
     var packageFolder = path.join(this.extensionFolder, manifest.name + '-' + manifest.version);
 
-    var new_extension = new Extension(packageFolder);
+    var new_extension = new Extension(packageFolder, this.gridFSObjectStorage);
     //Force extension uuid to match with the one used
     new_extension.uuid = uuid;
     this._attachExtension(new_extension);

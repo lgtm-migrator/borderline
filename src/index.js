@@ -7,16 +7,8 @@ var BorderlineServer = require('./borderlineServer.js');
 //Remove unwanted express headers
 app.set('x-powered-by', false);
 
-app.use(BorderlineServer({
-    mongoURL: config.mongoURL,
-    extensionSourcesFolder: config.extensionSourcesFolder,
-    extensionFileSystemFolder: config.extensionFileSystemFolder,
-    uiFolder: config.uiFolder,
-    development: true,
-    enableCors: config.enableCors,
-    port: config.port
-}
-));
+var options = Object.assign({}, config, { development: true });
+app.use(BorderlineServer(options));
 
 app.listen(config.port, function (err) {
     if (err) {
