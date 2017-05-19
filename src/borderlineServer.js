@@ -136,7 +136,7 @@ BorderlineServer.prototype._registryHandler = function () {
 BorderlineServer.prototype._connectDb = function () {
     var _this = this;
     var main_db = new Promise(function (resolve, reject) {
-        mongodb.connect(this.config.mongoURL, function (err, db) {
+        mongodb.connect(_this.config.mongoURL, function (err, db) {
             if (err !== null && err !== undefined) {
                 reject(defines.errorStacker('Failed to connect to mongoDB', err));
                 return;
@@ -148,13 +148,13 @@ BorderlineServer.prototype._connectDb = function () {
     });
 
     var object_db = new Promise(function (resolve, reject) {
-        mongodb.connect(this.config.objectStorageURL, function (err, db) {
+        mongodb.connect(_this.config.objectStorageURL, function (err, db) {
             if (err !== null && err !== undefined) {
                 reject(defines.errorStacker('Failed to connect to mongoDB', err));
                 return;
             }
             _this.objectStorage = db;
-            _this.grid = new GridFSBucket(this.objectStorage, { bucketName: defines.globalStorageCollectionName });
+            _this.grid = new GridFSBucket(_this.objectStorage, { bucketName: defines.globalStorageCollectionName });
             resolve(true);
         });
     });
