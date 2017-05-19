@@ -311,7 +311,7 @@ UserAccountController.prototype.postUserById = function(req, res) {
             res.json(user);
         },
         function(error) {
-            res.status(401);
+            res.status(400);
             res.json(defines.errorStacker('Failed to update user', error));
         });
 };

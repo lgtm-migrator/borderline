@@ -181,8 +181,7 @@ dataStore.prototype.subscribeUserToDataSource = function(user_id, source_id) {
                 resolve(success);
             }, function(error) {
                 reject(defines.errorStacker('Subscribe failed to save', error));
-            }
-            );
+            });
     });
 };
 
