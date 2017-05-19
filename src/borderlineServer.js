@@ -20,6 +20,8 @@ function BorderlineServer(config) {
     this.config = new borderlineOptions(config);
     this.app = express();
 
+        console.log(this.config.objectStorageURL);
+
     //Configuration import
     global.config = this.config;
 
