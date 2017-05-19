@@ -177,7 +177,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             _this.queryCollection = _this.db.collection(defines.queryCollectionName);
 
             _this.objectDb = databases[1];
-            _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.queryGridFSCollectionName });
+            _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.globalStorageCollectionName });
             resolve(true);
         }, function (error) {
             reject(defines.errorStacker(error));
