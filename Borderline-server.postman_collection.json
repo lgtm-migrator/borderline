@@ -34,7 +34,7 @@
 					"response": []
 				},
 				{
-					"name": "Post new  data source",
+					"name": "Post new  data source and save the data_source_id",
 					"event": [
 						{
 							"listen": "test",
@@ -42,9 +42,7 @@
 								"type": "text/javascript",
 								"exec": [
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"",
 									"var jsonData = JSON.parse(responseBody);",
-									"",
 									"postman.setEnvironmentVariable(\"data_source_id\", jsonData._id);",
 									"",
 									""
@@ -71,7 +69,7 @@
 					"response": []
 				},
 				{
-					"name": "Get data source by ID",
+					"name": "Get current data source from data_source_id",
 					"event": [
 						{
 							"listen": "test",
@@ -93,7 +91,7 @@
 					"response": []
 				},
 				{
-					"name": "Update data source by ID",
+					"name": "Update current data source from data_source_id",
 					"event": [
 						{
 							"listen": "test",
@@ -124,7 +122,7 @@
 					"response": []
 				},
 				{
-					"name": "Remove data source by ID",
+					"name": "Remove current data source from its data_source_id",
 					"event": [
 						{
 							"listen": "test",
@@ -201,6 +199,112 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "[Error] Get data source with invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/data_sources/notvalidid",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update data source from invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/data_sources/coucouhibou",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"sourceType\": \"etriks\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n  }"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Remove data source from invalid data_source_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/data_sources/notavalidid",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error]Subscribe current user to unknown data source",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/{{user_id}}/data_sources/notavaliddatasourceid",
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -242,7 +346,7 @@
 					},
 					"response": [
 						{
-							"id": "314f05ed-b2dc-4fca-8e13-bb157000607e",
+							"id": "d65e641d-9343-421f-9b5c-faf7e1bd475f",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -303,7 +407,7 @@
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						},
 						{
-							"id": "78db5cd9-4a1d-4595-8499-63e1916ace15",
+							"id": "24c37440-78a9-4934-8ab2-f3cea487bb97",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -405,7 +509,7 @@
 					},
 					"response": [
 						{
-							"id": "aeb40aca-0da6-477d-9145-9b4bab8f1e56",
+							"id": "2f466247-c2bc-457e-9127-b87e2f069b41",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -463,7 +567,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "22bd8a1f-546b-4af1-ae8e-e9c048833823",
+							"id": "34539454-b888-4cab-ade0-bb12d636cfce",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -603,7 +707,7 @@
 					},
 					"response": [
 						{
-							"id": "7f19ca40-17cd-4032-947e-55ae15fe5965",
+							"id": "adc114f6-8638-42b6-809d-3e2d3a3ec89d",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -661,7 +765,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "e42d2bf4-cbc8-4760-b79b-89828666464d",
+							"id": "48b9c25d-5e5f-404a-8c06-7b506e2ffd5f",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -795,7 +899,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "User Login",
+					"name": "Login as admin and save user id for use",
 					"event": [
 						{
 							"listen": "test",
@@ -845,7 +949,7 @@
 					"response": []
 				},
 				{
-					"name": "List Users",
+					"name": "List all users on the server. requires admin rights",
 					"event": [
 						{
 							"listen": "test",
@@ -867,7 +971,7 @@
 					"response": []
 				},
 				{
-					"name": "User Logout",
+					"name": "Logout and close session",
 					"event": [
 						{
 							"listen": "test",
@@ -889,14 +993,17 @@
 					"response": []
 				},
 				{
-					"name": "Get user By ID",
+					"name": "Get current user from user_id",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"User has ID\"] = jsonData.hasOwnProperty('_id');",
+									"postman.setEnvironmentVariable(\"user_id\", jsonData._id);"
 								]
 							}
 						}
@@ -911,7 +1018,7 @@
 					"response": []
 				},
 				{
-					"name": "Update user By ID",
+					"name": "Update current user from user_id",
 					"event": [
 						{
 							"listen": "test",
@@ -935,14 +1042,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"_id\": \"588b715469a1b64140e00b8a\",\n  \"username\": \"deleteme_has_been_updated\",\n  \"salt\": \"1fc162ade209d19e3db9ead000df7d2f\",\n  \"password\": \"1e3ec0ba8a479f3c16169bd2f31b0c5bdc022fbf3a5f4021eaa589c3891f5fa63453f38b1c0f404e183ab24ff47622328b58b9db0cf0d15e09f9f07ec189d717\",\n  \"admin\": true\n}"
+							"raw": "{\n  \"_id\": \"588b715469a1b64140e00b8a\",\n  \"username\": \"root\",\n  \"salt\": \"1fc162ade209d19e3db9ead000df7d2f\",\n  \"password\": \"1e3ec0ba8a479f3c16169bd2f31b0c5bdc022fbf3a5f4021eaa589c3891f5fa63453f38b1c0f404e183ab24ff47622328b58b9db0cf0d15e09f9f07ec189d717\",\n  \"admin\": true\n}"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Delete user By ID",
+					"name": "Delete user from user_id",
 					"event": [
 						{
 							"listen": "test",
@@ -970,7 +1077,7 @@
 					"response": []
 				},
 				{
-					"name": "WhoAmI",
+					"name": "Get the user for the current session and save user id for use",
 					"event": [
 						{
 							"listen": "test",
@@ -998,6 +1105,169 @@
 						"url": "http://localhost:3000/2step/{{user_id}}",
 						"method": "PUT",
 						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] User login  with invalid credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/login",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "nope",
+									"type": "text",
+									"enabled": false
+								},
+								{
+									"key": "password",
+									"value": "root",
+									"type": "text",
+									"enabled": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] List user without admin rights",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users",
+						"method": "GET",
+						"header": [
+							{
+								"key": "//Connection",
+								"value": "close",
+								"description": "",
+								"disabled": true
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get current user with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/iamnotavalidid",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/nono",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"iamnotavaliduserid\",\n  \"username\": \"root\",\n  \"salt\": \"1fc162ade209d19e3db9ead000df7d2f\",\n  \"password\": \"1e3ec0ba8a479f3c16169bd2f31b0c5bdc022fbf3a5f4021eaa589c3891f5fa63453f38b1c0f404e183ab24ff47622328b58b9db0cf0d15e09f9f07ec189d717\",\n  \"admin\": true\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Delete unknown user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/nonoiamnotokay",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
 						"body": {},
 						"description": ""
 					},
@@ -1316,7 +1586,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"_id\": \"58e6106a51d4d00744327e40\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"58e50d40f1072427c419b775\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
+							"raw": "{\n  \"_id\": \"{{step_ID}}\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"58e50d40f1072427c419b775\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
 						},
 						"description": ""
 					},
