@@ -34,7 +34,7 @@ dataStoreController.prototype.getDataStore = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(500);
         res.json(defines.errorStacker('Failed to list data sources', error));
     });
 };
@@ -49,7 +49,7 @@ dataStoreController.prototype.getDataStore = function(req, res) {
 dataStoreController.prototype.postDataStore = function(req, res) {
     var data_source = req.body;
     if (data_source === null || data_source === undefined) {
-        res.status(401);
+        res.status(400);
         res.json(defines.errorStacker('Cannot create an empty data source'));
         return;
     }
@@ -57,7 +57,7 @@ dataStoreController.prototype.postDataStore = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(500);
         res.json(defines.errorStacker('Failed to list data sources', error));
     });
 };
@@ -75,7 +75,7 @@ dataStoreController.prototype.getDataStoreByID = function(req, res) { //GET a si
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Cannot get data source by ID: ', error));
     });
 };
@@ -95,7 +95,7 @@ dataStoreController.prototype.putDataStoreByID = function(req, res) {  // PUT Up
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(400);
         res.json(defines.errorStacker('Cannot update data source by ID', error));
     });
 };
@@ -113,7 +113,7 @@ dataStoreController.prototype.deleteDataStoreByID = function(req, res) {
         res.status(200);
         res.json({deleted: result});
     }, function(error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Cannot delete data source by ID', error));
     });
 };
@@ -131,7 +131,7 @@ dataStoreController.prototype.getUserDataSources = function(req, res) {  //GET a
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Cannot get user data sources', error));
     });
 };
@@ -149,13 +149,13 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
     var source_id = req.params.source_id;
 
     if (user_id === undefined || user_id === null || user_id === '') {
-        res.status(501);
+        res.status(400);
         res.json(defines.errorStacker('Missing user_id'));
         return;
     }
 
     if (source_id === undefined || source_id === null || source_id === '') {
-        res.status(501);
+        res.status(400);
         res.json(defines.errorStacker('Missing source_id'));
         return;
     }
@@ -165,7 +165,7 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
         res.status(200);
         res.json(success);
     }, function(error) {
-        res.status(401);
+        res.status(500);
         res.json(defines.errorStacker('Cannot subscribe', error));
     });
 };
@@ -185,7 +185,7 @@ dataStoreController.prototype.deleteUserDataSourceByID = function(req, res) { //
         res.status(200);
         res.json(success);
     }, function(error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Cannot unsubscribe', error));
     });
 };
