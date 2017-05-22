@@ -74,7 +74,7 @@ UserAccountController.prototype.getUsers = function(req, res) {
    },
    function(error) {
       res.status(401);
-      res.json({ error: 'Cannot list users: ' + error});
+      res.json(defines.errorStacker('Cannot list users', error));
    });
 };
 
@@ -88,7 +88,7 @@ UserAccountController.prototype.getUsers = function(req, res) {
 UserAccountController.prototype.login = function(req, res) {
     var that = this;
     var rejected = function(reason) {
-        res.status(401);
+        res.status(400);
         res.send(defines.errorStacker('Failed to login', reason));
     };
 
@@ -136,8 +136,8 @@ UserAccountController.prototype.login = function(req, res) {
  */
 UserAccountController.prototype.login2 = function(req, res) {
     var rejected = function(reason) {
-        res.status(401);
-        res.send({ error: 'Failed to login : ' + reason.toString() });
+        res.status(400);
+        res.send(defines.errorStacker('Failed to login', reason));
     };
 
     var username = req.body.username;
@@ -172,7 +172,7 @@ UserAccountController.prototype.login2 = function(req, res) {
                 }
             },
             function(error) {
-                rejected(error.toString());
+                rejected(defines.errorStacker(error));
             }
         );
 };
@@ -187,23 +187,23 @@ UserAccountController.prototype.put2step = function(req, res) {
     var user_id = req.params.user_id;
 
     if (user_id === undefined || user_id === null) {
-        res.status(403);
-        res.json({ error : 'Unknown user id' });
+        res.status(400);
+        res.json(defines.errorStacker('Unknown user id'));
         return;
     }
 
     this.users.regenerateSecret(user_id).then(function (user) {
             if (user === undefined || user === null) {
-                res.status(403);
-                res.json({error: 'Unknown user id'});
+                res.status(404);
+                res.json(defines.errorStacker('Unknown user id'));
                 return;
             }
             res.status(200);
             res.send(user.secret.otpauth_url);
         },
         function(error) {
-            res.status(403);
-            res.json({error: error.toString()});
+            res.status(400);
+            res.json(defines.errorStacker(error));
         }
     );
 };
@@ -218,13 +218,13 @@ UserAccountController.prototype.logout = function(req, res) {
     req.session.destroy(function(err) {
         if (req.user === undefined || req.user === null) {
             res.status(401);
-            res.json({ error: 'Not logged in' });
+            res.json(defines.errorStacker('Not logged in'));
             return;
         }
         req.logout();
         if (err) {
             res.status(500);
-            res.json({ error: 'Cannot destroy session: ' + err });
+            res.json(defines.errorStacker('Cannot destroy session', err));
         }
         else {
             res.status(200);
@@ -243,8 +243,8 @@ UserAccountController.prototype.logout = function(req, res) {
 UserAccountController.prototype.whoAmI = function(req, res) {
     var Iam = req.user;
     if (Iam === undefined || Iam === null) {
-        res.status(401);
-        res.json({ error: 'An unknown unicorn' });
+        res.status(404);
+        res.json(defines.errorStacker('An unknown unicorn'));
     }
     else {
         res.status(200);
@@ -332,7 +332,7 @@ UserAccountController.prototype.deleteUserById = function(req, res) {
             res.json({ deleted: user });
         },
         function(error) {
-            res.status(401);
+            res.status(400);
             res.json(defines.errorStacker('Failed to delete user', error));
         });
 };
