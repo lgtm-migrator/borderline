@@ -30,7 +30,7 @@ UserExtensionController.prototype.getExtensions = function(req, res) {
         res.json(list);
     },
     function (error) {
-        res.status(501);
+        res.status(404);
         res.json(defines.errorStacker('Cannot list extension for ' + user_id + ' user ID', error));
     });
 };
@@ -48,7 +48,7 @@ UserExtensionController.prototype.deleteExtensions = function(req, res) {
         res.json({ success: success });
     },
     function (error) {
-        res.status(501);
+        res.status(404);
         res.json(defines.errorStacker('Cannot erase user extensions', error));
     });
 };
@@ -68,7 +68,7 @@ UserExtensionController.prototype.subscribeExtension = function(req, res) {
             res.json({ success: success });
         },
         function (error) {
-            res.status(501);
+            res.status(404);
             res.json(defines.errorStacker('Cannot register user extension', error));
         }
     );
@@ -89,7 +89,7 @@ UserExtensionController.prototype.unsubscribeExtension = function(req, res) {
             res.json({ success: success });
         },
         function (error) {
-            res.status(501);
+            res.status(404);
             res.json(defines.errorStacker('Cannot remove user extension', error));
         }
     );
