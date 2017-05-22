@@ -38,7 +38,7 @@ workflowController.prototype.getWorkflow = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(400);
         res.json(defines.errorStacker('Failed to list workflows', error));
     });
 };
@@ -52,7 +52,7 @@ workflowController.prototype.getWorkflow = function(req, res) {
 workflowController.prototype.putWorkflow = function(req, res) {
     var data = req.body;
     if (data === null || data === undefined) {
-        res.status(401);
+        res.status(400);
         res.json(defines.errorStacker('Cannot create an empty workflow'));
         return;
     }
@@ -60,7 +60,7 @@ workflowController.prototype.putWorkflow = function(req, res) {
     data.user = req.user ? req.user._id : null;
     data.name = data.name ? data.name : 'DefaultWorkflowName';
     if (data.user === null || data.user === undefined) {
-        res.status(403);
+        res.status(401);
         res.json(defines.errorStacker('Cannot create a workflow outside a session'));
         return;
     }
@@ -69,7 +69,7 @@ workflowController.prototype.putWorkflow = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(501);
+        res.status(500);
         res.json(defines.errorStacker('Failed to create workflow', error));
     });
 };
@@ -86,7 +86,7 @@ workflowController.prototype.getWorkflowByID = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Cannot get workflow by ID',  error));
     });
 };
@@ -103,7 +103,7 @@ workflowController.prototype.postWorkflowByID = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Cannot update workflow by ID', error));
     });
 };
@@ -120,7 +120,7 @@ workflowController.prototype.deleteWorkflowByID = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Cannot delete workflow by ID', error));
     });
 };
@@ -155,7 +155,7 @@ workflowController.prototype.putStep = function(req, res) {
         res.status(200);
         res.json(result);
     }, function(error){
-        res.status(401);
+        res.status(400);
         res.json(defines.errorStacker('Creating workflow step failed', error));
     });
 };
@@ -172,7 +172,7 @@ workflowController.prototype.getStepByID = function(req, res) {
         res.status(200);
         res.json(result);
     }, function (error) {
-       res.status(401);
+       res.status(404);
        res.json(defines.errorStacker('Cannot get step', error));
     });
 };
@@ -193,11 +193,11 @@ workflowController.prototype.postStepByID = function(req, res){
             res.status(200);
             res.json(step_result);
         }, function(workflow_error) {
-            res.status(401);
+            res.status(500);
             res.json(defines.errorStacker('Logging update in workflow failed', workflow_error));
         });
     }, function (step_error) {
-        res.status(401);
+        res.status(400);
         res.json(defines.errorStacker('Update step operation failed', step_error));
     });
 };
@@ -217,11 +217,11 @@ workflowController.prototype.deleteStepByID = function(req, res) {
             res.status(200);
             res.json(result);
         }, function(workflow_error) {
-            res.status(401);
+            res.status(500);
             res.json(defines.errorStacker('Logging delete in workflow failed', workflow_error));
         });
     }, function (error) {
-        res.status(401);
+        res.status(404);
         res.json(defines.errorStacker('Delete step operation failed', error));
     });
 };
