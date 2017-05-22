@@ -32,7 +32,7 @@ ExtensionStoreController.prototype.getExtensionStoreRouter = function() {
 };
 
 /**
- * @fn geTExtensionStore
+ * @fn getExtensionStore
  * @desc List all the extensions
  * @param req Express.js request object
  * @param res Express.js response object
@@ -52,7 +52,7 @@ ExtensionStoreController.prototype.getExtensionStore = function(req, res) {
 ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
 
     if (typeof req.files === 'undefined' || req.files === null || req.files.length == 0){
-        res.status(406);
+        res.status(400);
         res.json(defines.errorStacker('Zip file upload failed'));
         return;
     }
