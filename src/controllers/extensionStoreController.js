@@ -1,6 +1,7 @@
 var path = require('path');
 
 var extensionStoreModule = require('../core/extensionStore');
+const defines = require('../defines.js');
 
 /**
  * @fn ExtensionStoreContrller
@@ -52,7 +53,7 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
 
     if (typeof req.files === 'undefined' || req.files === null || req.files.length == 0){
         res.status(406);
-        res.json({error: 'Zip file upload failed'});
+        res.json(defines.errorStacker('Zip file upload failed'));
         return;
     }
 
@@ -92,8 +93,8 @@ ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
         res.json(info);
     }
     else {
-        res.status(401);
-        res.json({error: 'Unknown extension Id ' +  id });
+        res.status(404);
+        res.json(defines.errorStacker('Unknown extension Id ' +  id));
     }
 };
 
@@ -107,13 +108,13 @@ ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
 ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
     var id = req.params.id;
     if (typeof req.files === 'undefined' || req.files.length == 0) {
-        res.status(406);
-        res.json({error: 'No file uploaded for extension ' + id + ' update'});
+        res.status(400);
+        res.json(defines.errorStacker('No file uploaded for extension ' + id + ' update'));
         return;
     }
     var updateReply = this.extensionStore.updateExtensionById(id, req.files[0]);
     if (updateReply.hasOwnProperty('error') == true)
-        res.status(401);
+        res.status(500);
     else
         res.status(200);
     res.json(updateReply);
@@ -129,7 +130,7 @@ ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
     var id = req.params.id;
     var deleteReply = this.extensionStore.deleteExtensionById(id);
     if (deleteReply.hasOwnProperty('error') == true)
-        res.status(401);
+        res.status(404);
     else
         res.status(200);
     res.json(deleteReply);
