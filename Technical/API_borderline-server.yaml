@@ -628,8 +628,18 @@ definitions:
             users:
                 type: array
                 items:
-                    type: string
-                    description: User unique ID
+                    type: object
+                    description: User subscription object
+                    properties:
+                        user_id:
+                            type: string
+                            description: The user subscribing to the data source
+                        username: 
+                            type: string
+                            description: Username to use for this data source
+                        password:
+                            type: string
+                            description: Password to use for this data source
                 description: Array of users subscribed to this source
     ExtensionModel:
         type: object

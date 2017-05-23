@@ -62,7 +62,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "\t  {\n\t    \"sourceType\": \"TS171\",\n\t    \"sourceName\": \"etriks dev\",\n\t    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n\t    \"public\": false,\n\t    \"default\": false,\n\t    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n\t  }"
+							"raw": "\t  {\n\t    \"sourceType\": \"TS171\",\n\t    \"sourceName\": \"etriks dev\",\n\t    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n\t    \"public\": false,\n\t    \"default\": false,\n\t    \"users\": [ ]\n\t  }"
 						},
 						"description": ""
 					},
@@ -115,7 +115,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\n    \"sourceType\": \"TS171\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n  }"
+							"raw": "  {\n    \"sourceType\": \"TS171\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ ]\n  }"
 						},
 						"description": ""
 					},
@@ -172,8 +172,17 @@
 					"request": {
 						"url": "http://localhost:3000/users/{{user_id}}/data_sources/{{data_source_id}}",
 						"method": "POST",
-						"header": [],
-						"body": {},
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user_id\": \"{{user_id}}\",\n\t\"username\": \"admin\",\n\t\"password\": \"admin\"\n}"
+						},
 						"description": ""
 					},
 					"response": []
@@ -300,6 +309,39 @@
 					"request": {
 						"url": "http://localhost:3000/users/{{user_id}}/data_sources/notavaliddatasourceid",
 						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user_id\": \"{{user_id}}\",\n\t\"username\": \"admin\",\n\t\"password\": \"admin\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Unsubscribe invalid user from data source",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/NOPE/data_sources/{{data_source_id}}",
+						"method": "DELETE",
 						"header": [],
 						"body": {},
 						"description": ""
@@ -346,7 +388,7 @@
 					},
 					"response": [
 						{
-							"id": "4651e401-b289-437f-b48a-cba9ba9ded41",
+							"id": "f30a54a5-a065-4bd3-bfed-6ea51f5f2eb9",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -407,7 +449,7 @@
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						},
 						{
-							"id": "67a0753c-b663-445e-bf73-f55f18ccb877",
+							"id": "3bc92502-88dd-4335-9017-154d0a42bbdc",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -509,7 +551,7 @@
 					},
 					"response": [
 						{
-							"id": "7afb3eff-fbc3-4b5c-95c0-323b334af4f0",
+							"id": "f9d26eb3-6239-49fd-9b7f-307bc9f503c4",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -567,7 +609,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "879d9f09-c349-438f-90d4-15e091ebfbbc",
+							"id": "984500c9-3336-442c-a184-99b11673394d",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -707,7 +749,7 @@
 					},
 					"response": [
 						{
-							"id": "16be84e7-6695-42ad-ad32-9f6f72216746",
+							"id": "278b9bc8-0819-414b-a05e-d436cdaeaeef",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -765,7 +807,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "c16c32e8-03d4-4350-bcc9-d881d5206643",
+							"id": "6307d59a-87e2-424b-9b53-be2d64e69a08",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -928,7 +970,7 @@
 					},
 					"response": [
 						{
-							"id": "63f8d9b6-d5ab-42ff-9d0a-59a2d40891b5",
+							"id": "a0c433e7-4935-4b94-a4c3-858ec4a42e82",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -986,7 +1028,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "6f1aeaa1-505d-4c90-acc5-75be358e4f81",
+							"id": "425769a5-b2ce-4fef-98fe-95ad4f0ae75e",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
