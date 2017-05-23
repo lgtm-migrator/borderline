@@ -62,7 +62,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "\t  {\n\t    \"sourceType\": \"etriks\",\n\t    \"sourceName\": \"etriks dev\",\n\t    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n\t    \"public\": false,\n\t    \"default\": false,\n\t    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n\t  }"
+							"raw": "\t  {\n\t    \"sourceType\": \"TS171\",\n\t    \"sourceName\": \"etriks dev\",\n\t    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n\t    \"public\": false,\n\t    \"default\": false,\n\t    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n\t  }"
 						},
 						"description": ""
 					},
@@ -115,7 +115,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\n    \"sourceType\": \"etriks\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n  }"
+							"raw": "  {\n    \"sourceType\": \"TS171\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n  }"
 						},
 						"description": ""
 					},
@@ -208,7 +208,7 @@
 							"script": {
 								"type": "text/javascript",
 								"exec": [
-									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
 									"var jsonData = JSON.parse(responseBody);",
 									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
 								]
@@ -232,7 +232,7 @@
 							"script": {
 								"type": "text/javascript",
 								"exec": [
-									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
 									"var jsonData = JSON.parse(responseBody);",
 									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
 									""
@@ -266,7 +266,7 @@
 							"script": {
 								"type": "text/javascript",
 								"exec": [
-									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
 									"var jsonData = JSON.parse(responseBody);",
 									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
 								]
@@ -290,7 +290,7 @@
 							"script": {
 								"type": "text/javascript",
 								"exec": [
-									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"tests[\"Status code is 500\"] = responseCode.code === 500;",
 									"var jsonData = JSON.parse(responseBody);",
 									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
 								]
@@ -346,7 +346,7 @@
 					},
 					"response": [
 						{
-							"id": "d65e641d-9343-421f-9b5c-faf7e1bd475f",
+							"id": "4651e401-b289-437f-b48a-cba9ba9ded41",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -407,7 +407,7 @@
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						},
 						{
-							"id": "24c37440-78a9-4934-8ab2-f3cea487bb97",
+							"id": "67a0753c-b663-445e-bf73-f55f18ccb877",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -470,7 +470,7 @@
 					]
 				},
 				{
-					"name": "Upload extension",
+					"name": "Upload new extension and save plugin_id",
 					"event": [
 						{
 							"listen": "test",
@@ -501,7 +501,7 @@
 									"key": "plugin-zip",
 									"type": "file",
 									"enabled": true,
-									"src": "chat-0.0.1.zip"
+									"src": "toto-0.0.1.zip"
 								}
 							]
 						},
@@ -509,7 +509,7 @@
 					},
 					"response": [
 						{
-							"id": "2f466247-c2bc-457e-9127-b87e2f069b41",
+							"id": "7afb3eff-fbc3-4b5c-95c0-323b334af4f0",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -567,7 +567,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "34539454-b888-4cab-ade0-bb12d636cfce",
+							"id": "879d9f09-c349-438f-90d4-15e091ebfbbc",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -627,7 +627,7 @@
 					]
 				},
 				{
-					"name": "Get extension Info",
+					"name": "Get extension info for current plugin_id",
 					"event": [
 						{
 							"listen": "test",
@@ -649,7 +649,7 @@
 					"response": []
 				},
 				{
-					"name": "GET /default",
+					"name": "Test plugin. GET /default",
 					"event": [
 						{
 							"listen": "test",
@@ -671,7 +671,7 @@
 					"response": []
 				},
 				{
-					"name": "Extension update by ID",
+					"name": "Extension replace files identified by ID",
 					"event": [
 						{
 							"listen": "test",
@@ -699,7 +699,7 @@
 									"key": "plugin-zip",
 									"type": "file",
 									"enabled": true,
-									"src": "chat-0.0.1.zip"
+									"src": "toto-0.0.1.zip"
 								}
 							]
 						},
@@ -707,7 +707,7 @@
 					},
 					"response": [
 						{
-							"id": "adc114f6-8638-42b6-809d-3e2d3a3ec89d",
+							"id": "16be84e7-6695-42ad-ad32-9f6f72216746",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -765,7 +765,7 @@
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "48b9c25d-5e5f-404a-8c06-7b506e2ffd5f",
+							"id": "c16c32e8-03d4-4350-bcc9-d881d5206643",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -825,7 +825,7 @@
 					]
 				},
 				{
-					"name": "Get plugin Info updated",
+					"name": "Get plugin description from unique identifier",
 					"event": [
 						{
 							"listen": "test",
@@ -871,7 +871,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete extension",
+					"name": "Delete extension from it's unique ID",
 					"event": [
 						{
 							"listen": "test",
@@ -885,6 +885,207 @@
 					],
 					"request": {
 						"url": "http://localhost:3000/extension_store/{{pluginID}}",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Extension update with invalid extension id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 500\"] = responseCode.code === 500;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/extension_store/notavliadpluginid",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "plugin-zip",
+									"type": "file",
+									"enabled": true,
+									"src": "chat-0.0.1.zip"
+								}
+							]
+						},
+						"description": "Generated from a curl request: \ncurl \\\"http://localhost:3000/plugin_store\\\" -H \\\"Origin: http://localhost:3000\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: http://localhost:3000/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
+					},
+					"response": [
+						{
+							"id": "63f8d9b6-d5ab-42ff-9d0a-59a2d40891b5",
+							"name": "pluginUploaded",
+							"originalRequest": {
+								"url": "http://localhost:3000/plugin_store",
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": "The length of the response body in octets (8-bit bytes)"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 11:55:47 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-agRQRT6BI3xnOccrfflWBQ\"",
+									"description": "An identifier for a specific version of a resource, often a message digest"
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+								}
+							],
+							"cookie": [],
+							"responseTime": 23,
+							"body": "[{\"id\":\"3b9febc1d233\"}]"
+						},
+						{
+							"id": "6f1aeaa1-505d-4c90-acc5-75be358e4f81",
+							"name": "pluginUpload",
+							"originalRequest": {
+								"url": "http://localhost:3000/plugin_store",
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": "The length of the response body in octets (8-bit bytes)"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 12:01:35 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-jag58ZyQFKaxf1ArOM+98w\"",
+									"description": "An identifier for a specific version of a resource, often a message digest"
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+								}
+							],
+							"cookie": [],
+							"responseTime": 23,
+							"body": "[{\"id\":\"859ddffc98d7\"}]"
+						}
+					]
+				},
+				{
+					"name": "[Error] Get plugin description from invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/extension_store/notavalidplugin",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Delete extension with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/extension_store/nonostillnotvalid",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -1280,7 +1481,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "List user Plugins",
+					"name": "List all plugins for user identifed by ID",
 					"request": {
 						"url": "http://localhost:3000/users/{{user_id}}/extensions",
 						"method": "GET",
@@ -1291,7 +1492,7 @@
 					"response": []
 				},
 				{
-					"name": "Clear user Plugins",
+					"name": "Clear all plugins for user defined by ID",
 					"request": {
 						"url": "http://localhost:3000/users/{{user_id}}/extensions",
 						"method": "DELETE",
@@ -1302,7 +1503,7 @@
 					"response": []
 				},
 				{
-					"name": "Subscribe to plugin",
+					"name": "Subscribe user identfied by ID to plugin identified by ID",
 					"request": {
 						"url": "http://localhost:3000/users/{{user_id}}/extensions/{{pluginID}}",
 						"method": "PUT",
@@ -1313,10 +1514,106 @@
 					"response": []
 				},
 				{
-					"name": "Unsubscribe to plugin",
+					"name": "Unsubscribe user identified by ID to plugin identified by ID",
 					"request": {
 						"url": "http://localhost:3000/users/{{user_id}}/extensions/{{pluginID}}",
 						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] List all plugins for invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/invalidid/extensions",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Clear all plugins for invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/invaliduserid/extensions",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Subscribe invalid user to valid plugin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/nonoinvalid/extensions/{{pluginID}}",
+						"method": "PUT",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Subscribe valid user to invalid plugin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/users/{{user_id}}/extensions/nonoinvalidplugin",
+						"method": "PUT",
 						"header": [],
 						"body": {},
 						"description": ""
@@ -1330,7 +1627,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "List workflows",
+					"name": "List workflows on the server",
 					"event": [
 						{
 							"listen": "test",
@@ -1353,7 +1650,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Workflow",
+					"name": "Create a new workflow and save its ID",
 					"event": [
 						{
 							"listen": "test",
@@ -1398,7 +1695,7 @@
 					"response": []
 				},
 				{
-					"name": "Get workflow By ID",
+					"name": "Get a workflow from its unique identifier",
 					"request": {
 						"url": "http://localhost:3000/workflow/{{workflow_ID}}/",
 						"method": "GET",
@@ -1409,7 +1706,7 @@
 					"response": []
 				},
 				{
-					"name": "Update name field in workflow by ID",
+					"name": "Update name field for workflow_id",
 					"event": [
 						{
 							"listen": "test",
@@ -1443,7 +1740,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete workflow By ID",
+					"name": "Delete workflow based on workflow_id",
 					"event": [
 						{
 							"listen": "test",
@@ -1465,7 +1762,7 @@
 					"response": []
 				},
 				{
-					"name": "Create root node",
+					"name": "Create root node in current workflow_id and store step_id",
 					"event": [
 						{
 							"listen": "test",
@@ -1502,7 +1799,7 @@
 					"response": []
 				},
 				{
-					"name": "Create child node",
+					"name": "Create child node under step_id in current workflow_id",
 					"event": [
 						{
 							"listen": "test",
@@ -1537,7 +1834,7 @@
 					"response": []
 				},
 				{
-					"name": "Get step by ID",
+					"name": "Get step_id from current workflow_id",
 					"event": [
 						{
 							"listen": "test",
@@ -1559,7 +1856,7 @@
 					"response": []
 				},
 				{
-					"name": "Update step by ID",
+					"name": "Update step_id inside current workflow_id",
 					"event": [
 						{
 							"listen": "test",
@@ -1586,6 +1883,188 @@
 						],
 						"body": {
 							"mode": "raw",
+							"raw": "{\n  \"_id\": \"{{step_ID}}\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"{{workflow_ID}}\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete step_id inside curent workflow_id",
+					"request": {
+						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/{{step_ID}}",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get a workflow from invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/workflow/iamnotaworkflow",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update name field for invalid workflow ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/workflow/nonopasbon",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"{{workflow_ID}}\",\n  \"name\": \"Updated Workflow name\",\n  \"create\": \"6405499313127948289\",\n  \"update\": \"6405499313127948290\",\n  \"owner\": \"58a198229bc4ca3bb81c937a\",\n  \"read\": [],\n  \"write\": [],\n  \"graph\": {}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Delete workflow with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/workflow/nonoworkflow",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Create root node in invalid workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/workflow/nopenopenope/step/",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"parent\": null,\n\t\"extension\": \"toto-extension\",\n\t\"action\": \"@@/workflow/ANALYSIS_INPUT\",\n\t\"data\": {\n\t\t\"custom\": true,\n\t\t\"useless\": true\n\t}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get invalid step_id from current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/nopnostep",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update invalid step_id inside current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/nopestepid",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
 							"raw": "{\n  \"_id\": \"{{step_ID}}\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"58e50d40f1072427c419b775\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
 						},
 						"description": ""
@@ -1593,10 +2072,47 @@
 					"response": []
 				},
 				{
-					"name": "Delete step by ID",
+					"name": "[Error] Delete invalid step_id inside curent workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/{{step_ID}}",
+						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/notavlidstep",
 						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get invalid step_id from current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/nopnostep",
+						"method": "GET",
 						"header": [],
 						"body": {},
 						"description": ""
