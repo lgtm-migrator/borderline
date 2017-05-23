@@ -153,15 +153,14 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
         res.json(defines.errorStacker('Missing user_id'));
         return;
     }
-
     if (source_id === undefined || source_id === null || source_id === '') {
         res.status(400);
         res.json(defines.errorStacker('Missing source_id'));
         return;
     }
+    var subscription = Object.assign({}, req.body, { user_id: user_id });
 
-
-    this.dataStore.subscribeUserToDataSource(user_id, source_id).then(function(success) {
+    this.dataStore.subscribeUserToDataSource(source_id, subscription).then(function(success) {
         res.status(200);
         res.json(success);
     }, function(error) {

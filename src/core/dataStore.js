@@ -156,17 +156,24 @@ dataStore.prototype.getDataStoreByUserID = function(user_id) {
 /**
  * @fn subscribeUserToDataSource
  * @desc Flags a user as using a data source
- * @param user_id User referenced by its unique identifier
  * @param source_id The reference ID to the data source
- * @return {Promise} Resolves to the update data source on success
+ * @param subscription User id and credentials for this subscription
+ * @return {Promise} Resolves to the updated data source on success
  */
-dataStore.prototype.subscribeUserToDataSource = function(user_id, source_id) {
+dataStore.prototype.subscribeUserToDataSource = function(source_id, subscription) {
     var that = this;
     return new Promise(function(resolve, reject) {
+        if (!subscription.hasOwnProperty('user_id') ||
+            !subscription.hasOwnProperty('username') ||
+            !subscription.hasOwnProperty('password')) {
+            reject(defines.errorStacker('Missing subscription fields'));
+            return;
+        }
+        subscription.user_id = new ObjectID(subscription.user_id);
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
                                          {
                                              $addToSet: {
-                                                 users: new ObjectID(user_id)
+                                                 users: subscription
                                              }
                                          })
             .then(function(success) {
@@ -198,7 +205,7 @@ dataStore.prototype.unsubscribeUserFromDataSource = function(user_id, source_id)
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
             {
                 $pull: {
-                    users: new ObjectID(user_id)
+                    users: { user_id: new ObjectID(user_id) }
                 }
             })
             .then(function(success) {
