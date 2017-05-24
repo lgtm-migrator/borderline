@@ -33,11 +33,11 @@
     "eslint": "3.19.0"
   },
   "dependencies": {
-    "body-parser": "1.17.1",
+    "body-parser": "1.17.2",
     "express": "4.15.3",
     "fs-extra": "3.0.1",
     "ip": "1.1.5",
-    "mongodb": "2.2.26",
+    "mongodb": "2.2.27",
     "request": "2.81.0",
     "uuid": "3.0.1"
   }
