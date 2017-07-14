@@ -39,7 +39,7 @@ QueryAbstract.prototype.isAuth = function() {
  * @pure
  */
 QueryAbstract.prototype.execute = function() {
-  throw "Execute should be overloaded by implementations";
+    throw 'Execute should be overloaded by implementations';
 };
 
 /**
@@ -47,28 +47,28 @@ QueryAbstract.prototype.execute = function() {
  * @pure
  */
 QueryAbstract.prototype.input_local2standard = function(data) {
-    throw "Input local to standard should be overloaded";
+    throw 'Input local to standard should be overloaded';
 };
 /**
  * @fn input_standard2local
  * @pure
  */
 QueryAbstract.prototype.input_standard2local = function(data) {
-    throw "Input standard to local should be overloaded";
+    throw 'Input standard to local should be overloaded';
 };
 /**
  * @fn output_local2standard
  * @pure
  */
 QueryAbstract.prototype.output_local2standard = function(data) {
-    throw "Output local to standard should be overloaded";
+    throw 'Output local to standard should be overloaded';
 };
 /**
  * @fn output_standard2local
  * @pure
  */
 QueryAbstract.prototype.output_standard2local = function(data) {
-    throw "Output standard to local should be overloaded";
+    throw 'Output standard to local should be overloaded';
 };
 
 /**
@@ -415,7 +415,7 @@ QueryAbstract.prototype.fetchModel = function() {
 
 /**
  * @fn pushModel
- * @desc Overwrite the model inside the databasewith the current one.
+ * @desc Overwrite the model inside the database with the current one.
  * @return {Promise} A Promise resolving to the synchronised model
  */
 QueryAbstract.prototype.pushModel = function() {

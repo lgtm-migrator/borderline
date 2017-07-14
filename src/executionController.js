@@ -39,7 +39,7 @@ ExecutionController.prototype.executeQuery = function(req, res) {
     var noCache = req.body.hasOwnProperty('nocache') ? req.body['nocache'] : false;
 
     this.queryFactory.fromID(query_id).then(function(queryObject) {
-        queryObject.execute(!noCache).then(function (result) {
+        queryObject.execute(!noCache).then(function(result) {
             res.status(200);
             res.json(result);
         }, function (error) {
