@@ -7,7 +7,6 @@
     },
     "parser": "babel-eslint",
     "plugins": [
-        "react"
     ],
     "ecmaFeatures": {
         "arrowFunctions": true,
@@ -34,13 +33,10 @@
         "jsx": true
     },
     "rules": {
-        "react/jsx-uses-react": 2,
-        "react/jsx-uses-vars": 2,
-        "react/react-in-jsx-scope": 2,
         "no-alert": 2,
         "no-console": 1,
         "quotes": [
-            2,
+            1,
             "single"
         ],
         "semi": [
@@ -48,18 +44,14 @@
             "always"
         ],
         "strict": [
-            2,
+            1,
             "global"
         ],
-        // "indent": [
-        //     1,
-        //     4
-        // ],
         "space-infix-ops": 2,
-        "spaced-comment": 1,
         "space-in-parens": 2,
         "space-unary-ops": 2,
         "no-trailing-spaces": 1,
-        "no-irregular-whitespace": 2
+        "no-irregular-whitespace": 2,
+        "no-unused-vars": 1
     }
 }
