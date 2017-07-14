@@ -181,7 +181,7 @@ QueryAbstract.prototype.getOutput = function() {
                 resolve(data);
             }, function(error) {
                 reject(defines.errorStacker(error));
-            })
+            });
         }
         catch (error) {
             reject(defines.errorStacker('getOutput caught error', error));
@@ -348,7 +348,7 @@ QueryAbstract.prototype.registerExecutionStart = function() {
             resolve(_this.model.status);
         }, function(error) {
             reject(defines.errorStacker('Starting execution update fail', error));
-        })
+        });
     });
 };
 
@@ -370,7 +370,7 @@ QueryAbstract.prototype.registerExecutionEnd = function() {
             resolve(_this.model.status);
         }, function(error) {
             reject(defines.errorStacker('Ending execution update fail', error));
-        })
+        });
     });
 };
 
@@ -392,7 +392,7 @@ QueryAbstract.prototype.registerExecutionError = function(errorObject) {
             resolve(_this.model.status);
         }, function(error) {
             reject(defines.errorStacker('Error execution update fail', error));
-        })
+        });
     });
 };
 

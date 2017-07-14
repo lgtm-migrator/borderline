@@ -93,7 +93,7 @@ EndpointController.prototype.deleteQueryById = function(req, res) {
     }
     this.factory.fromID(query_id).then(function(queryObject) {
         var type = queryObject.model.endpoint.sourceType;
-        queryObject.model.endpoint =Object.assign({}, defines.endpointModel, {sourceType: type});
+        queryObject.model.endpoint = Object.assign({}, defines.endpointModel, {sourceType: type});
         queryObject.pushModel().then(function() {
             res.status(200);
             res.json(queryObject.model.endpoint);

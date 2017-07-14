@@ -2,7 +2,8 @@
 const ObjectID = require('mongodb').ObjectID;
 
 // Project modules
-const Query_TS171 = require('./ts171/queryObject.js');
+const Query_TS171 = require('./queryObject_TS171.js');
+const Query_File = require('./queryObject_File.js');
 const defines = require('../defines.js');
 
 /**
@@ -29,8 +30,13 @@ QueryFactory.prototype.fromModel = function(queryModel) {
         switch (queryModel.endpoint.sourceType) {
             case 'TS171':
                 resolve(new Query_TS171(queryModel, _this.queryCollection, _this.queryGridFS));
+                break;
+            case 'File':
+                resolve(new Query_File(queryModel, _this.queryCollection, _this.queryGridFS));
+                break;
             case 'eHS':
-                reject(defines.errorStacker('eHS support is not implemented (yet ?)'));
+                reject(defines.errorStacker('eHS support is not implemented'));
+                break;
             default:
                 reject(defines.errorStacker('Type [' + queryModel.endpoint.sourceType + '] is unknown'));
         }

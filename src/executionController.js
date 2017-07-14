@@ -35,11 +35,10 @@ ExecutionController.prototype.executeQuery = function(req, res) {
         res.json({error: 'Requested execution is missing parameters'});
         return;
     }
-    var query_id = req.body['query'];
-    var noCache = req.body.hasOwnProperty('nocache') ? req.body['nocache'] : false;
+    var query_id = req.body.query;
 
     this.queryFactory.fromID(query_id).then(function(queryObject) {
-        queryObject.execute(!noCache).then(function(result) {
+        queryObject.execute().then(function(result) {
             res.status(200);
             res.json(result);
         }, function (error) {
@@ -49,7 +48,7 @@ ExecutionController.prototype.executeQuery = function(req, res) {
     }, function (error) {
         res.status(401);
         res.json(defines.errorStacker(error));
-    })
+    });
 };
 
 /**

@@ -60,7 +60,7 @@ CredentialsController.prototype.putQueryById = function(req, res) {
         queryObject.model.credentials = Object.assign({}, defines.credentialsModel, data);
         queryObject.pushModel().then(function() {
             res.status(200);
-            res.json(queryObject.model.credentials );
+            res.json(queryObject.model.credentials);
         }, function(error) {
             res.status(401);
             res.json(defines.errorStacker('Updating input model failed', error));
@@ -88,7 +88,7 @@ CredentialsController.prototype.deleteQueryById = function(req, res) {
         queryObject.model.credentials = Object.assign({}, defines.credentialsModel);
         queryObject.pushModel().then(function() {
             res.status(200);
-            res.json( queryObject.model.credentials );
+            res.json(queryObject.model.credentials);
         }, function(error) {
           res.status(401);
           res.json(defines.errorStacker('Delete from model failed', error));

@@ -8,16 +8,16 @@ const registryModel = {
 };
 
 const endpointModel = {
-    sourceType: "",
-    sourceName: "",
-    sourceHost: "",
+    sourceType: '',
+    sourceName: '',
+    sourceHost: '',
     sourcePort: 8080,
     public: false
 };
 
 const credentialsModel = {
-    username: "",
-    password: ""
+    username: '',
+    password: ''
 };
 
 const executionModel = {
@@ -81,7 +81,7 @@ module.exports = {
     globalRegistryCollectionName: 'borderline_global_registry',
     globalStorageCollectionName: 'borderline_global_storage',
     queryCollectionName: 'borderline_middleware_queries',
-    endpointTypes: ['TS171', 'eHS'],
+    endpointTypes: ['TS171', 'eHS', 'File'],
     executionModel: executionModel,
     endpointModel: endpointModel,
     credentialsModel: credentialsModel,

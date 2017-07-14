@@ -1,12 +1,12 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
 const GridFSBucket = require('mongodb').GridFSBucket;
-const timer= require('timers');
+const timer = require('timers');
 const ip = require('ip');
 
 const body_parser = require('body-parser');
 const defines = require('./defines.js');
-const package = require('../package.json');
+const package_file = require('../package.json');
 const Options = require('./core/options.js');
 
 function BorderlineMiddleware(config) {
@@ -64,7 +64,7 @@ BorderlineMiddleware.prototype._registryHandler = function() {
         //Create status object
         var status = Object.assign({}, defines.registryModel, {
             type: 'borderline-middleware',
-            version: package.version,
+            version: package_file.version,
             timestamp: new Date(),
             expires_in: defines.registryUpdateInterval / 1000,
             port: _this.config.port,
@@ -105,7 +105,7 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
 
     //Import & instantiate controller modules
     var creationControllerModule = require('./creationController.js');
-    _this.creationController = new creationControllerModule(_this.queryCollection);
+    _this.creationController = new creationControllerModule(_this.queryCollection, _this.grid);
     var endpointControllerModule = require('./endpointController.js');
     _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.grid);
     var credentialsControllerModule = require('./credentialsController.js');
@@ -121,6 +121,8 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     _this.app.route(prefix + '/new')
         .get(_this.creationController.getNewQuery)
         .post(_this.creationController.postNewQuery);
+    _this.app.route(prefix + '/new/:query_type')
+        .post(_this.creationController.postNewQueryTyped);
     _this.app.route(prefix + '/:query_id/endpoint')
         .get(_this.endpointController.getQueryById)
         .put(_this.endpointController.putQueryById)

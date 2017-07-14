@@ -109,7 +109,7 @@ ObjectStorage.prototype.setObject = function(object_id, object_data) {
                 });
             }, function (error) { //Delete failed
                 reject(defines.errorStacker('Updating operation failed', error));
-            })
+            });
         }
         catch (error) {
             reject(defines.errorStacker('Storage update caught error', error));
