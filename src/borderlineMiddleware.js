@@ -3,8 +3,9 @@ const mongodb = require('mongodb').MongoClient;
 const GridFSBucket = require('mongodb').GridFSBucket;
 const timer = require('timers');
 const ip = require('ip');
-
+const multer  = require('multer');
 const body_parser = require('body-parser');
+
 const defines = require('./defines.js');
 const package_file = require('../package.json');
 const Options = require('./core/options.js');
@@ -20,7 +21,7 @@ function BorderlineMiddleware(config) {
 
     //Setup Express Application
     //Parse JSON body when received
-    this.app.use(body_parser.urlencoded({extended: true}));
+    this.app.use(body_parser.urlencoded({extended: true, limit: '1tb'}));
     this.app.use(body_parser.json());
 
     //Removes default express headers
@@ -142,7 +143,7 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .put(_this.outputController.putQueryById)
         .delete(_this.outputController.deleteQueryById);
     _this.app.route('/execute')
-        .post(_this.executionController.executeQuery);
+        .post(multer().single('file'), _this.executionController.executeQuery);
     _this.app.route('/execute/:query_id')
         .get(_this.executionController.getQueryById);
 };

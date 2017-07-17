@@ -36,9 +36,11 @@ QueryAbstract.prototype.isAuth = function() {
 
 /**
  * @fn execute
+ * @desc Performs the query on the underlying data source
+ * @param req Express.js request object. Some implementation requires params and or headers
  * @pure
  */
-QueryAbstract.prototype.execute = function() {
+QueryAbstract.prototype.execute = function(req) {
     throw 'Execute should be overloaded by implementations';
 };
 

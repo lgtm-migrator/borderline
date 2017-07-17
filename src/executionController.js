@@ -30,24 +30,25 @@ function ExecutionController(queryCollection, gridFs) {
  */
 ExecutionController.prototype.executeQuery = function(req, res) {
     if (req.body === null || req.body === undefined ||
-        req.body.hasOwnProperty('query') === false) {
+        req.body.query === undefined) {
         res.status(401);
         res.json({error: 'Requested execution is missing parameters'});
         return;
     }
+
     var query_id = req.body.query;
 
     this.queryFactory.fromID(query_id).then(function(queryObject) {
-        queryObject.execute().then(function(result) {
+        queryObject.execute(req).then(function(result) {
             res.status(200);
             res.json(result);
         }, function (error) {
             res.status(401);
-            res.json(defines.errorStacker(error));
+            res.json(defines.errorStacker('Execute query failed', error));
         });
     }, function (error) {
         res.status(401);
-        res.json(defines.errorStacker(error));
+        res.json(defines.errorStacker('Unknown query ' + query_id, error));
     });
 };
 

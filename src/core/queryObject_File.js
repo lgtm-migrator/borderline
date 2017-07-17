@@ -31,29 +31,59 @@ QueryFile.prototype.isAuth = function() {
 /**
  * @fn execute
  * @desc Performs file storage
+ * @param req Express.js request object, must contain .file attribute
  * @return {Promise} Execution status object on success
  */
-QueryFile.prototype.execute = function() {
+QueryFile.prototype.execute = function(req) {
     var _this = this;
-    return new Promise(function(resolve, reject) {
 
+    return new Promise(function(resolve, reject) {
+        if (req.file === undefined || req.file === null) {
+            _this.registerExecutionError(defines.errorStacker('No files uploaded'));
+            reject(defines.errorStacker('Missing file to upload'));
+            return;
+        }
+        //Start file upload in background, update execution status
         _this.registerExecutionStart().then(function (status) {
             resolve(status);
         }, function (error) {
             reject(defines.errorStacker('Execution fail', error));
         });
 
-        //Download file and stores it in output storage
-        _this._receiveFile().then(function (file_data) {
-                _this.setOutputStd(file_data).then(function (_) {
-                    _this.registerExecutionEnd(); //Update status to done
-                }, function (error) {
-                    _this.registerExecutionError(defines.errorStacker('Execution failed while storing file', error));
-                });
-            },
-            function (error) {
-                _this.registerExecutionError(defines.errorStacker('File upload execute failed', error));
-            });
+        _this._receiveFile(req.file).then(function() {
+            _this.registerExecutionEnd(); //Update status to done
+        }, function (error) {
+            _this.registerExecutionError(defines.errorStacker('File upload execute failed', error));
+        });
+    });
+};
+
+/**
+ * @fn _receiveFile
+ * @param file Uploaded multer file object
+ * @private
+ * @return {Promise} Resolves to the file id in storage on success, rejects with error stack
+ */
+QueryFile.prototype._receiveFile = function(file) {
+    var _this=  this;
+    return new Promise(function(resolve, reject) {
+        var op = null;
+        if (_this.model.output === undefined ||
+            _this.model.output.std === undefined ||
+            _this.model.output.std.dataId === undefined ||
+            _this.model.output.std.dataId === null) { // First time write of the file
+            op = _this.storage.createObject(file.buffer);
+        }
+        else {
+            op = _this.storage.setObject(_this.model.output.std.dataId, file.buffer);
+        }
+        op.then(function(file_id) {
+            //Update output dataId on success
+            _this.model.output = Object.assign({}, _this.model.output, { std: { dataId: file_id, filename: file.originalname}});
+            resolve(file_id);
+        }, function(error) {
+            reject(defines.errorStacker('File ', error));
+        })
     });
 };
 
