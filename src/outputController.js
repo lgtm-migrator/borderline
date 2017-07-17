@@ -5,11 +5,11 @@ var defines = require('./defines.js');
  * @fn OutputController
  * @desc Controller for queries results management.
  * @param queryCollection MongoDb collection where the queries are stored
- * @param queryGridFS ObjectStore to build the queries
+ * @param storage Object storage instance to access/store queries data
  * @constructor
  */
-function OutputController(queryCollection, queryGridFS) {
-    this.factory = new QueryFactory(queryCollection, queryGridFS);
+function OutputController(queryCollection, storage) {
+    this.factory = new QueryFactory(queryCollection, storage);
     this.queryCollection = queryCollection;
 
     //Bind member functions to this instance

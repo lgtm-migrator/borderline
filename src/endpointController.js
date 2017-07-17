@@ -5,11 +5,11 @@ var defines = require('./defines.js');
  * @fn EndpointController
  * @desc Controller for queries data sources management.
  * @param queryCollection MongoDb collection where the queries are stored
- * @param queryGridFS ObjectStore to build the queries
+ * @param storage Object storage instance to access/store queries data
  * @constructor
  */
-function EndpointController(queryCollection, queryGridFS) {
-    this.factory = new QueryFactory(queryCollection, queryGridFS);
+function EndpointController(queryCollection, storage) {
+    this.factory = new QueryFactory(queryCollection, storage);
     this.queryCollection = queryCollection;
 
     //Bind member functions to this instance

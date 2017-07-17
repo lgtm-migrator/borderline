@@ -3,21 +3,19 @@ const ObjectID = require('mongodb').ObjectID;
 
 // Local modules
 const defines = require('../defines.js');
-const ObjectStorage = require('./objectStorage.js');
 
 /**
  * @fn QueryAbstract
  * @desc Implementation independent query representation. MUST be inherited by the specific implementations
  * @param queryModel Plain JS Object, stored in DB
  * @param queryCollection MongoDB collection where the model is stored
- * @param queryGridFS MongoDB gridFS object to read/write query result
+ * @param storage Object storage instance to read/write query result
  * @constructor
  */
-function QueryAbstract(queryModel, queryCollection, queryGridFS) {
+function QueryAbstract(queryModel, queryCollection, storage) {
     this.model = queryModel;
     this.queryCollection = queryCollection;
-    this.queryGridFS = queryGridFS;
-    this.storage = new ObjectStorage(this.queryGridFS);
+    this.storage = storage;
 
     //Bind member functions
     this.registerExecutionStart = QueryAbstract.prototype.registerExecutionStart.bind(this);

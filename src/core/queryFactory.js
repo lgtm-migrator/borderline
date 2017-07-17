@@ -10,12 +10,12 @@ const defines = require('../defines.js');
  * @fn QueryFactory
  * @desc Factory class for the different queries implementations
  * @param queryCollection MongoDb collection where all the queries are stored
- * @param queryGridFS MongoDB collection for the queries result data
+ * @param storage Object storage instance to store queries result data
  * @constructor
  */
-function QueryFactory(queryCollection, queryGridFS) {
+function QueryFactory(queryCollection, storage) {
     this.queryCollection = queryCollection;
-    this.queryGridFS = queryGridFS;
+    this.storage = storage;
 }
 
 /**
@@ -29,10 +29,10 @@ QueryFactory.prototype.fromModel = function(queryModel) {
     return new Promise(function(resolve, reject) {
         switch (queryModel.endpoint.sourceType) {
             case 'TS171':
-                resolve(new Query_TS171(queryModel, _this.queryCollection, _this.queryGridFS));
+                resolve(new Query_TS171(queryModel, _this.queryCollection, _this.storage));
                 break;
             case 'File':
-                resolve(new Query_File(queryModel, _this.queryCollection, _this.queryGridFS));
+                resolve(new Query_File(queryModel, _this.queryCollection, _this.storage));
                 break;
             case 'eHS':
                 reject(defines.errorStacker('eHS support is not implemented'));

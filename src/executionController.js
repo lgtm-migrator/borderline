@@ -9,13 +9,13 @@ const QueryFactory = require('./core/queryFactory.js');
  * @fn ExecutionController
  * @desc Manager for the execution related endpoints
  * @param queryCollection MongoDB collection queries storage
- * @param gridFs MongoDB GridFS storage collection used by some query results
+ * @param storage Object storage abstract class instance used by some query results
  * @constructor
  */
-function ExecutionController(queryCollection, gridFs) {
+function ExecutionController(queryCollection, storage) {
     this.queryCollection = queryCollection;
-    this.grid = gridFs;
-    this.queryFactory = new QueryFactory(queryCollection, gridFs);
+    this.storage = storage;
+    this.queryFactory = new QueryFactory(queryCollection, storage);
 
     //Bind member functions
     this.executeQuery = ExecutionController.prototype.executeQuery.bind(this);

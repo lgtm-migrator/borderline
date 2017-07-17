@@ -10,11 +10,11 @@ const QueryAbstract = require('./queryAbstract.js');
  * @desc Query Implementation for File uploads
  * @param queryModel Plain JS Object, stored in DB
  * @param queryCollection MongoDB collection where the model is stored
- * @param queryGridFS MongoDB gridFS object to read/write query result
+ * @param storage Object storage instance to read/write query result
  * @constructor
  */
-function QueryFile(queryModel, queryCollection, queryGridFS) {
-    QueryAbstract.call(this, queryModel, queryCollection, queryGridFS);
+function QueryFile(queryModel, queryCollection, storage) {
+    QueryAbstract.call(this, queryModel, queryCollection, storage);
 }
 QueryFile.prototype = Object.create(QueryAbstract.prototype); //Inherit Js style
 QueryFile.prototype.constructor = QueryFile;

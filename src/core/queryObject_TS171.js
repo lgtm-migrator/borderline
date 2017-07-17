@@ -10,11 +10,11 @@ const QueryAbstract = require('./queryAbstract.js');
  * @desc Query Implementation for TranSMART 17.1
  * @param queryModel Plain JS Object, stored in DB
  * @param queryCollection MongoDB collection where the model is stored
- * @param queryGridFS MongoDB gridFS object to read/write query result
+ * @param storage Object storage instance to read/write query result
  * @constructor
  */
-function QueryTransmart17_1(queryModel, queryCollection, queryGridFS) {
-    QueryAbstract.call(this, queryModel, queryCollection, queryGridFS);
+function QueryTransmart17_1(queryModel, queryCollection, storage) {
+    QueryAbstract.call(this, queryModel, queryCollection, storage);
 }
 QueryTransmart17_1.prototype = Object.create(QueryAbstract.prototype); //Inherit Js style
 QueryTransmart17_1.prototype.constructor = QueryTransmart17_1;

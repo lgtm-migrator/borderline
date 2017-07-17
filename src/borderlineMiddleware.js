@@ -9,6 +9,7 @@ const body_parser = require('body-parser');
 const defines = require('./defines.js');
 const package_file = require('../package.json');
 const Options = require('./core/options.js');
+const ObjectStorage = require('./core/objectStorage.js');
 
 function BorderlineMiddleware(config) {
     this.config = new Options(config);
@@ -106,17 +107,17 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
 
     //Import & instantiate controller modules
     var creationControllerModule = require('./creationController.js');
-    _this.creationController = new creationControllerModule(_this.queryCollection, _this.grid);
+    _this.creationController = new creationControllerModule(_this.queryCollection, _this.storage);
     var endpointControllerModule = require('./endpointController.js');
-    _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.grid);
+    _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.storage);
     var credentialsControllerModule = require('./credentialsController.js');
-    _this.credentialsController = new credentialsControllerModule(_this.queryCollection, _this.grid);
+    _this.credentialsController = new credentialsControllerModule(_this.queryCollection, _this.storage);
     var inputControllerModule = require('./inputController.js');
-    _this.inputController = new inputControllerModule(_this.queryCollection, _this.grid);
+    _this.inputController = new inputControllerModule(_this.queryCollection, _this.storage);
     var outputControllerModule = require('./outputController.js');
-    _this.outputController = new outputControllerModule(_this.queryCollection, _this.grid);
+    _this.outputController = new outputControllerModule(_this.queryCollection, _this.storage);
     var executionControllerModule = require('./executionController.js');
-    _this.executionController = new executionControllerModule(_this.queryCollection, _this.grid);
+    _this.executionController = new executionControllerModule(_this.queryCollection, _this.storage);
 
     //Setup controllers URIs
     _this.app.route(prefix + '/new')
@@ -181,6 +182,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
 
             _this.objectDb = databases[1];
             _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.globalStorageCollectionName });
+            _this.storage =  new ObjectStorage(_this.grid);
             resolve(true);
         }, function (error) {
             reject(defines.errorStacker(error));
