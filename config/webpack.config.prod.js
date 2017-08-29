@@ -11,6 +11,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
+const eslint = require('./eslint');
 const getClientEnvironment = require('./env');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -132,14 +133,9 @@ module.exports = {
                             // @remove-on-eject-begin
                             // TODO: consider separate config for production,
                             // e.g. to enable no-console and no-debugger only in production.
-                            baseConfig: {
+                            baseConfig: Object.assign({
                                 extends: [require.resolve('eslint-config-react-app')],
-                                // Following is due to https://github.com/facebookincubator/create-react-app/issues/2631
-                                rules: {
-                                    "jsx-a11y/href-no-hash": "off",
-                                    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
-                                }
-                            },
+                            }, eslint),
                             ignore: false,
                             useEslintrc: false,
                             // @remove-on-eject-end
@@ -173,7 +169,7 @@ module.exports = {
                             // @remove-on-eject-begin
                             babelrc: false,
                             presets: [require.resolve('babel-preset-react-app')],
-                            plugins: [require.resolve('babel-plugin-transform-decorators')],
+                            plugins: [require.resolve('babel-plugin-transform-decorators-legacy')],
                             // @remove-on-eject-end
                             compact: true,
                         },

@@ -11,6 +11,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const eslint = require('./eslint');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -126,14 +127,9 @@ module.exports = {
                             formatter: eslintFormatter,
                             eslintPath: require.resolve('eslint'),
                             // @remove-on-eject-begin
-                            baseConfig: {
+                            baseConfig: Object.assign({
                                 extends: [require.resolve('eslint-config-react-app')],
-                                // Following is due to https://github.com/facebookincubator/create-react-app/issues/2631
-                                rules: {
-                                    "jsx-a11y/href-no-hash": "off",
-                                    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
-                                }
-                            },
+                            }, eslint),
                             ignore: false,
                             useEslintrc: false,
                             // @remove-on-eject-end
@@ -168,7 +164,7 @@ module.exports = {
                             // @remove-on-eject-begin
                             babelrc: false,
                             presets: [require.resolve('babel-preset-react-app')],
-                            plugins: [require.resolve('babel-plugin-transform-decorators')],
+                            plugins: [require.resolve('babel-plugin-transform-decorators-legacy')],
                             // @remove-on-eject-end
                             // This is a feature of `babel-loader` for webpack (not Babel itself).
                             // It enables caching results in ./node_modules/.cache/babel-loader/
