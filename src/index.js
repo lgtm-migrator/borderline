@@ -10,8 +10,8 @@ app.set('x-powered-by', false);
 app.use(BorderlineMiddleware(config));
 app.listen(config.port, function (err) {
     if (err) {
-        return console.error(err);
+        return console.error(err); // eslint-disable-line no-console
     }
 
-    console.log(`Listening at http://localhost:${config.port}/`);
+    console.log(`Listening at http://localhost:${config.port}/`); // eslint-disable-line no-console
 });

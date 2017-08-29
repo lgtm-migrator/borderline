@@ -1,6 +1,5 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
-const GridFSBucket = require('mongodb').GridFSBucket;
 const timer = require('timers');
 const ip = require('ip');
 const multer  = require('multer');
@@ -15,34 +14,34 @@ function BorderlineMiddleware(config) {
     this.config = new Options(config);
     this.app = express();
 
-    //Bind member functions
+    // Bind member functions
     this._connectDb = BorderlineMiddleware.prototype._connectDb.bind(this);
     this._setupQueryEndpoints = BorderlineMiddleware.prototype._setupQueryEndpoints.bind(this);
     this._registryHandler = BorderlineMiddleware.prototype._registryHandler.bind(this);
 
-    //Setup Express Application
-    //Parse JSON body when received
+    // Setup Express Application
+    // Parse JSON body when received
     this.app.use(body_parser.urlencoded({extended: true, limit: '1tb'}));
     this.app.use(body_parser.json());
 
-    //Removes default express headers
+    // Removes default express headers
     this.app.set('x-powered-by', false);
-    //Allow CORS request when enabled
+    // Allow CORS request when enabled
     if (this.config.enableCors === true) {
-        this.app.use(function (req, res, next) {
+        this.app.use(function (__unused__req, res, next) {
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
             next();
         });
     }
 
-    var _this = this;
+    let _this = this;
     this._connectDb().then(function() {
         _this._setupQueryEndpoints('/query');
 
         _this._registryHandler();
     }, function(error) {
-        _this.app.all('*', function(req, res) {
+        _this.app.all('*', function(__unused__req, res) {
             res.status(501);
             res.json(defines.errorStacker('Database connection failure', error));
         });
@@ -80,16 +79,16 @@ BorderlineMiddleware.prototype._registryHandler = function() {
             port: status.port,
             type: status.type
         }, status, { upsert: true, returnOriginal: false })
-            .then(function(success) {
+            .then(function(__unused__success) {
                 //Nothing to do here
             }, function(error) {
                 //Just log the error
-                console.log(error);
+                console.log(error); // eslint-disable-line no-console
             });
     };
 
     //Call the update every X milliseconds
-    var interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
+    let interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
     //Do a first update now
     registry_update();
 
@@ -159,7 +158,6 @@ BorderlineMiddleware.prototype._connectDb = function() {
     var _this = this;
     var urls_list = [
         this.config.mongoURL,
-        this.config.objectStorageUrl
     ];
     return new Promise(function(resolve, reject) {
         //Create one Promise par DB to connect to
@@ -179,10 +177,12 @@ BorderlineMiddleware.prototype._connectDb = function() {
         Promise.all(promises).then(function(databases) {
             _this.db = databases[0];
             _this.queryCollection = _this.db.collection(defines.queryCollectionName);
+            _this.storage =  new ObjectStorage({
+                url: _this.config.swiftURL,
+                username: _this.config.swiftUsername,
+                password: _this.config.swiftPassword
+            });
 
-            _this.objectDb = databases[1];
-            _this.grid = new GridFSBucket(_this.objectDb, { bucketName: defines.globalStorageCollectionName });
-            _this.storage =  new ObjectStorage(_this.grid);
             resolve(true);
         }, function (error) {
             reject(defines.errorStacker(error));

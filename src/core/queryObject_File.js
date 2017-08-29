@@ -1,6 +1,3 @@
-// Vendor modules
-const request = require('request');
-
 // Local modules
 const defines = require('../defines.js');
 const QueryAbstract = require('./queryAbstract.js');
@@ -65,9 +62,9 @@ QueryFile.prototype.execute = function(req) {
  * @return {Promise} Resolves to the file id in storage on success, rejects with error stack
  */
 QueryFile.prototype._receiveFile = function(file) {
-    var _this=  this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
-        var op = null;
+        let op = null;
         if (_this.model.output === undefined ||
             _this.model.output.std === undefined ||
             _this.model.output.std.dataId === undefined ||
@@ -83,7 +80,7 @@ QueryFile.prototype._receiveFile = function(file) {
             resolve(file_id);
         }, function(error) {
             reject(defines.errorStacker('File ', error));
-        })
+        });
     });
 };
 
@@ -101,8 +98,8 @@ QueryFile.prototype.input_local2standard = function(data) {
  * @param data Standard data to transform
  * @return Null data pointer, File do not use local data format
  */
-QueryFile.prototype.input_standard2local = function(data) {
-    return null;
+QueryFile.prototype.input_standard2local = function(__unused__data) {
+    return 'null';
 };
 
 /**
@@ -119,8 +116,8 @@ QueryFile.prototype.output_local2standard = function(data) {
  * @param data A Standard output object to transform
  * @return Null data pointer, File do not use Local data format
  */
-QueryFile.prototype.output_standard2local = function(data) {
-    return null;
+QueryFile.prototype.output_standard2local = function(__unused__data) {
+    return 'null';
 };
 
 

@@ -27,7 +27,7 @@ function CredentialsController(queryCollection, storage) {
  */
 CredentialsController.prototype.getQueryById = function(req, res) {
     var query_id = req.params.query_id;
-    if (query_id === null || query_id === undefined || query_id.length == 0) {
+    if (query_id === null || query_id === undefined || query_id.length === 0) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
         return;

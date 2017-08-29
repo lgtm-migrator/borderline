@@ -1,7 +1,3 @@
-// Vendor modules
-const ObjectID = require('mongodb').ObjectID;
-
-// Project modules
 const defines = require('./defines.js');
 const QueryFactory = require('./core/queryFactory.js');
 

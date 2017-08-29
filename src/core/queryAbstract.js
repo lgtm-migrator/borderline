@@ -38,7 +38,7 @@ QueryAbstract.prototype.isAuth = function() {
  * @param req Express.js request object. Some implementation requires params and or headers
  * @pure
  */
-QueryAbstract.prototype.execute = function(req) {
+QueryAbstract.prototype.execute = function(__unused__req) {
     throw 'Execute should be overloaded by implementations';
 };
 
@@ -46,28 +46,28 @@ QueryAbstract.prototype.execute = function(req) {
  * @fn input_local2standard
  * @pure
  */
-QueryAbstract.prototype.input_local2standard = function(data) {
+QueryAbstract.prototype.input_local2standard = function(__unused__data) {
     throw 'Input local to standard should be overloaded';
 };
 /**
  * @fn input_standard2local
  * @pure
  */
-QueryAbstract.prototype.input_standard2local = function(data) {
+QueryAbstract.prototype.input_standard2local = function(__unused__data) {
     throw 'Input standard to local should be overloaded';
 };
 /**
  * @fn output_local2standard
  * @pure
  */
-QueryAbstract.prototype.output_local2standard = function(data) {
+QueryAbstract.prototype.output_local2standard = function(__unused__data) {
     throw 'Output local to standard should be overloaded';
 };
 /**
  * @fn output_standard2local
  * @pure
  */
-QueryAbstract.prototype.output_standard2local = function(data) {
+QueryAbstract.prototype.output_standard2local = function(__unused__data) {
     throw 'Output standard to local should be overloaded';
 };
 
@@ -234,24 +234,26 @@ QueryAbstract.prototype.getOutputStd = function() {
 /**
  * @fn setOutputLocal
  * @desc Stores the output data into the model from the local data format
- * @param data Output data in the local format
+ * @param local_data Output data in the local format
  * @return {Promise} A Promise resolving the output to standard data model
  */
 QueryAbstract.prototype.setOutputLocal = function(local_data) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
-            //Compute std format
-            var std_data = _this.output_local2standard(local_data);
+            // Compute std format
+            let std_data = _this.output_local2standard(local_data);
 
-            var promises = [];
-            //Is it an update or a creation
+            let promises = [];
+            // Is it an update or a creation
             if (_this.model.output.local.hasOwnProperty('dataId') === false ||
                 _this.model.output.local.dataId === null ||
-                _this.model.output.local.dataId.length == 0 ||
+                _this.model.output.local.dataId === undefined ||
+                _this.model.output.local.dataId.length === 0 ||
                 _this.model.output.std.hasOwnProperty('dataId') === false ||
-                _this.model.output.std === null ||
-                _this.model.output.std.dataId.length == 0) {
+                _this.model.output.std.dataId === null ||
+                _this.model.output.std.dataId === undefined ||
+                _this.model.output.std.dataId.length === 0) {
                 promises.push(_this.storage.createObject(local_data));
                 promises.push(_this.storage.createObject(std_data));
             } else {
@@ -260,7 +262,7 @@ QueryAbstract.prototype.setOutputLocal = function(local_data) {
             }
 
             Promise.all(promises).then(function(values) {
-                //Update output model
+                // Update output model
                 _this.model.output.local.dataSize = local_data.length;
                 _this.model.output.std.dataSize = std_data.length;
                 _this.model.output.local.dataId = values[0];
@@ -283,24 +285,26 @@ QueryAbstract.prototype.setOutputLocal = function(local_data) {
 /**
  * @fn setOutputStd
  * @desc Stores the output data into the model from the Std data format
- * @param data Output data in the standard format
+ * @param std_data Output data in the standard format
  * @return {Promise} A Promise resolving the output to local data model
  */
 QueryAbstract.prototype.setOutputStd = function(std_data) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             //Compute std format
-            var local_data = _this.output_standard2local(std_data);
+            let local_data = _this.output_standard2local(std_data);
 
-            var promises = [];
+            let promises = [];
             //Is it an update or a creation
             if (_this.model.output.local.hasOwnProperty('dataId') === false ||
                 _this.model.output.local.dataId === null ||
-                _this.model.output.local.dataId.length == 0 ||
+                _this.model.output.local.dataId === undefined ||
+                _this.model.output.local.dataId.length === 0 ||
                 _this.model.output.std.hasOwnProperty('dataId') === false ||
-                _this.model.output.std === null ||
-                _this.model.output.std.dataId.length == 0) {
+                _this.model.output.std.dataId === null ||
+                _this.model.output.std.dataId === undefined ||
+                _this.model.output.std.dataId.length === 0) {
                 promises.push(_this.storage.createObject(local_data));
                 promises.push(_this.storage.createObject(std_data));
             } else {
@@ -335,16 +339,16 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
  * @return {Promise} Resolving to the new status
  */
 QueryAbstract.prototype.registerExecutionStart = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
-        var new_status = Object.assign({}, defines.executionModel, {
+        let new_status = Object.assign({}, defines.executionModel, {
             status: 'running',
             start: new Date(),
             end: null,
             info: 'Will perform query'
         });
         _this.model.status = new_status;
-        _this.pushModel().then(function(model) {
+        _this.pushModel().then(function(__unused__model) {
             resolve(_this.model.status);
         }, function(error) {
             reject(defines.errorStacker('Starting execution update fail', error));
@@ -358,15 +362,15 @@ QueryAbstract.prototype.registerExecutionStart = function() {
  * @return {Promise} Resolving to the new status
  */
 QueryAbstract.prototype.registerExecutionEnd = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
-        var new_status = Object.assign({}, _this.model.status, {
+        let new_status = Object.assign({}, _this.model.status, {
             status: 'done',
             end: new Date(),
             info: 'All good'
         });
         _this.model.status = new_status;
-        _this.pushModel().then(function(model) {
+        _this.pushModel().then(function(__unused__model) {
             resolve(_this.model.status);
         }, function(error) {
             reject(defines.errorStacker('Ending execution update fail', error));
@@ -380,15 +384,15 @@ QueryAbstract.prototype.registerExecutionEnd = function() {
  * @return {Promise} Resolving to the new status
  */
 QueryAbstract.prototype.registerExecutionError = function(errorObject) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
-        var new_status = Object.assign({}, _this.model.status, {
+        let new_status = Object.assign({}, _this.model.status, {
             status: 'error',
             end: new Date(),
             info: errorObject
         });
         _this.model.status = new_status;
-        _this.pushModel().then(function(model) {
+        _this.pushModel().then(function(__unused__model) {
             resolve(_this.model.status);
         }, function(error) {
             reject(defines.errorStacker('Error execution update fail', error));
@@ -402,7 +406,7 @@ QueryAbstract.prototype.registerExecutionError = function(errorObject) {
  * @return {Promise} A Promise resolving to the synchronised model
  */
 QueryAbstract.prototype.fetchModel = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         _this.queryCollection.findOne({_id: new ObjectID(_this.model['_id'])}).then(function(result) {
             _this.model = result;
@@ -419,10 +423,10 @@ QueryAbstract.prototype.fetchModel = function() {
  * @return {Promise} A Promise resolving to the synchronised model
  */
 QueryAbstract.prototype.pushModel = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
        _this.queryCollection.findOneAndReplace({_id: new ObjectID(_this.model._id)}, _this.model).then(function(result) {
-            if (result.ok == 1)
+            if (result.ok === 1)
                 resolve(_this.model);
             else
                 reject(defines.errorStacker('Update query model failed',

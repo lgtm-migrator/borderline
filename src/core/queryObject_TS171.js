@@ -45,7 +45,7 @@ QueryTransmart17_1.prototype.isAuth = function() {
  * @private
  */
 QueryTransmart17_1.prototype._doAuth = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         //Get new credentials from data source
         request.post({
@@ -64,9 +64,9 @@ QueryTransmart17_1.prototype._doAuth = function() {
                 reject(defines.errorStacker('Authentication failed'));
                 return;
             }
-            //Update queryModel
-            var newCredentials = Object.assign({}, _this.model.credentials, body, {generated: new Date()});
-            var newModel = Object.assign({}, _this.model, {credentials: newCredentials});
+            // Update queryModel
+            let newCredentials = Object.assign({}, _this.model.credentials, body, {generated: new Date()});
+            let newModel = Object.assign({}, _this.model, {credentials: newCredentials});
             _this.model = newModel;
             _this.pushModel().then(function() {
                 resolve(true);
@@ -85,7 +85,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
 QueryTransmart17_1.prototype._ensureAuth = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
-        if (_this.isAuth() == false) {
+        if (_this.isAuth() === false) {
             _this._doAuth().then(function() {
                 resolve(true);
             }, function (error) {
@@ -135,7 +135,7 @@ QueryTransmart17_1.prototype.execute = function() {
                     _this.registerExecutionError(defines.errorStacker('Execute request failed', error));
                     return;
                 }
-                _this.setOutputLocal(body).then(function(std_data) {
+                _this.setOutputLocal(body).then(function(__unused__std_data) {
                     _this.registerExecutionEnd(); //Update status to done
                 }, function(error) {
                     _this.registerExecutionError(defines.errorStacker('Exectution failed while saving result', error));

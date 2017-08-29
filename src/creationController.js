@@ -21,7 +21,7 @@ function CreationController(queryCollection) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-CreationController.prototype.getNewQuery = function(req, res) {
+CreationController.prototype.getNewQuery = function(__unused__req, res) {
     var newQuery = Object.assign({},
         defines.queryModel,
         {
