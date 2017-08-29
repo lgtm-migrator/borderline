@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SVG from 'components/SVG';
 import errorIcon from './images/errorIcon.svg';
-import './style.css';
+import style from './style.css';
 
 export default class Stale extends Component {
 
@@ -14,7 +14,7 @@ export default class Stale extends Component {
 
     render() {
         return (
-            <div className="stale" >
+            <div className={style.stale} >
                 <SVG src={errorIcon} />
             </div>
         );

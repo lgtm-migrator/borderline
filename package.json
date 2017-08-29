@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "borderline-devutils": "0.0.2",
         "dompurify": "^1.0.2",
         "immutable": "^3.8.1",
         "react": "^16.0.0-beta.5",
@@ -10,7 +11,6 @@
         "react-redux": "^5.0.6",
         "react-router-dom": "^4.2.2",
         "react-router-redux": "^5.0.0-alpha.6",
-        "react-scripts": "^1.0.12",
         "redux": "^3.7.2",
         "redux-logger": "^3.0.6",
         "redux-observable": "^0.16.0",
@@ -23,11 +23,11 @@
     },
     "scripts": {
         "start": "npm-run-all --parallel server client",
-        "client": "cross-env NODE_PATH=src BROWSER=none react-scripts start",
+        "client": "cross-env NODE_PATH=src BROWSER=none borderline-devutils start",
         "server": "cross-env NODE_PATH=src NODE_ENV=development node tools/server.js",
-        "build": "cross-env NODE_PATH=src react-scripts build",
-        "test": "cross-env NODE_PATH=src react-scripts test --env=jsdom",
-        "eject": "cross-env NODE_PATH=src react-scripts eject"
+        "build": "cross-env NODE_PATH=src borderline-devutils build",
+        "test": "cross-env NODE_PATH=src borderline-devutils test --env=jsdom",
+        "eject": "cross-env NODE_PATH=src borderline-devutils eject"
     },
     "devDependencies": {
         "borderline-server": "^0.2.5",

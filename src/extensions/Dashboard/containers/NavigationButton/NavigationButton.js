@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SVG from 'components/SVG';
 import logo from './images/logo.svg';
-import './style.css';
+import style from './style.css';
 
 class NavigationButton extends Component {
 
@@ -9,7 +9,7 @@ class NavigationButton extends Component {
     static displayName = 'NavigationButton';
 
     render() {
-        return <SVG src={logo} className="logo" />;
+        return <SVG src={logo} className={style.logo} />;
     }
 }
 

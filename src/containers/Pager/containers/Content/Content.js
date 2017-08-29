@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import Enclave from 'containers/Enclave'
 import { stateAware } from 'utilities/storeManager'
-import './style.css'
+import style from './style.css';
 
 class Content extends Component {
 
@@ -19,7 +19,7 @@ class Content extends Component {
             )
         });
         return (
-            <div className="content">
+            <div className={style.content}>
                 {panels}
             </div>
         )

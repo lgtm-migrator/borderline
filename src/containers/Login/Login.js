@@ -3,7 +3,7 @@ import { default as T } from 'prop-types';
 import { Redirect } from 'react-router-dom'
 import { stateAware } from 'utilities/storeManager'
 import { actions } from 'containers/Session/flux'
-import './style.css';
+import style from './style.css';
 
 class Login extends Component {
 
@@ -39,7 +39,7 @@ class Login extends Component {
         }
 
         return (
-            <div className="LoginScreen">
+            <div className={style.login}>
                 <p>You must log in to view the page at {from.pathname}</p>
                 <input type="text" placeholder="Username" ref="username" /><br />
                 <input type="password" placeholder="Password" ref="password" /><br />
