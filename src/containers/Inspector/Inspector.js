@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { reducers, epics } from './flux'
-import Injector from './containers/Injector'
+import React, { Component } from 'react';
+import { reducers, epics } from './flux';
+import Injector from './containers/Injector';
 
 class Inspector extends Component {
 
@@ -13,8 +13,8 @@ class Inspector extends Component {
     static modelReducers = reducers;
 
     render() {
-        return <Injector />
+        return <Injector />;
     }
 }
 
-export default Inspector
+export default Inspector;

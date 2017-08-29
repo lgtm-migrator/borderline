@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs'
-import { api } from 'api'
+import { Observable } from 'rxjs';
+import { api } from 'api';
 import systemExtensions from 'extensions';
 
 const types = {

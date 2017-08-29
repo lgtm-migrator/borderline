@@ -17,6 +17,7 @@
         "npm": ">= 5.3.0"
     },
     "dependencies": {
+        "babel-plugin-transform-decorators-legacy": "^1.3.4",
         "dompurify": "1.0.2",
         "immutable": "3.8.1",
         "react": "16.0.0-beta.5",
@@ -35,6 +36,6 @@
         "test": "borderline-devutils test --env=jsdom"
     },
     "devDependencies": {
-        "borderline-devutils": "0.0.7"
+        "borderline-devutils": "0.0.9"
     }
 }

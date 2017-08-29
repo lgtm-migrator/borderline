@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { default as T } from 'prop-types';
-import { epics } from './flux'
+import { epics } from './flux';
 
 class Dashboard extends Component {
 
@@ -22,4 +22,4 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard
+export default Dashboard;

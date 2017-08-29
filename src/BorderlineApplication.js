@@ -1,9 +1,9 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
-import Body from 'components/Body'
-import Login from 'containers/Login'
-import Enclave from 'containers/Enclave'
-import PrivateRoute from 'containers/PrivateRoute'
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Body from 'components/Body';
+import Login from 'containers/Login';
+import Enclave from 'containers/Enclave';
+import PrivateRoute from 'containers/PrivateRoute';
 
 class BorderlineApplication extends React.Component {
 
@@ -23,8 +23,8 @@ class BorderlineApplication extends React.Component {
                     </Switch>
                 </Enclave>
             </Body>
-        )
+        );
     }
 }
 
-export default BorderlineApplication
+export default BorderlineApplication;

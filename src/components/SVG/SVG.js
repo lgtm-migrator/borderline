@@ -32,7 +32,7 @@ export default class SVG extends Component {
         let ret = {};
         let prop = null;
         for (let i = 0; i < attributes.length; i++) {
-            prop = this.propertyFilter(attributes[i].name)
+            prop = this.propertyFilter(attributes[i].name);
             if (prop !== null)
                 ret[prop] = attributes[i].value;
         }
@@ -40,10 +40,10 @@ export default class SVG extends Component {
     }
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             element: null
-        }
+        };
     }
 
     componentDidMount() {
@@ -51,12 +51,12 @@ export default class SVG extends Component {
         if (SVG.cache[this.props.src] === undefined)
             SVG.cache[this.props.src] = fetch(this.props.src)
                 .then(response => response.text())
-                .then(text => (new DOMParser()).parseFromString(DOMPurify.sanitize(text), 'image/svg+xml').documentElement)
+                .then(text => (new DOMParser()).parseFromString(DOMPurify.sanitize(text), 'image/svg+xml').documentElement);
         SVG.cache[this.props.src].then(element => {
             this.setState({
                 element: element
-            })
-        })
+            });
+        });
     }
 
     render() {
@@ -64,8 +64,8 @@ export default class SVG extends Component {
         const { element } = this.state;
 
         if (element === null)
-            return <div { ...this.props } />
+            return <div { ...this.props } />;
         else
-            return <svg {...this.attributeMapping(element.attributes) } dangerouslySetInnerHTML={{ __html: element.innerHTML }} { ...this.props } />
+            return <svg {...this.attributeMapping(element.attributes) } dangerouslySetInnerHTML={{ __html: element.innerHTML }} { ...this.props } />;
     }
 }

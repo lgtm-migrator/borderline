@@ -1,12 +1,12 @@
-import React from 'react'
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
+import React from 'react';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { routerReducer, routerMiddleware } from 'react-router-redux'
+import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { createLogger } from 'redux-logger';
 import { BehaviorSubject } from 'rxjs';
 import { Map } from 'immutable';
-import createHistory from 'history/createBrowserHistory'
-import ParentTracer from 'containers/ParentTracer'
+import createHistory from 'history/createBrowserHistory';
+import ParentTracer from 'containers/ParentTracer';
 
 class StoreManager {
 
@@ -34,10 +34,10 @@ class StoreManager {
 
     configure() {
 
-        this.setDefaults()
-        this.clearRootEpics()
+        this.setDefaults();
+        this.clearRootEpics();
 
-        history = createHistory()
+        history = createHistory();
 
         this.middleware = {
             logger: createLogger({
@@ -53,7 +53,7 @@ class StoreManager {
             }),
             router: routerMiddleware(history),
             epic: createEpicMiddleware(this.rootEpic)
-        }
+        };
 
         let mutateCompose = compose;
         if (process.env.NODE_ENV === 'development') {
@@ -73,7 +73,7 @@ class StoreManager {
 
         }
 
-        store = createStore(combineReducers(this.asyncReducers), {}, mutateCompose(applyMiddleware(...Object.values(this.middleware))))
+        store = createStore(combineReducers(this.asyncReducers), {}, mutateCompose(applyMiddleware(...Object.values(this.middleware))));
 
     }
 
@@ -96,6 +96,6 @@ export let history = null;
 export const stateAware = (mapStateToProps) =>
     (target) =>
         (props) =>
-            <ParentTracer {...props} tracedComponent={target} mapStateToProps={mapStateToProps} />
+            <ParentTracer {...props} tracedComponent={target} mapStateToProps={mapStateToProps} />;
 
 export default new StoreManager();

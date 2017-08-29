@@ -9,9 +9,9 @@ async function bootstrap() {
             new BorderlineBootstrap();
             registerServiceWorker();
         })
-        .catch(error => {
-            /** */
+        .catch(() => {
+            // TO-DO Must handle API loading failure
         });
 }
 
-bootstrap()
+bootstrap();

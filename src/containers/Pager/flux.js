@@ -27,7 +27,7 @@ const pageDock = (state, action) => {
     if (action.path === undefined || action.path === null ||
         action.icon === undefined || action.icon === null ||
         action.view === undefined || action.view === null)
-        return state
+        return state;
     state.pages[action.path] = {
         path: action.path,
         icon: action.icon,

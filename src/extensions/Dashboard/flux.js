@@ -1,5 +1,5 @@
-import NavigationButton from './containers/NavigationButton'
-import View from './containers/View'
+import NavigationButton from './containers/NavigationButton';
+import View from './containers/View';
 
 export const actions = {
 
@@ -20,7 +20,7 @@ export const epics = {
 };
 
 export const reducers = {
-}
+};
 
 export default {
     actions,

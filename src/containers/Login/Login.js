@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
-import { Redirect } from 'react-router-dom'
-import { stateAware } from 'utilities/storeManager'
-import { actions } from 'containers/Session/flux'
+import { Redirect } from 'react-router-dom';
+import { stateAware } from 'utilities/storeManager';
+import { actions } from 'containers/Session/flux';
 import style from './style.css';
 
+@stateAware(state => ({
+    isAuthenticated: state.ok
+}))
 class Login extends Component {
 
     // Custom name for container
@@ -29,13 +32,13 @@ class Login extends Component {
 
     render() {
 
-        const { location, isAuthenticated } = this.props
-        const { from } = location.state || { from: { pathname: '/' } }
+        const { location, isAuthenticated } = this.props;
+        const { from } = location.state || { from: { pathname: '/' } };
 
         if (isAuthenticated === true) {
             return (
                 <Redirect to={from} />
-            )
+            );
         }
 
         return (
@@ -45,11 +48,9 @@ class Login extends Component {
                 <input type="password" placeholder="Password" ref="password" /><br />
                 <button onClick={this.login}>Log in</button>
             </div>
-        )
+        );
     }
 }
 
-export default stateAware(state => ({
-    isAuthenticated: state.ok
-}))(Login)
+export default Login;
 

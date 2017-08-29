@@ -10,4 +10,4 @@ class View extends Component {
     }
 }
 
-export default View
+export default View;

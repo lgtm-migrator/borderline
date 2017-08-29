@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { default as T } from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -20,15 +20,15 @@ class ParentTracer extends Component {
                 (state, ownProps) => this.props.mapStateToProps(state[this.context.modelName] !== undefined ? state[this.context.modelName].toJS() : {}, ownProps),
                 () => ({})
             )(this.props.tracedComponent)
-        })
+        });
     }
 
     render() {
         const filteredProps = Object.assign({}, this.props);
-        delete filteredProps.tracedComponent
-        delete filteredProps.mapStateToProps
+        delete filteredProps.tracedComponent;
+        delete filteredProps.mapStateToProps;
         return <this.state.connector {...filteredProps} />;
     }
 }
 
-export default ParentTracer
+export default ParentTracer;

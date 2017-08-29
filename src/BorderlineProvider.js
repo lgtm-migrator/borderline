@@ -22,10 +22,10 @@ class BorderlineProvider extends React.Component {
         return (
             <Provider store={store}>
                 <ConnectedRouter history={history}>
-                     <BorderlineApplication />
+                    <BorderlineApplication />
                 </ConnectedRouter>
             </Provider>
-        )
+        );
     }
 }
 

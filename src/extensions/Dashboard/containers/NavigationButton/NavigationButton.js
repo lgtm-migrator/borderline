@@ -13,4 +13,4 @@ class NavigationButton extends Component {
     }
 }
 
-export default NavigationButton
+export default NavigationButton;

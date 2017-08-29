@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import Enclave from 'containers/Enclave'
-import Navigation from './containers/Navigation'
-import Content from './containers/Content'
-import { reducers } from './flux'
+import React, { Component } from 'react';
+import Enclave from 'containers/Enclave';
+import Navigation from './containers/Navigation';
+import Content from './containers/Content';
+import { reducers } from './flux';
 
 class Pager extends Component {
 
@@ -18,8 +18,8 @@ class Pager extends Component {
             <Navigation key={'navigation'}/>,
             <Content key={'content'} />,
             <Enclave key={'inspector'} model={ import('containers/Inspector') } />
-        ]
+        ];
     }
 }
 
-export default Pager
+export default Pager;

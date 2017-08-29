@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { default as T } from 'prop-types';
-import { reducers, epics } from './flux'
+import { reducers, epics } from './flux';
 
 class Session extends Component {
 
@@ -26,4 +26,4 @@ class Session extends Component {
     }
 }
 
-export default Session
+export default Session;
