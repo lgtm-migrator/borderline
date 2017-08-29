@@ -21,7 +21,7 @@ class Injector extends Component {
     }
 }
 
-export default stateAware(state => (state => ({
+export default stateAware(state => ({
     isDoneDiscoverying: state.ok,
     extensions: state.list
-}))(state !== undefined && state.toJS !== undefined ? state.toJS() : {}))(Injector)
+}))(Injector)

@@ -1,4 +1,3 @@
-import { fromJS, Map } from 'immutable'
 import { Observable } from 'rxjs'
 import { api } from 'api'
 import systemExtensions from 'extensions';
@@ -121,10 +120,10 @@ export const epics = {
 
 export const reducers = {
     extensionReducer:
-    (state = Map({
+    (state = {
         ok: false,
         list: {}
-    }), action) => {
+    }, action) => {
 
         switch (action.type) {
             case types.EXTENSIONS_SUCCESS:
@@ -142,41 +141,37 @@ export const reducers = {
 };
 
 const extensionsSuccess = (state, action) => {
-    let future = state.toJS();
     Observable.from(action.list).map(extension =>
-        future.list[extension.id] = {
+        state.list[extension.id] = {
             loaded: false
         }
     ).subscribe();
     let count = 0;
     Observable.from(systemExtensions).map(model =>
-        future.list[`__sys${count++}__`] = {
+        state.list[`__sys${count++}__`] = {
             model: model,
             loaded: true
         }
     ).subscribe();
-    return fromJS(future);
+    return state;
 };
 
 
 const extensionsDidLoad = (state) => {
-    let future = state.toJS();
-    future.ok = true;
-    return fromJS(future);
+    state.ok = true;
+    return state;
 };
 
 const extensionUnitSuccess = (state, action) => {
-    let future = state.toJS();
-    future.list[action.extension.id].model = () => {};
-    future.list[action.extension.id].loaded = true;
-    return fromJS(future);
+    state.list[action.extension.id].model = () => {};
+    state.list[action.extension.id].loaded = true;
+    return state;
 };
 
 const extensionCleanup = (state) => {
-    let future = state.toJS();
-    future.ok = false;
-    future.list = {};
-    return fromJS(future);
+    state.ok = false;
+    state.list = {};
+    return state;
 };
 
 export default {

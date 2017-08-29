@@ -26,6 +26,6 @@ class Content extends Component {
     }
 }
 
-export default stateAware(state => (state => ({
+export default stateAware(state => ({
     views: state.pages || []
-}))(state !== undefined && state.toJS !== undefined ? state.toJS() : {}))(Content)
+}))(Content)

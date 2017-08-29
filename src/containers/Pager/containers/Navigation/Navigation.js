@@ -29,6 +29,6 @@ class Navigation extends Component {
     }
 }
 
-export default stateAware(state => (state => ({
+export default stateAware(state => ({
     buttons: state.pages || []
-}))(state !== undefined && state.toJS !== undefined ? state.toJS() : {}))(Navigation)
+}))(Navigation)

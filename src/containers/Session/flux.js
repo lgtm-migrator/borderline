@@ -1,4 +1,3 @@
-import { fromJS, Map } from 'immutable'
 import { api } from 'api'
 
 const types = {
@@ -81,11 +80,11 @@ export const epics = {
 
 export const reducers = {
     sessionReducer:
-    (state = Map({
+    (state = {
         ok: false,
         working: false,
         attempts: 0
-    }), action) => {
+    }, action) => {
 
         switch (action.type) {
             case types.SESSION_RECOVER:
@@ -109,40 +108,35 @@ export const reducers = {
 };
 
 const sessionRecover = (state) => {
-    let future = state.toJS();
-    future.working = true;
-    return fromJS(future);
+    state.working = true;
+    return state;
 };
 
 const sessionLogin = (state) => {
-    let future = state.toJS();
-    future.working = true;
-    future.attempts = future.attempts++;
-    delete future.error;
-    return fromJS(future);
+    state.working = true;
+    state.attempts = state.attempts++;
+    delete state.error;
+    return state;
 };
 
 const sessionLoginSuccess = (state, action) => {
-    let future = state.toJS();
-    future.working = false;
-    future.user = action.session;
-    return fromJS(future);
+    state.working = false;
+    state.user = action.session;
+    return state;
 };
 
 const sessionLoginFailure = (state, action) => {
-    let future = state.toJS();
-    future.working = false;
-    future.ok = false;
-    future.error = action.error.error;
-    return fromJS(future);
+    state.working = false;
+    state.ok = false;
+    state.error = action.error.error;
+    return state;
 };
 
 const sessionLogout = (state) => {
-    let future = state.toJS();
-    future.working = true;
-    future.ok = false;
-    delete future.error;
-    return fromJS(future);
+    state.working = true;
+    state.ok = false;
+    delete state.error;
+    return state;
 };
 
 const sessionLogoutSuccess = () => {
@@ -150,10 +144,9 @@ const sessionLogoutSuccess = () => {
 };
 
 const sessionValid = (state) => {
-    let future = state.toJS();
-    future.working = false;
-    future.ok = true;
-    return fromJS(future);
+    state.working = false;
+    state.ok = true;
+    return state;
 };
 
 export default {

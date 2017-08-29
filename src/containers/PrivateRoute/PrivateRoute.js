@@ -20,6 +20,6 @@ class PrivateRoute extends Component {
     }
 }
 
-export default stateAware(state => (state => ({
+export default stateAware(state => ({
     isAuthenticated: state.ok
-}))(state !== undefined && state.toJS !== undefined ? state.toJS() : {}))(PrivateRoute)
+}))(PrivateRoute)

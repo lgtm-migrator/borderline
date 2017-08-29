@@ -17,7 +17,7 @@ class ParentTracer extends Component {
     componentWillMount() {
         this.setState({
             connector: connect(
-                (state, ownProps) => this.props.mapStateToProps(state[this.context.modelName], ownProps),
+                (state, ownProps) => this.props.mapStateToProps(state[this.context.modelName] !== undefined ? state[this.context.modelName].toJS() : {}, ownProps),
                 () => ({})
             )(this.props.tracedComponent)
         })

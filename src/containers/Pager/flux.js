@@ -1,5 +1,3 @@
-import { fromJS, Map } from 'immutable'
-
 const types = {
 
     PAGE_DOCK: 'PAGE_DOCK'
@@ -9,9 +7,9 @@ export const actions = {};
 export const epics = {};
 export const reducers = {
     pageReducer:
-    (state = Map({
+    (state = {
         pages: {}
-    }), action) => {
+    }, action) => {
 
         switch (action.type) {
             case types.PAGE_DOCK:
@@ -30,22 +28,20 @@ const pageDock = (state, action) => {
         action.icon === undefined || action.icon === null ||
         action.view === undefined || action.view === null)
         return state
-    let future = state.toJS();
-    future.pages[action.path] = {
+    state.pages[action.path] = {
         path: action.path,
         icon: action.icon,
         view: action.view,
         proxy: action.proxy,
         origin: action.__origin__
     };
-    return fromJS(future);
+    return state;
 };
 
 const logoutCleanup = (state) => {
 
-    let future = state.toJS();
-    future.pages = {};
-    return fromJS(future);
+    state.pages = {};
+    return state;
 };
 
 export default {

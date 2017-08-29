@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
 import { Observable } from 'rxjs';
+import { fromJS } from 'immutable'
 import { ActionsObservable } from 'redux-observable';
 import storeManager, { store } from 'utilities/storeManager';
 import Stale from 'components/Stale';
@@ -125,7 +126,7 @@ class Enclave extends Component {
 
         assets[this.state.modelName].reducers = reducers
         storeManager.injectAsyncReducer(this.state.modelName, (previous, action) =>
-            Object.values(assets[this.state.modelName].reducers).reduce((state, r) => r(state, this.actionDetagger(action)), previous)
+            Object.values(assets[this.state.modelName].reducers).reduce((state, r) => fromJS(r(state !== undefined ? state.toJS() : state, this.actionDetagger(action))), previous)
         );
     }
 
