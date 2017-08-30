@@ -1074,9 +1074,9 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-borderline-devutils@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/borderline-devutils/-/borderline-devutils-0.1.3.tgz#979fe6020e74b488d7480980e49ced3be93f85aa"
+borderline-devutils@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/borderline-devutils/-/borderline-devutils-0.1.4.tgz#17f4bacca486ef749a7d9918c2fb8a5e324df1c7"
   dependencies:
     autoprefixer "7.1.3"
     babel-core "6.26.0"
