@@ -40,23 +40,26 @@ class StoreManager {
         history = createHistory();
 
         this.middleware = {
-            logger: createLogger({
-                duration: true,
-                collapsed: true,
-                stateTransformer: (state) => {
-                    let future = {};
-                    for (var name in state) {
-                        future[name] = state[name] !== undefined && state[name].toJS instanceof Function ? state[name].toJS() : state[name];
-                    }
-                    return future;
-                }
-            }),
             router: routerMiddleware(history),
             epic: createEpicMiddleware(this.rootEpic)
         };
 
         let mutateCompose = compose;
         if (process.env.NODE_ENV === 'development') {
+
+            this.middleware = Object.assign(this.middleware, {
+                logger: createLogger({
+                    duration: true,
+                    collapsed: true,
+                    stateTransformer: (state) => {
+                        let future = {};
+                        for (var name in state) {
+                            future[name] = state[name] !== undefined && state[name].toJS instanceof Function ? state[name].toJS() : state[name];
+                        }
+                        return future;
+                    }
+                })
+            });
 
             mutateCompose = typeof window === 'object' &&
                 window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?

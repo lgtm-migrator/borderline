@@ -103,7 +103,7 @@ class Enclave extends Component {
     }
 
     displayError(message) {
-        if (process.env.NODE_ENV !== 'production')
+        if (process.env.NODE_ENV === 'development')
             console.error(`There was a problem creating an enclave: ${message}`);
     }
 
