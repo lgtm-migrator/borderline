@@ -29,6 +29,14 @@ module.exports = {
                 "argsIgnorePattern": "^__unused__"
             }
         ],
+        "eqeqeq": [
+            "error",
+            "always"
+        ],
+        "no-var": [
+            "error",
+            "always"
+        ],
         "no-irregular-whitespace": "error",
         // Following is due to https://github.com/facebookincubator/create-react-app/issues/2631
         "jsx-a11y/href-no-hash": "off",
