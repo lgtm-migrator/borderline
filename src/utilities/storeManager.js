@@ -53,7 +53,7 @@ class StoreManager {
                     collapsed: true,
                     stateTransformer: (state) => {
                         let future = {};
-                        for (var name in state) {
+                        for (let name in state) {
                             future[name] = state[name] !== undefined && state[name].toJS instanceof Function ? state[name].toJS() : state[name];
                         }
                         return future;
@@ -67,7 +67,7 @@ class StoreManager {
                     name: 'Borderline',
                     stateSanitizer: (state) => {
                         let future = {};
-                        for (var name in state) {
+                        for (let name in state) {
                             future[name] = state[name] && state[name].toJS !== undefined ? state[name].toJS() : state[name];
                         }
                         return future;

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BorderlineProvider from 'BorderlineProvider';
 
-export default class BorderlineBootstrap {
+class BorderlineBootstrap {
 
     // Custom name for container
     static displayName = 'BorderlineBootstrap';
@@ -26,7 +26,7 @@ export default class BorderlineBootstrap {
             module.hot.accept('BorderlineProvider', () => {
 
                 // Upon hot reload we fetch a new instance of the application and render it
-                var HotBorderlineProvider = require('BorderlineProvider').default;
+                const HotBorderlineProvider = require('BorderlineProvider').default;
                 ReactDOM.render(
                     <HotBorderlineProvider />, root
                 );
@@ -34,3 +34,5 @@ export default class BorderlineBootstrap {
         }
     }
 }
+
+export default BorderlineBootstrap;

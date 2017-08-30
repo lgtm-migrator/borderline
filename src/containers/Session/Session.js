@@ -6,9 +6,6 @@ class Session extends Component {
 
     // Custom name for container
     static displayName = 'Session';
-    get name() {
-        return 'Session';
-    }
 
     // Typechecking for container's props
     static propTypes = {
