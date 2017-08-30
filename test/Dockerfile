@@ -19,7 +19,7 @@ RUN cat /root/.npm/_logs/*; exit 0;
 COPY ./src /usr/app/src
 COPY ./.eslintrc /usr/app/.eslintrc
 COPY ./test/*.js /usr/app/test/
-COPY ./config/eae.compute.test.config.js /usr/app/config/eae.compute.config.js
+COPY ./config/borderline.test.config.js /usr/app/config/borderline.config.js
 
 EXPOSE 80
 
