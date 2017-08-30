@@ -136,7 +136,7 @@ QueryController.prototype.deleteQueryById = function(req, res) {
         res.statusCode(404);
         res.json(defines.errorStacker('Missing query_id'));
     }
-    this.queryCollection.findOneAndDelete({ _id : new ObjectID(query_id)}).then(function(__ok_delete) {
+    this.queryCollection.findOneAndDelete({ _id : new ObjectID(query_id)}).then(function(__unused__ok_delete) {
         res.status(200);
         res.json({success: true});
     }, function(error) {
