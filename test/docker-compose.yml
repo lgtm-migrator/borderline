@@ -17,7 +17,7 @@ services:
 
     tests:
             build:
-                context: ../../
+                context: ../
                 dockerfile: ./test/Dockerfile
             depends_on:
                 - mongodb
