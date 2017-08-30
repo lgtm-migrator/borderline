@@ -14,7 +14,12 @@ function BorderlineMiddleware(config) {
     this.config = new Options(config);
     this.app = express();
 
-    // Bind member functions
+    // Bind public  member functions
+    this.start = BorderlineMiddleware.prototype.start.bind(this);
+    this.stop = BorderlineMiddleware.prototype.stop.bind(this);
+
+
+    // Bind private member functions
     this._connectDb = BorderlineMiddleware.prototype._connectDb.bind(this);
     this._setupQueryEndpoints = BorderlineMiddleware.prototype._setupQueryEndpoints.bind(this);
     this._registryHandler = BorderlineMiddleware.prototype._registryHandler.bind(this);
@@ -34,21 +39,55 @@ function BorderlineMiddleware(config) {
             next();
         });
     }
+}
 
+/**
+ * @fn start
+ * @desc Starts the borderline middleware
+ * @return {Promise} Resolves to a Express.js Application router on success,
+ * rejects an error stack otherwise
+ */
+BorderlineMiddleware.prototype.start = function() {
     let _this = this;
-    this._connectDb().then(function() {
-        _this._setupQueryEndpoints('/query');
+    return new Promise(function (resolve, reject) {
+        _this._connectDb().then(function () {
+            // Setup route using controllers
+            _this._setupQueryEndpoints('/query');
 
-        _this._registryHandler();
-    }, function(error) {
-        _this.app.all('*', function(__unused__req, res) {
-            res.status(501);
-            res.json(defines.errorStacker('Database connection failure', error));
+            // Start status periodic update
+            _this._registryHandler();
+
+            resolve(_this.app); // All good, returns application
+        }, function (error) {
+            _this.app.all('*', function(__unused__req, res) {
+                res.status(501);
+                res.json(defines.errorStacker('Database connection failure', error));
+            });
+            reject(defines.errorStacker('Cannot establish mongoDB connection', error));
         });
     });
+};
 
-    return this.app;
-}
+/**
+ * @fn stop
+ * @desc Stop the the borderline middleware
+ * @return {Promise} Resolves to true on success,
+ * rejects an error stack otherwise
+ */
+BorderlineMiddleware.prototype.stop = function() {
+    let _this = this;
+    return new Promise(function (resolve, reject) {
+        // Stop status update
+        timer.clearInterval(_this._interval_timer);
+        // Disconnect DB --force
+        _this.db.close(true).then(function(error) {
+            if (error)
+                reject(defines.errorStacker('Closing mongoDB connection failed', error));
+            else
+                resolve(true);
+        });
+    });
+};
 
 /**
  * @fn _registryHandler
@@ -57,13 +96,13 @@ function BorderlineMiddleware(config) {
  * @private
  */
 BorderlineMiddleware.prototype._registryHandler = function() {
-    var _this = this;
+    let _this = this;
 
     //Connect to the registry collection
     this.registry = this.db.collection(defines.globalRegistryCollectionName);
-    var registry_update = function() {
+    let registry_update = function() {
         //Create status object
-        var status = Object.assign({}, defines.registryModel, {
+        let status = Object.assign({}, defines.registryModel, {
             type: 'borderline-middleware',
             version: package_file.version,
             timestamp: new Date(),
@@ -88,11 +127,11 @@ BorderlineMiddleware.prototype._registryHandler = function() {
     };
 
     //Call the update every X milliseconds
-    let interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
+    _this._interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
     //Do a first update now
     registry_update();
 
-    return interval_timer;
+    return _this._interval_timer;
 };
 
 
@@ -102,20 +141,20 @@ BorderlineMiddleware.prototype._registryHandler = function() {
  * @private
  */
 BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
-    var _this = this;
+    let _this = this;
 
     //Import & instantiate controller modules
-    var creationControllerModule = require('./creationController.js');
+    let creationControllerModule = require('./creationController.js');
     _this.creationController = new creationControllerModule(_this.queryCollection, _this.storage);
-    var endpointControllerModule = require('./endpointController.js');
+    let endpointControllerModule = require('./endpointController.js');
     _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.storage);
-    var credentialsControllerModule = require('./credentialsController.js');
+    let credentialsControllerModule = require('./credentialsController.js');
     _this.credentialsController = new credentialsControllerModule(_this.queryCollection, _this.storage);
-    var inputControllerModule = require('./inputController.js');
+    let inputControllerModule = require('./inputController.js');
     _this.inputController = new inputControllerModule(_this.queryCollection, _this.storage);
-    var outputControllerModule = require('./outputController.js');
+    let outputControllerModule = require('./outputController.js');
     _this.outputController = new outputControllerModule(_this.queryCollection, _this.storage);
-    var executionControllerModule = require('./executionController.js');
+    let executionControllerModule = require('./executionController.js');
     _this.executionController = new executionControllerModule(_this.queryCollection, _this.storage);
 
     //Setup controllers URIs
@@ -155,15 +194,15 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
  * @private
  */
 BorderlineMiddleware.prototype._connectDb = function() {
-    var _this = this;
-    var urls_list = [
+    let _this = this;
+    let urls_list = [
         this.config.mongoURL,
     ];
     return new Promise(function(resolve, reject) {
         //Create one Promise par DB to connect to
-        var promises = [];
-        for (var i = 0; i < urls_list.length; i++) {
-            var p = new Promise(function(resolve, reject) {
+        let promises = [];
+        for (let i = 0; i < urls_list.length; i++) {
+            let p = new Promise(function(resolve, reject) {
                 mongodb.connect(urls_list[i], function(err, db) {
                     if (err !== null)
                         reject(defines.errorStacker('Database connection failure', err));

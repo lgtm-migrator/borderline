@@ -32,7 +32,7 @@ ExecutionController.prototype.executeQuery = function(req, res) {
         return;
     }
 
-    var query_id = req.body.query;
+    let query_id = req.body.query;
 
     this.queryFactory.fromID(query_id).then(function(queryObject) {
         queryObject.execute(req).then(function(result) {
@@ -55,7 +55,7 @@ ExecutionController.prototype.executeQuery = function(req, res) {
  * @param res Express.js response object
  */
 ExecutionController.prototype.getQueryById = function(req, res) {
-    var query_id = req.params.query_id;
+    let query_id = req.params.query_id;
     if (query_id === undefined || query_id === null) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));

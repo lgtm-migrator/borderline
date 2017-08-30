@@ -30,9 +30,9 @@ QueryTransmart17_1.prototype.isAuth = function() {
         this.model.credentials.hasOwnProperty('generated') === false)
         return false;
 
-    var now = new Date();
+    let now = new Date();
     //Compute expiration date for this token
-    var expires = new Date(this.model.credentials.generated);
+    let expires = new Date(this.model.credentials.generated);
     expires.setTime(expires.getTime() +  this.model.credentials.expires_in * 1000);
     //Compares now and expiration date
     return (now < expires);
@@ -83,7 +83,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
  * @private
  */
 QueryTransmart17_1.prototype._ensureAuth = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         if (_this.isAuth() === false) {
             _this._doAuth().then(function() {
@@ -104,7 +104,7 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
  * @return {Promise} Execution status object on success
  */
 QueryTransmart17_1.prototype.execute = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
 
         _this.registerExecutionStart().then(function(status) {

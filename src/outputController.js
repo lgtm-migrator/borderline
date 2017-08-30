@@ -1,5 +1,5 @@
 const QueryFactory = require('./core/queryFactory.js');
-var defines = require('./defines.js');
+let defines = require('./defines.js');
 
 /**
  * @fn OutputController
@@ -25,7 +25,7 @@ function OutputController(queryCollection, storage) {
  * @param res Express.js response object
  */
 OutputController.prototype.getQueryById = function(req, res) {
-    var query_id = req.params.query_id;
+    let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
@@ -53,8 +53,8 @@ OutputController.prototype.getQueryById = function(req, res) {
  * @param res Express.js response object
  */
 OutputController.prototype.putQueryById = function(req, res) {
-    var query_id = req.params.query_id;
-    var data = req.body;
+    let query_id = req.params.query_id;
+    let data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
@@ -82,7 +82,7 @@ OutputController.prototype.putQueryById = function(req, res) {
  * @param res Express.js response object
  */
 OutputController.prototype.deleteQueryById = function(req, res) {
-    var query_id = req.params.query_id;
+    let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query ID'));

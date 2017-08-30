@@ -1,4 +1,4 @@
-var defines = require('./defines.js');
+let defines = require('./defines.js');
 
 /**
  * @fn CreationController
@@ -22,7 +22,7 @@ function CreationController(queryCollection) {
  * @param res Express.js response object
  */
 CreationController.prototype.getNewQuery = function(__unused__req, res) {
-    var newQuery = Object.assign({},
+    let newQuery = Object.assign({},
         defines.queryModel,
         {
             endpoint: {
@@ -31,7 +31,7 @@ CreationController.prototype.getNewQuery = function(__unused__req, res) {
         });
 
     this.queryCollection.insertOne(newQuery).then(function(r) {
-        if (r.insertedCount == 1) {
+        if (r.insertedCount === 1) {
             res.status(200);
             res.json(r.ops[0]);
         }
@@ -51,23 +51,23 @@ CreationController.prototype.getNewQuery = function(__unused__req, res) {
  * @param res Express.js response object
  */
 CreationController.prototype.postNewQuery = function(req, res) {
-    var credentials = req.body.credentials;
-    var endpoint = req.body.endpoint;
-    if (endpoint == null || endpoint == undefined ||
-        credentials == null || credentials == undefined) {
+    let credentials = req.body.credentials;
+    let endpoint = req.body.endpoint;
+    if (endpoint === null || endpoint === undefined ||
+        credentials === null || credentials === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query data'));
         return;
     }
-    if (defines.endpointTypes.find(function(v) { return v === endpoint.sourceType; }) == undefined) {
+    if (defines.endpointTypes.find(function(v) { return v === endpoint.sourceType; }) === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Invalid source type'));
         return;
     }
-    var newQuery = Object.assign({}, defines.queryModel, { endpoint: endpoint }, {credentials: credentials});
+    let newQuery = Object.assign({}, defines.queryModel, { endpoint: endpoint }, {credentials: credentials});
 
     this.queryCollection.insertOne(newQuery).then(function(r) {
-        if (r.insertedCount == 1) {
+        if (r.insertedCount === 1) {
             res.status(200);
             res.json(r.ops[0]);
         }
@@ -87,18 +87,18 @@ CreationController.prototype.postNewQuery = function(req, res) {
  * @param res Express.js response object
  */
 CreationController.prototype.postNewQueryTyped = function(req, res) {
-    var query_type = req.params.query_type;
+    let query_type = req.params.query_type;
 
-    if (defines.endpointTypes.includes(query_type) == false) {
+    if (defines.endpointTypes.includes(query_type) === false) {
         res.status(400);
         res.json(defines.errorStacker('Unknown query type'));
     }
 
-    var endpointModel = Object.assign({}, defines.endpointModel, { sourceType: query_type});
+    let endpointModel = Object.assign({}, defines.endpointModel, { sourceType: query_type});
     //Create new query from here
-    var newQuery = Object.assign({}, defines.queryModel, { endpoint: endpointModel } , req.body);
+    let newQuery = Object.assign({}, defines.queryModel, { endpoint: endpointModel } , req.body);
     this.queryCollection.insertOne(newQuery).then(function(r) {
-        if (r.insertedCount == 1) {
+        if (r.insertedCount === 1) {
             res.status(200);
             res.json(r.ops[0]);
         }

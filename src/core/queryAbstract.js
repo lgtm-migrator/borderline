@@ -76,7 +76,7 @@ QueryAbstract.prototype.output_standard2local = function(__unused__data) {
  * @return {Promise} A Promise resolving model's input
  */
 QueryAbstract.prototype.getInput = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
        try {
             resolve(_this.model.input);
@@ -92,7 +92,7 @@ QueryAbstract.prototype.getInput = function() {
  * @return {Promise} A promise resolving to the local input value
  */
 QueryAbstract.prototype.getInputLocal = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function (resolve, reject) {
         if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('local'))
             resolve(_this.model.input.local);
@@ -106,7 +106,7 @@ QueryAbstract.prototype.getInputLocal = function() {
  * @return {Promise} A promise resolving to the standardized input
  */
 QueryAbstract.prototype.getInputStd = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function (resolve, reject) {
         if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('std'))
             resolve(_this.model.input.std);
@@ -121,11 +121,11 @@ QueryAbstract.prototype.getInputStd = function() {
  * @return {Promise} A Promise resolving the stored model in local format
  */
 QueryAbstract.prototype.setInputStd = function(std_data) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             //Transform to local format
-            var local_data = _this.input_standard2local(std_data);
+            let local_data = _this.input_standard2local(std_data);
             //Store into model
             _this.model.input.local = local_data;
             _this.model.input.std = std_data;
@@ -144,11 +144,11 @@ QueryAbstract.prototype.setInputStd = function(std_data) {
  * @return {Promise} A Promise resolving the stored model to standard format
  */
 QueryAbstract.prototype.setInputLocal = function(local_data) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             //Transform to local format
-            var std_data = _this.input_local2standard(local_data);
+            let std_data = _this.input_local2standard(local_data);
             //Store into model
             _this.model.input.local = local_data;
             _this.model.input.std = std_data;
@@ -167,11 +167,11 @@ QueryAbstract.prototype.setInputLocal = function(local_data) {
  * @return {Promise} A Promise resolving to data model expanded with its content from storage
  */
 QueryAbstract.prototype.getOutput = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
-            var data = _this.model.output;
-            var promises = [
+            let data = _this.model.output;
+            let promises = [
                 _this.storage.getObject(data.local.dataId),
                 _this.storage.getObject(data.std.dataId)
             ];
@@ -194,7 +194,7 @@ QueryAbstract.prototype.getOutput = function() {
  * @return {Promise} Resolves to output local data content
  */
 QueryAbstract.prototype.getOutputLocal = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('local')) {
             _this.storage.getObject(_this.model.output.local.dataId).then(function(local_data) {
@@ -214,7 +214,7 @@ QueryAbstract.prototype.getOutputLocal = function() {
  * @return {Promise} Resolves to output standard data content
  */
 QueryAbstract.prototype.getOutputStd = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('std') &&
             _this.model.output.std.hasOwnProperty('dataId') &&

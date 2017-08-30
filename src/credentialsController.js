@@ -1,5 +1,5 @@
 const QueryFactory = require('./core/queryFactory.js');
-var defines = require('./defines.js');
+let defines = require('./defines.js');
 
 /**
  * @fn CredentialsController
@@ -26,7 +26,7 @@ function CredentialsController(queryCollection, storage) {
  * @param res Express.js response object
  */
 CredentialsController.prototype.getQueryById = function(req, res) {
-    var query_id = req.params.query_id;
+    let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined || query_id.length === 0) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
@@ -49,8 +49,8 @@ CredentialsController.prototype.getQueryById = function(req, res) {
  * @param res Express.js response object
  */
 CredentialsController.prototype.putQueryById = function(req, res) {
-    var query_id = req.params.query_id;
-    var data = req.body;
+    let query_id = req.params.query_id;
+    let data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
@@ -78,7 +78,7 @@ CredentialsController.prototype.putQueryById = function(req, res) {
  * @param res Express.js response object
  */
 CredentialsController.prototype.deleteQueryById = function(req, res) {
-    var query_id = req.params.query_id;
+    let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query ID'));
@@ -106,14 +106,14 @@ CredentialsController.prototype.deleteQueryById = function(req, res) {
  * @param res Express.js response object
  */
 CredentialsController.prototype.getQueryAuthById = function(req, res) {
-    var query_id = req.params.query_id;
-    if (query_id === null || query_id === undefined || query_id.length == 0) {
+    let query_id = req.params.query_id;
+    if (query_id === null || query_id === undefined || query_id.length === 0) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        if (queryObject.isAuth() == true) {
+        if (queryObject.isAuth() === true) {
             res.status(200);
             res.json({isAuth: true});
         }

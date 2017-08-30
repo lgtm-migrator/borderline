@@ -32,7 +32,7 @@ QueryFile.prototype.isAuth = function() {
  * @return {Promise} Execution status object on success
  */
 QueryFile.prototype.execute = function(req) {
-    var _this = this;
+    let _this = this;
 
     return new Promise(function(resolve, reject) {
         if (req.file === undefined || req.file === null) {

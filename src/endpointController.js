@@ -1,5 +1,5 @@
 const QueryFactory = require('./core/queryFactory.js');
-var defines = require('./defines.js');
+let defines = require('./defines.js');
 
 /**
  * @fn EndpointController
@@ -25,8 +25,8 @@ function EndpointController(queryCollection, storage) {
  * @param res Express.js response object
  */
 EndpointController.prototype.getQueryById = function(req, res) {
-    var query_id = req.params.query_id;
-    if (query_id === null || query_id === undefined || query_id.length == 0) {
+    let query_id = req.params.query_id;
+    if (query_id === null || query_id === undefined || query_id.length === 0) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
         return;
@@ -48,17 +48,17 @@ EndpointController.prototype.getQueryById = function(req, res) {
  * @param res Express.js response object
  */
 EndpointController.prototype.putQueryById = function(req, res) {
-    var query_id = req.params.query_id;
-    var data = req.body;
+    let query_id = req.params.query_id;
+    let data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query_id'));
         return;
     }
-    if (data.hasOwnProperty('sourceType') == false || defines.endpointTypes.find(
+    if (data.hasOwnProperty('sourceType') === false || defines.endpointTypes.find(
         function(val) {
             return val === data.sourceType;
-        }) == undefined) {
+        }) === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Invalid sourceType'));
         return;
@@ -85,14 +85,14 @@ EndpointController.prototype.putQueryById = function(req, res) {
  * @param res Express.js response object
  */
 EndpointController.prototype.deleteQueryById = function(req, res) {
-    var query_id = req.params.query_id;
+    let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
         res.json(defines.errorStacker('Missing query ID'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        var type = queryObject.model.endpoint.sourceType;
+        let type = queryObject.model.endpoint.sourceType;
         queryObject.model.endpoint = Object.assign({}, defines.endpointModel, {sourceType: type});
         queryObject.pushModel().then(function() {
             res.status(200);

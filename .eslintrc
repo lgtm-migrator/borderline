@@ -33,6 +33,8 @@
         "jsx": true
     },
     "rules": {
+        "eqeqeq": 2,
+        "no-var" : 2,
         "no-alert": 2,
         "no-console": 1,
         "quotes": [

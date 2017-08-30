@@ -25,7 +25,7 @@ function QueryFactory(queryCollection, storage) {
  * @return {Promise} A Promise resolving to the allocated implementation Object
  */
 QueryFactory.prototype.fromModel = function(queryModel) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         switch (queryModel.endpoint.sourceType) {
             case 'TS171':
@@ -49,11 +49,11 @@ QueryFactory.prototype.fromModel = function(queryModel) {
  * @return {Promise} A Promise resolving to the allocated implementation Object
  */
 QueryFactory.prototype.fromID = function(query_id) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             _this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function (queryModel) {
-                if (queryModel == null || queryModel == undefined) {
+                if (queryModel === null || queryModel === undefined) {
                     reject(defines.errorStacker('Unknown id ' + query_id));
                     return;
                 }
