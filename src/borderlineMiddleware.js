@@ -143,7 +143,7 @@ BorderlineMiddleware.prototype._registryHandler = function() {
 BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     let _this = this;
 
-    //Import & instantiate controller modules
+    // Import & instantiate controller modules
     let queryControllerModule = require('./queryController.js');
     _this.queryController = new queryControllerModule(_this.queryCollection, _this.storage);
     let endpointControllerModule = require('./endpointController.js');
@@ -157,13 +157,14 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     let executionControllerModule = require('./executionController.js');
     _this.executionController = new executionControllerModule(_this.queryCollection, _this.storage);
 
-    //Setup controllers URIs
+    // Setup controllers URIs
     _this.app.route(prefix + '/new')
         .get(_this.queryController.getNewQuery)
         .post(_this.queryController.postNewQuery);
     _this.app.route(prefix + '/new/:query_type')
         .post(_this.queryController.postNewQueryTyped);
     _this.app.route(prefix + '/:query_id')
+        .get(_this.queryController.getQueryById)
         .delete(_this.queryController.deleteQueryById);
     _this.app.route(prefix + '/:query_id/endpoint')
         .get(_this.endpointController.getQueryById)

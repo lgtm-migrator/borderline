@@ -16,6 +16,7 @@ function QueryController(queryCollection) {
     this.postNewQuery = QueryController.prototype.postNewQuery.bind(this);
     this.postNewQueryTyped = QueryController.prototype.postNewQueryTyped.bind(this);
     this.deleteQueryById = QueryController.prototype.deleteQueryById.bind(this);
+    this.getQueryById = QueryController.prototype.getQueryById.bind(this);
 }
 
 /**
@@ -111,6 +112,21 @@ QueryController.prototype.postNewQueryTyped = function(req, res) {
     }, function(error){
         res.status(500);
         res.json(defines.errorStacker(error));
+    });
+};
+
+QueryController.prototype.getQueryById = function(req, res) {
+    let query_id = req.params.query_id;
+    if (query_id === undefined || query_id === null) {
+        res.statusCode(404);
+        res.json(defines.errorStacker('Missing query_id'));
+    }
+    this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function (query_data) {
+        res.status(200);
+        res.json(query_data);
+    }, function (error) {
+        res.status(500);
+        res.json(defines.errorStacker('Failed to find query', error));
     });
 };
 
