@@ -18,11 +18,6 @@ TestServer.prototype.start = function(config) {
         // Create borderline middleware service
         _this.borderline_middleware = new BorderlineMiddleware(config);
 
-        _this._app.get('/ffs', function(req, res) {
-            res.status(200);
-            res.json({ ffs: true});
-        });
-
         // Start serving on config.port
         _this.borderline_middleware.start().then(function(middleware_router) {
             _this._app.use(middleware_router);
