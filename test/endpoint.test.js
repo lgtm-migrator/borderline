@@ -8,7 +8,7 @@ let g_query_id = '';
 
 beforeAll(function() {
     return new Promise(function (resolve, reject) {
-        test_server.run(config).then(function() {
+        test_server.start(config).then(function() {
             resolve(true);
         }, function (error) {
             reject(error.toString());
@@ -17,7 +17,7 @@ beforeAll(function() {
 });
 
 test('Create stub TS171 query', function(done) {
-    expect.assertions(5);
+    expect.assertions(6);
     request(
         {
             method: 'POST',
@@ -31,8 +31,7 @@ test('Create stub TS171 query', function(done) {
             if (error) {
                 done.fail(error.toString());
             }
-            // throw JSON.stringify(test_server);
-
+            expect(response).toBeDefined();
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
@@ -67,9 +66,9 @@ test('Get {query_id} endpoint, check type is TS171', function(done) {
     });
 });
 
-/*
+
 afterAll(function() {
     g_query_id = null;
     return test_server.stop();
 });
-*/
+
