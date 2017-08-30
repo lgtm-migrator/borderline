@@ -43,17 +43,16 @@ test('Create stub TS171 query, save the id as ref', function(done) {
     );
 });
 
-test('Get credentials for invalid query_id', function(done) {
+test('Get query input for invalid query_id', function(done) {
     expect.assertions(3);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/query/totocoucou/credentials',
+        uri: '/query/invalid_query_id/input',
         json: true
     }, function(error, response, body) {
         if (error) {
             done.fail(error.toString());
-            return;
         }
         expect(response).toBeDefined();
         expect(response.statusCode).toEqual(401);
@@ -62,83 +61,80 @@ test('Get credentials for invalid query_id', function(done) {
     });
 });
 
-
-test('Get {query_id} credentials, check type fields username and password are present', function(done) {
-    expect.assertions(4);
+test('Get {query_id} input, check its empty', function(done) {
+    expect.assertions(6);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/query/' + g_query_id + '/credentials',
+        uri: '/query/' + g_query_id + '/input',
         json: true
     }, function(error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
         }
-        if (response.statusCode !== 200) {
-            done.fail('Status code is not 200');
-            return;
-        }
+        expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.username).toBeDefined();
-        expect(body.password).toBeDefined();
+        expect(body.std).toBeDefined();
+        expect(Object.keys(body.std).length).toEqual(0);
+        expect(Object.keys(body.local).length).toEqual(0);
         done();
     });
 });
 
-test('Update {query_id} credentials, check updates and fields', function(done) {
-    expect.assertions(6);
+test('Write query input for {query_id} with dummy TS171 query', function(done) {
+    expect.assertions(5);
     request({
         method: 'PUT',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/query/' + g_query_id + '/credentials',
+        uri: '/query/' + g_query_id + '/input',
         json: true,
         body: {
-            username: 'demo-user',
-            password: 'demo-user'
+            uri: '/v2/observations?constraint=',
+            params: {
+                type: 'Combination',
+                operator: "and",
+                args: [
+                    {
+                        type: "ConceptConstraint",
+                        path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\"
+                    },
+                    {
+                        type: "ConceptConstraint",
+                        path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\"
+                    }]
+            }
         }
     }, function(error, response, body) {
-        if (error) {
+        if (error)
             done.fail(error.toString());
-            return;
-        }
-        if (response.statusCode !== 200) {
-            done.fail('Status code is not 200');
-            return;
-        }
+        expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.username).toBeDefined();
-        expect(body.username).toEqual('demo-user');
-        expect(body.password).toBeDefined();
-        expect(body.password).toEqual('demo-user');
+        expect(body.uri).toBeDefined();
+        expect(body.params).toBeDefined();
         done();
     });
 });
 
-test('Reset {query_id} credentials, check fields are back to default', function(done) {
+
+test('Get query input for {query_id}, check previously set fields are present', function(done) {
     expect.assertions(6);
     request({
-        method: 'DELETE',
+        method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/query/' + g_query_id + '/credentials',
+        uri: '/query/' + g_query_id + '/input',
         json: true
     }, function(error, response, body) {
-        if (error) {
-            done.fail(error.toString());
-            return;
-        }
-        if (response.statusCode !== 200) {
-            done.fail('Status code is not 200');
-            return;
-        }
+        if (error)
+            done.fail(error);
+        expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.username).toBeDefined();
-        expect(body.username.length).toEqual(0);
-        expect(body.password).toBeDefined();
-        expect(body.password.length).toEqual(0);
+        expect(body.std).toBeDefined();
+        expect(body.std.uri).toBeDefined();
+        expect(body.std.params).toBeDefined();
         done();
     });
 });
@@ -151,7 +147,7 @@ test('Delete stub TS171 {query_id}', function(done) {
             baseUrl: 'http://127.0.0.1:' + config.port,
             uri: '/query/' + g_query_id,
             json: true
-        }, function (error, response, body) {
+        }, function (error, response, __unused__body) {
             if (error) {
                 done.fail(error.toString());
             }
