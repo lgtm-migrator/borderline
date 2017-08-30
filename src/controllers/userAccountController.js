@@ -1,8 +1,5 @@
-const fs = require('fs-extra');
-const path = require('path');
 const speakeasy = require('speakeasy');
-
-var userAccounts = require('../core/userAccounts');
+let userAccounts = require('../core/userAccounts');
 const defines = require('../defines.js');
 
 /**
@@ -23,7 +20,6 @@ function UserAccountController(mongoDBCollection) {
     this.whoAmI = UserAccountController.prototype.whoAmI.bind(this);
     this.login2 = UserAccountController.prototype.login2.bind(this);
     this.put2step = UserAccountController.prototype.put2step.bind(this);
-    this.getLoginForm = UserAccountController.prototype.getLoginForm.bind(this);
     this.getUserById = UserAccountController.prototype.getUserById.bind(this);
     this.postUserById = UserAccountController.prototype.postUserById.bind(this);
     this.deleteUserById = UserAccountController.prototype.deleteUserById.bind(this);
@@ -36,7 +32,7 @@ function UserAccountController(mongoDBCollection) {
  * @param done
  */
 UserAccountController.prototype.serializeUser = function(deserializedUser, done) {
-    if (deserializedUser.hasOwnProperty('_id') == false)
+    if (deserializedUser.hasOwnProperty('_id') === false)
         done('User has no ID', null);
     else {
         done(null,
@@ -67,7 +63,7 @@ UserAccountController.prototype.deserializeUser = function(serializedUser, done)
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.getUsers = function(req, res) {
+UserAccountController.prototype.getUsers = function(__unused__req, res) {
    this.users.findAll().then(function(users) {
        res.status(200);
        res.json(users);
@@ -86,15 +82,15 @@ UserAccountController.prototype.getUsers = function(req, res) {
  * @param res Express.js response object
  */
 UserAccountController.prototype.login = function(req, res) {
-    var that = this;
-    var rejected = function(reason) {
+    let that = this;
+    let rejected = function(reason) {
         res.status(400);
         res.send(defines.errorStacker('Failed to login', reason));
     };
 
-    var username = req.body.username;
-    var password = req.body.password;
-    if (! username || ! password) {
+    let username = req.body.username;
+    let password = req.body.password;
+    if (!username || !password) {
         rejected('Missing username or password');
         return;
     }
@@ -102,12 +98,12 @@ UserAccountController.prototype.login = function(req, res) {
     this.users.findByUsernameAndPassword(username, password)
         .then(
             function (user) {
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve, __unused__reject) {
                     //Known user match
                     resolve(user);
                 });
             },
-            function(error) {
+            function(__unused__error) {
                 return new Promise(function(resolve, reject) {
                 //Try to find user in external DB and create in local
                 that.users.registerExternalByUsernameAndPassword(username, password).then(function (user) {
@@ -119,7 +115,8 @@ UserAccountController.prototype.login = function(req, res) {
         .then(function(user) {
                 req.login(user, function (err) {
                     if (err) {
-                        return next(err);
+                        rejected(err);
+                        return;
                     }
                     res.status(200);
                     res.json(user);
@@ -135,15 +132,15 @@ UserAccountController.prototype.login = function(req, res) {
  * @param res Express.js response object
  */
 UserAccountController.prototype.login2 = function(req, res) {
-    var rejected = function(reason) {
+    let rejected = function(reason) {
         res.status(400);
         res.send(defines.errorStacker('Failed to login', reason));
     };
 
-    var username = req.body.username;
-    var password = req.body.password;
-    var token = req.body.token;
-    if (! username || ! password || ! token) {
+    let username = req.body.username;
+    let password = req.body.password;
+    let token = req.body.token;
+    if (!username || !password || !token) {
         rejected('Missing username or password or token');
         return;
     }
@@ -151,7 +148,7 @@ UserAccountController.prototype.login2 = function(req, res) {
     this.users.findByUsernameAndPassword(username, password)
         .then(
             function (user) {
-                var verified = speakeasy.totp.verify({
+                let verified = speakeasy.totp.verify({
                         secret: user.secret.base32,
                         encoding: 'base32',
                         token: token
@@ -184,7 +181,7 @@ UserAccountController.prototype.login2 = function(req, res) {
  * @param res Express.js response object
  */
 UserAccountController.prototype.put2step = function(req, res) {
-    var user_id = req.params.user_id;
+    let user_id = req.params.user_id;
 
     if (user_id === undefined || user_id === null) {
         res.status(400);
@@ -241,7 +238,7 @@ UserAccountController.prototype.logout = function(req, res) {
  * @param res Express.js response object
  */
 UserAccountController.prototype.whoAmI = function(req, res) {
-    var Iam = req.user;
+    let Iam = req.user;
     if (Iam === undefined || Iam === null) {
         res.status(404);
         res.json(defines.errorStacker('An unknown unicorn'));
@@ -252,30 +249,6 @@ UserAccountController.prototype.whoAmI = function(req, res) {
     }
 };
 
-/**
- * @fn getLoginForm
- * @desc Get a HTML login form for testing
- * @param req Express.js request object
- * @param res Express.js response object
- */
-UserAccountController.prototype.getLoginForm = function(req, res) {
-    var form =
-    '<form action="/login" method="post">' +
-        '<div>' +
-            '<label>Username:</label>' +
-            '<input type="text" name="username"/>' +
-        '</div>' +
-        '<div>' +
-            '<label>Password:</label>' +
-            '<input type="password" name="password"/>' +
-        '</div>' +
-        '<div>' +
-            '<input type="submit" value="Log In"/>' +
-        '</div>' +
-    '</form>';
-    res.status(200);
-    res.send(form);
-};
 
 /**
  * @fn getUserByID
@@ -284,7 +257,7 @@ UserAccountController.prototype.getLoginForm = function(req, res) {
  * @param res Express.js response object
  */
 UserAccountController.prototype.getUserById = function(req, res) {
-    var user_id = req.params.user_id;
+    let user_id = req.params.user_id;
 
     this.users.findById(user_id).then(function(user) {
         res.status(200);
@@ -303,7 +276,7 @@ UserAccountController.prototype.getUserById = function(req, res) {
  * @param res Express.js response object
  */
 UserAccountController.prototype.postUserById = function(req, res) {
-    var user_id = req.params.user_id;
+    let user_id = req.params.user_id;
 
     this.users.updateById(user_id, req.body).then(function (user)
         {
@@ -323,7 +296,7 @@ UserAccountController.prototype.postUserById = function(req, res) {
  * @param res Express.js response object
  */
 UserAccountController.prototype.deleteUserById = function(req, res) {
-    var user_id = req.params.user_id;
+    let user_id = req.params.user_id;
 
     this.users.deleteById(user_id).then(function (user)
         {

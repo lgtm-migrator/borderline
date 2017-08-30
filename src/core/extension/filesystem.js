@@ -31,7 +31,7 @@ ExtensionFileSystem.prototype._bootstrap = function() {
  * @private
  */
 ExtensionFileSystem.prototype._isValidPath = function(filePath) {
-    var relativeFilePath = path.relative(this.root, filePath);
+    let relativeFilePath = path.relative(this.root, filePath);
 
     //Checking user is not trying to go outside it's root filesystem
     if (relativeFilePath.indexOf('..') !== -1)
@@ -49,7 +49,7 @@ ExtensionFileSystem.prototype.close = function(fd) {
         fs.close(fd);
     }
     catch (err) {
-        console.error(err);
+        console.error(err); // eslint-disable-line no-console
         return false;
     }
     return true;
@@ -61,7 +61,7 @@ ExtensionFileSystem.prototype.close = function(fd) {
  * @return {boolean}
  */
 ExtensionFileSystem.prototype.exists = function(path) {
-    var filePath = path.join(this.root, path);
+    let filePath = path.join(this.root, path);
     if (this._isValidPath(filePath) === false)
         return false;
     return fs.existsSync(filePath);
@@ -74,7 +74,7 @@ ExtensionFileSystem.prototype.exists = function(path) {
  * @return {boolean}
  */
 ExtensionFileSystem.prototype.mkdir = function(path) {
-    var filePath = path.join(this.root, path);
+    let filePath = path.join(this.root, path);
     if (this._isValidPath(filePath) === false)
         return false;
 
@@ -82,7 +82,7 @@ ExtensionFileSystem.prototype.mkdir = function(path) {
         fs.mkdirpSync(filePath);
     }
     catch (err) {
-        console.error(err);
+        console.error(err); // eslint-disable-line no-console
         return false;
     }
     return true;
@@ -95,7 +95,7 @@ ExtensionFileSystem.prototype.mkdir = function(path) {
  * @return {number} The opened file descriptor
  */
 ExtensionFileSystem.prototype.open = function(path, flags) {
-    var filePath = path.join(this.root, path);
+    let filePath = path.join(this.root, path);
     if (this._isValidPath(filePath) === false)
         return -1;
     return fs.openSync(filePath, flags);
@@ -118,10 +118,10 @@ ExtensionFileSystem.prototype.read = function(fd, buf, count) {
  * @return {String} The whole file content
  */
 ExtensionFileSystem.prototype.readFile = function(filePath) {
-    var filePath = path.join(this.root, filePath);
-    if (this._isValidPath(filePath) === false)
+    let absolutefilePath = path.join(this.root, filePath);
+    if (this._isValidPath(absolutefilePath) === false)
         return null;
-    return fs.readFileSync(filePath);
+    return fs.readFileSync(absolutefilePath);
 };
 
 /**
@@ -131,8 +131,8 @@ ExtensionFileSystem.prototype.readFile = function(filePath) {
  * @return {boolean}
  */
 ExtensionFileSystem.prototype.rename = function(oldPath, newPath) {
-    var oldFilePath = path.join(this.root, oldPath);
-    var newFilePath = path.join(this.root, newPath);
+    let oldFilePath = path.join(this.root, oldPath);
+    let newFilePath = path.join(this.root, newPath);
     if (this._isValidPath(oldFilePath) === false)
         return false;
     if (this._isValidPath(newFilePath) === false)
@@ -148,7 +148,7 @@ ExtensionFileSystem.prototype.rename = function(oldPath, newPath) {
  * @return {boolean}
  */
 ExtensionFileSystem.prototype.rmdir = function(path) {
-    var filePath = path.join(this.root, path);
+    let filePath = path.join(this.root, path);
     if (this._isValidPath(filePath) === false)
         return false;
     fs.rmdir(filePath);
@@ -173,7 +173,7 @@ ExtensionFileSystem.prototype.write = function(fd, buf, count) {
  * @return {number} Number of written bytes
  */
 ExtensionFileSystem.prototype.writeFile = function(path, buf) {
-    var filePath = path.join(this.root, path);
+    let filePath = path.join(this.root, path);
     if (this._isValidPath(filePath) === false)
         return null;
     return fs.writeFileSync(filePath, buf);

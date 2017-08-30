@@ -1,6 +1,4 @@
-var path = require('path');
-
-var extensionStoreModule = require('../core/extensionStore');
+let extensionStoreModule = require('../core/extensionStore');
 const defines = require('../defines.js');
 
 /**
@@ -19,8 +17,6 @@ function ExtensionStoreController(mongoDBCollection, gridFSObjectStorage) {
     this.getExtensionByID = ExtensionStoreController.prototype.getExtensionByID.bind(this);
     this.postExtensionByID = ExtensionStoreController.prototype.postExtensionByID.bind(this);
     this.deleteExtensionByID = ExtensionStoreController.prototype.deleteExtensionByID.bind(this);
-    this.getExtensionStoreUpload = ExtensionStoreController.prototype.getExtensionStoreUpload.bind(this);
-    this.getExtensionStoreUploadByID = ExtensionStoreController.prototype.getExtensionStoreUploadByID.bind(this);
 }
 
 /**
@@ -37,8 +33,8 @@ ExtensionStoreController.prototype.getExtensionStoreRouter = function() {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExtensionStoreController.prototype.getExtensionStore = function(req, res) {
-    var extension_list = this.extensionStore.listExtensions();
+ExtensionStoreController.prototype.getExtensionStore = function(__unused__req, res) {
+    let extension_list = this.extensionStore.listExtensions();
     res.status(200);
     res.json({ extensions: extension_list });
 };
@@ -51,15 +47,15 @@ ExtensionStoreController.prototype.getExtensionStore = function(req, res) {
  */
 ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
 
-    if (typeof req.files === 'undefined' || req.files === null || req.files.length == 0){
+    if (typeof req.files === 'undefined' || req.files === null || req.files.length === 0){
         res.status(400);
         res.json(defines.errorStacker('Zip file upload failed'));
         return;
     }
 
-    var extensions = [];
-    for (var i = 0; i < req.files.length; i++) {
-        var p = this.extensionStore.createExtensionFromFile(req.files[i]);
+    let extensions = [];
+    for (let i = 0; i < req.files.length; i++) {
+        let p = this.extensionStore.createExtensionFromFile(req.files[i]);
         extensions.push(p);
     }
 
@@ -73,7 +69,7 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExtensionStoreController.prototype.deleteExtensionStore = function(req, res) {
+ExtensionStoreController.prototype.deleteExtensionStore = function(__unused__req, res) {
     this.extensionStore.clearExtensions();
     res.status(200);
     res.json({ message: 'Removed all server extensions' });
@@ -86,8 +82,8 @@ ExtensionStoreController.prototype.deleteExtensionStore = function(req, res) {
  * @param res
  */
 ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
-    var id = req.params.id;
-    var info = this.extensionStore.getExtensionInfoById(id);
+    let id = req.params.id;
+    let info = this.extensionStore.getExtensionInfoById(id);
     if (info !== null) {
         res.status(200);
         res.json(info);
@@ -106,14 +102,14 @@ ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
  * @param res Express.js response object
  */
 ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
-    var id = req.params.id;
-    if (typeof req.files === 'undefined' || req.files.length == 0) {
+    let id = req.params.id;
+    if (typeof req.files === 'undefined' || req.files.length === 0) {
         res.status(400);
         res.json(defines.errorStacker('No file uploaded for extension ' + id + ' update'));
         return;
     }
-    var updateReply = this.extensionStore.updateExtensionById(id, req.files[0]);
-    if (updateReply.hasOwnProperty('error') == true)
+    let updateReply = this.extensionStore.updateExtensionById(id, req.files[0]);
+    if (updateReply.hasOwnProperty('error') === true)
         res.status(500);
     else
         res.status(200);
@@ -127,46 +123,14 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
  * @param res Express.js response object
  */
 ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
-    var id = req.params.id;
-    var deleteReply = this.extensionStore.deleteExtensionById(id);
-    if (deleteReply.hasOwnProperty('error') == true)
+    let id = req.params.id;
+    let deleteReply = this.extensionStore.deleteExtensionById(id);
+    if (deleteReply.hasOwnProperty('error') === true)
         res.status(404);
     else
         res.status(200);
     res.json(deleteReply);
 };
 
-/**
- * @fn getExtensionStoreUpload
- * @desc Get the minimal HTML form for a postExtensionStore
- * @param req Express.js request object
- * @param res Express.js response object
- */
-ExtensionStoreController.prototype.getExtensionStoreUpload = function(req, res) {
-    res.status(200);
-    res.send(
-        '<form action="/extension_store" method="post" enctype="multipart/form-data">'+
-        '<input type="file" name="extension-zip" accept=".zip">'+
-        '<input type="submit" value="Upload">'+
-        '</form>'
-    );
-};
-
-/**
- * @fn getExtensionStoreUploadByID
- * @desc Get the minimal HTML form for a postExtensionStoreByID
- * @param req Express.js request object
- * @param res Express.js response object
- */
-ExtensionStoreController.prototype.getExtensionStoreUploadByID = function(req, res) {
-    var id = req.params.id;
-    res.status(200);
-    res.send(
-        '<form action="/extension_store/${id}" method="post" enctype="multipart/form-data">'+
-        '<input type="file" name="extension-zip" accept=".zip">'+
-        '<input type="submit" value="Upload">'+
-        '</form>'
-    );
-};
 
 module.exports = ExtensionStoreController;

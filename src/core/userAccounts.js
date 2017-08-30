@@ -1,6 +1,3 @@
-const path = require('path');
-const fs = require('fs-extra');
-const https = require('https');
 const crypto = require('crypto');
 const ObjectID = require('mongodb').ObjectID;
 const speakeasy = require('speakeasy');
@@ -30,7 +27,7 @@ function UserAccounts(userCollection) {
  * @return {Promise} Resolves to an array of users on success
  */
 UserAccounts.prototype.findAll = function(){
-    var that = this;
+    let that = this;
     return  new Promise(function(resolve, reject) {
         that.userCollection.find().toArray().then(function(result) {
             if (result === null || result === undefined)
@@ -50,18 +47,18 @@ UserAccounts.prototype.findAll = function(){
  * @return {Promise} Resolves to the matched user on success
  */
 UserAccounts.prototype.findByUsernameAndPassword = function(username, password) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.userCollection.findOne({username: username}).then(function(result) {
             if (result === null || result === undefined) {
                 reject(defines.errorStacker('Invalid username/password'));
                 return;
             }
-            var salt = result.salt || '';
-            var hash = crypto.createHmac('sha512', salt);
+            let salt = result.salt || '';
+            let hash = crypto.createHmac('sha512', salt);
             hash.update(password);
-            var hash_pass = hash.digest('hex');
-            if (hash_pass == result.password)
+            let hash_pass = hash.digest('hex');
+            if (hash_pass === result.password)
                 resolve(result);
             else
                 reject(defines.errorStacker('Invalid username/password'));
@@ -80,18 +77,18 @@ UserAccounts.prototype.findByUsernameAndPassword = function(username, password) 
  * @return {Promise} Resolves to the registered user on success
  */
 UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username, password) {
-    var that = this;
+    let that = this;
 
     return new Promise(function(resolve, reject) {
         //Fetch default external DB here
         //reject('Invalid username/password first time login');
 
         //Register new Borderline user on success
-        var salt = crypto.randomBytes(32).toString('hex').slice(0, 32);
-        var hash = crypto.createHmac('sha512', salt);
+        let salt = crypto.randomBytes(32).toString('hex').slice(0, 32);
+        let hash = crypto.createHmac('sha512', salt);
         hash.update(password);
-        var hash_pass = hash.digest('hex');
-        var new_user = Object.assign({}, defines.userModel, {
+        let hash_pass = hash.digest('hex');
+        let new_user = Object.assign({}, defines.userModel, {
             username: username,
             salt: salt,
             password: hash_pass,
@@ -114,7 +111,7 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
  * @return {Promise} Resolves to the user data on success
  */
 UserAccounts.prototype.findById = function(id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.userCollection.findOne({ _id : new ObjectID(id) }).then(function(result) {
             if (result === null || result === undefined)
@@ -135,12 +132,12 @@ UserAccounts.prototype.findById = function(id) {
  * @return {Promise} Resolves to the update user on success
  */
 UserAccounts.prototype.updateById = function(id, data) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         if (data.hasOwnProperty('_id')) //Removes ID field because its managed by mongoDB
             delete data._id;
         //Create object from model and data
-        var updated_user = Object.assign({}, defines.userModel, data);
+        let updated_user = Object.assign({}, defines.userModel, data);
         //Perform database update
         that.userCollection.findOneAndReplace({ _id : new ObjectID(id) }, updated_user).then(function(result) {
                 if (result === null || result === undefined)
@@ -161,7 +158,7 @@ UserAccounts.prototype.updateById = function(id, data) {
  * @return {Promise} Resolve to the removed user on success
  */
 UserAccounts.prototype.deleteById = function(id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.userCollection.findOneAndDelete({ _id : new ObjectID(id) }).then(function(result) {
             resolve(result.value);
@@ -178,12 +175,12 @@ UserAccounts.prototype.deleteById = function(id) {
  * @return {Promise} Resolves to the update user on success
  */
 UserAccounts.prototype.regenerateSecret = function(id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.findById(id).then(
             function (user) {
                 user.secret = speakeasy.generateSecret({ length: 32, name: 'Borderline' });
-                that.updateById(id, user).then(function (result) {
+                that.updateById(id, user).then(function (__unused__result) {
                     resolve(user);
                 },
                 function (error) {

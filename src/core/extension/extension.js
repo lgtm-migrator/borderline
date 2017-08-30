@@ -31,22 +31,23 @@ Extension.prototype.info = function() {
 Extension.prototype.webpackImporter = function(importPath) {
     try {
 
-        if (this.manifest.hasOwnProperty('server.js') == false || this.manifest.hasOwnProperty('client.js') == false)
+        if (this.manifest.hasOwnProperty('server.js') === false ||
+            this.manifest.hasOwnProperty('client.js') === false)
             return null;
 
-        var serverFile = path.join(importPath, this.manifest['server.js']);
-        var clientFile = path.join(importPath, this.manifest['client.js']);
+        let serverFile = path.join(importPath, this.manifest['server.js']);
+        let clientFile = path.join(importPath, this.manifest['client.js']);
 
         if (fs.existsSync(serverFile) === true) {
-            //Read server module form filesystem
-            var code = fs.readFileSync(serverFile);
-            //Define borderline in local scope so its found during eval
-            var borderline = this.borderlineApi;
-            //Evaluate server extension Code
-            var imported = eval(code.toString());
+            // Read server module form filesystem
+            let code = fs.readFileSync(serverFile);
+            // Define borderline in local scope so its found during eval
+            let borderline = this.borderlineApi; //  eslint-disable-line no-unused-vars
+            // Evaluate server extension Code
+            let imported = eval(code.toString());
 
-            //Create extension container object
-            var extension = Object.assign({
+            // Create extension container object
+            let extension = Object.assign({
                 compiled: true,
                 serverFile: serverFile,
                 clientFile: clientFile,
@@ -58,36 +59,36 @@ Extension.prototype.webpackImporter = function(importPath) {
         }
     }
     catch (err) {
-        console.error('Webpack extension import failed: ' + err);
+        console.error('Webpack extension import failed: ' + err); // eslint-disable-line no-console
         return null;
     }
     return null;
 };
 
 Extension.prototype.importer = function(importPath) {
-    var serverFile = path.join(importPath, 'server.js');
-    var clientFile = path.join(importPath, 'client.js');
+    let serverFile = path.join(importPath, 'server.js');
+    let clientFile = path.join(importPath, 'client.js');
 
-    var mod = {};
+    let mod = {};
     try {
         if (fs.existsSync(clientFile) === false)
             clientFile = null;
 
         if (fs.existsSync(serverFile) === true) {
             //Read server module form filesystem
-            var code = fs.readFileSync(serverFile);
+            let code = fs.readFileSync(serverFile);
 
-            var code_pre = '(function (borderline, module, __filename, __directory) { ';
-            var code_post = '});';
+            let code_pre = '(function (borderline, module, __filename, __directory) { ';
+            let code_post = '});';
 
             //Evaluate server extension Code
-            var imported = eval(code_pre + code + code_post);
+            let imported = eval(code_pre + code + code_post);
 
             //Instanciate server module with boderline context
             imported(this.borderlineApi, mod, 'index.js', importPath);
 
             //Create extension container object
-            var extension = {
+            let extension = {
                 compiled: false,
                 serverFile: serverFile,
                 clientFile: clientFile,
@@ -98,21 +99,21 @@ Extension.prototype.importer = function(importPath) {
         }
     }
     catch (err) {
-        console.error('Classic extension import failed: ' + err);
+        console.error('Classic extension import failed: ' + err); // eslint-disable-line no-console
         return null;
     }
     return null;
 };
 
 Extension.prototype.attach = function() {
-    var that = this;
+    let that = this;
 
     if (this.container) { //Dynamic extension features
         if (this.container.serverModule) {
             this.container.serverModule.attach(this.router);
         }
         if (this.container.clientFile) {
-            this.router.get('/client', function (req, res) {
+            this.router.get('/client', function (__unused__req, res) {
                 return res.sendFile(that.container.clientFile);
             });
         }
@@ -122,17 +123,17 @@ Extension.prototype.attach = function() {
     this.router.get('/*', function(req, res) {
 
         //Defaults to index.html
-        var url = req.params[0];
+        let url = req.params[0];
         if (req.params[0] === null || req.params[0] === undefined || req.params[0].length === 0) {
             url = 'index.html';
         }
 
-        var resourcePath = that.extensionPath + '/' + url;
+        let resourcePath = that.extensionPath + '/' + url;
         if (resourcePath.indexOf('..') === -1 && fs.existsSync(resourcePath) === true) {
             return res.sendFile(resourcePath);
         }
         res.status(404);
-        res.json({ error: 'Unresolved extension internal path /' + url } );
+        res.json({ error: 'Unresolved extension internal path /' + url });
     });
 };
 

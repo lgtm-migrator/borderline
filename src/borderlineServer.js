@@ -1,7 +1,6 @@
 //External node module imports
 const mongodb = require('mongodb').MongoClient;
 const GridFSBucket = require('mongodb').GridFSBucket;
-const path = require('path');
 const fs = require('fs-extra');
 const express = require('express');
 const expressSession = require('express-session');
@@ -14,13 +13,11 @@ const ip = require('ip');
 
 const borderlineOptions = require('./core/options');
 const defines = require('./defines.js');
-const package = require('../package.json');
+const package_json = require('../package.json');
 
 function BorderlineServer(config) {
     this.config = new borderlineOptions(config);
     this.app = express();
-
-        console.log(this.config.objectStorageURL);
 
     //Configuration import
     global.config = this.config;
@@ -40,14 +37,14 @@ function BorderlineServer(config) {
     this.app.set('x-powered-by', false);
     //Allow CORS requests when enabled
     if (this.config.enableCors === true) {
-        this.app.use(function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        this.app.use(function (__unused__req, res, next) {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
             next();
         });
     }
 
-    var _this = this;
+    let _this = this;
     this._connectDb().then(function () {
         //Setup Registry update
         _this._registryHandler();
@@ -76,7 +73,7 @@ function BorderlineServer(config) {
         _this.setupWorkflows();
 
     }, function (error) {
-        this.mongoError(error);
+        _this.mongoError(error);
     });
 
     return this.app;
@@ -89,16 +86,16 @@ function BorderlineServer(config) {
  * @private
  */
 BorderlineServer.prototype._registryHandler = function () {
-    var _this = this;
+    let _this = this;
 
     //Connect to the registry collection
     this.registry = this.db.collection(defines.globalRegistryCollectionName);
     global.registry = this.registry;
-    var registry_update = function () {
+    let registry_update = function () {
         //Create status object
-        var status = Object.assign({}, defines.registryModel, {
+        let status = Object.assign({}, defines.registryModel, {
             type: 'borderline-server',
-            version: package.version,
+            version: package_json.version,
             timestamp: new Date(),
             expires_in: defines.registryUpdateInterval / 1000,
             port: _this.config.port,
@@ -112,16 +109,16 @@ BorderlineServer.prototype._registryHandler = function () {
             port: status.port,
             type: status.type
         }, status, { upsert: true, returnOriginal: false })
-            .then(function (success) {
+            .then(function (__unused__success) {
                 //Nothing to do here
             }, function (error) {
                 //Just log the error
-                // console.log(error);
+                console.log(error); // eslint-disable-line no-console
             });
     };
 
     //Call the update every X milliseconds
-    var interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
+    let interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
     //Do a first update now
     registry_update();
 
@@ -136,8 +133,8 @@ BorderlineServer.prototype._registryHandler = function () {
  * @private
  */
 BorderlineServer.prototype._connectDb = function () {
-    var _this = this;
-    var main_db = new Promise(function (resolve, reject) {
+    let _this = this;
+    let main_db = new Promise(function (resolve, reject) {
         mongodb.connect(_this.config.mongoURL, function (err, db) {
             if (err !== null && err !== undefined) {
                 reject(defines.errorStacker('Failed to connect to mongoDB', err));
@@ -149,7 +146,7 @@ BorderlineServer.prototype._connectDb = function () {
         });
     });
 
-    var object_db = new Promise(function (resolve, reject) {
+    let object_db = new Promise(function (resolve, reject) {
         mongodb.connect(_this.config.objectStorageURL, function (err, db) {
             if (err !== null && err !== undefined) {
                 reject(defines.errorStacker('Failed to connect to mongoDB', err));
@@ -162,7 +159,7 @@ BorderlineServer.prototype._connectDb = function () {
     });
 
     return new Promise(function(resolve, reject) {
-        Promise.all([main_db, object_db]).then(function(true_array) {
+        Promise.all([main_db, object_db]).then(function(__unused__true_array) {
             resolve(true);
         }, function (error) {
             reject(defines.errorStacker('One of the db connection failed', error));
@@ -176,7 +173,7 @@ BorderlineServer.prototype._connectDb = function () {
  */
 BorderlineServer.prototype.setupUserAccount = function () {
     //Controller imports
-    var userAccountController = require('./controllers/userAccountController');
+    let userAccountController = require('./controllers/userAccountController');
     this.userAccountController = new userAccountController(this.db.collection(defines.userCollectionName));
 
     //Passport session serialize and deserialize
@@ -184,9 +181,6 @@ BorderlineServer.prototype.setupUserAccount = function () {
     passport.deserializeUser(this.userAccountController.deserializeUser);
 
     //[ Login and sessions Routes
-    //TEMPORARY getter on login form
-    this.app.get('/login/form', this.userAccountController.getLoginForm); //GET login form
-
     this.app.route('/login')
         .post(this.userAccountController.login); //POST login information
     this.app.route('/logout')
@@ -212,7 +206,7 @@ BorderlineServer.prototype.setupUserAccount = function () {
  */
 BorderlineServer.prototype.setupDataStore = function () {
     // Data sources controller import
-    var dataStoreControllerModule = require('./controllers/dataStoreController');
+    let dataStoreControllerModule = require('./controllers/dataStoreController');
     this.dataStoreController = new dataStoreControllerModule(this.db.collection(defines.dataSourcesCollectionName));
 
     //[ Data sources routes
@@ -236,23 +230,19 @@ BorderlineServer.prototype.setupDataStore = function () {
  * @desc Initialize global extensions management routes and controller
  */
 BorderlineServer.prototype.setupExtensionStore = function () {
-    if (this.config.hasOwnProperty('extensionSourcesFolder') == false) {
+    if (this.config.hasOwnProperty('extensionSourcesFolder') === false) {
         this.extensionError('No extensionSourcesFolder in options');
         return;
     }
-    if (fs.existsSync(this.config.extensionSourcesFolder) == false) {
+    if (fs.existsSync(this.config.extensionSourcesFolder) === false) {
         this.extensionError('Directory ' + this.config.extensionSourcesFolder + ' not found');
         return;
     }
 
-    var extensionStoreController = require('./controllers/extensionStoreController');
+    let extensionStoreController = require('./controllers/extensionStoreController');
     this.extensionStoreController = new extensionStoreController(this.db.collection(defines.extensionsCollectionName), this.grid);
 
     // [ Extension Store Routes
-    //TEMPORARY getter on a form to upload extensions zip file
-    this.app.get('/extension_store/upload', this.extensionStoreController.getExtensionStoreUpload);
-    //TEMPORARY getter on a form to update extensions zip file
-    this.app.get('/extension_store/upload/:id', this.extensionStoreController.getExtensionStoreUploadByID);
 
     this.app.use('/extensions', this.extensionStoreController.getExtensionStoreRouter()); //Extensions routers connect here
     this.app.route('/extension_store')
@@ -271,7 +261,7 @@ BorderlineServer.prototype.setupExtensionStore = function () {
  * @desc Initialize users extensions management routes and controller
  */
 BorderlineServer.prototype.setupUserExtensions = function () {
-    var userExtensionControllerModule = require('./controllers/userExtensionController');
+    let userExtensionControllerModule = require('./controllers/userExtensionController');
     this.userExtensionController = new userExtensionControllerModule(this.db.collection(defines.extensionsCollectionName));
 
     //[ Extensions subscriptions
@@ -289,7 +279,7 @@ BorderlineServer.prototype.setupUserExtensions = function () {
  * @desc Initialize workflow management routes and controller
  */
 BorderlineServer.prototype.setupWorkflows = function () {
-    var workflowControllerModule = require('./controllers/workflowController');
+    let workflowControllerModule = require('./controllers/workflowController');
     this.workflowController = new workflowControllerModule(this.db.collection(defines.workflowCollectionName), this.db.collection(defines.stepCollectionName));
 
     //[ Workflow endpoints
@@ -316,7 +306,7 @@ BorderlineServer.prototype.setupWorkflows = function () {
  * @param message A message string to use in responses
  */
 BorderlineServer.prototype.mongoError = function (message) {
-    this.app.all('*', function (req, res) {
+    this.app.all('*', function (__unused__req, res) {
         res.status(401);
         res.json(defines.errorStacker('Could not connect to the database', message));
     });
@@ -328,11 +318,11 @@ BorderlineServer.prototype.mongoError = function (message) {
  * @param message A message string to use in responses
  */
 BorderlineServer.prototype.extensionError = function (message) {
-    this.app.all('/extension_store', function (req, res) {
+    this.app.all('/extension_store', function (__unused__req, res) {
         res.status(204);
         res.json(defines.errorStacker('Extension store is disabled', message));
     });
-    this.app.all('/extensions/*', function (req, res) {
+    this.app.all('/extensions/*', function (__unused__req, res) {
         res.status(204);
         res.json(defines.errorStacker('Extensions are disabled', message));
     });

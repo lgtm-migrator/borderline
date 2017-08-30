@@ -1,6 +1,6 @@
 function ErrorStack(error_obj, error_stack) {
-    var error = {};
-    var error_message = '';
+    let error = {};
+    let error_message = '';
 
     //Extract current error message
     if (typeof error_obj === 'string')

@@ -1,6 +1,3 @@
-const fs = require('fs-extra');
-const path = require('path');
-
 const dataStoreModule = require('../core/dataStore');
 const defines = require('../defines.js');
 
@@ -29,7 +26,7 @@ function dataStoreController(mongoDBCollection) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.getDataStore = function(req, res) {
+dataStoreController.prototype.getDataStore = function(__unused__req, res) {
     this.dataStore.findAll().then(function(result) {
         res.status(200);
         res.json(result);
@@ -47,7 +44,7 @@ dataStoreController.prototype.getDataStore = function(req, res) {
  * @param res Express.js response object
  */
 dataStoreController.prototype.postDataStore = function(req, res) {
-    var data_source = req.body;
+    let data_source = req.body;
     if (data_source === null || data_source === undefined) {
         res.status(400);
         res.json(defines.errorStacker('Cannot create an empty data source'));
@@ -70,7 +67,7 @@ dataStoreController.prototype.postDataStore = function(req, res) {
  * @param res Express.js response object
  */
 dataStoreController.prototype.getDataStoreByID = function(req, res) { //GET a single data source
-    var source_id = req.params.source_id;
+    let source_id = req.params.source_id;
     this.dataStore.getDataSourceByID(source_id).then(function(result){
         res.status(200);
         res.json(result);
@@ -88,8 +85,8 @@ dataStoreController.prototype.getDataStoreByID = function(req, res) { //GET a si
  * @param res Express.js response object
  */
 dataStoreController.prototype.putDataStoreByID = function(req, res) {  // PUT Update a single data source
-    var source_id = req.params.source_id;
-    var data = req.body;
+    let source_id = req.params.source_id;
+    let data = req.body;
 
     this.dataStore.updateDataSourceByID(source_id, data).then(function(result){
         res.status(200);
@@ -108,7 +105,7 @@ dataStoreController.prototype.putDataStoreByID = function(req, res) {  // PUT Up
  * @param res Express.js response object
  */
 dataStoreController.prototype.deleteDataStoreByID = function(req, res) {
-    var source_id = req.params.source_id;
+    let source_id = req.params.source_id;
     this.dataStore.deleteDataSourceByID(source_id).then(function(result){
         res.status(200);
         res.json({deleted: result});
@@ -126,7 +123,7 @@ dataStoreController.prototype.deleteDataStoreByID = function(req, res) {
  * @param res Express.js response object
  */
 dataStoreController.prototype.getUserDataSources = function(req, res) {  //GET all user's data sources
-    var user_id = req.params.user_id;
+    let user_id = req.params.user_id;
     this.dataStore.getDataStoreByUserID(user_id).then(function (result) {
         res.status(200);
         res.json(result);
@@ -145,8 +142,8 @@ dataStoreController.prototype.getUserDataSources = function(req, res) {  //GET a
  * @param res Express.js response object
  */
 dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //POST Subscribe a user to a data source
-    var user_id = req.params.user_id;
-    var source_id = req.params.source_id;
+    let user_id = req.params.user_id;
+    let source_id = req.params.source_id;
 
     if (user_id === undefined || user_id === null || user_id === '') {
         res.status(400);
@@ -158,7 +155,7 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
         res.json(defines.errorStacker('Missing source_id'));
         return;
     }
-    var subscription = Object.assign({}, req.body, { user_id: user_id });
+    let subscription = Object.assign({}, req.body, { user_id: user_id });
 
     this.dataStore.subscribeUserToDataSource(source_id, subscription).then(function(success) {
         res.status(200);
@@ -178,8 +175,8 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
  * @param res Express.js response object
  */
 dataStoreController.prototype.deleteUserDataSourceByID = function(req, res) { //DELETE Unsubscribe user to data source
-    var user_id = req.params.user_id;
-    var source_id = req.params.source_id;
+    let user_id = req.params.user_id;
+    let source_id = req.params.source_id;
     this.dataStore.unsubscribeUserFromDataSource(user_id, source_id).then(function(success) {
         res.status(200);
         res.json(success);

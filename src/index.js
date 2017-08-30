@@ -1,20 +1,20 @@
-var express = require('express');
-var app = express();
+let express = require('express');
+let app = express();
 
-var config = require('../config/borderline.config.js');
-var BorderlineServer = require('./borderlineServer.js');
+let config = require('../config/borderline.config.js');
+let BorderlineServer = require('./borderlineServer.js');
 
 //Remove unwanted express headers
 app.set('x-powered-by', false);
 
-var options = Object.assign({}, config, { development: true });
+let options = Object.assign({}, config, { development: true });
 app.use(BorderlineServer(options));
 
 app.listen(config.port, function (err) {
     if (err) {
-        console.error(err);
+        console.error(err); // eslint-disable-line no-console
         return;
     }
 
-    console.log(`Listening at http://localhost:${config.port}/`);
+    console.log(`Listening at http://localhost:${config.port}/`); // eslint-disable-line no-console
 });

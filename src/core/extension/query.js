@@ -18,17 +18,17 @@ function ExtensionQuery() {
  * @private
  */
 ExtensionQuery.prototype._requestMaker = function(options, error_message) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         _this._pickMiddleware().then(function(middleware) {
-            var req_options = Object.assign({}, {
+            let req_options = Object.assign({}, {
                 method: 'GET',
                 json: true,
                 baseURL: 'http://127.0.0.1:' + middleware.port,
 //              baseURL: 'http://' + middleware.ip + ':' + middleware.port,
                 uri: ''
             }, options);
-            var req = request(req_options, function(error, response, body) {
+            request(req_options, function(error, response, body) {
                 if (error !== null && error !== undefined) {
                     reject(defines.errorStacker('Requesting middleware failed', error));
                     return;
@@ -41,7 +41,7 @@ ExtensionQuery.prototype._requestMaker = function(options, error_message) {
             });
         }, function (error) {
             reject(defines.errorStacker('Cannot pick middleware', error));
-        })
+        });
     });
 };
 
@@ -52,19 +52,19 @@ ExtensionQuery.prototype._requestMaker = function(options, error_message) {
  * @private
  */
 ExtensionQuery.prototype._pickMiddleware = function() {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         //Get all middleware in the registry. Last updated goes first
-        _this.registryCollection.find({type: 'borderline-middleware'}, {sort: "timestamp"}).toArray(function(err, entries) { //Error checking
+        _this.registryCollection.find({type: 'borderline-middleware'}, {sort: 'timestamp'}).toArray(function(err, entries) { //Error checking
             if (err !== null && err !== undefined) {
                 reject(defines.errorStacker('Cannot list middleware from registry', err));
                 return;
             }
 
             //Try to find the first online middleware
-            for (var i = 0; i < entries.length; i++) {
-                var now = new Date();
-                var expires = new Date();
+            for (let i = 0; i < entries.length; i++) {
+                let now = new Date();
+                let expires = new Date();
                 expires.setDate(entries[i].timestamp.getDate() + entries[i].expires_in);
 
                 if (expires > now) {

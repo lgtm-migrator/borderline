@@ -25,11 +25,11 @@ function ObjectStorage(queryGridFS) {
  * @return {Promise} Resolves to object id on success
  */
 ObjectStorage.prototype.createObject = function(object_data) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             //Create file in gridFS
-            var writable = _this.gridfs.openUploadStream(_this._generateFilename());
+            let writable = _this.gridfs.openUploadStream(_this._generateFilename());
             //Write data to file
             writable.write(object_data);
             writable.end();
@@ -55,14 +55,14 @@ ObjectStorage.prototype.createObject = function(object_data) {
  * @return {Promise} Resolves to the data content into a String
  */
 ObjectStorage.prototype.getObject = function(object_id) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
-            var data = '';
+            let data = '';
             //Open file in grid fs
-            var readable = _this.gridfs.openDownloadStream(object_id);
+            let readable = _this.gridfs.openDownloadStream(object_id);
 
-            //Read data and accumulate to var data
+            //Read data and accumulate to let data
             readable.on('data', function(chunk) {
                 data += chunk;
             });
@@ -88,13 +88,13 @@ ObjectStorage.prototype.getObject = function(object_id) {
  * @return {Promise} Resolves to the object ID on success
  */
 ObjectStorage.prototype.setObject = function(object_id, object_data) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             //First delete the old file content
             _this.gridfs.delete(object_id).then(function() {
                 //Recreate file entry with same ID
-                var writable = _this.gridfs.openUploadStreamWithId(object_id, _this._generateFilename());
+                let writable = _this.gridfs.openUploadStreamWithId(object_id, _this._generateFilename());
                 //Write data to file
                 writable.write(object_data);
                 writable.end();
@@ -109,7 +109,7 @@ ObjectStorage.prototype.setObject = function(object_id, object_data) {
                 });
             }, function (error) { //Delete failed
                 reject(defines.errorStacker('Updating operation failed', error));
-            })
+            });
         }
         catch (error) {
             reject(defines.errorStacker('Storage update caught error', error));
@@ -123,7 +123,7 @@ ObjectStorage.prototype.setObject = function(object_id, object_data) {
  * @return {Promise} Resolve to the deleted object ID on success
  */
 ObjectStorage.prototype.deleteObject = function(object_id) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             _this.gridfs.delete(object_id).then(function() {

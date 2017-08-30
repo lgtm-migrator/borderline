@@ -1,5 +1,3 @@
-const fs = require('fs-extra');
-const path = require('path');
 const ObjectID = require('mongodb').ObjectID;
 const defines = require('../defines.js');
 
@@ -29,7 +27,7 @@ function dataStore(dataStoreCollection) {
  * @return {Promise} Resolve to an array containing the data sources
  */
 dataStore.prototype.findAll = function() {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.find().toArray().then(function(result) {
             if (result === null || result === undefined || result.length === 0)
@@ -48,17 +46,17 @@ dataStore.prototype.findAll = function() {
  * @return {Promise} Resolve to the inserted data source on success
  */
 dataStore.prototype.createDataSource = function(data_source) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         //Transform users ID string to objectID for Mongo
-        for (var i = 0; i < data_source.users.length; i++) {
+        for (let i = 0; i < data_source.users.length; i++) {
             data_source.users[i] = new ObjectID(data_source.users[i]);
         }
         //Create new data source from model default
-        var new_data_source = Object.assign({}, defines.dataSourceModel, data_source);
+        let new_data_source = Object.assign({}, defines.dataSourceModel, data_source);
         //Insert into database
         that.sourcesCollection.insertOne(new_data_source).then(function(success) {
-            if (success.insertedCount == 1) {
+            if (success.insertedCount === 1) {
                 resolve(success.ops[0]);
             }
             else {
@@ -77,7 +75,7 @@ dataStore.prototype.createDataSource = function(data_source) {
  * @return {Promise} Resolves to the data source on success
  */
 dataStore.prototype.getDataSourceByID = function(source_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.findOne({_id: new ObjectID(source_id) }).then(function(result) {
             if (result === null || result === undefined)
@@ -97,16 +95,16 @@ dataStore.prototype.getDataSourceByID = function(source_id) {
  * @return {Promise} Resolves to the update data source on success
  */
 dataStore.prototype.updateDataSourceByID = function(source_id, data) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         if (data.hasOwnProperty('_id')) //Remove _id from data to prevent replace error in mongo
             delete data._id;
         //transform user IDs
-        for (var i = 0; i < data.users; i++) {
+        for (let i = 0; i < data.users; i++) {
             data.users[i] = new ObjectID(data.users[i]);
         }
         //Create new data source from model default
-        var updated_data_source = Object.assign({}, defines.dataSourceModel, data);
+        let updated_data_source = Object.assign({}, defines.dataSourceModel, data);
         that.sourcesCollection.findOneAndReplace({_id: new ObjectID(source_id) }, updated_data_source).then(function(result) {
             if (result === null || result === undefined)
                 reject(defines.errorStacker('No match for id: ' + source_id));
@@ -126,7 +124,7 @@ dataStore.prototype.updateDataSourceByID = function(source_id, data) {
  * @return {Promise} Resolves to the deleted data source on success
  */
 dataStore.prototype.deleteDataSourceByID = function(source_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.findOneAndDelete({_id: new ObjectID(source_id)}).then(function (result) {
             resolve(result.value);
@@ -143,7 +141,7 @@ dataStore.prototype.deleteDataSourceByID = function(source_id) {
  * @return {Promise} Resolve to an array of data sources on success
  */
 dataStore.prototype.getDataStoreByUserID = function(user_id) {
-    var that = this;
+    let that = this;
     return  new Promise(function(resolve, reject) {
         that.sourcesCollection.find({ users: new ObjectID(user_id) }).toArray().then(function(result) {
             resolve(result);
@@ -161,7 +159,7 @@ dataStore.prototype.getDataStoreByUserID = function(user_id) {
  * @return {Promise} Resolves to the updated data source on success
  */
 dataStore.prototype.subscribeUserToDataSource = function(source_id, subscription) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         if (!subscription.hasOwnProperty('user_id') ||
             !subscription.hasOwnProperty('username') ||
@@ -177,11 +175,11 @@ dataStore.prototype.subscribeUserToDataSource = function(source_id, subscription
                                              }
                                          })
             .then(function(success) {
-                if (success.matchedCount == 0) {
+                if (success.matchedCount === 0) {
                     reject(defines.errorStacker('Invalid user_id or source_id'));
                     return;
                 }
-                if (success.modifiedCount == 0) {
+                if (success.modifiedCount === 0) {
                     reject(defines.errorStacker('Already subscribed'));
                     return;
                 }
@@ -200,7 +198,7 @@ dataStore.prototype.subscribeUserToDataSource = function(source_id, subscription
  * @return {Promise} Resolves to the update data source on success
  */
 dataStore.prototype.unsubscribeUserFromDataSource = function(user_id, source_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
             {
@@ -209,11 +207,11 @@ dataStore.prototype.unsubscribeUserFromDataSource = function(user_id, source_id)
                 }
             })
             .then(function(success) {
-                if (success.matchedCount == 0) {
+                if (success.matchedCount === 0) {
                     reject(defines.errorStacker('Invalid user_id or source_id'));
                     return;
                 }
-                if (success.modifiedCount == 0) {
+                if (success.modifiedCount === 0) {
                     reject(defines.errorStacker('Was not subscribed'));
                     return;
                 }

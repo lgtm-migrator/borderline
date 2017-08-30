@@ -23,7 +23,7 @@ function UserExtensions(extensionCollection) {
  * @return {Promise} Resolves to an array on this user's extensions
  */
 UserExtensions.prototype.listExtensions = function(user_id) {
-    var that = this;
+    let that = this;
     return new Promise(function (resolve, reject) {
         that.extensionCollection.find({ users: [ new ObjectID(user_id) ] }).toArray().then(
             function (result) {
@@ -43,7 +43,7 @@ UserExtensions.prototype.listExtensions = function(user_id) {
  * @return {Promise} Resolves to the updated user on success
  */
 UserExtensions.prototype.clearExtensions = function(user_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.extensionCollection.updateMany(
             { _id: new ObjectID(user_id) },
@@ -71,7 +71,7 @@ UserExtensions.prototype.clearExtensions = function(user_id) {
  * @return {Promise} Resolves to the update extension on success
  */
 UserExtensions.prototype.subscribe = function(user_id, extension_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.extensionCollection.updateOne(
             { _id: extension_id },
@@ -82,11 +82,11 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
             })
             .then(
                 function(success) {
-                    if (success.matchedCount == 0) {
+                    if (success.matchedCount === 0) {
                         reject(defines.errorStacker('Invalid user_id or extension_id'));
                         return;
                     }
-                    if (success.modifiedCount == 0) {
+                    if (success.modifiedCount === 0) {
                         reject(defines.errorStacker('Already subscribed'));
                         return;
                     }
@@ -107,7 +107,7 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
  * @return {Promise} Resolves to the update extension on success
  */
 UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.extensionCollection.updateOne(
             { _id: extension_id },
@@ -118,11 +118,11 @@ UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
             })
             .then(
                 function(success) {
-                    if (success.matchedCount == 0) {
+                    if (success.matchedCount === 0) {
                         reject(defines.errorStacker('Invalid user_id or extension_id'));
                         return;
                     }
-                    if (success.modifiedCount == 0) {
+                    if (success.modifiedCount === 0) {
                         reject(defines.errorStacker('Already unsubscribed'));
                         return;
                     }

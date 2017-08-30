@@ -7,9 +7,9 @@ const fs = require('fs-extra');
  * @desc Complete the configuration object with default values
  * @constructor
  */
-var Options = function (configuration) {
+let Options = function (configuration) {
     //Get all the attributes
-    for (var attr in configuration)
+    for (let attr in configuration)
         this[attr] = configuration[attr];
 
     this.mongoURL = configuration.mongoURL ? configuration.mongoURL : 'mongodb://root:root@127.0.0.1:27020/borderline';
@@ -33,10 +33,10 @@ var Options = function (configuration) {
  * @private
  */
 Options.prototype._ensureFolder = function (inputPath) {
-    var absolutePath = path.resolve(inputPath);
-    var paths = absolutePath.split(path.sep);
-    var currentPath = paths[0];
-    for (var i = 1; i < paths.length; i++) {
+    let absolutePath = path.resolve(inputPath);
+    let paths = absolutePath.split(path.sep);
+    let currentPath = paths[0];
+    for (let i = 1; i < paths.length; i++) {
         currentPath = path.resolve(path.join(currentPath, paths[i]));
         if (fs.existsSync(currentPath) === false) {
             fs.mkdirSync(currentPath);

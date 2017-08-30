@@ -1,4 +1,4 @@
-var userExtensionModule = require('../core/userExtensions');
+let userExtensionModule = require('../core/userExtensions');
 const defines = require('../defines.js');
 
 /**
@@ -24,7 +24,7 @@ function UserExtensionController(mongoDBCollection) {
  * @param res Express.js response object
  */
 UserExtensionController.prototype.getExtensions = function(req, res) {
-    var user_id = req.params.user_id;
+    let user_id = req.params.user_id;
     this.userExtension.listExtensions(user_id).then(function (list) {
         res.status(200);
         res.json(list);
@@ -42,7 +42,7 @@ UserExtensionController.prototype.getExtensions = function(req, res) {
  * @param res Express.js response object
  */
 UserExtensionController.prototype.deleteExtensions = function(req, res) {
-    var user_id = req.params.user_id;
+    let user_id = req.params.user_id;
     this.userExtension.clearExtensions(user_id).then(function (success) {
         res.status(200);
         res.json({ success: success });
@@ -60,8 +60,8 @@ UserExtensionController.prototype.deleteExtensions = function(req, res) {
  * @param res Express.js response object
  */
 UserExtensionController.prototype.subscribeExtension = function(req, res) {
-    var user_id = req.params.user_id;
-    var extension_id = req.params.extension_id;
+    let user_id = req.params.user_id;
+    let extension_id = req.params.extension_id;
     this.userExtension.subscribe(user_id, extension_id).then(
         function(success) {
             res.status(200);
@@ -81,8 +81,8 @@ UserExtensionController.prototype.subscribeExtension = function(req, res) {
  * @param res Express.js response object
  */
 UserExtensionController.prototype.unsubscribeExtension = function(req, res) {
-    var user_id = req.params.user_id;
-    var extension_id = req.params.extension_id;
+    let user_id = req.params.user_id;
+    let extension_id = req.params.extension_id;
     this.userExtension.unsubscribe(user_id, extension_id).then(
         function(success) {
             res.status(200);

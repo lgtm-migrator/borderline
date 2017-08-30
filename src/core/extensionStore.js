@@ -2,11 +2,10 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs-extra');
-const zlib = require('zlib');
 const adm_zip = require('adm-zip');
 
 //Local modules
-var Extension = require('./extension/extension');
+let Extension = require('./extension/extension');
 const defines = require('../defines.js');
 
 /**
@@ -14,7 +13,7 @@ const defines = require('../defines.js');
  * @param extensionCollection MongoDB collection to sync against
  * @constructor
  */
-var ExtensionStore = function(extensionCollection, gridFSObjectStorage) {
+let ExtensionStore = function(extensionCollection, gridFSObjectStorage) {
     this.extensions = [];
     this.extensionFolder = path.normalize(global.config.extensionSourcesFolder);
     this.extensionCollection = extensionCollection;
@@ -23,7 +22,7 @@ var ExtensionStore = function(extensionCollection, gridFSObjectStorage) {
 
     //Look what's in the local folder
     this._scanLocalFolder();
-    if (global.config.development == true) {
+    if (global.config.development === true) {
         this._watchLocalFolder(); //Keep updating that
     }
     this._scanDatabase(); //Sync with the DB
@@ -36,9 +35,9 @@ var ExtensionStore = function(extensionCollection, gridFSObjectStorage) {
  * @private
  */
 ExtensionStore.prototype._scanDatabase = function() {
-    var that = this;
+    let that = this;
     this.extensionCollection.find().toArray().then(function(results) {
-        for (var i = 0; i < results.length; i++) {
+        for (let i = 0; i < results.length; i++) {
             if (that._findExtensionById(results[i]._id) === null) {
                 that._syncExtension({ uuid: results[i]._id }, 'disable');
             }
@@ -54,23 +53,23 @@ ExtensionStore.prototype._scanDatabase = function() {
  * @private
  */
 ExtensionStore.prototype._syncExtension = function(extension, operation) {
-    var that = this;
-    var model = null;
+    let that = this;
+    let model = null;
     operation =  typeof operation !== 'undefined' ? operation : 'update';
     if (operation === 'create' || operation === 'update') {
-        var info = JSON.parse(JSON.stringify(extension.manifest));
+        let info = JSON.parse(JSON.stringify(extension.manifest));
         delete info['server.js'];
         delete info['client.js'];
         delete info['id'];
-        var model = Object.assign({}, defines.extensionModel, {
+        model = Object.assign({}, defines.extensionModel, {
             users: extension.users ? extension.users : [],
             enabled: true
         }, info);
     }
 
     return new Promise(function(resolve, reject) {
-        var sync_success = function(success) { resolve(success); };
-        var sync_error = function(error) { reject(defines.errorStacker('Extension synchronise failed', error)); };
+        let sync_success = function(success) { resolve(success); };
+        let sync_error = function(error) { reject(defines.errorStacker('Extension synchronise failed', error)); };
 
         if (operation === 'update' || operation === 'create') {
             that.extensionCollection.findOneAndReplace({_id: extension.uuid}, model, { upsert: true })
@@ -84,7 +83,7 @@ ExtensionStore.prototype._syncExtension = function(extension, operation) {
             that.extensionCollection.findOneAndUpdate({ _id: extension.uuid }, { $set: { enabled: true } })
                 .then(sync_success, sync_error);
         }
-        else if (operation === 'delete' ) {
+        else if (operation === 'delete') {
             that.extensionCollection.findOneAndDelete({ _id: extension.uuid })
                 .then(sync_success, sync_error);
         }
@@ -115,8 +114,8 @@ ExtensionStore.prototype._attachExtension = function(extension) {
 ExtensionStore.prototype._detachExtension = function(extension) {
     extension.detach();
     if (Array.isArray(this.router.stack)) {
-        var extensionRoot = '/' + extension.uuid;
-        var index = this.router.stack.findIndex(function (layer) {
+        let extensionRoot = '/' + extension.uuid;
+        let index = this.router.stack.findIndex(function (layer) {
             if (layer.name === 'router' && extensionRoot.match(layer.regexp)) {
                 return true;
             }
@@ -136,7 +135,7 @@ ExtensionStore.prototype._detachExtension = function(extension) {
  * @private
  */
 ExtensionStore.prototype._findExtensionById = function(id) {
-    for (var i = 0; i < this.extensions.length; i++) {
+    for (let i = 0; i < this.extensions.length; i++) {
         if (this.extensions[i].uuid === id)
             return this.extensions[i];
     }
@@ -149,32 +148,32 @@ ExtensionStore.prototype._findExtensionById = function(id) {
  * @private
  */
 ExtensionStore.prototype._watchLocalFolder = function() {
-    var that = this;
+    let that = this;
     fs.watch(this.extensionFolder,
         {
             recursive: true,
             encoding: 'utf8',
             persistent: true
         },
-        function(eventType, filename)
+        function(__unused__eventType, filename)
         {
             try {
                 if (!filename)
                     return;
-                var re = /(\/|\\)/;
-                var extensionDirectory = filename.split(re);
+                let re = /([\/\\])/;
+                let extensionDirectory = filename.split(re);
                 if (extensionDirectory && extensionDirectory.length > 0) {
-                    var folder = extensionDirectory[0];
-                    var extensionPath = path.join(that.extensionFolder, folder);
-                    var manifest = fs.readJsonSync(path.join(extensionPath, 'plugin.json'));
-                    var p = that._findExtensionById(manifest.id);
+                    let folder = extensionDirectory[0];
+                    let extensionPath = path.join(that.extensionFolder, folder);
+                    let manifest = fs.readJsonSync(path.join(extensionPath, 'plugin.json'));
+                    let p = that._findExtensionById(manifest.id);
                     if (p !== null) {
                         that._detachExtension(p);
                         that.extensions.splice(that.extensions.findIndex(function (p) {
-                            return p.uuid == manifest.id
+                            return p.uuid === manifest.id;
                         }), 1);
                         if (fs.existsSync(extensionPath)) {
-                            var new_extension = new Extension(extensionPath, that.gridFSObjectStorage);
+                            let new_extension = new Extension(extensionPath, that.gridFSObjectStorage);
                             that._attachExtension(new_extension);
                             that.extensions.push(new_extension);
                             that._syncExtension(new_extension, 'update');
@@ -182,7 +181,7 @@ ExtensionStore.prototype._watchLocalFolder = function() {
                     }
                     else {
                         if (fs.existsSync(extensionPath)) {
-                            var new_extension = new Extension(extensionPath, that.gridFSObjectStorage);
+                            let new_extension = new Extension(extensionPath, that.gridFSObjectStorage);
                             that._attachExtension(new_extension);
                             that.extensions.push(new_extension);
                             that._syncExtension(new_extension, 'create');
@@ -191,7 +190,7 @@ ExtensionStore.prototype._watchLocalFolder = function() {
                 }
             }
             catch (err) {
-                console.error('Error updating in development: ' + err);
+                console.error('Error updating in development: ' + err); // eslint-disable-line no-console
             }
         }
     );
@@ -203,15 +202,15 @@ ExtensionStore.prototype._watchLocalFolder = function() {
  * @private
  */
 ExtensionStore.prototype._scanLocalFolder = function() {
-    var dir_content = fs.readdirSync( this.extensionFolder );
-    var that = this;
+    let dir_content = fs.readdirSync(this.extensionFolder);
+    let that = this;
 
     dir_content.forEach(function(f) {
-        var file = path.join(that.extensionFolder, f);
-        var file_fd = fs.openSync(file, 'r');
-        var file_stats = fs.fstatSync(file_fd);
+        let file = path.join(that.extensionFolder, f);
+        let file_fd = fs.openSync(file, 'r');
+        let file_stats = fs.fstatSync(file_fd);
         if (file_stats.isDirectory()) {
-            var extension = new Extension(file, that.gridFSObjectStorage);
+            let extension = new Extension(file, that.gridFSObjectStorage);
             that._attachExtension(extension);
             that.extensions.push(extension);
             that._syncExtension(extension, 'update');
@@ -225,8 +224,8 @@ ExtensionStore.prototype._scanLocalFolder = function() {
  * @return {Array} Known extensions
  */
 ExtensionStore.prototype.listExtensions = function() {
-    var list = [];
-    for (var i = 0; i < this.extensions.length; i++) {
+    let list = [];
+    for (let i = 0; i < this.extensions.length; i++) {
         list.push(this.extensions[i].info());
     }
     return list;
@@ -238,12 +237,12 @@ ExtensionStore.prototype.listExtensions = function() {
  * @return {Object} Created extension metadata
  */
 ExtensionStore.prototype.createExtensionFromFile = function(file) {
-    var that = this;
-    var buf = Buffer.from(file.buffer);
-    var zip = new adm_zip(buf);
+    let that = this;
+    let buf = Buffer.from(file.buffer);
+    let zip = new adm_zip(buf);
 
     //Find required manifest file
-    var manifest = null;
+    let manifest = null;
     zip.getEntries().forEach(function (entry) {
         if (entry.name === 'plugin.json')
             manifest = entry;
@@ -253,7 +252,7 @@ ExtensionStore.prototype.createExtensionFromFile = function(file) {
         return defines.errorStacker('Missing mandatory extension manifest plugin.js');
     }
     manifest = JSON.parse(manifest.getData());
-    if (manifest === null || manifest.hasOwnProperty('id') == false) {
+    if (manifest === null || manifest.hasOwnProperty('id') === false) {
         return defines.errorStacker('Corrupted extension manifest plugin.js');
     }
 
@@ -263,12 +262,12 @@ ExtensionStore.prototype.createExtensionFromFile = function(file) {
 
     zip.extractAllTo(that.extensionFolder, true);
 
-    var packageFolder = path.join(that.extensionFolder, manifest.name + '-' + manifest.version);
+    let packageFolder = path.join(that.extensionFolder, manifest.name + '-' + manifest.version);
 
     //overwrite manifest ofter extraction for non colliding ids
     fs.writeJsonSync(path.join(packageFolder, './plugin.json'), manifest);
 
-    var new_extension = new Extension(packageFolder, that.gridFSObjectStorage);
+    let new_extension = new Extension(packageFolder, that.gridFSObjectStorage);
     that.extensions.push(new_extension);
     that._attachExtension(new_extension);
 
@@ -280,7 +279,7 @@ ExtensionStore.prototype.createExtensionFromFile = function(file) {
  * @desc removes every extensions from both router and DB
  */
 ExtensionStore.prototype.clearExtensions = function() {
-    var that = this;
+    let that = this;
     this.extensions.forEach(function(extension) {
         //Disconnect routes
         that._detachExtension(extension);
@@ -298,7 +297,7 @@ ExtensionStore.prototype.clearExtensions = function() {
  * @return {Object} Extension info object
  */
 ExtensionStore.prototype.getExtensionInfoById = function(id) {
-    var  p = this._findExtensionById(id);
+    let  p = this._findExtensionById(id);
     if (p !== null)
         return p.infos();
     return null;
@@ -310,15 +309,15 @@ ExtensionStore.prototype.getExtensionInfoById = function(id) {
  * @return {Object} Operation summary object
  */
 ExtensionStore.prototype.deleteExtensionById = function(uuid) {
-    var res = { error: 'Cannot delete extension with ID ' + uuid };
+    let res = { error: 'Cannot delete extension with ID ' + uuid };
 
-    var p = this._findExtensionById(uuid);
+    let p = this._findExtensionById(uuid);
     if (p !== null) {
         if (this._detachExtension(p) === true) {
             //Remove from DB
             this._syncExtension(p, 'delete');
             //Remove from array
-            this.extensions.splice(this.extensions.findIndex(function(p) { return p.uuid == uuid }), 1);
+            this.extensions.splice(this.extensions.findIndex(function(p) { return p.uuid === uuid; }), 1);
             //Remove local directory
             fs.removeSync(this.extensionFolder + '/' + uuid);
             res = {id: uuid};
@@ -337,13 +336,13 @@ ExtensionStore.prototype.deleteExtensionById = function(uuid) {
  * @return {Object} Operation summary object
  */
 ExtensionStore.prototype.updateExtensionById = function(uuid, file) {
-    var buf = Buffer.from(file.buffer);
-    var zip = new adm_zip(buf);
-    var zipEntries = zip.getEntries(); // an array of ZipEntry records
-    var manifest = null;
+    let buf = Buffer.from(file.buffer);
+    let zip = new adm_zip(buf);
+    let zipEntries = zip.getEntries(); // an array of ZipEntry records
+    let manifest = null;
 
     zipEntries.forEach(function(zipEntry) {
-        if (zipEntry.name == "plugin.json") {
+        if (zipEntry.name === 'plugin.json') {
             manifest = zipEntry.entryName; //Stores manifest path within zip
         }
     });
@@ -352,7 +351,7 @@ ExtensionStore.prototype.updateExtensionById = function(uuid, file) {
         return defines.errorStacker('Missing mandatory extension manifest plugin.json');
     }
 
-    var delReply = this.deleteExtensionById(uuid);
+    let delReply = this.deleteExtensionById(uuid);
     if (delReply.hasOwnProperty('error')) {
         return defines.errorStacker('Cannot update unknown extension ID: ' + uuid, delReply.error);
     }
@@ -360,12 +359,12 @@ ExtensionStore.prototype.updateExtensionById = function(uuid, file) {
     zip.extractAllTo(this.extensionFolder, true);
 
     manifest = fs.readJSONSync(path.join(this.extensionFolder, manifest));
-    if (manifest === null || manifest.hasOwnProperty('id') == false) {
+    if (manifest === null || manifest.hasOwnProperty('id') === false) {
         return defines.errorStacker('Corrupted extension manifest plugin.json');
     }
-    var packageFolder = path.join(this.extensionFolder, manifest.name + '-' + manifest.version);
+    let packageFolder = path.join(this.extensionFolder, manifest.name + '-' + manifest.version);
 
-    var new_extension = new Extension(packageFolder, this.gridFSObjectStorage);
+    let new_extension = new Extension(packageFolder, this.gridFSObjectStorage);
     //Force extension uuid to match with the one used
     new_extension.uuid = uuid;
     this._attachExtension(new_extension);
