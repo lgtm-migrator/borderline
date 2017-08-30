@@ -26,7 +26,7 @@ TestServer.prototype.start = function(config) {
         // Start serving on config.port
         _this.borderline_middleware.start().then(function(middleware_router) {
             _this._app.use(middleware_router);
-            _this.server = _this._app.listen(config.port, function(error) {
+            _this._server = _this._app.listen(config.port, function(error) {
                 if (error)
                     reject(error);
                 else {
