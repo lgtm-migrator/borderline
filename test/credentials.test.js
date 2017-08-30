@@ -97,6 +97,32 @@ test('Update {query_id} credentials, check updates and fields', function(done) {
     });
 });
 
+test('Reset {query_id} credentials, check fields are back to default', function(done) {
+    expect.assertions(6);
+    request({
+        method: 'DELETE',
+        baseUrl: 'http://127.0.0.1:' + config.port,
+        uri: '/query/' + g_query_id + '/credentials',
+        json: true
+    }, function(error, response, body) {
+        if (error) {
+            done.fail(error.toString());
+            return;
+        }
+        if (response.statusCode !== 200) {
+            done.fail('Status code is not 200');
+            return;
+        }
+        expect(response.statusCode).toEqual(200);
+        expect(body).toBeDefined();
+        expect(body.username).toBeDefined();
+        expect(body.username.length).toEqual(0);
+        expect(body.password).toBeDefined();
+        expect(body.password.length).toEqual(0);
+        done();
+    });
+});
+
 test('Delete stub TS171 {query_id}', function(done) {
     expect.assertions(2);
     request(
