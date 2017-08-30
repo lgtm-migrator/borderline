@@ -1,8 +1,4 @@
-/* -------------------------------------------------------------------------------------------
- *  Copyright (c) Florian Guitton. All rights reserved.
- *  Licensed under the MIT License. See LICENSE in the project root for license information.
- * ---------------------------------------------------------------------------------------- */
-
 module.exports = {
-    mongoURL: 'mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]'
+    mongoURL: 'mongodb://jean:root@146.169.33.32:27020/borderline',
+    objectStorageURL: 'mongodb://flo:ChangeMe42@146.169.33.32:27020/borderlineobject'
 };
