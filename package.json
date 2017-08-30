@@ -13,7 +13,7 @@
     },
     "homepage": "https://github.com/dsi-icl/borderline-ui#readme",
     "engines": {
-        "node": ">= 8.2.1",
+        "node": ">= 7.10.1",
         "yarn": ">= 0.27.5"
     },
     "dependencies": {
@@ -35,6 +35,6 @@
         "test": "borderline-devutils test --env=jsdom"
     },
     "devDependencies": {
-        "borderline-devutils": "^0.1.2"
+        "borderline-devutils": "^0.1.3"
     }
 }
