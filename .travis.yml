@@ -2,6 +2,7 @@ dist: trusty
 language: node_js
 install: true
 node_js:
+  - 7
   - 8
 
 cache:
@@ -12,7 +13,7 @@ env:
   - NODE_ENV=TEST
 
 before_install:
-  - npm install
+  - yarn install
 
 script:
-  - npm test
+  - yarn run test
