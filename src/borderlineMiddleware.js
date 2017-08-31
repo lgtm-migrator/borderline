@@ -165,6 +165,7 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .post(_this.queryController.postNewQueryTyped);
     _this.app.route(prefix + '/:query_id')
         .get(_this.queryController.getQueryById)
+        .post(_this.queryController.postQueryById)
         .delete(_this.queryController.deleteQueryById);
     _this.app.route(prefix + '/:query_id/endpoint')
         .get(_this.endpointController.getQueryById)
