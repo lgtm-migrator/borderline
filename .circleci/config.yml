@@ -31,9 +31,11 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - deploy:
           name: Publishing
-          command: |
-            node ./bin/borderline-devutils.js publish &&
-            curl -X POST "https://circleci.com/api/v1.1/project/github/${CIRCLE_PROJECT_USERNAME}/borderline-ui/tree/master?circle-token=${CIRCLECI_TOKEN_BORDERLINE_UI}"
+          command: node ./bin/borderline-devutils.js publish
+        # We are waiting for https://circleci.com/docs/api/v1-reference/ to implement workflow API
+        # command: |
+        #   node ./bin/borderline-devutils.js publish &&
+        #   curl -X POST "https://circleci.com/api/v1.1/project/github/${CIRCLE_PROJECT_USERNAME}/borderline-ui/tree/master?circle-token=${CIRCLECI_TOKEN_BORDERLINE_UI}"
 
 workflows:
   version: 2
