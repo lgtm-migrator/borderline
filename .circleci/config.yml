@@ -32,11 +32,7 @@ jobs:
       - deploy:
           name: Publishing
           command: |
-            export Y=`yarn info borderline-devutils --json`;
-            export P=`cat package.json`;
-            node -e "var y=($Y).data.version, p=($P).version, s = require('./node_modules/semver'); process.exit(s.lt(p, y));" &&
-            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc &&
-            npm publish &&
+            node ./bin/borderline-devutils.js publish &&
             curl -X POST "https://circleci.com/api/v1.1/project/github/${CIRCLE_PROJECT_USERNAME}/borderline-ui/tree/master?circle-token=${CIRCLECI_TOKEN_BORDERLINE_UI}"
 
 workflows:

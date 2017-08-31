@@ -1,6 +1,6 @@
 {
     "name": "borderline-devutils",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "description": "Configuration and scripts for Borderline development.",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "license": "MIT",
@@ -26,7 +26,7 @@
         "borderline-devutils": "./bin/borderline-devutils.js"
     },
     "scripts": {
-        "prepublishOnly": "echo \"--> CI will take care of this :)\" && exit 1"
+        "prepublishOnly": "node ./scripts/publish.js"
     },
     "dependencies": {
         "autoprefixer": "7.1.3",

@@ -12,6 +12,7 @@ const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
 switch (script) {
     case 'build':
+    case 'publish':
     case 'start':
     case 'test': {
         const result = spawn.sync(
@@ -41,7 +42,6 @@ switch (script) {
         break;
     }
     default:
-        console.log('Unknown script "' + script + '".');
-        console.log('Perhaps you need to update borderline-devutils?');
+        console.log(`Unknown command "${script}".`);
         break;
 }
