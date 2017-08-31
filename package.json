@@ -35,6 +35,6 @@
         "test": "borderline-devutils test --env=jsdom"
     },
     "devDependencies": {
-        "borderline-devutils": "0.1.5"
+        "borderline-devutils": "^0.x"
     }
 }

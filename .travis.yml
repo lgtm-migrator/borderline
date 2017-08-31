@@ -14,10 +14,8 @@ env:
   - NODE_ENV=TEST
 
 before_install:
-  - yarn install
+  - yarn versions
+  - yarn upgrade
 
 script:
   - yarn run test -- --coverage
-
-after_success:
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js --verbose
