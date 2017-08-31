@@ -101,6 +101,7 @@ test('Reset endpoint for {query_id}, check port is back to default at 8080', fun
     }, function(error, response, body) {
         if (error) {
             done.fail(error.toString());
+            return;
         }
         expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
@@ -117,9 +118,10 @@ test('Delete stub TS171 {query_id}', function(done) {
             baseUrl: 'http://127.0.0.1:' + config.port,
             uri: '/query/' + g_query_id,
             json: true
-        }, function (error, response, body) {
+        }, function (error, response, __unused__body) {
             if (error) {
                 done.fail(error.toString());
+                return;
             }
             expect(response).toBeDefined();
             expect(response.statusCode).toEqual(200);

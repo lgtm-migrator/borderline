@@ -51,6 +51,11 @@ function ErrorStack(error_obj, error_stack) {
     let error = {};
     let error_message = '';
 
+    error.toString = function() {
+        let replacer = [' '];
+        return JSON.stringify(this, replacer, 6);
+    };
+
     //Extract current error message
     if (typeof error_obj === 'string')
         error_message = error_obj;

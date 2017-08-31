@@ -25,16 +25,17 @@ function ExecutionController(queryCollection, storage) {
  * @param res Express.js response object
  */
 ExecutionController.prototype.executeQuery = function(req, res) {
+    let _this = this;
+
     if (req.body === null || req.body === undefined ||
         req.body.query === undefined) {
         res.status(401);
         res.json({error: 'Requested execution is missing parameters'});
         return;
     }
-
     let query_id = req.body.query;
 
-    this.queryFactory.fromID(query_id).then(function(queryObject) {
+    _this.queryFactory.fromID(query_id).then(function(queryObject) {
         queryObject.execute(req).then(function(result) {
             res.status(200);
             res.json(result);

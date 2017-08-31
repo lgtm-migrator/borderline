@@ -68,7 +68,7 @@ QueryController.prototype.postNewQuery = function(req, res) {
         res.json(defines.errorStacker('Invalid source type'));
         return;
     }
-    let newQuery = Object.assign({}, defines.queryModel, { endpoint: endpoint }, {credentials: credentials});
+    let newQuery = Object.assign({}, defines.queryModel, req.body);
 
     this.queryCollection.insertOne(newQuery).then(function(r) {
         if (r.insertedCount === 1) {

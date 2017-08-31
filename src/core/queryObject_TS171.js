@@ -15,6 +15,12 @@ const QueryAbstract = require('./queryAbstract.js');
  */
 function QueryTransmart17_1(queryModel, queryCollection, storage) {
     QueryAbstract.call(this, queryModel, queryCollection, storage);
+
+    // Bind member functions
+    this.isAuth = QueryTransmart17_1.prototype.isAuth.bind(this);
+    this._doAuth = QueryTransmart17_1.prototype._doAuth.bind(this);
+    this._ensureAuth = QueryTransmart17_1.prototype._ensureAuth.bind(this);
+    this.execute = QueryTransmart17_1.prototype.execute.bind(this);
 }
 QueryTransmart17_1.prototype = Object.create(QueryAbstract.prototype); //Inherit Js style
 QueryTransmart17_1.prototype.constructor = QueryTransmart17_1;
@@ -25,7 +31,9 @@ QueryTransmart17_1.prototype.constructor = QueryTransmart17_1;
  */
 QueryTransmart17_1.prototype.isAuth = function() {
     //Needs first auth if Oauth token details are missing
-    if (this.model.credentials.hasOwnProperty('access_token') === false ||
+    if (this.hasOwnProperty('model') === false ||
+        this.model.hasOwnProperty('credentials') === false ||
+        this.model.credentials.hasOwnProperty('access_token') === false ||
         this.model.credentials.hasOwnProperty('expires_in') === false ||
         this.model.credentials.hasOwnProperty('generated') === false)
         return false;
@@ -57,17 +65,21 @@ QueryTransmart17_1.prototype._doAuth = function() {
             '&password=' + _this.model.credentials.password
         }, function (error, response, body) {
             if (error !== null) {
-                reject(defines.errorStacker(error));
+                reject(defines.errorStacker('Auth request failed', error));
                 return;
             }
-            else if (response === null || response.statusCode !== 200) { //Reject on errors
+            else if (response === null || response.statusCode !== 200) { // Reject on errors
+                reject(defines.errorStacker('Authentication url is invalid'));
+                return;
+            }
+            else if (body === undefined || body === null || body.hasOwnProperty('access_token') === false) {
                 reject(defines.errorStacker('Authentication failed'));
                 return;
             }
+
             // Update queryModel
             let newCredentials = Object.assign({}, _this.model.credentials, body, {generated: new Date()});
-            let newModel = Object.assign({}, _this.model, {credentials: newCredentials});
-            _this.model = newModel;
+            _this.model = Object.assign({}, _this.model, {credentials: newCredentials});
             _this.pushModel().then(function() {
                 resolve(true);
             }, function (error) {
@@ -85,15 +97,20 @@ QueryTransmart17_1.prototype._doAuth = function() {
 QueryTransmart17_1.prototype._ensureAuth = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
-        if (_this.isAuth() === false) {
-            _this._doAuth().then(function() {
+        try {
+            if (_this.isAuth() === false) {
+                _this._doAuth().then(function () {
+                    resolve(true);
+                }, function (error) {
+                    reject(defines.errorStacker('Ensure auth failed', error));
+                });
+            }
+            else {
                 resolve(true);
-            }, function (error) {
-                reject(defines.errorStacker('Ensure auth failed', error));
-            });
+            }
         }
-        else {
-            resolve(true);
+        catch (auth_err) {
+            reject(defines.errorStacker('Authentication check has thrown', auth_err));
         }
     });
 };
@@ -106,43 +123,45 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
 QueryTransmart17_1.prototype.execute = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
-
         _this.registerExecutionStart().then(function(status) {
             resolve(status);
-        }, function (error) {
-            reject(defines.errorStacker('Execution fail', error));
-        });
 
-        //Check for required fields
-        if (!_this.model.hasOwnProperty('input') ||
-            !_this.model.input.hasOwnProperty('local') ||
-            !_this.model.input.local.hasOwnProperty('uri') ||
-            !_this.model.input.local.hasOwnProperty('params')) {
-            _this.registerExecutionError('Query input is not valid');
-           return;
-        }
+            //Check for required fields
+            if (_this.model.hasOwnProperty('input') === false ||
+                _this.model.input.hasOwnProperty('local') === false ||
+                _this.model.input.local.hasOwnProperty('uri') === false ||
+                _this.model.input.local.hasOwnProperty('params') === false) {
+                _this.registerExecutionError('Query input is not valid');
+                return;
+            }
 
-        //Auth and perform execution against Transmart instance
-        _this._ensureAuth().then(function() {
-            request.get({
-                baseUrl: _this.model.endpoint.sourceHost + ':' + _this.model.endpoint.sourcePort,
-                uri: _this.model.input.local.uri + JSON.stringify(_this.model.input.local.params),
-                headers: {
-                    Authorization: 'Bearer ' + _this.model.credentials.access_token
-                }
-            }, function (error, response, body) {
-                if (error !== null || response === null || response.statusCode !== 200) {
-                    _this.registerExecutionError(defines.errorStacker('Execute request failed', error));
-                    return;
-                }
-                _this.setOutputLocal(body).then(function(__unused__std_data) {
-                    _this.registerExecutionEnd(); //Update status to done
-                }, function(error) {
-                    _this.registerExecutionError(defines.errorStacker('Exectution failed while saving result', error));
+            //Auth and perform execution against tranSmart instance
+            _this._ensureAuth().then(function() {
+                request.get({
+                    baseUrl: _this.model.endpoint.sourceHost + ':' + _this.model.endpoint.sourcePort,
+                    uri: _this.model.input.local.uri + JSON.stringify(_this.model.input.local.params),
+                    headers: {
+                        Authorization: 'Bearer ' + _this.model.credentials.access_token
+                    }
+                }, function (error, response, body) {
+                    if (error !== null || response === null || response.statusCode !== 200) {
+                        _this.registerExecutionError(defines.errorStacker('Execute request failed', error));
+                        return;
+                    }
+                    _this.setOutputLocal(body).then(function(__unused__std_data) {
+                        _this.registerExecutionEnd(); //Update status to done
+                    }, function(error) {
+                        _this.registerExecutionError(defines.errorStacker('Execution failed while saving result', error));
+                    });
                 });
+            }, function (auth_error) {
+                _this.registerExecutionError(defines.errorStacker('Authentication error while executing', auth_error))
+                    .catch(function(critical_error) {
+                        console.error(defines.errorStacker('Critical error', critical_error)); // eslint-disable-line no-console
+                    });
             });
-        }, function (error) {
-            _this.registerExecutionError(defines.errorStacker('Authentication error while executing', error));
+        }, function (error) { // Failed to update status to running
+            reject(defines.errorStacker('Execution fail', error));
         });
     });
 };

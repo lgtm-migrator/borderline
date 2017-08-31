@@ -18,6 +18,12 @@ function QueryAbstract(queryModel, queryCollection, storage) {
     this.storage = storage;
 
     //Bind member functions
+    this.pushModel = QueryAbstract.prototype.pushModel.bind(this);
+    this.fetchModel = QueryAbstract.prototype.fetchModel.bind(this);
+    this.setInputLocal = QueryAbstract.prototype.setInputLocal.bind(this);
+    this.setInputStd = QueryAbstract.prototype.setInputStd.bind(this);
+    this.setOutputLocal = QueryAbstract.prototype.setOutputLocal.bind(this);
+    this.setOutputStd = QueryAbstract.prototype.setOutputStd.bind(this);
     this.registerExecutionStart = QueryAbstract.prototype.registerExecutionStart.bind(this);
     this.registerExecutionEnd = QueryAbstract.prototype.registerExecutionEnd.bind(this);
     this.registerExecutionError = QueryAbstract.prototype.registerExecutionError.bind(this);
@@ -124,10 +130,8 @@ QueryAbstract.prototype.setInputStd = function(std_data) {
     let _this = this;
     return new Promise(function(resolve, reject) {
         try {
-            //Transform to local format
-            let local_data = _this.input_standard2local(std_data);
-            //Store into model
-            _this.model.input.local = local_data;
+            //Transform to local format & Store into model
+            _this.model.input.local = _this.input_standard2local(std_data);
             _this.model.input.std = std_data;
             //Send back local input
             resolve(_this.model.input.local);
@@ -386,17 +390,21 @@ QueryAbstract.prototype.registerExecutionEnd = function() {
 QueryAbstract.prototype.registerExecutionError = function(errorObject) {
     let _this = this;
     return new Promise(function(resolve, reject) {
-        let new_status = Object.assign({}, _this.model.status, {
-            status: 'error',
-            end: new Date(),
-            info: errorObject
-        });
-        _this.model.status = new_status;
-        _this.pushModel().then(function(__unused__model) {
-            resolve(_this.model.status);
-        }, function(error) {
-            reject(defines.errorStacker('Error execution update fail', error));
-        });
+        try {
+            _this.model.status = Object.assign({}, _this.model.status, {
+                status: 'error',
+                end: new Date(),
+                info: errorObject
+            });
+            _this.pushModel().then(function (__unused__model) {
+                resolve(_this.model.status);
+            }, function (error) {
+                reject(defines.errorStacker('Error execution update fail', error));
+            });
+        }
+        catch (exec_status_error) {
+            reject(defines.errorStacker('Update exec status to error has thrown', exec_status_error));
+        }
     });
 };
 
@@ -432,7 +440,7 @@ QueryAbstract.prototype.pushModel = function() {
                 reject(defines.errorStacker('Update query model failed',
                     { error : result.lastErrorObject.toString() }));
        }, function (error) {
-          reject(defines.errorStacker(error));
+          reject(defines.errorStacker('MongoDB error', error));
        });
     });
 };
