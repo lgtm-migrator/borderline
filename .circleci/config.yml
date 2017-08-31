@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:latest
+    steps:
+      - deploy:
+          name: Trigger Consumers Build
+          command: |
+            curl -X POST "https://circleci.com/api/v1.1/project/github/${CIRCLE_PROJECT_USERNAME}/borderline-ui/tree/master?circle-token=${CIRCLECI_TOKEN_BORDERLINE_UI}"
