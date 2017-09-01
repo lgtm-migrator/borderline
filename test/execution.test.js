@@ -2,6 +2,8 @@ const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
+
 let test_server = new TestServer();
 let g_query_id = '';
 const ts171_query = {
@@ -109,7 +111,6 @@ test('Execute current query_id, check its started', function(done) {
 });
 
 test('Wait 5 secs, Check execution status current query, check auth failed', function(done) {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
     expect.assertions(4);
     setTimeout(function() {
         request({
@@ -199,7 +200,6 @@ test('Execute current query_id, check its started', function(done) {
 
 test('Wait 10 secs, Check execution status current query is done', function(done) {
     expect.assertions(4);
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
     setTimeout(function() {
         request({
             method: 'GET',
