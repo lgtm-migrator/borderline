@@ -61,7 +61,7 @@ OutputController.prototype.putQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.setOutputStd(JSON.stringify(data)).then(function(local_data) {
+        queryObject.setOutputStd(data).then(function(local_data) {
             res.status(200);
             res.json(local_data);
         }, function(error) {
@@ -92,7 +92,7 @@ OutputController.prototype.deleteQueryById = function(req, res) {
         queryObject.model.output = Object.assign({}, defines.queryModel.output);
         queryObject.pushModel().then(function() {
             res.status(200);
-            res.json(queryObject.model.output);
+            res.json(queryObject.model.output.std);
         }, function(error) {
             res.status(401);
             res.json(defines.errorStacker('Delete from model failed', error));

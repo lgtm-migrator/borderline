@@ -198,8 +198,9 @@ QueryTransmart17_1.prototype.input_standard2local = function(data) {
  * @return Output data in standard format
  */
 QueryTransmart17_1.prototype.output_local2standard = function(data) {
-    //Todo
-    return data;
+    if (typeof data === 'object')
+        return JSON.stringify(data);
+    return data.toString();
 };
 
 /**
@@ -209,8 +210,9 @@ QueryTransmart17_1.prototype.output_local2standard = function(data) {
  * @return Object transformed to local format
  */
 QueryTransmart17_1.prototype.output_standard2local = function(data) {
-    //todo
-    return data;
+    if (typeof data === 'object')
+        return JSON.stringify(data);
+    return data.toString();
 };
 
 

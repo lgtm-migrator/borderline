@@ -124,7 +124,7 @@ QueryAbstract.prototype.getInputStd = function() {
 /**
  * @fn setInputStd
  * @param std_data The data object to transform and store
- * @return {Promise} A Promise resolving the stored model in local format
+ * @return {Promise} A Promise resolving the stored model in std format
  */
 QueryAbstract.prototype.setInputStd = function(std_data) {
     let _this = this;
@@ -134,7 +134,7 @@ QueryAbstract.prototype.setInputStd = function(std_data) {
             _this.model.input.local = _this.input_standard2local(std_data);
             _this.model.input.std = std_data;
             //Send back local input
-            resolve(_this.model.input.local);
+            resolve(_this.model.input.std);
         }
         catch (error) {
             reject(defines.errorStacker(error));
@@ -290,12 +290,16 @@ QueryAbstract.prototype.setOutputLocal = function(local_data) {
  * @fn setOutputStd
  * @desc Stores the output data into the model from the Std data format
  * @param std_data Output data in the standard format
- * @return {Promise} A Promise resolving the output to local data model
+ * @return {Promise} A Promise resolving the output to standard data model
  */
 QueryAbstract.prototype.setOutputStd = function(std_data) {
     let _this = this;
     return new Promise(function(resolve, reject) {
         try {
+            if (typeof std_data === 'object')
+                std_data = JSON.stringify(std_data);
+            else
+                std_data = std_data.toString();
             //Compute std format
             let local_data = _this.output_standard2local(std_data);
 
@@ -323,7 +327,7 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
                 _this.model.output.local.dataId = values[0];
                 _this.model.output.std.dataId = values[1];
                 _this.pushModel().then(function() {
-                    resolve(local_data);
+                    resolve(std_data);
                 }, function (error) {
                     reject(defines.errorStacker(error));
                 });
