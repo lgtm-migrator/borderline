@@ -60,7 +60,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
             method: 'POST',
             json: true,
             baseUrl: _this.model.endpoint.sourceHost + ':' + _this.model.endpoint.sourcePort,
-            uri: '/oauth/token?grant_type=password&client_id=glowingbear-js&client_secret=' +
+            uri: '/oauth/token?grant_type=password&client_id=glowingbear-js' +
             '&username=' + _this.model.credentials.username +
             '&password=' + _this.model.credentials.password
         }, function (error, response, body) {
@@ -137,14 +137,17 @@ QueryTransmart17_1.prototype.execute = function() {
 
             //Auth and perform execution against tranSmart instance
             _this._ensureAuth().then(function() {
+                let uri_type_arg = _this.model.input.local.hasOwnProperty('type') ? ('&type=' + _this.model.input.local.type) : '';
                 request.get({
                     baseUrl: _this.model.endpoint.sourceHost + ':' + _this.model.endpoint.sourcePort,
-                    uri: _this.model.input.local.uri + JSON.stringify(_this.model.input.local.params),
+                    uri: _this.model.input.local.uri + JSON.stringify(_this.model.input.local.params) + uri_type_arg,
                     headers: {
                         Authorization: 'Bearer ' + _this.model.credentials.access_token
                     }
                 }, function (error, response, body) {
                     if (error !== null || response === null || response.statusCode !== 200) {
+                        if (body !== null)
+                            error = defines.errorStacker('Execute error body', body);
                         _this.registerExecutionError(defines.errorStacker('Execute request failed', error));
                         return;
                     }
