@@ -245,6 +245,11 @@ QueryAbstract.prototype.setOutputLocal = function(local_data) {
     let _this = this;
     return new Promise(function(resolve, reject) {
         try {
+            if (typeof local__data === 'object')
+                local_data = JSON.stringify(std_data);
+            else
+                local_data = local_data.toString();
+
             // Compute std format
             let std_data = _this.output_local2standard(local_data);
 
