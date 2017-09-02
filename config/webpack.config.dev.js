@@ -11,8 +11,9 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const fs = require('fs');
 const eslint = require('./eslint');
-const webpackExtraConfig = {}
+let webpackExtraConfig = {}
 
 if (fs.existsSync(paths.webpackExtraConfig)) {
     webpackExtraConfig = require(paths.webpackExtraConfig)();
@@ -271,7 +272,7 @@ module.exports = {
         // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
         // You can remove this if you don't use Moment.js:
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    ].concat(webpackExtraConfig.plugins || []),,
+    ].concat(webpackExtraConfig.plugins || []),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
     node: {

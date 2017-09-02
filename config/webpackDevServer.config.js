@@ -7,7 +7,7 @@ const paths = require('./paths');
 const fs = require('fs');
 const path = require('path');
 const borderlineServer = require('borderline-server');
-const borderlineConfig = {}
+let borderlineConfig = {}
 
 if (fs.existsSync(paths.borderlineServerConfig)) {
     borderlineConfig = require(paths.borderlineServerConfig);

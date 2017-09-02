@@ -11,9 +11,10 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
+const fs = require('fs');
 const eslint = require('./eslint');
 const getClientEnvironment = require('./env');
-const webpackExtraConfig = {}
+let webpackExtraConfig = {}
 
 if (fs.existsSync(paths.webpackExtraConfig)) {
     webpackExtraConfig = require(paths.webpackExtraConfig)();
