@@ -31,9 +31,7 @@ const query = (url, params = {}) => Observable.fromPromise(fetch(`${prefix}${url
         Observable.forkJoin(
             Observable.of({
                 ok: response.ok,
-                type: response.type,
-                status: response.status,
-                headers: response.headers
+                status: response.status
             }),
             response.json()
         )).map(values => Object.assign({}, values[0], { data: unbolt(values[1]) }));

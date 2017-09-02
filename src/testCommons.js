@@ -1,25 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import renderer from 'react-test-renderer';
 
 export const canRender = (Component) => {
 
     it('renders without crashing while empty', () => {
-        const div = document.createElement('div');
-        ReactDOM.render(<Component />, div);
+        const tree = renderer.create(<Component />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it('renders without crashing with a child', () => {
-        const div = document.createElement('div');
-        ReactDOM.render(<Component>
+        const tree = renderer.create(<Component>
             <h1>Hello World</h1>
-        </Component>, div);
+        </Component>).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it('renders without crashing with multiple children', () => {
-        const div = document.createElement('div');
-        ReactDOM.render(<Component>
+        const tree = renderer.create(<Component>
             <h1>Hello</h1>
             <h1>World</h1>
-        </Component>, div);
+        </Component>).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 }
