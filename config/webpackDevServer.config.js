@@ -7,7 +7,11 @@ const paths = require('./paths');
 const fs = require('fs');
 const path = require('path');
 const borderlineServer = require('borderline-server');
-const borderlineConfig = require(`${fs.realpathSync(process.cwd())}${path.sep}config${path.sep}borderline.config`);
+const borderlineConfig = {}
+
+if (fs.existsSync(paths.borderlineServerConfig)) {
+    borderlineConfig = require(paths.borderlineServerConfig);
+}
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';

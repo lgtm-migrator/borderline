@@ -8,8 +8,13 @@ process.env.PUBLIC_URL = '';
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
-process.on('unhandledRejection', err => {
-    throw err;
+process.on('unhandledRejection', (reason, p) => {
+    // TO-DO We wait for https://github.com/facebook/jest/issues/2059 to be addressed
+    const chalk = require('chalk');
+    reason.stack.split('\n').map((line) => {
+        console.error(chalk.supportsColor ? chalk.reset.inverse.bold.red(` ERR! `) + ` ${line}` : ` ERR!  ${line}`);
+    })
+    console.error(chalk.supportsColor ? chalk.reset.inverse.bold.red(' ERR!  v v v v v v v v v v v v v v v v ') : ' ERR!  v v v v v v v v v v v v v v v v ');
 });
 
 // Ensure environment variables are read.

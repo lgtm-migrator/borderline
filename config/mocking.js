@@ -5,21 +5,12 @@ if (!process.env.NO_TEST_MOCKING) {
 
     self.fetch = jest.fn();
     function _setUpMockResponse(mockType) {
-        return (body, extraOptions = {}) => {
-            if (typeof body !== 'string') {
+        return (body, init = {}) => {
+            if (typeof body !== 'string')
                 body = JSON.stringify(body);
-            }
-
-            fetch[mockType](() =>
-                Promise.resolve({
-                    ...extraOptions,
-                    ok: true,
-                    headers: {
-                        get: () => ['json']
-                    },
-                    json: () => Promise.resolve(JSON.parse(body)),
-                    text: () => Promise.resolve(body)
-                }));
+            const response = Promise.resolve(new Response(body, init));
+            fetch[mockType](() => response);
+            return response;
         };
     }
 
