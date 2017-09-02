@@ -80,7 +80,7 @@ class Enclave extends Component {
             });
         else if (this.props.modelName !== null)
             this.setState({
-                ready: true
+                done: true
             });
         else
             this.setState({
@@ -88,12 +88,14 @@ class Enclave extends Component {
             });
     }
 
-    componentDidUpdate() {
-        this.readinessProbe();
+    componentDidUpdate(__unused__prevProps, prevState) {
+        this.declareAssets();
+        this.startModel(prevState);
     }
 
     componentWillUnmount() {
-        this.dispatchProxy()({ type: 'STOP' });
+        if (this.state.model !== null)
+            this.dispatchProxy()({ type: 'STOP' });
     }
 
     componentDidCatch() {
@@ -107,19 +109,25 @@ class Enclave extends Component {
             console.error(`There was a problem creating an enclave: ${message}`);
     }
 
-    readinessProbe() {
+    declareAssets() {
 
         if (this.state.done === false && this.state.ready === true) {
             assets[this.state.modelName] = {};
-            if (this.state.model !== null && this.state.model.modelReducers !== undefined)
-                this.declareReducers(this.state.model.modelReducers);
-            if (this.state.model !== null && this.state.model.modelEpics !== undefined)
-                this.declareEpics(this.state.model.modelEpics);
-            this.dispatchProxy()({ type: 'START' });
+            if (this.state.model !== null) {
+                if (this.state.model.modelReducers !== undefined)
+                    this.declareReducers(this.state.model.modelReducers);
+                if (this.state.model.modelEpics !== undefined)
+                    this.declareEpics(this.state.model.modelEpics);
+            }
             this.setState({
                 done: true
             });
         }
+    }
+
+    startModel(prevState) {
+        if (prevState.done !== this.state.done && this.state.done === true && this.state.ready === true)
+            this.dispatchProxy()({ type: 'START' });
     }
 
     declareReducers(reducers) {
@@ -168,7 +176,7 @@ class Enclave extends Component {
     render() {
         if (this.state.valid === false)
             return <Stale />;
-        if (this.state.ready === true) {
+        if (this.state.done === true) {
             const children = this.props.children !== undefined ? this.props.children : null;
             if (this.state.model !== null)
                 return <this.state.model children={children} />;
