@@ -18,8 +18,8 @@ class Navigation extends Component {
         const { buttons } = this.props;
         const panels = Object.keys(buttons).map(key => {
             const Component = buttons[key].icon;
-            return <NavLink key={key} to={`/${buttons[key].path}`} activeClassName={style.active} >
-                <Enclave key={key} domain={'extensions'} modelName={key} >
+            return <NavLink key={buttons[key].origin} to={`/${buttons[key].path}`} activeClassName={style.active} >
+                <Enclave domain={'extensions'} modelName={buttons[key].origin} >
                     <Component />
                 </Enclave>
             </NavLink>;

@@ -13,12 +13,12 @@ class BorderlineApplication extends React.Component {
     render() {
         return (
             <Body>
-                <Enclave model={ import('containers/Session') }>
+                <Enclave model={import('containers/Session')}>
                     <Switch>
                         <Route exact path="/public" component={() => <h3>Public</h3>} />
                         <Route exact path="/login" component={Login} />
                         <PrivateRoute>
-                            <Enclave model={ import('containers/Pager') } />
+                            <Enclave model={import('containers/Pager')} />
                         </PrivateRoute>
                     </Switch>
                 </Enclave>

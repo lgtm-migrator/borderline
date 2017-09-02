@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { default as T } from 'prop-types';
+import browserBehaviour from 'utilities/browserBehaviour';
 import './style.css';
 
 export default class Body extends Component {
@@ -11,6 +12,10 @@ export default class Body extends Component {
     static propTypes = {
         children: T.oneOfType([T.array, T.element])
     };
+
+    componentWillMount() {
+        browserBehaviour.apply();
+    }
 
     render() {
         const { children } = this.props;

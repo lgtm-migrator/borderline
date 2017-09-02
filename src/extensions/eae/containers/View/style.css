@@ -1,0 +1,40 @@
+.menu {
+    height: 5vh;
+    width: 100%;
+    background-color: var(--color-background);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.panel {
+    height: 100%;
+    width: 100%;
+    padding-top: 5vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.button {
+    display: inline-block;
+    text-align: center;
+    line-height: 5vh;
+    height: 5vh;
+    padding: 0 2vh;
+    color:var(--color-font);
+    border-bottom: 2px solid hsla(0, 0%, 0%, 0);
+    transition: border 200ms, color 200ms;
+}
+
+.button:hover {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2));
+}
+
+.button.active {
+    color:var(--color-font-active);
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.5));
+    border-bottom: 2px solid var(--color-accent);
+}
