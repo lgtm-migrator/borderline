@@ -161,7 +161,7 @@ ExtensionStore.prototype._watchLocalFolder = function() {
             try {
                 if (!filename)
                     return;
-                let re = /([\/\\])/;
+                let re = /([/\\])/;
                 let extensionDirectory = filename.split(re);
                 if (extensionDirectory && extensionDirectory.length > 0) {
                     let folder = extensionDirectory[0];
