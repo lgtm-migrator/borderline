@@ -1,0 +1,24 @@
+{
+    "username" : "root",
+    "password" : "88651f9f1d78b6ff00118e0de89df4346d01e041e551b8bdb34bbafc184f5417016193a0ea9425964b7433c4c5e65b45e554b3694212519eed379694f1231e3f",
+    "admin" : true,
+    "salt" : "7dcef72d7b53e1fd6af8c1f08956eac9",
+    "secret" : {
+        "ascii" : "fM4I1x4Nl<wMQ)%8}J>W>HDk!s7EV$,%",
+        "hex" : "664d34493178344e6c3c774d512925387d4a3e573e48446b2173374556242c25",
+        "base32" : "MZGTISJRPA2E43B4O5GVCKJFHB6UUPSXHZEEI2ZBOM3UKVREFQSQ",
+        "otpauth_url" : "otpauth://totp/Borderline?secret=MZGTISJRPA2E43B4O5GVCKJFHB6UUPSXHZEEI2ZBOM3UKVREFQSQ"
+    }
+}
+{
+    "username": "user",
+    "password": "d91bbf1dfd100ffdae633eb0b067ca9ae8a621d3891955cc2a8397f66cd3baf253160b40997ca8038e596caed3e81ac6426f7de580e0416d9416d98cbbc1b55b",
+    "admin": false,
+    "salt": "15891c37b88381a3b43382909614b3f6",
+    "secret": {
+        "ascii": "K{>Lq]ydxHQ]Uk2OqQs&p1&*^#pNItM!",
+        "hex": "4b7b3e4c715d79647848515d556b324f715173267031262a5e23704e49744d21",
+        "base32": "JN5T4TDRLV4WI6CIKFOVK2ZSJ5YVC4ZGOAYSMKS6ENYE4SLUJUQQ",
+        "otpauth_url": "otpauth://totp/Borderline?secret=JN5T4TDRLV4WI6CIKFOVK2ZSJ5YVC4ZGOAYSMKS6ENYE4SLUJUQQ"
+    }
+}

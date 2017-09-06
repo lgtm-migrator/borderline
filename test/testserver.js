@@ -5,11 +5,15 @@ let config = require('../config/borderline.config');
 function TestServer() {
     // Bind member vars
     this._app = express();
+    this._cookies = [];
 
     // Bind public member functions
     this.run = TestServer.prototype.run.bind(this);
     this.stop = TestServer.prototype.stop.bind(this);
     this.mongo = TestServer.prototype.mongo.bind(this);
+    this.getCookie = TestServer.prototype.getCookie.bind(this);
+    this.setCookie = TestServer.prototype.setCookie.bind(this);
+    this.clearCookie = TestServer.prototype.clearCookie.bind(this);
 }
 
 TestServer.prototype.run = function() {
@@ -55,6 +59,37 @@ TestServer.prototype.stop = function() {
 
 TestServer.prototype.mongo = function() {
     return this.borderline_server.db
+};
+
+TestServer.prototype.setCookie = function(response) {
+    let _this = this;
+    if (response && response.headers) {
+        // Need to set a new cookie
+        if (response.headers.hasOwnProperty('set-cookie')) {
+            let set_cookies = response.headers['set-cookie'];
+            set_cookies.forEach(function (cookie) {
+                let cookie_array_value = cookie.split(';');
+                _this._cookies.push(cookie_array_value[0]);
+            });
+        }
+
+        // Processing current cookies
+        if (response.headers.hasOwnProperty('Cookie')) {
+            let current_cookies = response.headers['Cookie'];
+            let current_cookie_array = current_cookies.split(';');
+            _this._cookies = _this._cookies.merge(current_cookie_array);
+        }
+    }
+};
+
+TestServer.prototype.getCookie = function() {
+    let _this = this;
+    return _this._cookies.join(';');
+};
+
+TestServer.prototype.clearCookie = function() {
+    let _this = this;
+    _this._cookies = [];
 };
 
 module.exports = TestServer;

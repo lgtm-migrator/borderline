@@ -64,7 +64,7 @@ UserAccounts.prototype.findByUsernameAndPassword = function(username, password) 
                 reject(defines.errorStacker('Invalid username/password'));
         },
         function(error) {
-            reject(defines.errorStacker(error)); //Fetch local DB here
+            reject(defines.errorStacker('Reading users db failed', error));
         });
     });
 };
