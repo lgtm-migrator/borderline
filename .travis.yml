@@ -17,10 +17,11 @@ install:
 
 before_script:
   - docker-compose -f ./test/docker-compose.yml up tests
+  - docker run --ti --rm -v mongo_data:./test/mongo_data
   - docker ps -a
 
 script:
-  - docker-compose -f ./test/docker-compose.yml run mongodb mongoimport --db borderline --collection borderline_server_users --file ./test/mongo_data/users.json
+  - docker-compose -f ./test/docker-compose.yml run -v mongo_data:/mongo_data mongodb mongoimport --db borderline --collection borderline_server_users --file mongo_data/users.json
   - docker-compose -f ./test/docker-compose.yml run tests npm run lint
   - docker-compose -f ./test/docker-compose.yml run tests npm test
 
