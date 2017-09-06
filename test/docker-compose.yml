@@ -30,5 +30,5 @@ services:
             ports:
                 - 80:80
 
-    volumes:
-        - volume_mongo_data:./test/mongo_data
+volumes:
+    - volume_mongo_data:./test/mongo_data
