@@ -6,13 +6,21 @@ services:
             - MONGO_DATA_DIR=/data/mongodb
             - MONGO_LOG_DIR=/dev/null
             - MONGODB_DBNAME=borderline
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
+        ports:
+            - 27017:27017
+
+    init_mogo:
+        image: mongo:latest
         volumes:
             - type: bind
               source: ./mongo_data
               target: /mongo_data
-        command: mongod --smallfiles --logpath=/dev/null # --quiet
         ports:
             - 27017:27017
+        command: mongoimport  --host 127.0.0.1 --db borderline --collection borderline_server_users --drop --file /mongo_data/users.json
+        depends_on:
+            - mongodb
 
     swift:
         image: bouncestorage/swift-aio
@@ -24,7 +32,7 @@ services:
                 context: ../
                 dockerfile: ./test/Dockerfile
             depends_on:
-                - mongodb
+                - init_mongodb
                 - swift
             links:
                 - mongodb
