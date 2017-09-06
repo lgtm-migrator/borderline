@@ -31,4 +31,4 @@ services:
                 - 80:80
 
     volumes:
-        volume_mongo_data:./test/mongo_data
+        - volume_mongo_data:./test/mongo_data
