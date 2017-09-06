@@ -29,3 +29,6 @@ services:
                 - swift
             ports:
                 - 80:80
+
+    volumes:
+        mongo_data:
