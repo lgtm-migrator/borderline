@@ -7,8 +7,6 @@ services:
             - MONGO_LOG_DIR=/dev/null
             - MONGODB_DBNAME=borderline
         command: mongod --smallfiles --logpath=/dev/null # --quiet
-        ports:
-            - 27017:27017
 
     init_mongodb:
         image: mongo:latest
@@ -16,8 +14,6 @@ services:
             - type: bind
               source: ./mongo_data
               target: /mongo_data
-        ports:
-            - 27017:27017
         command: mongoimport  --host mongodb --db borderline --collection borderline_server_users --drop --file /mongo_data/users.json
         depends_on:
             - mongodb
