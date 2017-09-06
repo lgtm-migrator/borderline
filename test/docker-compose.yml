@@ -7,7 +7,7 @@ services:
             - MONGO_LOG_DIR=/dev/null
             - MONGODB_DBNAME=borderline
         volumes:
-            - type: volume
+            - type: bind
               source: ./test/mongo_data
               target: /mongo_data
         command: mongod --smallfiles --logpath=/dev/null # --quiet
