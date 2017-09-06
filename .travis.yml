@@ -17,7 +17,7 @@ install:
 
 before_script:
   - docker-compose -f ./test/docker-compose.yml up tests
-  - docker run --ti --rm -v mongo_data:./test/mongo_data
+  - docker run -ti --rm -v mongo_data:./test/mongo_data mongodb
   - docker ps -a
 
 script:
