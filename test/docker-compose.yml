@@ -18,8 +18,10 @@ services:
               target: /mongo_data
         ports:
             - 27017:27017
-        command: mongoimport  --host 127.0.0.1 --db borderline --collection borderline_server_users --drop --file /mongo_data/users.json
+        command: mongoimport  --host mongodb --db borderline --collection borderline_server_users --drop --file /mongo_data/users.json
         depends_on:
+            - mongodb
+        links:
             - mongodb
 
     swift:
