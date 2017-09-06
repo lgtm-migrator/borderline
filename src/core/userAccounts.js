@@ -80,10 +80,9 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
     let that = this;
 
     return new Promise(function(resolve, reject) {
-        //Fetch default external DB here
-        //reject('Invalid username/password first time login');
+        // Fetch default external DB here
 
-        //Register new Borderline user on success
+        // Register new Borderline user on success
         let salt = crypto.randomBytes(32).toString('hex').slice(0, 32);
         let hash = crypto.createHmac('sha512', salt);
         hash.update(password);
@@ -95,7 +94,7 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
             secret: speakeasy.generateSecret({ length: 32, name: 'Borderline' })
         });
 
-        //Resolve Promise on DB insert success
+        // Resolve Promise on DB insert success
         that.userCollection.insertOne(new_user).then(function(result) {
             new_user._id = result.insertedId;
             resolve(new_user);

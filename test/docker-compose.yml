@@ -6,6 +6,8 @@ services:
             - MONGO_DATA_DIR=/data/mongodb
             - MONGO_LOG_DIR=/dev/null
             - MONGODB_DBNAME=borderline
+        volumes:
+            - "mongo_data:./test/mongo_data"
         command: mongod --smallfiles --logpath=/dev/null # --quiet
         ports:
             - 27017:27017
