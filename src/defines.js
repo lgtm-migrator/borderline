@@ -97,7 +97,7 @@ module.exports = {
     extensionsCollectionName: 'borderline_server_extensions',
     sessionCollectionName: 'borderline_server_sessions',
     sessionTimeout: 6 * (24 * 60 * 60), // 6 Days
-    registryUpdateInterval: 60 * 1000, // 60 * 1000 ms = 1 minute
+    registryUpdateInterval: 5 * 1000, // 5 * 1000 ms = 5 seconds
     registryModel: registryModel,
     userModel: userModel,
     dataSourceModel: dataSourceModel,

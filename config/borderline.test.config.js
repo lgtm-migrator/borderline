@@ -3,6 +3,6 @@ module.exports = {
     objectStorageURL: 'mongodb://mongodb/borderlineobject',
     extensionSourcesFolder: '.plugins/sources',
     extensionFileSystemFolder: '.plugins/filesystem',
-    development: true,
+    development: false,
     port: 3000
 };

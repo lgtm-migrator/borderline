@@ -11,6 +11,7 @@ const defines = require('../defines.js');
 /**
  * @fn ExtensionStore
  * @param extensionCollection MongoDB collection to sync against
+ * @param gridFSObjectStorage MongoDb gridFS for extensions storages
  * @constructor
  */
 let ExtensionStore = function(extensionCollection, gridFSObjectStorage) {
