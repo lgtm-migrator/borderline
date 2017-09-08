@@ -62,7 +62,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "\t  {\n\t    \"sourceType\": \"TS171\",\n\t    \"sourceName\": \"etriks dev\",\n\t    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n\t    \"public\": false,\n\t    \"default\": false,\n\t    \"users\": [ ]\n\t  }"
+							"raw": "    {\n      \"sourceType\": \"TS171\",\n      \"sourceName\": \"etriks dev\",\n      \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n      \"public\": false,\n      \"default\": false,\n      \"users\": [ ]\n    }"
 						},
 						"description": ""
 					},
@@ -181,7 +181,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"user_id\": \"{{user_id}}\",\n\t\"username\": \"admin\",\n\t\"password\": \"admin\"\n}"
+							"raw": "{\n  \"user_id\": \"{{user_id}}\",\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
 						},
 						"description": ""
 					},
@@ -318,7 +318,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"user_id\": \"{{user_id}}\",\n\t\"username\": \"admin\",\n\t\"password\": \"admin\"\n}"
+							"raw": "{\n  \"user_id\": \"{{user_id}}\",\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
 						},
 						"description": ""
 					},
@@ -388,7 +388,7 @@
 					},
 					"response": [
 						{
-							"id": "f30a54a5-a065-4bd3-bfed-6ea51f5f2eb9",
+							"id": "dd94f021-c71b-4a4f-aca8-d50239558315",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -405,51 +405,51 @@
 									"name": "Connection",
 									"key": "Connection",
 									"value": "keep-alive",
-									"description": "Options that are desired for the connection"
+									"description": ""
 								},
 								{
 									"name": "Content-Length",
 									"key": "Content-Length",
 									"value": "1901",
-									"description": "The length of the response body in octets (8-bit bytes)"
+									"description": ""
 								},
 								{
 									"name": "Content-Type",
 									"key": "Content-Type",
 									"value": "application/json; charset=utf-8",
-									"description": "The mime type of this content"
+									"description": ""
 								},
 								{
 									"name": "Date",
 									"key": "Date",
 									"value": "Thu, 19 Jan 2017 11:56:15 GMT",
-									"description": "The date and time that the message was sent"
+									"description": ""
 								},
 								{
 									"name": "ETag",
 									"key": "ETag",
 									"value": "W/\"76d-Uzr4RiY/CPYTNrUGxBIXaQ\"",
-									"description": "An identifier for a specific version of a resource, often a message digest"
+									"description": ""
 								},
 								{
 									"name": "X-Content-Type-Options",
 									"key": "X-Content-Type-Options",
 									"value": "nosniff",
-									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+									"description": ""
 								},
 								{
 									"name": "X-Powered-By",
 									"key": "X-Powered-By",
 									"value": "Express",
-									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+									"description": ""
 								}
 							],
 							"cookie": [],
-							"responseTime": 13,
+							"responseTime": "13",
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						},
 						{
-							"id": "3bc92502-88dd-4335-9017-154d0a42bbdc",
+							"id": "f8d6aa6a-6bf0-4325-bf3b-2c6addb9d9a5",
 							"name": "pluginList",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -506,7 +506,7 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": 13,
+							"responseTime": "13",
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						}
 					]
@@ -542,7 +542,6 @@
 								{
 									"key": "plugin-zip",
 									"type": "file",
-									"enabled": true,
 									"src": "toto-0.0.1.zip"
 								}
 							]
@@ -551,7 +550,7 @@
 					},
 					"response": [
 						{
-							"id": "f9d26eb3-6239-49fd-9b7f-307bc9f503c4",
+							"id": "c723707c-5702-4540-91d0-8664c79bf3bc",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -571,45 +570,45 @@
 									"name": "Connection",
 									"key": "Connection",
 									"value": "keep-alive",
-									"description": "Options that are desired for the connection"
+									"description": ""
 								},
 								{
 									"name": "Content-Length",
 									"key": "Content-Length",
 									"value": "23",
-									"description": "The length of the response body in octets (8-bit bytes)"
+									"description": ""
 								},
 								{
 									"name": "Content-Type",
 									"key": "Content-Type",
 									"value": "application/json; charset=utf-8",
-									"description": "The mime type of this content"
+									"description": ""
 								},
 								{
 									"name": "Date",
 									"key": "Date",
 									"value": "Thu, 19 Jan 2017 11:55:47 GMT",
-									"description": "The date and time that the message was sent"
+									"description": ""
 								},
 								{
 									"name": "ETag",
 									"key": "ETag",
 									"value": "W/\"17-agRQRT6BI3xnOccrfflWBQ\"",
-									"description": "An identifier for a specific version of a resource, often a message digest"
+									"description": ""
 								},
 								{
 									"name": "X-Powered-By",
 									"key": "X-Powered-By",
 									"value": "Express",
-									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+									"description": ""
 								}
 							],
 							"cookie": [],
-							"responseTime": 23,
+							"responseTime": "23",
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "984500c9-3336-442c-a184-99b11673394d",
+							"id": "ca94be7e-dc88-463b-9636-04b124ca4907",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -629,41 +628,41 @@
 									"name": "Connection",
 									"key": "Connection",
 									"value": "keep-alive",
-									"description": "Options that are desired for the connection"
+									"description": ""
 								},
 								{
 									"name": "Content-Length",
 									"key": "Content-Length",
 									"value": "23",
-									"description": "The length of the response body in octets (8-bit bytes)"
+									"description": ""
 								},
 								{
 									"name": "Content-Type",
 									"key": "Content-Type",
 									"value": "application/json; charset=utf-8",
-									"description": "The mime type of this content"
+									"description": ""
 								},
 								{
 									"name": "Date",
 									"key": "Date",
 									"value": "Thu, 19 Jan 2017 12:01:35 GMT",
-									"description": "The date and time that the message was sent"
+									"description": ""
 								},
 								{
 									"name": "ETag",
 									"key": "ETag",
 									"value": "W/\"17-jag58ZyQFKaxf1ArOM+98w\"",
-									"description": "An identifier for a specific version of a resource, often a message digest"
+									"description": ""
 								},
 								{
 									"name": "X-Powered-By",
 									"key": "X-Powered-By",
 									"value": "Express",
-									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+									"description": ""
 								}
 							],
 							"cookie": [],
-							"responseTime": 23,
+							"responseTime": "23",
 							"body": "[{\"id\":\"859ddffc98d7\"}]"
 						}
 					]
@@ -740,8 +739,7 @@
 								{
 									"key": "plugin-zip",
 									"type": "file",
-									"enabled": true,
-									"src": "toto-0.0.1.zip"
+									"src": "chat-0.0.1.zip"
 								}
 							]
 						},
@@ -749,7 +747,7 @@
 					},
 					"response": [
 						{
-							"id": "278b9bc8-0819-414b-a05e-d436cdaeaeef",
+							"id": "a3125a3b-9cb2-4bf3-9874-1f28d82bd3f4",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -769,45 +767,45 @@
 									"name": "Connection",
 									"key": "Connection",
 									"value": "keep-alive",
-									"description": "Options that are desired for the connection"
+									"description": ""
 								},
 								{
 									"name": "Content-Length",
 									"key": "Content-Length",
 									"value": "23",
-									"description": "The length of the response body in octets (8-bit bytes)"
+									"description": ""
 								},
 								{
 									"name": "Content-Type",
 									"key": "Content-Type",
 									"value": "application/json; charset=utf-8",
-									"description": "The mime type of this content"
+									"description": ""
 								},
 								{
 									"name": "Date",
 									"key": "Date",
 									"value": "Thu, 19 Jan 2017 11:55:47 GMT",
-									"description": "The date and time that the message was sent"
+									"description": ""
 								},
 								{
 									"name": "ETag",
 									"key": "ETag",
 									"value": "W/\"17-agRQRT6BI3xnOccrfflWBQ\"",
-									"description": "An identifier for a specific version of a resource, often a message digest"
+									"description": ""
 								},
 								{
 									"name": "X-Powered-By",
 									"key": "X-Powered-By",
 									"value": "Express",
-									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+									"description": ""
 								}
 							],
 							"cookie": [],
-							"responseTime": 23,
+							"responseTime": "23",
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "6307d59a-87e2-424b-9b53-be2d64e69a08",
+							"id": "4e847cba-5e5d-45c8-ae9a-74a23d914485",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -827,41 +825,41 @@
 									"name": "Connection",
 									"key": "Connection",
 									"value": "keep-alive",
-									"description": "Options that are desired for the connection"
+									"description": ""
 								},
 								{
 									"name": "Content-Length",
 									"key": "Content-Length",
 									"value": "23",
-									"description": "The length of the response body in octets (8-bit bytes)"
+									"description": ""
 								},
 								{
 									"name": "Content-Type",
 									"key": "Content-Type",
 									"value": "application/json; charset=utf-8",
-									"description": "The mime type of this content"
+									"description": ""
 								},
 								{
 									"name": "Date",
 									"key": "Date",
 									"value": "Thu, 19 Jan 2017 12:01:35 GMT",
-									"description": "The date and time that the message was sent"
+									"description": ""
 								},
 								{
 									"name": "ETag",
 									"key": "ETag",
 									"value": "W/\"17-jag58ZyQFKaxf1ArOM+98w\"",
-									"description": "An identifier for a specific version of a resource, often a message digest"
+									"description": ""
 								},
 								{
 									"name": "X-Powered-By",
 									"key": "X-Powered-By",
 									"value": "Express",
-									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+									"description": ""
 								}
 							],
 							"cookie": [],
-							"responseTime": 23,
+							"responseTime": "23",
 							"body": "[{\"id\":\"859ddffc98d7\"}]"
 						}
 					]
@@ -961,7 +959,6 @@
 								{
 									"key": "plugin-zip",
 									"type": "file",
-									"enabled": true,
 									"src": "chat-0.0.1.zip"
 								}
 							]
@@ -970,7 +967,7 @@
 					},
 					"response": [
 						{
-							"id": "a0c433e7-4935-4b94-a4c3-858ec4a42e82",
+							"id": "838f1a96-1d5e-4793-b9a9-713e4d807bc7",
 							"name": "pluginUploaded",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -990,45 +987,45 @@
 									"name": "Connection",
 									"key": "Connection",
 									"value": "keep-alive",
-									"description": "Options that are desired for the connection"
+									"description": ""
 								},
 								{
 									"name": "Content-Length",
 									"key": "Content-Length",
 									"value": "23",
-									"description": "The length of the response body in octets (8-bit bytes)"
+									"description": ""
 								},
 								{
 									"name": "Content-Type",
 									"key": "Content-Type",
 									"value": "application/json; charset=utf-8",
-									"description": "The mime type of this content"
+									"description": ""
 								},
 								{
 									"name": "Date",
 									"key": "Date",
 									"value": "Thu, 19 Jan 2017 11:55:47 GMT",
-									"description": "The date and time that the message was sent"
+									"description": ""
 								},
 								{
 									"name": "ETag",
 									"key": "ETag",
 									"value": "W/\"17-agRQRT6BI3xnOccrfflWBQ\"",
-									"description": "An identifier for a specific version of a resource, often a message digest"
+									"description": ""
 								},
 								{
 									"name": "X-Powered-By",
 									"key": "X-Powered-By",
 									"value": "Express",
-									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+									"description": ""
 								}
 							],
 							"cookie": [],
-							"responseTime": 23,
+							"responseTime": "23",
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "425769a5-b2ce-4fef-98fe-95ad4f0ae75e",
+							"id": "39ec57df-01fd-4554-8c1d-451b0d4103a1",
 							"name": "pluginUpload",
 							"originalRequest": {
 								"url": "http://localhost:3000/plugin_store",
@@ -1048,41 +1045,41 @@
 									"name": "Connection",
 									"key": "Connection",
 									"value": "keep-alive",
-									"description": "Options that are desired for the connection"
+									"description": ""
 								},
 								{
 									"name": "Content-Length",
 									"key": "Content-Length",
 									"value": "23",
-									"description": "The length of the response body in octets (8-bit bytes)"
+									"description": ""
 								},
 								{
 									"name": "Content-Type",
 									"key": "Content-Type",
 									"value": "application/json; charset=utf-8",
-									"description": "The mime type of this content"
+									"description": ""
 								},
 								{
 									"name": "Date",
 									"key": "Date",
 									"value": "Thu, 19 Jan 2017 12:01:35 GMT",
-									"description": "The date and time that the message was sent"
+									"description": ""
 								},
 								{
 									"name": "ETag",
 									"key": "ETag",
 									"value": "W/\"17-jag58ZyQFKaxf1ArOM+98w\"",
-									"description": "An identifier for a specific version of a resource, often a message digest"
+									"description": ""
 								},
 								{
 									"name": "X-Powered-By",
 									"key": "X-Powered-By",
 									"value": "Express",
-									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+									"description": ""
 								}
 							],
 							"cookie": [],
-							"responseTime": 23,
+							"responseTime": "23",
 							"body": "[{\"id\":\"859ddffc98d7\"}]"
 						}
 					]
@@ -1168,6 +1165,11 @@
 								"key": "Content-Type",
 								"value": "application/x-www-form-urlencoded",
 								"description": ""
+							},
+							{
+								"key": "Cookie",
+								"value": "test=test;toto=toto",
+								"description": ""
 							}
 						],
 						"body": {
@@ -1176,14 +1178,12 @@
 								{
 									"key": "username",
 									"value": "root",
-									"type": "text",
-									"enabled": true
+									"type": "text"
 								},
 								{
 									"key": "password",
 									"value": "root",
-									"type": "text",
-									"enabled": true
+									"type": "text"
 								}
 							]
 						},
@@ -1206,6 +1206,28 @@
 					],
 					"request": {
 						"url": "http://localhost:3000/users",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Who Am I",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/whoami",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1320,29 +1342,6 @@
 					"response": []
 				},
 				{
-					"name": "Get the user for the current session and save user id for use",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"url": "http://localhost:3000/whoami",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
 					"name": "Regenerate 2 Step  QR code",
 					"request": {
 						"url": "http://localhost:3000/2step/{{user_id}}",
@@ -1386,13 +1385,13 @@
 									"key": "username",
 									"value": "nope",
 									"type": "text",
-									"enabled": false
+									"disabled": true
 								},
 								{
 									"key": "password",
 									"value": "root",
 									"type": "text",
-									"enabled": false
+									"disabled": true
 								}
 							]
 						},
@@ -1418,7 +1417,7 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "//Connection",
+								"key": "Connection",
 								"value": "close",
 								"description": "",
 								"disabled": true
@@ -1511,6 +1510,29 @@
 								"description": ""
 							}
 						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get the user for the current session and save user id for use",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:3000/whoami",
+						"method": "GET",
+						"header": [],
 						"body": {},
 						"description": ""
 					},
@@ -1727,8 +1749,7 @@
 								{
 									"key": "name",
 									"value": "Postman Workflow",
-									"type": "text",
-									"enabled": true
+									"type": "text"
 								}
 							]
 						},
@@ -1834,7 +1855,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"parent\": null,\n\t\"extension\": \"toto-extension\",\n\t\"action\": \"@@/workflow/ANALYSIS_INPUT\",\n\t\"data\": {\n\t\t\"custom\": true,\n\t\t\"useless\": true\n\t}\n}"
+							"raw": "{\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
 						},
 						"description": ""
 					},
@@ -1869,7 +1890,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"parent\": \"{{step_ID}}\",\n\t\"extension\": \"child-extension\",\n\t\"action\": \"@@/workflow/RESULT_CANVAS\",\n\t\"data\": {\n\t\t\"custom\": true,\n\t\t\"useless\": true\n\t}\n}"
+							"raw": "{\n  \"parent\": \"{{step_ID}}\",\n  \"extension\": \"child-extension\",\n  \"action\": \"@@/workflow/RESULT_CANVAS\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
 						},
 						"description": ""
 					},
@@ -2050,7 +2071,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"parent\": null,\n\t\"extension\": \"toto-extension\",\n\t\"action\": \"@@/workflow/ANALYSIS_INPUT\",\n\t\"data\": {\n\t\t\"custom\": true,\n\t\t\"useless\": true\n\t}\n}"
+							"raw": "{\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
 						},
 						"description": ""
 					},

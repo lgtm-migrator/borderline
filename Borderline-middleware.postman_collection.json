@@ -74,7 +74,147 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"TS171\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n  \t\"local\": {},\r\n  \t\"std\": {}\r\n  },\r\n  \"output\": {\r\n  \t\"local\": {\r\n  \t\t\"dataSize\": 0,\r\n        \"dataId\": null\r\n  \t},\r\n  \t\"std\": {\r\n  \t\t\"dataSize\": 0,\r\n  \t\t\"dataId\": null\r\n  \t}\r\n  }\r\n}"
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"TS171\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n    \"local\": {},\r\n    \"std\": {}\r\n  },\r\n  \"output\": {\r\n    \"local\": {\r\n      \"dataSize\": 0,\r\n        \"dataId\": null\r\n    },\r\n    \"std\": {\r\n      \"dataSize\": 0,\r\n      \"dataId\": null\r\n    }\r\n  }\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create query typed: TS171",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/new/TS171",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"non_used_field\": \"coucoutest\"\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create query typed: File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/new/File",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get query  from {{current_id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update {{current_id}} query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/query/{{current_query}}",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"59a7ce455176401d286e1f65\",\n    \"endpoint\": {\n        \"sourceType\": \"TS171\",\n        \"sourceName\": \"Transmart the hyve\",\n        \"sourceHost\": \"http://glowingbear.thehyve.net/\",\n        \"sourcePort\": 80,\n        \"public\": false\n    },\n    \"credentials\": {\n        \"username\": \"demo-user\",\n        \"password\": \"demo-user\",\n        \"access_token\": \"0\",\n        \"expires_in\": 0,\n        \"generated\": \"Thu Aug 31 2017 09:52:26 GMT+0100 (GMT Daylight Time)\"\n    },\n    \"input\": {\n        \"local\": {\n            \"uri\": \"/v2/observations?constraint=\",\n            \"params\": {\n                \"type\": \"Combination\",\n                \"operator\": \"and\",\n                \"args\": [\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\n                    },\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\n                    }\n                ]\n            }\n        },\n        \"std\": {\n            \"uri\": \"/v2/observations?constraint=\",\n            \"params\": {\n                \"type\": \"Combination\",\n                \"operator\": \"and\",\n                \"args\": [\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\n                    },\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\n                    }\n                ]\n            }\n        }\n    },\n    \"status\": {\n        \"status\": \"unknown\",\n        \"start\": null,\n        \"end\": null,\n        \"info\": \"\"\n    },\n    \"output\": {\n        \"local\": {\n            \"dataSize\": 0,\n            \"dataId\": null\n        },\n        \"std\": {\n            \"dataSize\": 0,\n            \"dataId\": null\n        }\n    },\n    \"non_used_field\": \"updated2\"\n}"
 						},
 						"description": ""
 					},
@@ -110,7 +250,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"input\": {\r\n  \t\"local\": {},\r\n  \t\"std\": {}\r\n  },\r\n  \"output\": {\r\n  \t\"local\": {\r\n  \t\t\"dataSize\": 0,\r\n        \"dataId\": null\r\n  \t},\r\n  \t\"std\": {\r\n  \t\t\"dataSize\": 0,\r\n  \t\t\"dataId\": null\r\n  \t}\r\n  }\r\n}"
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"input\": {\r\n    \"local\": {},\r\n    \"std\": {}\r\n  },\r\n  \"output\": {\r\n    \"local\": {\r\n      \"dataSize\": 0,\r\n        \"dataId\": null\r\n    },\r\n    \"std\": {\r\n      \"dataSize\": 0,\r\n      \"dataId\": null\r\n    }\r\n  }\r\n}"
 						},
 						"description": ""
 					},
@@ -146,7 +286,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"thisshloudmakeitfail\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n  \t\"local\": {},\r\n  \t\"std\": {}\r\n  },\r\n  \"output\": {\r\n  \t\"local\": {\r\n  \t\t\"dataSize\": 0,\r\n        \"dataId\": null\r\n  \t},\r\n  \t\"std\": {\r\n  \t\t\"dataSize\": 0,\r\n  \t\t\"dataId\": null\r\n  \t}\r\n  }\r\n}"
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"thisshloudmakeitfail\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n    \"local\": {},\r\n    \"std\": {}\r\n  },\r\n  \"output\": {\r\n    \"local\": {\r\n      \"dataSize\": 0,\r\n        \"dataId\": null\r\n    },\r\n    \"std\": {\r\n      \"dataSize\": 0,\r\n      \"dataId\": null\r\n    }\r\n  }\r\n}"
 						},
 						"description": ""
 					},
@@ -224,7 +364,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"admin\",\n\t\"password\": \"admin\",\n\t\"access_token\": \"d5263a5b-c639-4ec6-8676-5aa0605feffd\",\n\t\"expires_in\": 10,\n\t\"generated\": \"{{date_now}}\"\n}"
+							"raw": "{\n  \"username\": \"demo-user\",\n  \"password\": \"demo-user\",\n  \"access_token\": \"0\",\n  \"expires_in\": 0,\n  \"generated\": \"{{date_now}}\"\n}"
 						},
 						"description": ""
 					},
@@ -393,7 +533,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"sourceType\": \"TS171\",\r\n\t\"sourceName\": \"Transmart the hyve\",\r\n\t\"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n\t\"sourcePort\": 80,\r\n\t\"public\": false\r\n}"
+							"raw": "{\r\n  \"sourceType\": \"TS171\",\r\n  \"sourceName\": \"Transmart the hyve\",\r\n  \"sourceHost\": \"http://transmart.thehyve.net\",\r\n  \"sourcePort\": 80,\r\n  \"public\": false\r\n}"
 						},
 						"description": ""
 					},
@@ -513,96 +653,6 @@
 			]
 		},
 		{
-			"name": "Execution",
-			"description": "",
-			"item": [
-				{
-					"name": "Execute query",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");",
-									"tests[\"isRunning\"] = jsonData.status === \"running\";"
-								]
-							}
-						}
-					],
-					"request": {
-						"url": "{{middleware_url}}/execute",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"query\": \"{{current_query}}\",\n\t\"nocache\": true\n}"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Get execution status",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"",
-									"",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");"
-								]
-							}
-						}
-					],
-					"request": {
-						"url": "{{middleware_url}}/execute/{{current_query}}",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "[Error] Get execution status for invalid query",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 401\"] = responseCode.code === 401;",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"isError\"] = jsonData.hasOwnProperty(\"error\");"
-								]
-							}
-						}
-					],
-					"request": {
-						"url": "{{middleware_url}}/execute/notaqueryi",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Input",
 			"description": "",
 			"item": [
@@ -663,7 +713,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \r\n \"uri\": \"/v2/observations?constraint=\",\r\n  \"params\": {\r\n  \t\"type\": \"Combination\", \r\n  \t\"operator\": \"and\", \r\n  \t\"args\": [\r\n  \t\t{\r\n  \t\t\t\"type\":\"ConceptConstraint\",\r\n  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\r\n  \t\t},\r\n  \t\t{\r\n  \t\t\t\"type\":\"ConceptConstraint\",\r\n  \t\t\t\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\r\n  \t\t}]\r\n  \t}\r\n}"
+							"raw": "{ \r\n \"uri\": \"/v2/observations?constraint=\",\r\n  \"params\": {\r\n    \"type\": \"combination\", \r\n    \"operator\": \"and\", \r\n    \"args\": [\r\n      {\r\n        \"type\":\"concept\",\r\n        \"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\r\n      },\r\n      {\r\n        \"type\":\"concept\",\r\n        \"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\r\n      }]\r\n   },\r\n   \"type\": \"clinical\"\r\n}"
 						},
 						"description": ""
 					},
@@ -745,7 +795,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"coucou\": false,\n\t\"hibou\": true\n}"
+							"raw": "{\n  \"coucou\": false,\n  \"hibou\": true\n}"
 						},
 						"description": ""
 					},
@@ -774,6 +824,186 @@
 							"mode": "raw",
 							"raw": ""
 						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Execution",
+			"description": "",
+			"item": [
+				{
+					"name": "Execute query TS171",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");",
+									"tests[\"isRunning\"] = jsonData.status === \"running\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/execute",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"{{current_query}}\",\n  \"nocache\": true\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Execute query File upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");",
+									"tests[\"isRunning\"] = jsonData.status === \"running\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/execute",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "query",
+									"value": "{{current_query}}",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"description": "",
+									"type": "file",
+									"src": "batman.png"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get execution status TS171",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/execute/{{current_query}}",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get execution status File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/execute/{{current_query}}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"description": "",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"description": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "",
+									"description": "",
+									"type": "file"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get execution status for invalid query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty(\"error\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{middleware_url}}/execute/notaqueryi",
+						"method": "GET",
+						"header": [],
+						"body": {},
 						"description": ""
 					},
 					"response": []
@@ -837,7 +1067,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \r\n\t\"coucou\": \"hibou\",\r\n\t\"ZirgMaster\": true\r\n}"
+							"raw": "{ \r\n  \"coucou\": \"hibou\",\r\n  \"ZirgMaster\": true\r\n}"
 						},
 						"description": ""
 					},
