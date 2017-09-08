@@ -1,0 +1,332 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Borderline - Cloud Connector
+  description: |
+    #### Middleware API
+    This API is designed to abstract Cloud capabilities in the Borderline micro-service architecture.
+    It is working with eAE, with possible support for other endpoints later on.
+    The abstraction layer this connector provides allows for caching of the computations results.
+schemes:
+  - http
+host: localhost:3000
+basePath: /
+paths:
+    /cloud/new:
+        get:
+            tags: [ ]
+            description: Create a new cloud_job query
+            responses:
+                200:
+                    description: New cloud_job query created
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: New cloud_job query error
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        post:
+            tags: [ ]
+            description: Creates a new cloud_job from parameters
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                      $ref: '#/definitions/QueryModel'
+            responses:
+                200:
+                    description: New query created
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: Creating a new query failed
+                    schema:
+                        $ref: "#/definitions/ErrorModel"
+    /cloud/{cloud_job_id}/data_source:
+        parameters:
+            -
+                name: cloud_job_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a cloud instance referenced by its unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/DataSourceModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a cloud instance from its cloud_job unique identifier
+            parameters:
+                -
+                    name: cloud_job
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        description: Transmart 17.1 json query
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/DataSourceModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a cloud instance inside its cloud_job. Referenced by unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        parameters:
+            -
+                name: cloud_job_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Returns the connection status with he data source for the target query
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        type: object
+                        properties:
+                          isAuth:
+                            type: boolean
+                            description: Is this query authenticated with the data source ?
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /cloud/{cloud_job_id}/input:
+        parameters:
+            -
+                name: cloud_job_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a cloud_job input referenced by its unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/InputModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a cloud_job input from its query unique identifier
+            parameters:
+                -
+                    name: cloud_job
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        description: Object storage unique identifier
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/InputModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a cloud_job input inside its cloud_job. Referenced by unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /cloud/{cloud_job_id}/output:
+        parameters:
+            -
+                name: cloud_job_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a cloud_job result referenced by its unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/OutputModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a cloud_job output from its cloud_job unique identifier
+            parameters:
+                -
+                    name: cloud_job
+                    required: true
+                    in: body
+                    schema:
+                        $ref: '#/definitions/OutputModel'
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/OutputModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a query output inside its query. Referenced by unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /cloud/{cloud_job_id}/status:
+        parameters:
+            -
+                name: cloud_job_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a cloud_job status, from its unique identifier
+            responses: 
+				200:
+					description: Get success
+					schema:
+						$ref: '#/definitions/StatusModel'
+				404:
+					description: Unknown query
+					schema:
+						$ref: '#definitions/ErrorModel'
+    /execute:
+        parameters:
+            -
+                name: cloud_job
+                required: true
+                in: body
+                description: cloud_job execution context
+                schema:
+                    type: object
+                    properties:
+                        query:
+                            type: string
+                            description: cloud_job unique identifier to execute
+                        nocache:
+                            type: boolean
+                            description: Prevents the cci from caching the result
+                
+        post:
+            description: Perform the cloud_job on the underlying endpoint or retreive from cache
+            responses:
+                200:
+                    description: Success execution
+                    schema:
+                      $ref: '#/definitions/StatusModel'
+                401:
+                    description: Failed to perform query
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+definitions:
+    ErrorModel:
+        type: object
+        properties:
+            error:
+                type: string
+                description: A more detailed error message
+    StatusModel:
+        type: object
+        properties:
+            status:
+                type: string
+                description: The current execution status of a cloud_job. [unknown, running, done, error]
+            start:
+                type: string
+                format: date-time
+                description: Timestamp of the submition date
+            end:
+                type: string
+                format: data-time
+                description: Timestamp of the execution termination
+            info:
+                type: object
+                description: Additionnal information if any
+    DataSourceModel:
+        type: object
+        properties:
+            sourceType:
+                type: string
+                description: Type of the underlying endpoint. Supported values are [ borderline_middleware, eAE_v2.0 ]
+            sourceName:
+                type: string
+                description: Display name
+            sourceHost:
+                type: string
+                description: Url or Ip where the source is hosted
+            sourcePort:
+                type: integer
+                description: Port used by this endpoint
+            public:
+                type: boolean
+                description: Publicly available, without auth endpoint
+    InputModel:
+      type: object
+      properties:
+        data:
+          type: object
+          description: Data to send to the data source when executing, format depends on DataSourceModel.sourceType
+    OutputModel:
+      type: object
+      properties:
+        cache:
+          type: object
+          description: Storage pointer to the cached data. Format depends on DataSourceModel.sourceType
+          properties:
+			cached:
+				type: boolean
+				description: If the data is cached, this should be true.
+            dataSize:
+              type: integer
+              description: Number of bytes
+            dataId:
+              type: string
+              description: File unique identifier in the object storage system
+
+    QueryModel:
+       type: object
+        properties:
+            _id:
+                type: string
+                description: Query unique identifier
+            credentials:
+                $ref: '#/definitions/CredentialsModel'
+            endpoint:
+                $ref: '#/definitions/DataSourceModel'
+            status:
+                $ref: '#/definitions/StatusModel'
+            input:
+                $ref: '#/definitions/InputModel'
+            output:
+                $ref: '#/definitions/OutputModel'

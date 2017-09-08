@@ -44,7 +44,39 @@ paths:
                 401:
                     description: Creating a new query failed
                     schema:
-                        $ref: "#/definitions/ErrorModel"
+                        $ref: '#/definitions/ErrorModel'
+                500:
+                    description: Internal error while creating a new query
+                    schema:
+                        $ref: '#definitions/ErrorModel'
+    /query/new/{query_type}:
+        post:
+            tags: [ ]
+            description: Creates a new query from the specified type
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                      $ref: '#/definitions/QueryModel'
+            responses:
+                200:
+                    description: New query created
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                400:
+                    description: Invalid query configuration
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+                401:
+                    description: Creating a query failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+                500:
+                    description: Internal error while creating a new query
+                    schema:
+                        $ref: '#definitions/ErrorModel'
     /query/{query_id}/endpoint:
         parameters:
             -
