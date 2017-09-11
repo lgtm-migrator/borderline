@@ -2,7 +2,7 @@ module.exports = {
     mongoURL: 'mongodb://mongodb/borderline',
     objectStorageURL: 'mongodb://mongodb/borderlineobject',
     extensionSourcesFolder: '.plugins/sources',
-    extensionFileSystemFolder: '.plugins/filesystem',
+    extensionWatchFolder: true,
+    port: 3000,
     development: false,
-    port: 3000
 };

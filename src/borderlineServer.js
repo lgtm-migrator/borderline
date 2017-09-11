@@ -281,15 +281,14 @@ BorderlineServer.prototype.setupExtensionStore = function () {
     }
 
     let extensionStoreController = require('./controllers/extensionStoreController');
-    this.extensionStoreController = new extensionStoreController(this.db.collection(defines.extensionsCollectionName), this.grid);
+    this.extensionStoreController = new extensionStoreController(this.db.collection(defines.extensionsCollectionName));
 
     // [ Extension Store Routes
 
     this.app.use('/extensions', this.extensionStoreController.getExtensionStoreRouter()); //Extensions routers connect here
     this.app.route('/extension_store')
-        .get(this.extensionStoreController.getExtensionStore) //GET returns the list of available extensions
-        .post(multer().any(), this.extensionStoreController.postExtensionStore) //POST upload a new extension
-        .delete(this.userPermissionsMiddleware.adminPrivileges, this.extensionStoreController.deleteExtensionStore); //DELETE clears all the extensions
+        .get(this.extensionStoreController.getAllExtensions) //GET returns the list of available extensions
+        .post(multer().any(), this.extensionStoreController.postExtensionStore); //POST upload a new extension
     this.app.route('/extension_store/:id')
         .get(this.extensionStoreController.getExtensionByID) //:id GET returns extension metadata
         .post(multer().any(), this.extensionStoreController.postExtensionByID) //:id POST update a extension content

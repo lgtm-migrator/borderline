@@ -1,23 +1,53 @@
-let extensionStoreModule = require('../core/extensionStore');
+let ExtensionStore = require('../core/extensionStore');
 const defines = require('../defines.js');
 
 /**
- * @fn ExtensionStoreContrller
- * @param mongoDBCollection Mongo collection where the extension are stored
+ * @fn ExtensionStoreController
+ * @param extensionCollection Mongo collection where the extension are stored
  * @constructor
  */
-function ExtensionStoreController(mongoDBCollection, gridFSObjectStorage) {
-    this.mongoDBCollection = mongoDBCollection;
-    this.extensionStore = new extensionStoreModule(this.mongoDBCollection, gridFSObjectStorage);
+function ExtensionStoreController(extensionCollection) {
+    this.extensionCollection  = extensionCollection;
+    this.extensionStore = new ExtensionStore(extensionCollection);
 
+    this.getAllExtensions = ExtensionStoreController.prototype.getAllExtensions.bind(this);
     this.getExtensionStoreRouter = ExtensionStoreController.prototype.getExtensionStoreRouter.bind(this);
-    this.getExtensionStore = ExtensionStoreController.prototype.getExtensionStore.bind(this);
     this.postExtensionStore = ExtensionStoreController.prototype.postExtensionStore.bind(this);
-    this.deleteExtensionStore = ExtensionStoreController.prototype.deleteExtensionStore.bind(this);
+
     this.getExtensionByID = ExtensionStoreController.prototype.getExtensionByID.bind(this);
     this.postExtensionByID = ExtensionStoreController.prototype.postExtensionByID.bind(this);
     this.deleteExtensionByID = ExtensionStoreController.prototype.deleteExtensionByID.bind(this);
+
+    this.extensionStore.openStore().catch(function(error) {
+        console.error(error.toString()); // eslint-disable-line no-console
+    });
 }
+
+/**
+ * @fn getAllExtensions
+ * @param __unused__req Unused Express.js request Object
+ * @param res Express.js response Object, .status and .json methods are used
+ */
+ExtensionStoreController.prototype.getAllExtensions = function(__unused__req, res) {
+    let _this = this;
+    _this.extensionCollection.find().toArray().then(function(ext_array) {
+        if (ext_array) {
+            // Processes MongoDB ObjectID to string
+            for (let i = 0; i < ext_array.length; i++)
+                ext_array[i]._id = ext_array[i]._id.toString();
+
+            res.status(200);
+            res.json(ext_array);
+        }
+        else {
+            res.status(404);
+            res.json(defines.errorStacker('No extensions yet'));
+        }
+    }, function(findall_error) {
+        res.status(501);
+        res.json(defines.errorStacker('Cannot list all extensions', findall_error));
+    })
+};
 
 /**
  * @fn getExtensionStoreRouter
@@ -27,17 +57,6 @@ ExtensionStoreController.prototype.getExtensionStoreRouter = function() {
     return this.extensionStore.router;
 };
 
-/**
- * @fn getExtensionStore
- * @desc List all the extensions
- * @param req Express.js request object
- * @param res Express.js response object
- */
-ExtensionStoreController.prototype.getExtensionStore = function(__unused__req, res) {
-    let extension_list = this.extensionStore.listExtensions();
-    res.status(200);
-    res.json({ extensions: extension_list });
-};
 
 /**
  * @fn postExtensionStore
@@ -53,26 +72,23 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
         return;
     }
 
+    // TODO Change this behavior for the following :
+    // Each zip file gets uploaded to an object Store
+    // For each zip file, create a Model to insert in DB
+    // Let the object store refresh itself
+
     let extensions = [];
     for (let i = 0; i < req.files.length; i++) {
-        let p = this.extensionStore.createExtensionFromFile(req.files[i]);
-        extensions.push(p);
+        let ext = {
+            name: req.files[i].originalname,
+            message: 'Please extract to plugin dir and insert model in DB',
+            model: defines.extensionModel
+        };
+        extensions.push(ext);
     }
 
     res.status(200);
     res.json(extensions);
-};
-
-/**
- * @fn deleteExtensionStore
- * @desc Removes all extensions from the store
- * @param req Express.js request object
- * @param res Express.js response object
- */
-ExtensionStoreController.prototype.deleteExtensionStore = function(__unused__req, res) {
-    this.extensionStore.clearExtensions();
-    res.status(200);
-    res.json({ message: 'Removed all server extensions' });
 };
 
 /**
@@ -83,15 +99,18 @@ ExtensionStoreController.prototype.deleteExtensionStore = function(__unused__req
  */
 ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
     let id = req.params.id;
-    let info = this.extensionStore.getExtensionInfoById(id);
-    if (info !== null) {
-        res.status(200);
-        res.json(info);
-    }
-    else {
+    this.extensionStore.getExtensionById(id).then(function(ext) {
+        ext.getModel().then(function(ext_model) {
+            res.status(200);
+            res.json(ext_model);
+        }, function(model_error) {
+            res.status(501);
+            res.json(defines.errorStacker('Failed to get extension data', model_error));
+        })
+    }, function(get_error) {
         res.status(404);
-        res.json(defines.errorStacker('Unknown extension Id ' +  id));
-    }
+        res.json(defines.errorStacker('Unknown extension Id ' +  id, get_error));
+    });
 };
 
 /**
@@ -123,7 +142,9 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
  * @param res Express.js response object
  */
 ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
+    let _this = this;
     let id = req.params.id;
+
     let deleteReply = this.extensionStore.deleteExtensionById(id);
     if (deleteReply.hasOwnProperty('error') === true)
         res.status(404);

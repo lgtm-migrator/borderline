@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
+const ObjectID = require('mongodb').ObjectID;
 
 /**
  * @fn Options
@@ -16,14 +17,12 @@ let Options = function (configuration) {
     this.objectStorageURL = configuration.objectStorageURL ? configuration.objectStorageURL : 'mongodb://root:root@127.0.0.1:27020/borderlineobject';
     this.port = configuration.port ? configuration.port : 8080;
     this.extensionSourcesFolder = configuration.extensionSourcesFolder ? configuration.extensionSourcesFolder : './.extensions/sources';
-    this.extensionFileSystemFolder = configuration.extensionFileSystemFolder ? configuration.extensionFileSystemFolder : './.extensions/filesystem';
     this.borderlineUiFolder = configuration.borderlineUiFolder ? configuration.borderlineUiFolder : './node-modules/borderline-ui';
     this.development = configuration.development ? configuration.development : false;
     this.enableCors = configuration.enableCors ? configuration.enableCors : true;
-
+    this.serverID = new ObjectID();
 
     this._ensureFolder(this.extensionSourcesFolder);
-    this._ensureFolder(this.extensionFileSystemFolder);
 };
 
 /**

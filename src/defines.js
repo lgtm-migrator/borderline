@@ -2,6 +2,10 @@ function ErrorStack(error_obj, error_stack) {
     let error = {};
     let error_message = '';
 
+    error.toString = function() {
+        return JSON.stringify(this);
+    };
+
     //Extract current error message
     if (typeof error_obj === 'string')
         error_message = error_obj;
@@ -54,12 +58,13 @@ const dataSourceModel = {
 };
 
 const extensionModel = {
-    enabled: true,
+    id: '',
     name: '',
     description: '',
     author: '',
     build: '',
-    version: '0.0.1'
+    version: '0.0.1',
+    enabled: []
 };
 
 const stepModel = {
@@ -98,6 +103,7 @@ module.exports = {
     sessionCollectionName: 'borderline_server_sessions',
     sessionTimeout: 6 * (24 * 60 * 60), // 6 Days
     registryUpdateInterval: 5 * 1000, // 5 * 1000 ms = 5 seconds
+    extensionManifestFilename: 'manifest.json',
     registryModel: registryModel,
     userModel: userModel,
     dataSourceModel: dataSourceModel,
