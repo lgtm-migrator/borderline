@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
 const defines = require('../defines.js');
+const ObjectID = require('mongodb').ObjectID;
 
 /**
  * @fn Extension
@@ -58,10 +59,7 @@ Extension.prototype._readManifest = function() {
         let manifest_path = path.join(global.config.extensionSourcesFolder, _this.getId());
         manifest_path = path.format({ dir: path.normalize(manifest_path), base: defines.extensionManifestFilename});
         fs.readJson(manifest_path).then(function(manifest_data) {
-            if (manifest_data)
-                resolve(manifest_data);
-            else
-                reject(defines.errorStacker('Manifest is corrupted or empty'));
+            resolve(manifest_data);
         }, function(error) {
             reject(defines.errorStacker('Reading extension manifest failed', error));
         });
@@ -74,12 +72,13 @@ Extension.prototype._readManifest = function() {
  * @return A string containing the extension unique identifier, or null if none
  */
 Extension.prototype.getId = function() {
-    if (this._model && this._model.id)
-        return this._model.id;
-    if (this._model && this._model._id)
-        return this._model._id;
-    else
-        return null;
+    if (this._model && this._model._id) {
+        if (this._model._id instanceof ObjectID)
+            return this._model._id.toHexString();
+        else
+            return this._model._id;
+    }
+    return null;
 };
 
 /**
@@ -189,7 +188,7 @@ Extension.prototype.synchronise = function() {
                 let local_model = _this.getModel();
                 let model_to_save = Object.assign({}, local_model);
                 delete model_to_save._id; // Let mongo handle ids
-                _this._extensionCollection.updateOne({_id: mongo_id}, {$set: model_to_save}, {upsert: true}).then(function () {
+                _this._extensionCollection.replaceOne({_id: mongo_id}, model_to_save, {upsert: true}).then(function (result) {
                     _this.setModel(model_to_save);
                     resolve(true);
                 }, function (update_error) {
@@ -198,17 +197,22 @@ Extension.prototype.synchronise = function() {
             });
         };
 
-        _this._readManifest().then(function(manifest_data) { // Can read, update extension model
-            mongo_find().then(function() {
-                mongo_update().then(function() {
-                    resolve(true); // All good, found, merged and updated
-                }, function(update_error) {
-                    reject(defines.errorStacker('Failed to update extension', update_error));
+        _this._readManifest().then(function(__unused__manifest_data) { // Can read, update extension model
+            _this.enable().then(function() {
+                mongo_find().then(function () {
+                    mongo_update().then(function () {
+                        resolve(true); // All good, found, merged and updated
+                    }, function (update_error) {
+                        reject(defines.errorStacker('Failed to update extension', update_error));
+                    });
+                }, function (find_error) {
+                    reject(defines.errorStacker('Failed to list extension from the registry', find_error));
                 });
-            }, function(find_error) {
-                reject(defines.errorStacker('Failed to list extension from the registry', find_error));
+            }, function(enable_error) {
+                reject(defines.errorStacker('Synchronise cannot enable extension', enable_error));
             });
         }, function(manifest_err) { // Cannot read manifest, forces disabling
+            console.log(manifest_err);
             _this.disable().then(function() {
                 mongo_find().then(function () {
                     mongo_update().then(function () {

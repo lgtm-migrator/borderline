@@ -150,9 +150,9 @@ ExtensionStore.prototype._scanDatabase = function() {
 ExtensionStore.prototype._startExtensionUpdate = function() {
     let _this = this;
     _this._interval_timer = setInterval(function() {
-        _this._scanDatabase().then(function(__unused__updated_int) {
+        _this._scanDatabase().then(function(__unused__updated_num) {
             // Nothing, silently success
-            // console.info('Updated ' + num + ' extensions');  // eslint-disable-line no-console
+            // console.info('Updated ' + __unused__updated_num + ' extensions');  // eslint-disable-line no-console
         }, function(err) {
             console.error(err.toString());  // eslint-disable-line no-console
         })

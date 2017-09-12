@@ -72,23 +72,34 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
         return;
     }
 
-    // TODO Change this behavior for the following :
+    // TODO Change the current behavior for the following :
     // Each zip file gets uploaded to an object Store
     // For each zip file, create a Model to insert in DB
     // Let the object store refresh itself
 
     let extensions = [];
     for (let i = 0; i < req.files.length; i++) {
-        let ext = {
-            name: req.files[i].originalname,
-            message: 'Please extract to plugin dir and insert model in DB',
-            model: defines.extensionModel
-        };
+        let ext = Object.assign({}, defines.extensionModel, {
+            zipFile: req.files[i].originalname,
+            message: 'Please extract to plugin dir locally'
+        });
         extensions.push(ext);
     }
 
-    res.status(200);
-    res.json(extensions);
+    this.extensionCollection.insertMany(extensions).then(function(result) {
+        if (result.insertedCount > 0 && result.ops) {
+            res.status(200);
+            res.json(result.ops);
+        }
+        else {
+            res.status(500);
+            res.json(defines.errorStacker('Nothing inserted, abort'));
+        }
+    }, function(db_error) {
+        res.status(500);
+        res.json(defines.errorStacker('Cannot insert extensions in DB', db_error));
+    })
+
 };
 
 /**
