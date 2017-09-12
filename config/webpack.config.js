@@ -26,7 +26,6 @@ else
             ignore: editor.ignore
         }))
 
-
 module.exports = () => ({
     plugins
 })

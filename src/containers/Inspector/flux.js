@@ -163,7 +163,7 @@ const extensionsDidLoad = (state) => {
 };
 
 const extensionUnitSuccess = (state, action) => {
-    state.list[action.extension.id].model = () => {};
+    state.list[action.extension.id].model = () => { };
     state.list[action.extension.id].loaded = true;
     return state;
 };
