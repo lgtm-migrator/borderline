@@ -58,13 +58,12 @@ const dataSourceModel = {
 };
 
 const extensionModel = {
-    id: '',
     name: '',
     description: '',
     author: '',
     build: '',
     version: '0.0.1',
-    enabled: []
+    enabled: {}
 };
 
 const stepModel = {
