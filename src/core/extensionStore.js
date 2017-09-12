@@ -150,12 +150,13 @@ ExtensionStore.prototype._scanDatabase = function() {
 ExtensionStore.prototype._startExtensionUpdate = function() {
     let _this = this;
     _this._interval_timer = setInterval(function() {
-        _this._scanDatabase().then(function(num) {
-            console.info('Updated ' + num + ' extensions');  // eslint-disable-line no-console
+        _this._scanDatabase().then(function(__unused__updated_int) {
+            // Nothing, silently success
+            // console.info('Updated ' + num + ' extensions');  // eslint-disable-line no-console
         }, function(err) {
             console.error(err.toString());  // eslint-disable-line no-console
         })
-    }, 1000); // Every seconds
+    }, defines.extensionUpdateInterval); // Every seconds
 };
 
 ExtensionStore.prototype._stopExtensionUpdate = function() {
