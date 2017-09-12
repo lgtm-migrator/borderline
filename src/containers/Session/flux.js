@@ -22,14 +22,14 @@ export const actions = {
         credentials: credentials
     }),
 
-    sessionLoginSuccess: (session) => ({
+    sessionLoginSuccess: (data) => ({
         type: types.SESSION_LOGIN_SUCCESS,
-        session: session
+        data: data
     }),
 
-    sessionLoginFailure: (error) => ({
+    sessionLoginFailure: (data) => ({
         type: types.SESSION_LOGIN_FAILURE,
-        error: error
+        data: data
     }),
 
     sessionLogout: () => ({
@@ -114,21 +114,21 @@ const sessionRecover = (state) => {
 
 const sessionLogin = (state) => {
     state.working = true;
-    state.attempts = state.attempts++;
+    state.attempts++;
     delete state.error;
     return state;
 };
 
 const sessionLoginSuccess = (state, action) => {
     state.working = false;
-    state.user = action.session;
+    state.user = action.data;
     return state;
 };
 
 const sessionLoginFailure = (state, action) => {
     state.working = false;
     state.ok = false;
-    state.error = action.error.error;
+    state.error = action.data.error;
     return state;
 };
 

@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import LoadBar from './components/LoadBar';
 import { stateAware } from 'utilities/storeManager';
 import { actions } from 'containers/Session/flux';
 import style from './style.css';
 
 @stateAware(state => ({
-    isAuthenticated: state.ok
+    isAuthenticated: state.ok,
+    isProcessing: state.working,
+    hasAttempted: state.attempts > 0,
+    error: state.error
 }))
 class Login extends Component {
 
@@ -32,7 +36,7 @@ class Login extends Component {
 
     render() {
 
-        const { location, isAuthenticated } = this.props;
+        const { location, isAuthenticated, isProcessing, hasAttempted, error } = this.props;
         const { from } = location.state || { from: { pathname: '/' } };
 
         if (isAuthenticated === true) {
@@ -42,11 +46,16 @@ class Login extends Component {
         }
 
         return (
-            <div className={style.login}>
-                <p>You must log in to view the page at {from.pathname}</p>
-                <input type="text" placeholder="Username" ref="username" /><br />
-                <input type="password" placeholder="Password" ref="password" /><br />
-                <button onClick={this.login}>Log in</button>
+            <div className={style.box}>
+                <div className={style.title}>
+                    <span>borderline<strong>:</strong></span>
+                </div>
+                <form className={style.form} onSubmit={this.login.bind(this)}>
+                    <input type="text" placeholder="Username" ref="username" /><br />
+                    <input type="password" placeholder="Password" ref="password" /><br />
+                    {isProcessing ? (<LoadBar />) : (<button type="submit">Login</button>)}<br />
+                    {hasAttempted && error !== undefined ? <div className={style.error}>{error}</div> : null}
+                </form>
             </div>
         );
     }
