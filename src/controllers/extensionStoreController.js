@@ -48,7 +48,7 @@ ExtensionStoreController.prototype.getAllExtensions = function(__unused__req, re
     }, function(findall_error) {
         res.status(501);
         res.json(defines.errorStacker('Cannot list all extensions', findall_error));
-    })
+    });
 };
 
 /**
@@ -100,8 +100,7 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
     }, function(db_error) {
         res.status(500);
         res.json(defines.errorStacker('Cannot insert extensions in DB', db_error));
-    })
-
+    });
 };
 
 /**

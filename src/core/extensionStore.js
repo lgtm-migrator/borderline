@@ -1,8 +1,6 @@
 //External modules
 const express = require('express');
 const path = require('path');
-const fs = require('fs-extra');
-const adm_zip = require('adm-zip');
 
 //Local modules
 let Extension = require('./extension');
@@ -140,7 +138,7 @@ ExtensionStore.prototype._scanDatabase = function() {
                 resolve(i);
             }, function(sync_error) {
                 reject(defines.errorStacker('Update extensions from DB failed', sync_error));
-            })
+            });
         }, function(find_error) {
             reject(defines.errorStacker('Cannot list extension from DB', find_error));
         });
@@ -155,7 +153,7 @@ ExtensionStore.prototype._startExtensionUpdate = function() {
             // console.info('Updated ' + __unused__updated_num + ' extensions');  // eslint-disable-line no-console
         }, function(err) {
             console.error(err.toString());  // eslint-disable-line no-console
-        })
+        });
     }, defines.extensionUpdateInterval); // Every seconds
 };
 

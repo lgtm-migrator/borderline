@@ -188,7 +188,7 @@ Extension.prototype.synchronise = function() {
                 let local_model = _this.getModel();
                 let model_to_save = Object.assign({}, local_model);
                 delete model_to_save._id; // Let mongo handle ids
-                _this._extensionCollection.replaceOne({_id: mongo_id}, model_to_save, {upsert: true}).then(function (result) {
+                _this._extensionCollection.replaceOne({_id: mongo_id}, model_to_save, {upsert: true}).then(function() {
                     _this.setModel(model_to_save);
                     resolve(true);
                 }, function (update_error) {
