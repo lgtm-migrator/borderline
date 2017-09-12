@@ -113,7 +113,7 @@ paths:
                     schema:
                         $ref: '#/definitions/ErrorModel'
     /users:
-        get:
+        head:
             tags: [ user ]
             description: List all the users. Requires admin privileges
             responses:
@@ -189,9 +189,9 @@ paths:
                 description: Id of the extension
                 in: path
                 type: string
-        get:
+        head:
             tags: [ extension ]
-            description: Get an extension
+            description: Get an extension metadata
             responses:
                 200:
                     description: Success, replies extension information
@@ -201,6 +201,9 @@ paths:
                     description: Cannot retreive extension information
                     schema:
                         $ref: '#/definitions/ErrorModel'
+        get:
+            tags: [ extension ]
+            description:  
         post:
             tags: [ extension ]
             description: Update extension content
@@ -219,7 +222,7 @@ paths:
                         $ref: '#/definitions/ErrorModel'
         delete:
             tags: [ extension ]
-            description: Removes extension from server
+            description: Delete an extension from the system
             responses:
                 200:
                     description: Success, extension is removed
@@ -675,7 +678,7 @@ definitions:
     ExtensionModel:
         type: object
         properties:
-            _id:
+            id:
                 type: string
                 description: Extension unique identifier
             enabled:
