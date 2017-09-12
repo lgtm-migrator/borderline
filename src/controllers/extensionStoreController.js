@@ -1,5 +1,7 @@
 let ExtensionStore = require('../core/extensionStore');
 const defines = require('../defines.js');
+const ObjectID = require('mongodb').ObjectID;
+
 
 /**
  * @fn ExtensionStoreController
@@ -110,18 +112,23 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
  */
 ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
     let id = req.params.id;
-    this.extensionStore.getExtensionById(id).then(function(ext) {
-        ext.getModel().then(function(ext_model) {
+    this.extensionCollection.findOne({_id: new ObjectID(id)}).then(function(result) {
+        if (result) {
             res.status(200);
-            res.json(ext_model);
-        }, function(model_error) {
+            res.json(result);
+        }
+        else {
             res.status(501);
-            res.json(defines.errorStacker('Failed to get extension data', model_error));
-        })
-    }, function(get_error) {
+            res.json(defines.errorStacker('Failed to get extension data'));
+        }
+    }, function(db_error) {
         res.status(404);
-        res.json(defines.errorStacker('Unknown extension Id ' +  id, get_error));
+        res.json(defines.errorStacker('Unknown extension Id ' +  id, db_error));
     });
+
+
+
+
 };
 
 /**
@@ -133,35 +140,66 @@ ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
  */
 ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
     let id = req.params.id;
-    if (typeof req.files === 'undefined' || req.files.length === 0) {
-        res.status(400);
-        res.json(defines.errorStacker('No file uploaded for extension ' + id + ' update'));
+    if (typeof req.files === 'undefined' || req.files.length !== 1) {
+        res.status(406);
+        res.json(defines.errorStacker('A unique file must be uploaded for extension ' + id + ' update'));
         return;
     }
-    let updateReply = this.extensionStore.updateExtensionById(id, req.files[0]);
-    if (updateReply.hasOwnProperty('error') === true)
-        res.status(500);
-    else
-        res.status(200);
-    res.json(updateReply);
+
+    // TODO Change the current behavior for the following :
+    // The zip file gets uploaded to an object Store
+    // create a Model to insert in DB with a ref on the ObjectStorage
+    // Let the object store refresh itself
+
+    let update_model = Object.assign({}, defines.extensionModel, req.body, {
+        zipFile: req.files[0].originalname,
+        message: 'Please extract to plugin dir locally'
+    });
+    delete update_model._id; // Let mongo handle ids
+    this.extensionCollection.findOneAndUpdate({_id: new ObjectID(id)},
+        { $set: update_model }, { returnOriginal: false }).then(function(update_result) {
+            if (update_result.lastErrorObject.n === 1) {
+                res.status(200);
+                res.json(update_result.value);
+            }
+            else {
+                res.status(500);
+                res.json(defines.errorStacker('Update aborted', update_result.lastErrorObject));
+            }
+    }, function(update_error) {
+        res.status(501);
+        res.json(defines.errorStacker('Cannot update extension model', update_error));
+    });
 };
 
 /**
  * @fn deleteExtensionByID
- * @desc remvoes an extension from the server, referenced by ID
+ * @desc Disables an extension from the server, referenced by ID
  * @param req Express.js request object
  * @param res Express.js response object
  */
 ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
-    let _this = this;
     let id = req.params.id;
-
-    let deleteReply = this.extensionStore.deleteExtensionById(id);
-    if (deleteReply.hasOwnProperty('error') === true)
+    if (id === undefined || id === null) {
         res.status(404);
-    else
-        res.status(200);
-    res.json(deleteReply);
+        res.json(defines.errorStacker('Missing extension ID'));
+        return;
+    }
+
+    this.extensionCollection.findOneAndDelete({_id: new ObjectID(id)}).then(function(result) {
+        if (result.lastErrorObject.n === 1) {
+            // Todo: Remove files form local FS if need be
+            res.status(200);
+            res.json(true);
+        }
+        else {
+            res.status(404);
+            res.json(defines.errorStacker('Failed to delete extension ' + id));
+        }
+    }, function(delete_error) {
+        res.status(404);
+        res.json(defines.errorStacker('Cannot delete extension', delete_error));
+    });
 };
 
 

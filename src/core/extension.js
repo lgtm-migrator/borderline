@@ -211,8 +211,7 @@ Extension.prototype.synchronise = function() {
             }, function(enable_error) {
                 reject(defines.errorStacker('Synchronise cannot enable extension', enable_error));
             });
-        }, function(manifest_err) { // Cannot read manifest, forces disabling
-            console.log(manifest_err);
+        }, function(__unused__manifest_err) { // Cannot read manifest, forces disabling
             _this.disable().then(function() {
                 mongo_find().then(function () {
                     mongo_update().then(function () {
