@@ -1,6 +1,5 @@
 //External node module imports
 const mongodb = require('mongodb').MongoClient;
-const GridFSBucket = require('mongodb').GridFSBucket;
 const fs = require('fs-extra');
 const express = require('express');
 const expressSession = require('express-session');
@@ -110,12 +109,7 @@ BorderlineServer.prototype.stop = function() {
             if (main_error)
                 reject(ErrorHelper('Closing main mongoDB connection failed', main_error));
             else {
-                _this.objectStorage.close(true).then(function(object_error) {
-                    if (object_error)
-                        reject(ErrorHelper('Closing gridFS connection failed', object_error));
-                    else
-                        resolve(true); // Everything is stopped
-                });
+                resolve(true); // Everything is stopped
             }
         });
     });
@@ -187,21 +181,8 @@ BorderlineServer.prototype._connectDb = function () {
         });
     });
 
-    // TODO remove this
-    let object_db = new Promise(function (resolve, reject) {
-        mongodb.connect(_this.config.objectStorageURL, function (err, db) {
-            if (err !== null && err !== undefined) {
-                reject(ErrorHelper('Failed to connect to mongoDB', err));
-                return;
-            }
-            _this.objectStorage = db;
-            _this.grid = new GridFSBucket(_this.objectStorage, { bucketName: 'borderline_global_storage' });
-            resolve(true);
-        });
-    });
-
     return new Promise(function(resolve, reject) {
-        Promise.all([main_db, object_db]).then(function(__unused__true_array) {
+        Promise.all([main_db]).then(function(__unused__true_array) {
             resolve(true);
         }, function (error) {
             reject(ErrorHelper('One of the db connection failed', error));
