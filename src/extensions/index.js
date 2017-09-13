@@ -1,4 +1,5 @@
 export default [
     import('./dashboard'),
-    import('./eae')
+    import('./eae'),
+    import('./account')
 ];
