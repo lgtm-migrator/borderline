@@ -84,24 +84,22 @@ const executionModel = {
     info: ''
 };
 
+const dataModel = {
+    label: '',
+    metadata: {
+    },
+    cache: {
+        dataSize: '0 b',
+        storageId: ''
+    }
+};
+
 const queryModel = {
     endpoint: dataSourceModel,
     credentials: credentialsModel,
-    input: {
-        local: {},
-        std: {}
-    },
     status: executionModel,
-    output: {
-        local: {
-            dataSize: 0,
-            dataId: null
-        },
-        std: {
-            dataSize: 0,
-            dataId: null
-        }
-    }
+    input: dataModel,
+    output: dataModel
 };
 
 module.exports = {
@@ -132,5 +130,6 @@ module.exports = {
     workflowModel: workflowModel,
     executionModel: executionModel,
     credentialsModel: credentialsModel,
+    dataModel: dataModel,
     queryModel: queryModel,
 };

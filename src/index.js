@@ -12,6 +12,7 @@ module.exports = {
         BL_MODEL_DATA_SOURCE: defines.dataSourceModel,
         BL_MODEL_EXECUTION: defines.executionModel,
         BL_MODEL_CREDENTIALS: defines.credentialsModel,
+        BL_MODEL_DATA: defines.dataModel,
         BL_MODEL_QUERY: defines.queryModel
     },
     Constants: {
