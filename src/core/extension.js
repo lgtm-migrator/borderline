@@ -2,8 +2,7 @@ const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
 const ObjectID = require('mongodb').ObjectID;
-const { ErrorHelper, Models, Constants } = require('borderline-utils');
-
+const { ErrorHelper, Models, Constants, RegistryIdentifier } = require('borderline-utils');
 
 /**
  * @fn Extension
@@ -17,7 +16,7 @@ function Extension(ExtensionModel, ExtensionCollection) {
 
     // Init member vars
     let enable_data = { enabled: {} };
-    enable_data.enabled[global.config.serverID] = true;
+    enable_data.enabled[RegistryIdentifier()] = true;
     this._model = Object.assign({}, Models.BL_MODEL_EXTENSION, ExtensionModel, enable_data);
     this._extensionCollection = ExtensionCollection;
     this._router = express.Router();
@@ -138,7 +137,7 @@ Extension.prototype.enable = function() {
 
         // Makes sure _model.enabled = true, even if _model is undefined
         let enable_data = { enabled: {} };
-        enable_data.enabled[global.config.serverID] = true;
+        enable_data.enabled[RegistryIdentifier()] = true;
         _this._model = Object.assign({}, _this._model, enable_data);
         resolve(_this._model);
     });
@@ -155,7 +154,7 @@ Extension.prototype.disable = function() {
     _this._static_router = express.Router();
     // Makes sure _model.enabled = false, even if _model is undefined
     let enable_data = { enabled: {} };
-    enable_data.enabled[global.config.serverID] = false;
+    enable_data.enabled[RegistryIdentifier()] = false;
     _this._model = Object.assign({}, _this._model, enable_data);
     return Promise.resolve(true);
 };
@@ -175,7 +174,7 @@ Extension.prototype.synchronise = function() {
                 _this._extensionCollection.findOne({ _id : mongo_id }).then(function (model) {
                     let local_model = _this.getModel();
                     // Update the enabled status for this server
-                    model.enabled[global.config.serverID] = local_model.enabled[global.config.serverID];
+                    model.enabled[RegistryIdentifier()] = local_model.enabled[RegistryIdentifier()];
                     _this.setModel(Object.assign({}, local_model, model));
                     resolve(true);
                 }, function(find_error) {

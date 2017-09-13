@@ -1,4 +1,28 @@
-{ "_id" : "dummy42", "enabled" : true, "name" : "dummy", "description" : "Generated Borderline internal extension", "author" : "Borderline", "build" : "dummy_build", "version" : "0.0.1", "users" : [  ] }
-{ "_id" : "751818194281", "enabled" : false, "name" : "toto", "description" : "Generated Borderline internal extension", "author" : "Borderline", "build" : "9i8d1qcs1c00", "version" : "0.0.1", "users" : [  ] }
-{ "_id" : "7bpm1gctch800", "enabled" : false, "name" : "toto", "description" : "Generated Borderline internal extension", "author" : "Borderline", "build" : "9i8d1qcs1c00", "version" : "0.0.1", "users" : [  ] }
-{ "_id" : "faa0b2ccad20", "enabled" : true, "name" : "toto", "description" : "Generated Borderline internal extension", "author" : "Borderline", "build" : "9i8d1qcs1c00", "version" : "0.0.1", "users" : [  ] }
+{
+    "_id" : "59b7aba03436750d40383478",
+    "name" : "",
+    "description" : "",
+    "author" : "",
+    "build" : "",
+    "version" : "0.0.1",
+    "enabled" : {
+        "default" : true,
+        "59b94150132ffc3b545a4883" : true
+    },
+    "zipFile" : "WGCNA_ACOS.R",
+    "message" : "Please extract to plugin dir locally"
+}
+{
+    "_id" : "59b7acf83f297f3d50adaa28",
+    "name" : "",
+    "description" : "",
+    "author" : "",
+    "build" : "",
+    "version" : "0.0.1",
+    "enabled" : {
+        "default" : false,
+        "59b94150132ffc3b545a4883" : false
+    },
+    "zipFile" : "README.md",
+    "message" : "Please extract to plugin dir locally"
+}
