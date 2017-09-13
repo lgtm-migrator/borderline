@@ -7,11 +7,9 @@ const MongoStore = require('connect-mongo')(expressSession);
 const body_parser = require('body-parser');
 const passport = require('passport');
 const multer = require('multer');
-const timer = require('timers');
-const ip = require('ip');
 
 const borderlineOptions = require('./core/options');
-const { ErrorHelper, Constants, Models } = require('borderline-utils');
+const { ErrorHelper, Constants, RegistryHelper } = require('borderline-utils');
 const package_json = require('../package.json');
 
 function BorderlineServer(config) {
@@ -23,6 +21,8 @@ function BorderlineServer(config) {
     this._registryHandler = BorderlineServer.prototype._registryHandler.bind(this);
 
     // Bind member functions
+    this.start = BorderlineServer.prototype.start.bind(this);
+    this.stop = BorderlineServer.prototype.stop.bind(this);
     this.extensionError = BorderlineServer.prototype.extensionError.bind(this);
     this.setupUserAccount = BorderlineServer.prototype.setupUserAccount.bind(this);
     this.setupDataStore = BorderlineServer.prototype.setupDataStore.bind(this);
@@ -102,7 +102,7 @@ BorderlineServer.prototype.stop = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
         // Stop periodic update of the registry
-        timer.clearInterval(_this._interval_timer);
+        _this.registryHelper.stopPeriodicUpdate();
 
         // Disconnect mongoDB --force
         _this.db.close(true).then(function(main_error) {
@@ -117,47 +117,24 @@ BorderlineServer.prototype.stop = function() {
 
 /**
  * @fn _registryHandler
- * @desc Setup a routine to update the global registry
- * Put a status object in the DB based on this current configuration
+ * @desc Setup the RegistryHelper and starts interval update
  * @private
  */
 BorderlineServer.prototype._registryHandler = function () {
     let _this = this;
 
     // Connect to the registry collection
-    _this.registry = _this.db.collection(Constants.BL_GLOBAL_COLLECTION_REGISTRY);
-    global.registry = _this.registry;
-    let registry_update = function () {
-        //Create status object
-        let status = Object.assign({}, Models.BL_MODEL_REGISTRY, {
-            type: 'borderline-server',
-            version: package_json.version,
-            timestamp: new Date(),
-            expires_in: Constants.BL_DEFAULT_REGISTRY_FREQUENCY / 1000,
-            port: _this.config.port,
-            ip: ip.address().toString()
-        });
-        // Write in DB
-        // Match by ip + port + type
-        // Create if does not exists.
-        _this.registry.findOneAndReplace({
-            ip: status.ip,
-            port: status.port,
-            type: status.type
-        }, status, { upsert: true, returnOriginal: false })
-            .then(function (__unused__success) {
-                //Nothing to do here
-            }, function (error) {
-                //Just log the error
-                console.log(error); // eslint-disable-line no-console
-            });
-    };
+    _this.registryCollection = _this.db.collection(Constants.BL_GLOBAL_COLLECTION_REGISTRY);
+    // Create RegistryHelper class
+    _this.registryHelper = new RegistryHelper(Constants.BL_SERVER_SERVICE, _this.registryCollection);
+    // Sets properties in the registry
+    _this.registryHelper.setModel({
+        version: package_json.version,
+        port: _this.config.port
+    });
 
-    // Do a first update now
-    registry_update();
-
-    // Call the update every X milliseconds
-    _this._interval_timer = timer.setInterval(registry_update, Constants.BL_DEFAULT_REGISTRY_FREQUENCY);
+    // Trigger updates
+    _this.registryHelper.startPeriodicUpdate(Constants.BL_DEFAULT_REGISTRY_FREQUENCY);
 };
 
 
