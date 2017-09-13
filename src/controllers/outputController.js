@@ -1,5 +1,5 @@
 const QueryFactory = require('../core/queryFactory.js');
-let defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn OutputController
@@ -28,7 +28,7 @@ OutputController.prototype.getQueryById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
@@ -37,11 +37,11 @@ OutputController.prototype.getQueryById = function(req, res) {
             res.json(result);
         }, function(error) {
             res.status(401);
-            res.json(defines.errorStacker('Output std extract failed', error));
+            res.json(ErrorHelper('Output std extract failed', error));
         });
     }, function(error) {
         res.status(401);
-        res.json(defines.errorStacker('Error retrieving query from ID', error));
+        res.json(ErrorHelper('Error retrieving query from ID', error));
     });
 };
 
@@ -57,7 +57,7 @@ OutputController.prototype.putQueryById = function(req, res) {
     let data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
@@ -66,11 +66,11 @@ OutputController.prototype.putQueryById = function(req, res) {
             res.json(local_data);
         }, function(error) {
             res.status(401);
-            res.json(defines.errorStacker('Updating output failed', error));
+            res.json(ErrorHelper('Updating output failed', error));
         });
     }, function(error) {
         res.status(401);
-        res.json(defines.errorStacker('Updating query failed', error));
+        res.json(ErrorHelper('Updating query failed', error));
     });
 };
 
@@ -85,21 +85,21 @@ OutputController.prototype.deleteQueryById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query ID'));
+        res.json(ErrorHelper('Missing query ID'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.model.output = Object.assign({}, defines.queryModel.output);
+        queryObject.model.output = Object.assign({}, Models.BL_MODEL_QUERY.output);
         queryObject.pushModel().then(function() {
             res.status(200);
             res.json(queryObject.model.output.std);
         }, function(error) {
             res.status(401);
-            res.json(defines.errorStacker('Delete from model failed', error));
+            res.json(ErrorHelper('Delete from model failed', error));
         });
     }, function(error) {
         res.status(401);
-        res.json(defines.errorStacker('Delete failed', error));
+        res.json(ErrorHelper('Delete failed', error));
     });
 };
 

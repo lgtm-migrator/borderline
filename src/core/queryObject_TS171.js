@@ -1,8 +1,6 @@
-// Vendor modules
 const request = require('request');
+const { ErrorHelper, Models } = require('borderline-utils');
 
-// Local modules
-const defines = require('../defines.js');
 const QueryAbstract = require('./queryAbstract.js');
 
 /**
@@ -65,15 +63,15 @@ QueryTransmart17_1.prototype._doAuth = function() {
             '&password=' + _this.model.credentials.password
         }, function (error, response, body) {
             if (error !== null) {
-                reject(defines.errorStacker('Auth request failed', error));
+                reject(ErrorHelper('Auth request failed', error));
                 return;
             }
             else if (response === null || response.statusCode !== 200) { // Reject on errors
-                reject(defines.errorStacker('Authentication url is invalid'));
+                reject(ErrorHelper('Authentication url is invalid'));
                 return;
             }
             else if (body === undefined || body === null || body.hasOwnProperty('access_token') === false) {
-                reject(defines.errorStacker('Authentication failed'));
+                reject(ErrorHelper('Authentication failed'));
                 return;
             }
 
@@ -83,7 +81,7 @@ QueryTransmart17_1.prototype._doAuth = function() {
             _this.pushModel().then(function() {
                 resolve(true);
             }, function (error) {
-                reject(defines.errorStacker('Auth save failed', error));
+                reject(ErrorHelper('Auth save failed', error));
             });
         });
     });
@@ -102,7 +100,7 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
                 _this._doAuth().then(function () {
                     resolve(true);
                 }, function (error) {
-                    reject(defines.errorStacker('Ensure auth failed', error));
+                    reject(ErrorHelper('Ensure auth failed', error));
                 });
             }
             else {
@@ -110,7 +108,7 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
             }
         }
         catch (auth_err) {
-            reject(defines.errorStacker('Authentication check has thrown', auth_err));
+            reject(ErrorHelper('Authentication check has thrown', auth_err));
         }
     });
 };
@@ -147,24 +145,24 @@ QueryTransmart17_1.prototype.execute = function() {
                 }, function (error, response, body) {
                     if (error !== null || response === null || response.statusCode !== 200) {
                         if (body !== null)
-                            error = defines.errorStacker('Execute error body', body);
-                        _this.registerExecutionError(defines.errorStacker('Execute request failed', error));
+                            error = ErrorHelper('Execute error body', body);
+                        _this.registerExecutionError(ErrorHelper('Execute request failed', error));
                         return;
                     }
                     _this.setOutputLocal(body).then(function(__unused__std_data) {
                         _this.registerExecutionEnd(); //Update status to done
                     }, function(error) {
-                        _this.registerExecutionError(defines.errorStacker('Execution failed while saving result', error));
+                        _this.registerExecutionError(ErrorHelper('Execution failed while saving result', error));
                     });
                 });
             }, function (auth_error) {
-                _this.registerExecutionError(defines.errorStacker('Authentication error while executing', auth_error))
+                _this.registerExecutionError(ErrorHelper('Authentication error while executing', auth_error))
                     .catch(function(critical_error) {
-                        console.error(defines.errorStacker('Critical error', critical_error)); // eslint-disable-line no-console
+                        console.error(ErrorHelper('Critical error', critical_error)); // eslint-disable-line no-console
                     });
             });
         }, function (error) { // Failed to update status to running
-            reject(defines.errorStacker('Execution fail', error));
+            reject(ErrorHelper('Execution fail', error));
         });
     });
 };

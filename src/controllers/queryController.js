@@ -1,5 +1,6 @@
-let defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 const ObjectID = require('mongodb').ObjectID;
+const defines = require('../defines.js');
 
 /**
  * @fn QueryController
@@ -26,12 +27,8 @@ function QueryController(queryCollection) {
  * @param res Express.js response object
  */
 QueryController.prototype.getNewQuery = function(__unused__req, res) {
-    let newQuery = Object.assign({},
-        defines.queryModel,
-        {
-            endpoint: {
-                sourceType: defines.endpointTypes[0] //Defaults to first support type
-            }
+    let newQuery = Object.assign({}, Models.BL_MODEL_QUERY, {
+            endpoint: Models.BL_MODEL_DATA_SOURCE
         });
 
     this.queryCollection.insertOne(newQuery).then(function(r) {
@@ -60,15 +57,15 @@ QueryController.prototype.postNewQuery = function(req, res) {
     if (endpoint === null || endpoint === undefined ||
         credentials === null || credentials === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query data'));
+        res.json(ErrorHelper('Missing query data'));
         return;
     }
     if (defines.endpointTypes.find(function(v) { return v === endpoint.sourceType; }) === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Invalid source type'));
+        res.json(ErrorHelper('Invalid source type'));
         return;
     }
-    let newQuery = Object.assign({}, defines.queryModel, req.body);
+    let newQuery = Object.assign({}, Models.BL_MODEL_QUERY, req.body);
 
     this.queryCollection.insertOne(newQuery).then(function(r) {
         if (r.insertedCount === 1) {
@@ -77,11 +74,11 @@ QueryController.prototype.postNewQuery = function(req, res) {
         }
         else {
             res.status(401);
-            res.json(defines.errorStacker('Insert a new query failed'));
+            res.json(ErrorHelper('Insert a new query failed'));
         }
     }, function(error){
         res.status(500);
-        res.json(defines.errorStacker(error));
+        res.json(ErrorHelper(error));
     });
 };
 
@@ -95,13 +92,13 @@ QueryController.prototype.postNewQueryTyped = function(req, res) {
 
     if (defines.endpointTypes.includes(query_type) === false) {
         res.status(400);
-        res.json(defines.errorStacker('Unknown query type'));
+        res.json(ErrorHelper('Unknown query type'));
         return;
     }
 
-    let endpointModel = Object.assign({}, defines.endpointModel, { sourceType: query_type});
+    let endpointModel = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, { sourceType: query_type});
     //Create new query from here
-    let newQuery = Object.assign({}, defines.queryModel, { endpoint: endpointModel } , req.body);
+    let newQuery = Object.assign({}, Models.BL_MODEL_QUERY, { endpoint: endpointModel } , req.body);
     this.queryCollection.insertOne(newQuery).then(function(r) {
         if (r.insertedCount === 1) {
             res.status(200);
@@ -109,11 +106,11 @@ QueryController.prototype.postNewQueryTyped = function(req, res) {
         }
         else {
             res.status(401);
-            res.json(defines.errorStacker('Insert a new query failed'));
+            res.json(ErrorHelper('Insert a new query failed'));
         }
     }, function(error){
         res.status(500);
-        res.json(defines.errorStacker(error));
+        res.json(ErrorHelper(error));
     });
 };
 
@@ -127,7 +124,7 @@ QueryController.prototype.getQueryById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === undefined || query_id === null) {
         res.statusCode(404);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
 
@@ -137,12 +134,12 @@ QueryController.prototype.getQueryById = function(req, res) {
             res.json(query_data);
         }, function (error) {
             res.status(500);
-            res.json(defines.errorStacker('Failed to find query', error));
+            res.json(ErrorHelper('Failed to find query', error));
         });
     }
     catch (error) { // ObjectID creation might throw
         res.status(500);
-        res.json(defines.errorStacker('Cannot get query data', error));
+        res.json(ErrorHelper('Cannot get query data', error));
     }
 };
 
@@ -157,29 +154,29 @@ QueryController.prototype.postQueryById = function(req, res) {
     let query_data = req.body;
     if (query_id === undefined || query_id === null) {
         res.statusCode(404);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
     if (query_data ===  null || query_data === undefined) {
         res.statusCode(400);
-        res.json(defines.errorStacker('Missing query data'));
+        res.json(ErrorHelper('Missing query data'));
         return;
     }
 
     try {
-        let query_update = Object.assign({}, defines.queryModel, query_data);
+        let query_update = Object.assign({}, Models.BL_MODEL_QUERY, query_data);
         delete query_update._id; // Let mongo handle ids
         this.queryCollection.findOneAndReplace({_id: new ObjectID(query_id)}, query_update, { returnOriginal: false}).then(function (query_data) {
             res.status(200);
             res.json(query_data);
         }, function (error) {
             res.status(500);
-            res.json(defines.errorStacker('Failed to find query', error));
+            res.json(ErrorHelper('Failed to find query', error));
         });
     }
     catch(error) { // ObjectID creation might throw
         res.status(500);
-        res.json(defines.errorStacker('Error occurred while updating', error));
+        res.json(ErrorHelper('Error occurred while updating', error));
     }
 };
 
@@ -193,7 +190,7 @@ QueryController.prototype.deleteQueryById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === undefined || query_id === null) {
         res.statusCode(404);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
     try {
@@ -202,12 +199,12 @@ QueryController.prototype.deleteQueryById = function(req, res) {
             res.json({success: true});
         }, function (error) {
             res.status(500);
-            res.json(defines.errorStacker('Failed to delete query', error));
+            res.json(ErrorHelper('Failed to delete query', error));
         });
     }
     catch (error) { // ObjectID creation might throw
         res.status(500);
-        res.json(defines.errorStacker('Error occurred while deleting', error));
+        res.json(ErrorHelper('Error occurred while deleting', error));
     }
 };
 

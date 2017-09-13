@@ -1,10 +1,8 @@
-// Vendor modules
 const ObjectID = require('mongodb').ObjectID;
+const { ErrorHelper, Models } = require('borderline-utils');
 
-// Project modules
 const Query_TS171 = require('./queryObject_TS171.js');
 const Query_File = require('./queryObject_File.js');
-const defines = require('../defines.js');
 
 /**
  * @fn QueryFactory
@@ -35,10 +33,10 @@ QueryFactory.prototype.fromModel = function(queryModel) {
                 resolve(new Query_File(queryModel, _this.queryCollection, _this.storage));
                 break;
             case 'eHS':
-                reject(defines.errorStacker('eHS support is not implemented'));
+                reject(ErrorHelper('eHS support is not implemented'));
                 break;
             default:
-                reject(defines.errorStacker('Type [' + queryModel.endpoint.sourceType + '] is unknown'));
+                reject(ErrorHelper('Type [' + queryModel.endpoint.sourceType + '] is unknown'));
         }
     });
 };
@@ -54,20 +52,20 @@ QueryFactory.prototype.fromID = function(query_id) {
         try {
             _this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function (queryModel) {
                 if (queryModel === null || queryModel === undefined) {
-                    reject(defines.errorStacker('Unknown id ' + query_id));
+                    reject(ErrorHelper('Unknown id ' + query_id));
                     return;
                 }
                 _this.fromModel(queryModel).then(function (queryObj) {
                     resolve(queryObj);
                 }, function (error) {
-                    reject(defines.errorStacker(error));
+                    reject(ErrorHelper(error));
                 });
             }, function (error) {
-                reject(defines.errorStacker(query_id + ' not found', error));
+                reject(ErrorHelper(query_id + ' not found', error));
             });
         }
         catch (error) {
-            reject(defines.errorStacker('From ID caught error', error));
+            reject(ErrorHelper('From ID caught error', error));
         }
     });
 };

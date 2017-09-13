@@ -1,8 +1,5 @@
-// Vendor modules
 const ObjectID = require('mongodb').ObjectID;
-
-// Local modules
-const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn QueryAbstract
@@ -62,6 +59,7 @@ QueryAbstract.prototype.input_local2standard = function(__unused__data) {
 QueryAbstract.prototype.input_standard2local = function(__unused__data) {
     throw 'Input standard to local should be overloaded';
 };
+
 /**
  * @fn output_local2standard
  * @pure
@@ -69,6 +67,7 @@ QueryAbstract.prototype.input_standard2local = function(__unused__data) {
 QueryAbstract.prototype.output_local2standard = function(__unused__data) {
     throw 'Output local to standard should be overloaded';
 };
+
 /**
  * @fn output_standard2local
  * @pure
@@ -88,7 +87,7 @@ QueryAbstract.prototype.getInput = function() {
             resolve(_this.model.input);
        }
        catch (error) {
-           reject(defines.errorStacker(error));
+           reject(ErrorHelper(error));
        }
     });
 };
@@ -103,7 +102,7 @@ QueryAbstract.prototype.getInputLocal = function() {
         if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('local'))
             resolve(_this.model.input.local);
         else
-            reject(defines.errorStacker('No local input'));
+            reject(ErrorHelper('No local input'));
     });
 };
 
@@ -117,7 +116,7 @@ QueryAbstract.prototype.getInputStd = function() {
         if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('std'))
             resolve(_this.model.input.std);
         else
-            reject(defines.errorStacker('Missing standard input'));
+            reject(ErrorHelper('Missing standard input'));
     });
 };
 
@@ -137,7 +136,7 @@ QueryAbstract.prototype.setInputStd = function(std_data) {
             resolve(_this.model.input.std);
         }
         catch (error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         }
     });
 };
@@ -160,7 +159,7 @@ QueryAbstract.prototype.setInputLocal = function(local_data) {
             resolve(_this.model.input.std);
         }
         catch (error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         }
     });
 };
@@ -184,11 +183,11 @@ QueryAbstract.prototype.getOutput = function() {
                 data.std.data = values[1];
                 resolve(data);
             }, function(error) {
-                reject(defines.errorStacker(error));
+                reject(ErrorHelper(error));
             });
         }
         catch (error) {
-            reject(defines.errorStacker('getOutput caught error', error));
+            reject(ErrorHelper('getOutput caught error', error));
         }
     });
 };
@@ -204,11 +203,11 @@ QueryAbstract.prototype.getOutputLocal = function() {
             _this.storage.getObject(_this.model.output.local.dataId).then(function(local_data) {
                 resolve(local_data);
             }, function (error) {
-                reject(defines.errorStacker('Get local output failed', error));
+                reject(ErrorHelper('Get local output failed', error));
             });
         }
         else {
-            reject(defines.errorStacker('No local output data'));
+            reject(ErrorHelper('No local output data'));
         }
     });
 };
@@ -226,11 +225,11 @@ QueryAbstract.prototype.getOutputStd = function() {
             _this.storage.getObject(_this.model.output.std.dataId).then(function(std_data) {
                 resolve(std_data);
             }, function (error) {
-                reject(defines.errorStacker('Get std output failed', error));
+                reject(ErrorHelper('Get std output failed', error));
             });
         }
         else {
-            reject(defines.errorStacker('No std output data'));
+            reject(ErrorHelper('No std output data'));
         }
     });
 };
@@ -279,14 +278,14 @@ QueryAbstract.prototype.setOutputLocal = function(local_data) {
                 _this.pushModel().then(function() {
                     resolve(std_data);
                 }, function (error) {
-                    reject(defines.errorStacker('Save output locations failed', error));
+                    reject(ErrorHelper('Save output locations failed', error));
                 });
             }, function(error) {
-                reject(defines.errorStacker(error));
+                reject(ErrorHelper(error));
             });
         }
         catch (error) {
-            reject(defines.errorStacker('Caught exception', error));
+            reject(ErrorHelper('Caught exception', error));
         }
     });
 };
@@ -334,14 +333,14 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
                 _this.pushModel().then(function() {
                     resolve(std_data);
                 }, function (error) {
-                    reject(defines.errorStacker(error));
+                    reject(ErrorHelper(error));
                 });
             }, function(error) {
-                reject(defines.errorStacker('Storage failed', error));
+                reject(ErrorHelper('Storage failed', error));
             });
         }
         catch (error) {
-            reject(defines.errorStacker('Caught exception', error));
+            reject(ErrorHelper('Caught exception', error));
         }
     });
 };
@@ -354,7 +353,7 @@ QueryAbstract.prototype.setOutputStd = function(std_data) {
 QueryAbstract.prototype.registerExecutionStart = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
-        let new_status = Object.assign({}, defines.executionModel, {
+        let new_status = Object.assign({}, Models.BL_MODEL_EXECUTION, {
             status: 'running',
             start: new Date(),
             end: null,
@@ -364,7 +363,7 @@ QueryAbstract.prototype.registerExecutionStart = function() {
         _this.pushModel().then(function(__unused__model) {
             resolve(_this.model.status);
         }, function(error) {
-            reject(defines.errorStacker('Starting execution update fail', error));
+            reject(ErrorHelper('Starting execution update fail', error));
         });
     });
 };
@@ -386,7 +385,7 @@ QueryAbstract.prototype.registerExecutionEnd = function() {
         _this.pushModel().then(function(__unused__model) {
             resolve(_this.model.status);
         }, function(error) {
-            reject(defines.errorStacker('Ending execution update fail', error));
+            reject(ErrorHelper('Ending execution update fail', error));
         });
     });
 };
@@ -408,11 +407,11 @@ QueryAbstract.prototype.registerExecutionError = function(errorObject) {
             _this.pushModel().then(function (__unused__model) {
                 resolve(_this.model.status);
             }, function (error) {
-                reject(defines.errorStacker('Error execution update fail', error));
+                reject(ErrorHelper('Error execution update fail', error));
             });
         }
         catch (exec_status_error) {
-            reject(defines.errorStacker('Update exec status to error has thrown', exec_status_error));
+            reject(ErrorHelper('Update exec status to error has thrown', exec_status_error));
         }
     });
 };
@@ -429,7 +428,7 @@ QueryAbstract.prototype.fetchModel = function() {
             _this.model = result;
             resolve(this.model);
         }, function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -446,10 +445,10 @@ QueryAbstract.prototype.pushModel = function() {
             if (result.ok === 1)
                 resolve(_this.model);
             else
-                reject(defines.errorStacker('Update query model failed',
+                reject(ErrorHelper('Update query model failed',
                     { error : result.lastErrorObject.toString() }));
        }, function (error) {
-          reject(defines.errorStacker('MongoDB error', error));
+          reject(ErrorHelper('MongoDB error', error));
        });
     });
 };

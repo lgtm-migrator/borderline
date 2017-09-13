@@ -4,6 +4,7 @@ const timer = require('timers');
 const ip = require('ip');
 const multer  = require('multer');
 const body_parser = require('body-parser');
+const { ErrorHelper, Constants, Models } = require('borderline-utils');
 
 const defines = require('./defines.js');
 const package_file = require('../package.json');
@@ -61,9 +62,9 @@ BorderlineMiddleware.prototype.start = function() {
         }, function (error) {
             _this.app.all('*', function(__unused__req, res) {
                 res.status(501);
-                res.json(defines.errorStacker('Database connection failure', error));
+                res.json(ErrorHelper('Database connection failure', error));
             });
-            reject(defines.errorStacker('Cannot establish mongoDB connection', error));
+            reject(ErrorHelper('Cannot establish mongoDB connection', error));
         });
     });
 };
@@ -82,7 +83,7 @@ BorderlineMiddleware.prototype.stop = function() {
         // Disconnect DB --force
         _this.db.close(true).then(function(error) {
             if (error)
-                reject(defines.errorStacker('Closing mongoDB connection failed', error));
+                reject(ErrorHelper('Closing mongoDB connection failed', error));
             else
                 resolve(true);
         });
@@ -99,16 +100,15 @@ BorderlineMiddleware.prototype._registryHandler = function() {
     let _this = this;
 
     //Connect to the registry collection
-    this.registry = this.db.collection(defines.globalRegistryCollectionName);
+    this.registry = this.db.collection(Constants.BL_GLOBAL_COLLECTION_REGISTRY);
     let registry_update = function() {
         //Create status object
-        let status = Object.assign({}, defines.registryModel, {
+        let status = Object.assign({}, Models.BL_MODEL_REGISTRY, {
             type: 'borderline-middleware',
             version: package_file.version,
             timestamp: new Date(),
-            expires_in: defines.registryUpdateInterval / 1000,
-            port: _this.config.port,
-            ip: ip.address().toString()
+            expires_in: Constants.BL_DEFAULT_REGISTRY_FREQUENCY / 1000,
+            port: _this.config.port
         });
         //Write in DB
         //Match by ip + port + type
@@ -127,7 +127,7 @@ BorderlineMiddleware.prototype._registryHandler = function() {
     };
 
     //Call the update every X milliseconds
-    _this._interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
+    _this._interval_timer = timer.setInterval(registry_update, Constants.BL_DEFAULT_REGISTRY_FREQUENCY);
     //Do a first update now
     registry_update();
 
@@ -209,7 +209,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
             let p = new Promise(function(resolve, reject) {
                 mongodb.connect(urls_list[i], function(err, db) {
                     if (err !== null)
-                        reject(defines.errorStacker('Database connection failure', err));
+                        reject(ErrorHelper('Database connection failure', err));
                     else
                         resolve(db);
                 });
@@ -219,7 +219,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
         //Resolve all promises in parallel
         Promise.all(promises).then(function(databases) {
             _this.db = databases[0];
-            _this.queryCollection = _this.db.collection(defines.queryCollectionName);
+            _this.queryCollection = _this.db.collection(Constants.BL_MIDDLEWARE_COLLECTION_QUERY);
             _this.storage =  new ObjectStorage({
                 url: _this.config.swiftURL,
                 username: _this.config.swiftUsername,
@@ -228,7 +228,7 @@ BorderlineMiddleware.prototype._connectDb = function() {
 
             resolve(true);
         }, function (error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };

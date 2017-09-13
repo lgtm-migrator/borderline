@@ -1,4 +1,4 @@
-const defines = require('../defines.js');
+const { ErrorHelper, Constants } = require('borderline-utils');
 const uuid = require('uuid');
 const os2 = require('os2');
 const MemoryStream = require('memorystream');
@@ -26,7 +26,7 @@ function ObjectStorage(
     // Creates os2 instances
     this._store = new os2.Store(this._url);
     this._account = new os2.Account(this._store, this._username, this._password);
-    this._container = new os2.Container(this._account, defines.globalStorageCollectionName);
+    this._container = new os2.Container(this._account, Constants.BL_GLOBAL_COLLECTION_STORAGE);
 
     // Internal ready status
     this._storage_ready = false;
@@ -58,14 +58,14 @@ ObjectStorage.prototype._internalClosure = function(callback, ...args) {
     let _auth_check = function() {
         return new Promise(function(resolve, reject) {
             if (_this._account === undefined || _this._account === null)
-                reject(defines.errorStacker('Swift account missing'));
+                reject(ErrorHelper('Swift account missing'));
             else if (_this._account.isConnected())
                 resolve(true);
             else {
                 _this._account.connect().then(function(connected) {
                     resolve(connected);
                 }, function(error) {
-                    reject(defines.errorStacker('Failed to connect', error));
+                    reject(ErrorHelper('Failed to connect', error));
                 });
             }
         });
@@ -74,14 +74,14 @@ ObjectStorage.prototype._internalClosure = function(callback, ...args) {
     let _container_check = function() {
         return new Promise(function(resolve, reject) {
             if (_this._container === undefined || _this._container === null)
-                reject(defines.errorStacker('Missing swift container'));
+                reject(ErrorHelper('Missing swift container'));
             else if (_this._storage_ready === true)
                 resolve(true);
             else {
                 _this._container.create().then(function(create_ok) {
                     resolve(create_ok);
                 }, function(error) {
-                    reject(defines.errorStacker('Failed to create container', error));
+                    reject(ErrorHelper('Failed to create container', error));
                 });
             }
         });
@@ -93,10 +93,10 @@ ObjectStorage.prototype._internalClosure = function(callback, ...args) {
                     _this._storage_ready = true;
                     return callback.apply(_this, args);
                 }, function(container_error) {
-                    return Promise.reject(defines.errorStacker('Container check failed', container_error));
+                    return Promise.reject(ErrorHelper('Container check failed', container_error));
                 });
             }, function(auth_error) {
-                return Promise.reject(defines.errorStacker('Auth check failed', auth_error));
+                return Promise.reject(ErrorHelper('Auth check failed', auth_error));
             }
     );
 };
@@ -118,7 +118,7 @@ ObjectStorage.prototype.createObject = function(object_data) {
             obj.createFromStream(data_stream, _this._chunkSize).then(function(__unused__obj_ok) {
                 resolve(objName);
             }, function(obj_error) {
-                reject(defines.errorStacker('Creating new entry in object store failed', obj_error));
+                reject(ErrorHelper('Creating new entry in object store failed', obj_error));
             });
 
             // Close the stream
@@ -152,15 +152,15 @@ ObjectStorage.prototype.getObject = function(object_id) {
                     });
                     //Handling errors
                     readable.on('error', function (error) {
-                        reject(defines.errorStacker('Readable error', error));
+                        reject(ErrorHelper('Readable error', error));
                     });
 
                 }, function(read_error) {
-                    reject(defines.errorStacker('Get content failed', read_error));
+                    reject(ErrorHelper('Get content failed', read_error));
                 });
             }
             catch (error) {
-                reject(defines.errorStacker(error));
+                reject(ErrorHelper(error));
             }
         });
     });
@@ -183,16 +183,16 @@ ObjectStorage.prototype.setObject = function(object_id, object_data) {
                         obj.createFromStream(data_stream, _this._chunkSize).then(function(__unused__obj_ok) {
                             resolve(object_id);
                         }, function(obj_error) {
-                            reject(defines.errorStacker('setObject Setting new content failed', obj_error));
+                            reject(ErrorHelper('setObject Setting new content failed', obj_error));
                         });
                         // End stream
                         data_stream.end(Buffer.from(object_data));
                     }, function(delete_error) {
-                        reject(defines.errorStacker('setObject Removing old content failed', delete_error));
+                        reject(ErrorHelper('setObject Removing old content failed', delete_error));
                     });
                 }
                 catch (error) {
-                    reject(defines.errorStacker('setObject Storage update caught error', error));
+                    reject(ErrorHelper('setObject Storage update caught error', error));
                 }
         });
     });
@@ -214,11 +214,11 @@ ObjectStorage.prototype.deleteObject = function(object_id) {
                 obj.delete().then(function(__unused__ok_delete) {
                     resolve(object_id);
                 }, function(delete_error) {
-                   reject(defines.errorStacker('Delete from storage failed', delete_error));
+                   reject(ErrorHelper('Delete from storage failed', delete_error));
                 });
             }
             catch (error) {
-                reject(defines.errorStacker(error));
+                reject(ErrorHelper(error));
             }
         });
     });

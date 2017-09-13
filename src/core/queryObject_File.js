@@ -1,5 +1,5 @@
-// Local modules
-const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
+
 const QueryAbstract = require('./queryAbstract.js');
 
 /**
@@ -36,21 +36,21 @@ QueryFile.prototype.execute = function(req) {
 
     return new Promise(function(resolve, reject) {
         if (req.file === undefined || req.file === null) {
-            _this.registerExecutionError(defines.errorStacker('No files uploaded'));
-            reject(defines.errorStacker('Missing file to upload'));
+            _this.registerExecutionError(ErrorHelper('No files uploaded'));
+            reject(ErrorHelper('Missing file to upload'));
             return;
         }
         //Start file upload in background, update execution status
         _this.registerExecutionStart().then(function (status) {
             resolve(status);
         }, function (error) {
-            reject(defines.errorStacker('Execution fail', error));
+            reject(ErrorHelper('Execution fail', error));
         });
 
         _this._receiveFile(req.file).then(function() {
             _this.registerExecutionEnd(); //Update status to done
         }, function (error) {
-            _this.registerExecutionError(defines.errorStacker('File upload execute failed', error));
+            _this.registerExecutionError(ErrorHelper('File upload execute failed', error));
         });
     });
 };
@@ -79,7 +79,7 @@ QueryFile.prototype._receiveFile = function(file) {
             _this.model.output = Object.assign({}, _this.model.output, { std: { dataId: file_id, filename: file.originalname}});
             resolve(file_id);
         }, function(error) {
-            reject(defines.errorStacker('File ', error));
+            reject(ErrorHelper('File ', error));
         });
     });
 };

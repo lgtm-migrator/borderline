@@ -1,5 +1,6 @@
 const QueryFactory = require('../core/queryFactory.js');
-let defines = require('../defines.js');
+const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn EndpointController
@@ -28,7 +29,7 @@ EndpointController.prototype.getQueryById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined || query_id.length === 0) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
@@ -36,7 +37,7 @@ EndpointController.prototype.getQueryById = function(req, res) {
         res.json(queryObject.model.endpoint);
     }, function(error) {
         res.status(401);
-        res.json(defines.errorStacker('Error retrieving query from ID', error));
+        res.json(ErrorHelper('Error retrieving query from ID', error));
     });
 };
 
@@ -52,7 +53,7 @@ EndpointController.prototype.putQueryById = function(req, res) {
     let data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
     if (data.hasOwnProperty('sourceType') === false || defines.endpointTypes.find(
@@ -60,21 +61,21 @@ EndpointController.prototype.putQueryById = function(req, res) {
             return val === data.sourceType;
         }) === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Invalid sourceType'));
+        res.json(ErrorHelper('Invalid sourceType'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.model.endpoint = Object.assign({}, defines.endpointModel, data);
+        queryObject.model.endpoint = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, data);
         queryObject.pushModel().then(function() {
             res.status(200);
             res.json(data);
         }, function(error) {
             res.status(501);
-            res.json(defines.errorStacker('Updating endpoint failed', error));
+            res.json(ErrorHelper('Updating endpoint failed', error));
         });
     }, function(error) {
         res.status(501);
-        res.json(defines.errorStacker('Updating query failed', error));
+        res.json(ErrorHelper('Updating query failed', error));
     });
 };
 
@@ -88,22 +89,22 @@ EndpointController.prototype.deleteQueryById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query ID'));
+        res.json(ErrorHelper('Missing query ID'));
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
         let type = queryObject.model.endpoint.sourceType;
-        queryObject.model.endpoint = Object.assign({}, defines.endpointModel, {sourceType: type});
+        queryObject.model.endpoint = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, {sourceType: type});
         queryObject.pushModel().then(function() {
             res.status(200);
             res.json(queryObject.model.endpoint);
         }, function(error) {
             res.status(401);
-            res.json(defines.errorStacker('Delete endpoint from model failed', error));
+            res.json(ErrorHelper('Delete endpoint from model failed', error));
         });
     }, function(error) {
         res.status(401);
-        res.json(defines.errorStacker('Delete failed', error));
+        res.json(ErrorHelper('Delete failed', error));
     });
 };
 

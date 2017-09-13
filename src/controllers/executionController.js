@@ -1,5 +1,5 @@
-const defines = require('../defines.js');
 const QueryFactory = require('../core/queryFactory.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn ExecutionController
@@ -41,11 +41,11 @@ ExecutionController.prototype.executeQuery = function(req, res) {
             res.json(result);
         }, function (error) {
             res.status(401);
-            res.json(defines.errorStacker('Execute query failed', error));
+            res.json(ErrorHelper('Execute query failed', error));
         });
     }, function (error) {
         res.status(401);
-        res.json(defines.errorStacker('Unknown query ' + query_id, error));
+        res.json(ErrorHelper('Unknown query ' + query_id, error));
     });
 };
 
@@ -59,7 +59,7 @@ ExecutionController.prototype.getQueryById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === undefined || query_id === null) {
         res.status(401);
-        res.json(defines.errorStacker('Missing query_id'));
+        res.json(ErrorHelper('Missing query_id'));
         return;
     }
     this.queryFactory.fromID(query_id).then(function(queryObject) {
@@ -67,7 +67,7 @@ ExecutionController.prototype.getQueryById = function(req, res) {
         res.json(queryObject.model.status);
     }, function (error) {
        res.status(401);
-       res.json(defines.errorStacker('Get query execution status failed', error));
+       res.json(ErrorHelper('Get query execution status failed', error));
     });
 };
 
