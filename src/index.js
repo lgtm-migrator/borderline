@@ -12,6 +12,9 @@ module.exports = {
         BL_MODEL_DATA_SOURCE: defines.dataSourceModel
     },
     Constants: {
+        BL_SERVER_SERVICE: defines.serverServiceName,
+        BL_MIDDLEWARE_SERVICE: defines.middlewareServiceName,
+
         BL_GLOBAL_COLLECTION_REGISTRY: defines.global_registryCollectionName,
         BL_GLOBAL_COLLECTION_SESSIONS: defines.global_sessionCollectionName,
 

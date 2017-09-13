@@ -84,6 +84,8 @@ module.exports = {
     server_dataSourcesCollectionName: 'borderline_server_data_sources',
     server_extensionsCollectionName: 'borderline_server_extensions',
 
+    serverServiceName: 'borderline-server-panzer',
+    middlewareServiceName: 'borderline-middleware-flammenwerfer',
     sessionTimeout: 6 * (24 * 60 * 60), // 6 Days
     registryUpdateInterval: 5 * 1000, // 5 * 1000 ms = 5 seconds
     extensionUpdateInterval: 10 * 1000, // 10 * 1000 ms = 10 seconds
