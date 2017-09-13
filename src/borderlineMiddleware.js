@@ -1,12 +1,10 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
 const timer = require('timers');
-const ip = require('ip');
 const multer  = require('multer');
 const body_parser = require('body-parser');
 const { ErrorHelper, Constants, Models } = require('borderline-utils');
 
-const defines = require('./defines.js');
 const package_file = require('../package.json');
 const Options = require('./core/options.js');
 const ObjectStorage = require('./core/objectStorage.js');
