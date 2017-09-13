@@ -9,7 +9,10 @@ module.exports = {
         BL_MODEL_WORKFLOW: defines.workflowModel,
         BL_MODEL_STEP: defines.stepModel,
         BL_MODEL_EXTENSION: defines.extensionModel,
-        BL_MODEL_DATA_SOURCE: defines.dataSourceModel
+        BL_MODEL_DATA_SOURCE: defines.dataSourceModel,
+        BL_MODEL_EXECUTION: defines.executionModel,
+        BL_MODEL_CREDENTIALS: defines.credentialsModel,
+        BL_MODEL_QUERY: defines.queryModel
     },
     Constants: {
         BL_SERVER_SERVICE: defines.serverServiceName,
@@ -23,6 +26,8 @@ module.exports = {
         BL_SERVER_COLLECTION_STEPS: defines.server_stepCollectionName,
         BL_SERVER_COLLECTION_DATA_SOURCES: defines.server_dataSourcesCollectionName,
         BL_SERVER_COLLECTION_EXTENSIONS: defines.server_extensionsCollectionName,
+
+        BL_MIDDLEWARE_COLLECTION_QUERY: defines.middleware_queryCollectionName,
 
         BL_DEFAULT_SESSION_TIMEOUT: defines.sessionTimeout,
         BL_DEFAULT_REGISTRY_FREQUENCY: defines.registryUpdateInterval,

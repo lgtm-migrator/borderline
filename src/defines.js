@@ -72,6 +72,38 @@ const workflowModel = {
     graph: workflowStepModel
 };
 
+const credentialsModel = {
+    username: '',
+    password: ''
+};
+
+const executionModel = {
+    status: 'unknown',
+    start: null,
+    end: null,
+    info: ''
+};
+
+const queryModel = {
+    endpoint: dataSourceModel,
+    credentials: credentialsModel,
+    input: {
+        local: {},
+        std: {}
+    },
+    status: executionModel,
+    output: {
+        local: {
+            dataSize: 0,
+            dataId: null
+        },
+        std: {
+            dataSize: 0,
+            dataId: null
+        }
+    }
+};
+
 module.exports = {
     global_registryCollectionName: 'borderline_global_registry',
     global_storageCollectionName: 'borderline_global_storage',
@@ -82,6 +114,7 @@ module.exports = {
     server_stepCollectionName: 'borderline_server_steps',
     server_dataSourcesCollectionName: 'borderline_server_data_sources',
     server_extensionsCollectionName: 'borderline_server_extensions',
+    middleware_queryCollectionName: 'borderline_middleware_queries',
 
     serverServiceName: 'borderline-server-panzer',
     middlewareServiceName: 'borderline-middleware-flammenwerfer',
@@ -96,5 +129,8 @@ module.exports = {
     extensionModel:extensionModel,
     stepModel : stepModel,
     workflowStepModel: workflowStepModel,
-    workflowModel: workflowModel
+    workflowModel: workflowModel,
+    executionModel: executionModel,
+    credentialsModel: credentialsModel,
+    queryModel: queryModel,
 };
