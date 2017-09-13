@@ -6,7 +6,7 @@ function ErrorStack(error_obj, error_stack) {
         return JSON.stringify(this);
     };
 
-    //Extract current error message
+    // Extract current error message
     if (typeof error_obj === 'string')
         error_message = error_obj;
     else if (typeof error_obj === 'object' && error_obj.hasOwnProperty('message'))
