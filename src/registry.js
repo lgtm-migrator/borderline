@@ -33,6 +33,11 @@ function Registry(serviceType, registryCollection) {
     this._systemInfoUpdate = Registry.prototype._systemInfoUpdate.bind(this);
 }
 
+let _global_process_identifier = null;
+Registry.identifer = function() {
+    return _global_process_identifier;
+};
+
 /**
  * @fn getModel
  * @desc Retrieves the model of this registry
@@ -114,7 +119,10 @@ Registry.prototype._sync = function() {
     return new Promise(function(resolve, reject) {
         let model_update = Object.assign({}, _this._model);
         delete model_update._id; // Let mongoDB handle ids
-        _this._registryCollection.findOneAndUpdate({id: new ObjectID(_this._model._id)}, model_update, { returnOriginal: false, upsert: true}).then(function() {
+        _this._registryCollection.findOneAndUpdate({id: new ObjectID(_this._model._id)}, model_update, { returnOriginal: false, upsert: true}).then(function(result) {
+            console.log(result);
+            // Assign global identifier value of this process
+            _global_process_identifier = result.value._id.toHexString();
             resolve(true); // All good, update successful
         }, function(update_error) {
             reject(ErrorStack('Update registry failed', update_error));

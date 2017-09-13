@@ -27,5 +27,6 @@ module.exports = {
         BL_DEFAULT_EXTENSION_MANIFEST: defines.extensionManifestFilename
     },
     ErrorHelper: ErrorStack,
-    RegistryHelper: RegistryModule
+    RegistryHelper: RegistryModule,
+    RegistryIdentifier: RegistryModule.identifier
 };
