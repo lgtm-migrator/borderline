@@ -20,6 +20,7 @@ module.exports = {
 
         BL_GLOBAL_COLLECTION_REGISTRY: defines.global_registryCollectionName,
         BL_GLOBAL_COLLECTION_SESSIONS: defines.global_sessionCollectionName,
+        BL_GLOBAL_COLLECTION_STORAGE: defines.global_storageCollectionName,
 
         BL_SERVER_COLLECTION_USERS: defines.server_userCollectionName,
         BL_SERVER_COLLECTION_WORKFLOW: defines.server_workflowCollectionName,
