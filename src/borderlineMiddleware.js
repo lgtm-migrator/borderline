@@ -1,6 +1,5 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
-const timer = require('timers');
 const multer  = require('multer');
 const body_parser = require('body-parser');
 const { ErrorHelper, Constants, RegistryHelper } = require('borderline-utils');
