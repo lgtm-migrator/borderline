@@ -33,8 +33,8 @@ function Registry(serviceType, registryCollection) {
     this._systemInfoUpdate = Registry.prototype._systemInfoUpdate.bind(this);
 }
 
-let _global_process_identifier = null;
-Registry.identifer = function() {
+let _global_process_identifier = 'default';
+Registry.identifier = function() {
     return _global_process_identifier;
 };
 
