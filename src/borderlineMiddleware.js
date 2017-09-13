@@ -3,7 +3,7 @@ const mongodb = require('mongodb').MongoClient;
 const timer = require('timers');
 const multer  = require('multer');
 const body_parser = require('body-parser');
-const { ErrorHelper, Constants, Models } = require('borderline-utils');
+const { ErrorHelper, Constants, RegistryHelper } = require('borderline-utils');
 
 const package_file = require('../package.json');
 const Options = require('./core/options.js');
@@ -13,7 +13,7 @@ function BorderlineMiddleware(config) {
     this.config = new Options(config);
     this.app = express();
 
-    // Bind public  member functions
+    // Bind public member functions
     this.start = BorderlineMiddleware.prototype.start.bind(this);
     this.stop = BorderlineMiddleware.prototype.stop.bind(this);
 
@@ -77,7 +77,8 @@ BorderlineMiddleware.prototype.stop = function() {
     let _this = this;
     return new Promise(function (resolve, reject) {
         // Stop status update
-        timer.clearInterval(_this._interval_timer);
+        _this.registryHelper.stopPeriodicUpdate();
+
         // Disconnect DB --force
         _this.db.close(true).then(function(error) {
             if (error)
@@ -97,39 +98,18 @@ BorderlineMiddleware.prototype.stop = function() {
 BorderlineMiddleware.prototype._registryHandler = function() {
     let _this = this;
 
-    //Connect to the registry collection
-    this.registry = this.db.collection(Constants.BL_GLOBAL_COLLECTION_REGISTRY);
-    let registry_update = function() {
-        //Create status object
-        let status = Object.assign({}, Models.BL_MODEL_REGISTRY, {
-            type: 'borderline-middleware',
-            version: package_file.version,
-            timestamp: new Date(),
-            expires_in: Constants.BL_DEFAULT_REGISTRY_FREQUENCY / 1000,
-            port: _this.config.port
-        });
-        //Write in DB
-        //Match by ip + port + type
-        //Create if does not exists.
-        _this.registry.findOneAndReplace({
-            ip: status.ip,
-            port: status.port,
-            type: status.type
-        }, status, { upsert: true, returnOriginal: false })
-            .then(function(__unused__success) {
-                //Nothing to do here
-            }, function(error) {
-                //Just log the error
-                console.log(error); // eslint-disable-line no-console
-            });
-    };
+    // Connect to the registry collection
+    _this.registryCollection = _this.db.collection(Constants.BL_GLOBAL_COLLECTION_REGISTRY);
+    // Create RegistryHelper class
+    _this.registryHelper = new RegistryHelper(Constants.BL_MIDDLEWARE_SERVICE, _this.registryCollection);
+    // Sets properties in the registry
+    _this.registryHelper.setModel({
+        version: package_file.version,
+        port: _this.config.port
+    });
 
-    //Call the update every X milliseconds
-    _this._interval_timer = timer.setInterval(registry_update, Constants.BL_DEFAULT_REGISTRY_FREQUENCY);
-    //Do a first update now
-    registry_update();
-
-    return _this._interval_timer;
+    // Trigger updates
+    _this.registryHelper.startPeriodicUpdate(Constants.BL_DEFAULT_REGISTRY_FREQUENCY);
 };
 
 
