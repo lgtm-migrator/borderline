@@ -39,6 +39,9 @@ class Login extends Component {
         const { location, isAuthenticated, isProcessing, hasAttempted, error } = this.props;
         const { from } = location.state || { from: { pathname: '/' } };
 
+        if (from.pathname === '/logout')
+            from.pathname = '/';
+
         if (isAuthenticated === true) {
             return (
                 <Redirect to={from} />

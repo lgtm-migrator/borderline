@@ -22,6 +22,7 @@ export const reducers = {
         }
     }
 };
+
 const pageDock = (state, action) => {
 
     if (action.path === undefined || action.path === null ||
