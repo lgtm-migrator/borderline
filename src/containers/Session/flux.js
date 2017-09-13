@@ -1,4 +1,7 @@
+import { Observable } from 'rxjs';
 import { api } from 'api';
+import NavigationButton from './containers/NavigationButton';
+import View from './containers/View';
 
 const types = {
 
@@ -8,7 +11,8 @@ const types = {
     SESSION_LOGIN_FAILURE: 'SESSION_LOGIN_FAILURE',
     SESSION_LOGOUT: 'SESSION_LOGOUT',
     SESSION_LOGOUT_SUCCESS: 'SESSION_LOGOUT_SUCCESS',
-    SESSION_VALID: 'SESSION_VALID'
+    SESSION_VALID: 'SESSION_VALID',
+    SESSION_FETCH: 'SESSION_FETCH'
 };
 
 export const actions = {
@@ -42,7 +46,19 @@ export const actions = {
 
     sessionValid: () => ({
         type: types.SESSION_VALID
-    })
+    }),
+
+    sessionFetch: (action, state) => ({
+        type: `@@extensions/${action.__origin__}/${action.replyTo}`,
+        user: state.user
+    }),
+
+    dockToPager: () => ({
+        type: '@@core/pager/PAGE_DOCK',
+        path: 'logout',
+        icon: NavigationButton,
+        view: View
+    }),
 };
 
 export const epics = {
@@ -76,6 +92,16 @@ export const epics = {
                 .map(() => actions.sessionLogoutSuccess())
         ),
 
+    sessionFetch:
+    (action, state) => action.ofType(types.SESSION_FETCH)
+        .mergeMap((action) =>
+            Observable.of(actions.sessionFetch(action, state))
+        ),
+
+    dockToPager:
+    (action) => action.ofType('@@core/inspector/EXTENSIONS_DID_LOAD')
+        .mapTo(actions.dockToPager()),
+
 };
 
 export const reducers = {
@@ -98,7 +124,7 @@ export const reducers = {
             case types.SESSION_LOGOUT:
                 return sessionLogout(state);
             case types.SESSION_LOGOUT_SUCCESS:
-                return sessionLogoutSuccess();
+                return sessionLogoutSuccess(state);
             case types.SESSION_VALID:
                 return sessionValid(state);
             default:
@@ -139,8 +165,9 @@ const sessionLogout = (state) => {
     return state;
 };
 
-const sessionLogoutSuccess = () => {
+const sessionLogoutSuccess = (state) => {
     window.location.reload();
+    return state;
 };
 
 const sessionValid = (state) => {
