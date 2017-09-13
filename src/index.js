@@ -1,4 +1,4 @@
-const defines = require('defines.js');
+const defines = require('./defines.js');
 let ErrorStack = require('./error.js');
 let RegistryModule = require('./registry.js');
 
