@@ -14,11 +14,9 @@ class Content extends Component {
         const panels = Object.keys(views).map(key => {
             const Content = views[key].view;
             return (
-                <Route key={views[key].origin} path={`/${views[key].path}`} render={(props) =>
-                    <Enclave domain={'extensions'} modelName={views[key].origin} >
-                        <Content {...props} />
-                    </Enclave>
-                } />
+                <Enclave key={views[key].origin} domain={'extensions'} modelName={views[key].origin} >
+                    <Route path={`/${views[key].path}`} component={Content} />
+                </Enclave>
             );
         });
         return (

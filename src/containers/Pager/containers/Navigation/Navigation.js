@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { default as T } from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Enclave from 'containers/Enclave';
 import { stateAware } from 'utilities/storeManager';
@@ -10,23 +9,21 @@ import style from './style.css';
 }))
 class Navigation extends Component {
 
-    static contextTypes = {
-        router: T.object
-    }
-
     render() {
         const { buttons } = this.props;
-        const panels = Object.keys(buttons).map(key => {
+        const links = Object.keys(buttons).map(key => {
             const Component = buttons[key].icon;
-            return <NavLink key={buttons[key].origin} to={`/${buttons[key].path}`} activeClassName={style.active} >
-                <Enclave domain={'extensions'} modelName={buttons[key].origin} >
-                    <Component />
+            return (
+                <Enclave key={buttons[key].origin} domain={'extensions'} modelName={buttons[key].origin} >
+                    <NavLink to={`/${buttons[key].path}`} activeClassName={style.active} >
+                        <Component />
+                    </NavLink>
                 </Enclave>
-            </NavLink>;
+            );
         });
         return (
             <div className={style.navigation}>
-                {panels}
+                {links}
             </div>
         );
     }
