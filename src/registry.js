@@ -117,9 +117,10 @@ Registry.prototype.stopPeriodicUpdate = function() {
 Registry.prototype._sync = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
-        let model_update = Object.assign({}, _this._model);
+        let model_update = Object.assign({}, _this.getModel());
+        let mongo_id = model_update._id;
         delete model_update._id; // Let mongoDB handle ids
-        _this._registryCollection.findOneAndUpdate({id: new ObjectID(_this._model._id)}, model_update, { returnOriginal: false, upsert: true}).then(function(result) {
+        _this._registryCollection.findOneAndUpdate({_id: new ObjectID(mongo_id)}, model_update, { returnOriginal: false, upsert: true}).then(function(result) {
             console.log(result);
             // Assign global identifier value of this process
             _global_process_identifier = result.value._id.toHexString();
