@@ -92,7 +92,7 @@ Registry.prototype.startPeriodicUpdate = function(delay = defines.registryUpdate
     // Start interval timer update
     _this._interval_timer = setInterval(function() {
         _this._systemInfoUpdate(); // Refresh model
-        _this.sync(); // Silently synchronise with DB
+        _this._sync(); // Silently synchronise with DB
     }, delay);
 };
 
