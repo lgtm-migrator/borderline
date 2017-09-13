@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const defines = require('../defines.js');
+const { ErrorHelper } = require('borderline-utils');
 
 /**
  * @fn userExtensions
@@ -30,7 +30,7 @@ UserExtensions.prototype.listExtensions = function(user_id) {
                 resolve(result);
             },
             function (error) {
-                reject(defines.errorStacker('List error', error));
+                reject(ErrorHelper('List error', error));
             }
         );
     });
@@ -57,7 +57,7 @@ UserExtensions.prototype.clearExtensions = function(user_id) {
                     resolve(success);
                 },
                 function(error) {
-                    reject(defines.errorStacker('Clear extensions subs error', error));
+                    reject(ErrorHelper('Clear extensions subs error', error));
                 }
             );
     });
@@ -83,17 +83,17 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
             .then(
                 function(success) {
                     if (success.matchedCount === 0) {
-                        reject(defines.errorStacker('Invalid user_id or extension_id'));
+                        reject(ErrorHelper('Invalid user_id or extension_id'));
                         return;
                     }
                     if (success.modifiedCount === 0) {
-                        reject(defines.errorStacker('Already subscribed'));
+                        reject(ErrorHelper('Already subscribed'));
                         return;
                     }
                     resolve(success);
                 },
                 function(error) {
-                    reject(defines.errorStacker('Extension subscribe error', error));
+                    reject(ErrorHelper('Extension subscribe error', error));
                 }
             );
     });
@@ -119,17 +119,17 @@ UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
             .then(
                 function(success) {
                     if (success.matchedCount === 0) {
-                        reject(defines.errorStacker('Invalid user_id or extension_id'));
+                        reject(ErrorHelper('Invalid user_id or extension_id'));
                         return;
                     }
                     if (success.modifiedCount === 0) {
-                        reject(defines.errorStacker('Already unsubscribed'));
+                        reject(ErrorHelper('Already unsubscribed'));
                         return;
                     }
                     resolve(success);
                 },
                 function(error) {
-                    reject(defines.errorStacker('Extension subscribe error', error));
+                    reject(ErrorHelper('Extension subscribe error', error));
                 }
             );
     });

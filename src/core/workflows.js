@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn Workflows
@@ -31,7 +31,7 @@ Workflows.prototype.findAll = function() {
             else
                 resolve(result);
         }, function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -45,7 +45,7 @@ Workflows.prototype.createWorkflow = function(data) {
     let that = this;
 
     let time = new Date();
-    let workflowModel = Object.assign({}, defines.workflowModel, {
+    let workflowModel = Object.assign({}, Models.BL_MODEL_WORKFLOW, {
         name: data.name,
         create: time,
         update: time,
@@ -56,7 +56,7 @@ Workflows.prototype.createWorkflow = function(data) {
             resolve(workflowModel);
         },
         function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -77,7 +77,7 @@ Workflows.prototype.updateTimestamp = function(workflow_id) {
                function(success) {
                    resolve(success);
                }, function (error) {
-                   reject(defines.errorStacker(error));
+                   reject(ErrorHelper(error));
                }
             );
     });
@@ -98,7 +98,7 @@ Workflows.prototype.getWorkflowByID = function(workflow_id) {
             else
                 resolve(result);
         }, function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -116,15 +116,15 @@ Workflows.prototype.updateWorkflowByID = function(workflow_id, data) {
         delete data._id;
         delete data.create;
         data.update = time;
-        let updated_workflow = Object.assign({}, defines.workflowModel, data);
+        let updated_workflow = Object.assign({}, Models.BL_MODEL_WORKFLOW, data);
         that.workflowCollection.findOneAndUpdate({_id: new ObjectID(workflow_id)}, { $set: updated_workflow}, { returnOriginal: false })
             .then(function(result) {
                 if (result === null || result === undefined)
-                    reject(defines.errorStacker('Update failed for workflow with id ' + workflow_id));
+                    reject(ErrorHelper('Update failed for workflow with id ' + workflow_id));
                 else
                     resolve(result.value);
             }, function(error) {
-                reject(defines.errorStacker(error));
+                reject(ErrorHelper(error));
             });
     });
 };
@@ -140,11 +140,11 @@ Workflows.prototype.deleteWorkflowByID = function(workflow_id) {
     return new Promise(function(resolve, reject) {
         _this.workflowCollection.findOneAndDelete({_id: new ObjectID(workflow_id)}).then(function(result) {
             if (result === null || result === undefined || result.value === null)
-                reject(defines.errorStacker('No match for workflow with id ' + workflow_id));
+                reject(ErrorHelper('No match for workflow with id ' + workflow_id));
             else
                 resolve(result.value);
         }, function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };

@@ -1,6 +1,6 @@
 const speakeasy = require('speakeasy');
 let userAccounts = require('../core/userAccounts');
-const defines = require('../defines.js');
+const { ErrorHelper } = require('borderline-utils');
 
 /**
  * @fn UserAccountController
@@ -70,7 +70,7 @@ UserAccountController.prototype.getUsers = function(__unused__req, res) {
    },
    function(error) {
       res.status(401);
-      res.json(defines.errorStacker('Cannot list users', error));
+      res.json(ErrorHelper('Cannot list users', error));
    });
 };
 
@@ -85,7 +85,7 @@ UserAccountController.prototype.login = function(req, res) {
     let that = this;
     let rejected = function(reason) {
         res.status(400);
-        res.send(defines.errorStacker('Failed to login', reason));
+        res.send(ErrorHelper('Failed to login', reason));
     };
 
     let username = req.body.username;
@@ -134,7 +134,7 @@ UserAccountController.prototype.login = function(req, res) {
 UserAccountController.prototype.login2 = function(req, res) {
     let rejected = function(reason) {
         res.status(400);
-        res.send(defines.errorStacker('Failed to login', reason));
+        res.send(ErrorHelper('Failed to login', reason));
     };
 
     let username = req.body.username;
@@ -169,7 +169,7 @@ UserAccountController.prototype.login2 = function(req, res) {
                 }
             },
             function(error) {
-                rejected(defines.errorStacker(error));
+                rejected(ErrorHelper(error));
             }
         );
 };
@@ -185,14 +185,14 @@ UserAccountController.prototype.put2step = function(req, res) {
 
     if (user_id === undefined || user_id === null) {
         res.status(400);
-        res.json(defines.errorStacker('Unknown user id'));
+        res.json(ErrorHelper('Unknown user id'));
         return;
     }
 
     this.users.regenerateSecret(user_id).then(function (user) {
             if (user === undefined || user === null) {
                 res.status(404);
-                res.json(defines.errorStacker('Unknown user id'));
+                res.json(ErrorHelper('Unknown user id'));
                 return;
             }
             res.status(200);
@@ -200,7 +200,7 @@ UserAccountController.prototype.put2step = function(req, res) {
         },
         function(error) {
             res.status(400);
-            res.json(defines.errorStacker(error));
+            res.json(ErrorHelper(error));
         }
     );
 };
@@ -215,13 +215,13 @@ UserAccountController.prototype.logout = function(req, res) {
     req.session.destroy(function(err) {
         if (req.user === undefined || req.user === null) {
             res.status(401);
-            res.json(defines.errorStacker('Not logged in'));
+            res.json(ErrorHelper('Not logged in'));
             return;
         }
         req.logout();
         if (err) {
             res.status(500);
-            res.json(defines.errorStacker('Cannot destroy session', err));
+            res.json(ErrorHelper('Cannot destroy session', err));
         }
         else {
             res.status(200);
@@ -241,7 +241,7 @@ UserAccountController.prototype.whoAmI = function(req, res) {
     let Iam = req.user;
     if (Iam === undefined || Iam === null) {
         res.status(404);
-        res.json(defines.errorStacker('An unknown unicorn'));
+        res.json(ErrorHelper('An unknown unicorn'));
     }
     else {
         res.status(200);
@@ -265,7 +265,7 @@ UserAccountController.prototype.getUserById = function(req, res) {
     },
     function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Can find user by ID', error));
+        res.json(ErrorHelper('Can find user by ID', error));
     });
 };
 
@@ -285,7 +285,7 @@ UserAccountController.prototype.postUserById = function(req, res) {
         },
         function(error) {
             res.status(400);
-            res.json(defines.errorStacker('Failed to update user', error));
+            res.json(ErrorHelper('Failed to update user', error));
         });
 };
 
@@ -306,7 +306,7 @@ UserAccountController.prototype.deleteUserById = function(req, res) {
         },
         function(error) {
             res.status(400);
-            res.json(defines.errorStacker('Failed to delete user', error));
+            res.json(ErrorHelper('Failed to delete user', error));
         });
 };
 

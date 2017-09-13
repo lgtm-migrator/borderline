@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn dataStore
@@ -35,7 +35,7 @@ dataStore.prototype.findAll = function() {
             else
                 resolve(result);
         }, function(error) {
-            reject(defines.errorStacker('Find operation failed', error));
+            reject(ErrorHelper('Find operation failed', error));
         });
     });
 };
@@ -53,17 +53,17 @@ dataStore.prototype.createDataSource = function(data_source) {
             data_source.users[i] = new ObjectID(data_source.users[i]);
         }
         //Create new data source from model default
-        let new_data_source = Object.assign({}, defines.dataSourceModel, data_source);
+        let new_data_source = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, data_source);
         //Insert into database
         that.sourcesCollection.insertOne(new_data_source).then(function(success) {
             if (success.insertedCount === 1) {
                 resolve(success.ops[0]);
             }
             else {
-                reject(defines.errorStacker('Did not manage to register a new data source'));
+                reject(ErrorHelper('Did not manage to register a new data source'));
             }
         }, function(error) {
-            reject(defines.errorStacker('New data source insert operation failed', error));
+            reject(ErrorHelper('New data source insert operation failed', error));
         });
     });
 };
@@ -79,11 +79,11 @@ dataStore.prototype.getDataSourceByID = function(source_id) {
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.findOne({_id: new ObjectID(source_id) }).then(function(result) {
             if (result === null || result === undefined)
-                reject(defines.errorStacker('No match for id: ' + source_id));
+                reject(ErrorHelper('No match for id: ' + source_id));
             else
                 resolve(result);
         }, function(error) {
-           reject(defines.errorStacker('Find data source by ID failed', error));
+           reject(ErrorHelper('Find data source by ID failed', error));
         });
     });
 };
@@ -104,15 +104,15 @@ dataStore.prototype.updateDataSourceByID = function(source_id, data) {
             data.users[i] = new ObjectID(data.users[i]);
         }
         //Create new data source from model default
-        let updated_data_source = Object.assign({}, defines.dataSourceModel, data);
+        let updated_data_source = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, data);
         that.sourcesCollection.findOneAndReplace({_id: new ObjectID(source_id) }, updated_data_source).then(function(result) {
             if (result === null || result === undefined)
-                reject(defines.errorStacker('No match for id: ' + source_id));
+                reject(ErrorHelper('No match for id: ' + source_id));
             else {
                 resolve(result.value);
             }
         }, function(error) {
-            reject(defines.errorStacker('Update datasource failed', error));
+            reject(ErrorHelper('Update datasource failed', error));
         });
     });
 };
@@ -129,7 +129,7 @@ dataStore.prototype.deleteDataSourceByID = function(source_id) {
         that.sourcesCollection.findOneAndDelete({_id: new ObjectID(source_id)}).then(function (result) {
             resolve(result.value);
         }, function (error) {
-            reject(defines.errorStacker('Delete a data source fail', error));
+            reject(ErrorHelper('Delete a data source fail', error));
         });
     });
 };
@@ -146,7 +146,7 @@ dataStore.prototype.getDataStoreByUserID = function(user_id) {
         that.sourcesCollection.find({ users: new ObjectID(user_id) }).toArray().then(function(result) {
             resolve(result);
         }, function(error) {
-            reject(defines.errorStacker('Get data sources by user fails', error));
+            reject(ErrorHelper('Get data sources by user fails', error));
         });
     });
 };
@@ -164,7 +164,7 @@ dataStore.prototype.subscribeUserToDataSource = function(source_id, subscription
         if (!subscription.hasOwnProperty('user_id') ||
             !subscription.hasOwnProperty('username') ||
             !subscription.hasOwnProperty('password')) {
-            reject(defines.errorStacker('Missing subscription fields'));
+            reject(ErrorHelper('Missing subscription fields'));
             return;
         }
         subscription.user_id = new ObjectID(subscription.user_id);
@@ -176,16 +176,16 @@ dataStore.prototype.subscribeUserToDataSource = function(source_id, subscription
                                          })
             .then(function(success) {
                 if (success.matchedCount === 0) {
-                    reject(defines.errorStacker('Invalid user_id or source_id'));
+                    reject(ErrorHelper('Invalid user_id or source_id'));
                     return;
                 }
                 if (success.modifiedCount === 0) {
-                    reject(defines.errorStacker('Already subscribed'));
+                    reject(ErrorHelper('Already subscribed'));
                     return;
                 }
                 resolve(success);
             }, function(error) {
-                reject(defines.errorStacker('Subscribe failed to save', error));
+                reject(ErrorHelper('Subscribe failed to save', error));
             });
     });
 };
@@ -208,16 +208,16 @@ dataStore.prototype.unsubscribeUserFromDataSource = function(user_id, source_id)
             })
             .then(function(success) {
                 if (success.matchedCount === 0) {
-                    reject(defines.errorStacker('Invalid user_id or source_id'));
+                    reject(ErrorHelper('Invalid user_id or source_id'));
                     return;
                 }
                 if (success.modifiedCount === 0) {
-                    reject(defines.errorStacker('Was not subscribed'));
+                    reject(ErrorHelper('Was not subscribed'));
                     return;
                 }
                 resolve(success);
             }, function(error) {
-                reject(defines.errorStacker('Unsubscribe failed to save', error));
+                reject(ErrorHelper('Unsubscribe failed to save', error));
             });
     });
 };

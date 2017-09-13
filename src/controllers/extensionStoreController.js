@@ -1,6 +1,6 @@
 let ExtensionStore = require('../core/extensionStore');
-const defines = require('../defines.js');
 const ObjectID = require('mongodb').ObjectID;
+const { ErrorHelper, Models } = require('borderline-utils');
 
 
 /**
@@ -43,11 +43,11 @@ ExtensionStoreController.prototype.getAllExtensions = function(__unused__req, re
         }
         else {
             res.status(404);
-            res.json(defines.errorStacker('No extensions yet'));
+            res.json(ErrorHelper('No extensions yet'));
         }
     }, function(findall_error) {
         res.status(501);
-        res.json(defines.errorStacker('Cannot list all extensions', findall_error));
+        res.json(ErrorHelper('Cannot list all extensions', findall_error));
     });
 };
 
@@ -70,7 +70,7 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
 
     if (typeof req.files === 'undefined' || req.files === null || req.files.length === 0){
         res.status(400);
-        res.json(defines.errorStacker('Zip file upload failed'));
+        res.json(ErrorHelper('Zip file upload failed'));
         return;
     }
 
@@ -81,7 +81,7 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
 
     let extensions = [];
     for (let i = 0; i < req.files.length; i++) {
-        let ext = Object.assign({}, defines.extensionModel, {
+        let ext = Object.assign({}, Models.BL_MODEL_EXTENSION, {
             zipFile: req.files[i].originalname,
             message: 'Please extract to plugin dir locally'
         });
@@ -95,11 +95,11 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
         }
         else {
             res.status(500);
-            res.json(defines.errorStacker('Nothing inserted, abort'));
+            res.json(ErrorHelper('Nothing inserted, abort'));
         }
     }, function(db_error) {
         res.status(500);
-        res.json(defines.errorStacker('Cannot insert extensions in DB', db_error));
+        res.json(ErrorHelper('Cannot insert extensions in DB', db_error));
     });
 };
 
@@ -118,11 +118,11 @@ ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
         }
         else {
             res.status(501);
-            res.json(defines.errorStacker('Failed to get extension data'));
+            res.json(ErrorHelper('Failed to get extension data'));
         }
     }, function(db_error) {
         res.status(404);
-        res.json(defines.errorStacker('Unknown extension Id ' +  id, db_error));
+        res.json(ErrorHelper('Unknown extension Id ' +  id, db_error));
     });
 
 
@@ -141,7 +141,7 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
     let id = req.params.id;
     if (typeof req.files === 'undefined' || req.files.length !== 1) {
         res.status(406);
-        res.json(defines.errorStacker('A unique file must be uploaded for extension ' + id + ' update'));
+        res.json(ErrorHelper('A unique file must be uploaded for extension ' + id + ' update'));
         return;
     }
 
@@ -150,7 +150,7 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
     // create a Model to insert in DB with a ref on the ObjectStorage
     // Let the object store refresh itself
 
-    let update_model = Object.assign({}, defines.extensionModel, req.body, {
+    let update_model = Object.assign({},Models.BL_MODEL_EXTENSION, req.body, {
         zipFile: req.files[0].originalname,
         message: 'Please extract to plugin dir locally'
     });
@@ -163,11 +163,11 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
             }
             else {
                 res.status(500);
-                res.json(defines.errorStacker('Update aborted', update_result.lastErrorObject));
+                res.json(ErrorHelper('Update aborted', update_result.lastErrorObject));
             }
     }, function(update_error) {
         res.status(501);
-        res.json(defines.errorStacker('Cannot update extension model', update_error));
+        res.json(ErrorHelper('Cannot update extension model', update_error));
     });
 };
 
@@ -181,7 +181,7 @@ ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
     let id = req.params.id;
     if (id === undefined || id === null) {
         res.status(404);
-        res.json(defines.errorStacker('Missing extension ID'));
+        res.json(ErrorHelper('Missing extension ID'));
         return;
     }
 
@@ -193,11 +193,11 @@ ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
         }
         else {
             res.status(404);
-            res.json(defines.errorStacker('Failed to delete extension ' + id));
+            res.json(ErrorHelper('Failed to delete extension ' + id));
         }
     }, function(delete_error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot delete extension', delete_error));
+        res.json(ErrorHelper('Cannot delete extension', delete_error));
     });
 };
 

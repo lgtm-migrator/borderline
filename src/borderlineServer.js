@@ -12,7 +12,7 @@ const timer = require('timers');
 const ip = require('ip');
 
 const borderlineOptions = require('./core/options');
-const defines = require('./defines.js');
+const { ErrorHelper, Constants, Models } = require('borderline-utils');
 const package_json = require('../package.json');
 
 function BorderlineServer(config) {
@@ -88,7 +88,7 @@ BorderlineServer.prototype.start = function() {
             // All good, return the express app router
             resolve(_this.app);
         }, function(error) {
-            reject(defines.errorStacker('Could not connect to the database', error));
+            reject(ErrorHelper('Could not connect to the database', error));
         });
     });
 };
@@ -108,11 +108,11 @@ BorderlineServer.prototype.stop = function() {
         // Disconnect mongoDB --force
         _this.db.close(true).then(function(main_error) {
             if (main_error)
-                reject(defines.errorStacker('Closing main mongoDB connection failed', main_error));
+                reject(ErrorHelper('Closing main mongoDB connection failed', main_error));
             else {
                 _this.objectStorage.close(true).then(function(object_error) {
                     if (object_error)
-                        reject(defines.errorStacker('Closing gridFS connection failed', object_error));
+                        reject(ErrorHelper('Closing gridFS connection failed', object_error));
                     else
                         resolve(true); // Everything is stopped
                 });
@@ -131,15 +131,15 @@ BorderlineServer.prototype._registryHandler = function () {
     let _this = this;
 
     // Connect to the registry collection
-    _this.registry = _this.db.collection(defines.globalRegistryCollectionName);
+    _this.registry = _this.db.collection(Constants.BL_GLOBAL_COLLECTION_REGISTRY);
     global.registry = _this.registry;
     let registry_update = function () {
         //Create status object
-        let status = Object.assign({}, defines.registryModel, {
+        let status = Object.assign({}, Models.BL_MODEL_REGISTRY, {
             type: 'borderline-server',
             version: package_json.version,
             timestamp: new Date(),
-            expires_in: defines.registryUpdateInterval / 1000,
+            expires_in: Constants.BL_DEFAULT_REGISTRY_FREQUENCY / 1000,
             port: _this.config.port,
             ip: ip.address().toString()
         });
@@ -163,7 +163,7 @@ BorderlineServer.prototype._registryHandler = function () {
     registry_update();
 
     // Call the update every X milliseconds
-    _this._interval_timer = timer.setInterval(registry_update, defines.registryUpdateInterval);
+    _this._interval_timer = timer.setInterval(registry_update, Constants.BL_DEFAULT_REGISTRY_FREQUENCY);
 };
 
 
@@ -178,23 +178,24 @@ BorderlineServer.prototype._connectDb = function () {
     let main_db = new Promise(function (resolve, reject) {
         mongodb.connect(_this.config.mongoURL, function (err, db) {
             if (err !== null && err !== undefined) {
-                reject(defines.errorStacker('Failed to connect to mongoDB', err));
+                reject(ErrorHelper('Failed to connect to mongoDB', err));
                 return;
             }
             _this.db = db;
-            _this.mongoStore = new MongoStore({ db: db, ttl: defines.sessionTimeout, collection: defines.sessionCollectionName });
+            _this.mongoStore = new MongoStore({ db: db, ttl: Constants.BL_DEFAULT_SESSION_TIMEOUT, collection: Constants.BL_GLOBAL_COLLECTION_SESSIONS });
             resolve(true);
         });
     });
 
+    // TODO remove this
     let object_db = new Promise(function (resolve, reject) {
         mongodb.connect(_this.config.objectStorageURL, function (err, db) {
             if (err !== null && err !== undefined) {
-                reject(defines.errorStacker('Failed to connect to mongoDB', err));
+                reject(ErrorHelper('Failed to connect to mongoDB', err));
                 return;
             }
             _this.objectStorage = db;
-            _this.grid = new GridFSBucket(_this.objectStorage, { bucketName: defines.globalStorageCollectionName });
+            _this.grid = new GridFSBucket(_this.objectStorage, { bucketName: 'borderline_global_storage' });
             resolve(true);
         });
     });
@@ -203,7 +204,7 @@ BorderlineServer.prototype._connectDb = function () {
         Promise.all([main_db, object_db]).then(function(__unused__true_array) {
             resolve(true);
         }, function (error) {
-            reject(defines.errorStacker('One of the db connection failed', error));
+            reject(ErrorHelper('One of the db connection failed', error));
         });
     });
 };
@@ -215,7 +216,7 @@ BorderlineServer.prototype._connectDb = function () {
 BorderlineServer.prototype.setupUserAccount = function () {
     //Controller imports
     let userAccountController = require('./controllers/userAccountController');
-    this.userAccountController = new userAccountController(this.db.collection(defines.userCollectionName));
+    this.userAccountController = new userAccountController(this.db.collection(Constants.BL_SERVER_COLLECTION_USERS));
 
     //Passport session serialize and deserialize
     passport.serializeUser(this.userAccountController.serializeUser);
@@ -248,7 +249,7 @@ BorderlineServer.prototype.setupUserAccount = function () {
 BorderlineServer.prototype.setupDataStore = function () {
     // Data sources controller import
     let dataStoreControllerModule = require('./controllers/dataStoreController');
-    this.dataStoreController = new dataStoreControllerModule(this.db.collection(defines.dataSourcesCollectionName));
+    this.dataStoreController = new dataStoreControllerModule(this.db.collection(Constants.BL_SERVER_COLLECTION_DATA_SOURCES));
 
     //[ Data sources routes
     this.app.route('/data_sources/')
@@ -281,7 +282,7 @@ BorderlineServer.prototype.setupExtensionStore = function () {
     }
 
     let extensionStoreController = require('./controllers/extensionStoreController');
-    this.extensionStoreController = new extensionStoreController(this.db.collection(defines.extensionsCollectionName));
+    this.extensionStoreController = new extensionStoreController(this.db.collection(Constants.BL_SERVER_COLLECTION_EXTENSIONS));
 
     // [ Extension Store Routes
 
@@ -302,7 +303,9 @@ BorderlineServer.prototype.setupExtensionStore = function () {
  */
 BorderlineServer.prototype.setupUserExtensions = function () {
     let userExtensionControllerModule = require('./controllers/userExtensionController');
-    this.userExtensionController = new userExtensionControllerModule(this.db.collection(defines.extensionsCollectionName));
+    this.userExtensionController = new userExtensionControllerModule(
+        this.db.collection(Constants.BL_SERVER_COLLECTION_USERS),
+        this.db.collection(Constants.BL_SERVER_COLLECTION_EXTENSIONS));
 
     //[ Extensions subscriptions
     this.app.route('/users/:user_id/extensions')
@@ -320,7 +323,9 @@ BorderlineServer.prototype.setupUserExtensions = function () {
  */
 BorderlineServer.prototype.setupWorkflows = function () {
     let workflowControllerModule = require('./controllers/workflowController');
-    this.workflowController = new workflowControllerModule(this.db.collection(defines.workflowCollectionName), this.db.collection(defines.stepCollectionName));
+    this.workflowController = new workflowControllerModule(
+        this.db.collection(Constants.BL_SERVER_COLLECTION_WORKFLOW),
+        this.db.collection(Constants.BL_SERVER_COLLECTION_STEPS));
 
     //[ Workflow endpoints
     this.app.route('/workflow')
@@ -348,11 +353,11 @@ BorderlineServer.prototype.setupWorkflows = function () {
 BorderlineServer.prototype.extensionError = function (message) {
     this.app.all('/extension_store', function (__unused__req, res) {
         res.status(204);
-        res.json(defines.errorStacker('Extension store is disabled', message));
+        res.json(ErrorHelper('Extension store is disabled', message));
     });
     this.app.all('/extensions/*', function (__unused__req, res) {
         res.status(204);
-        res.json(defines.errorStacker('Extensions are disabled', message));
+        res.json(ErrorHelper('Extensions are disabled', message));
     });
 };
 

@@ -1,8 +1,9 @@
 const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
-const defines = require('../defines.js');
 const ObjectID = require('mongodb').ObjectID;
+const { ErrorHelper, Models, Constants } = require('borderline-utils');
+
 
 /**
  * @fn Extension
@@ -17,7 +18,7 @@ function Extension(ExtensionModel, ExtensionCollection) {
     // Init member vars
     let enable_data = { enabled: {} };
     enable_data.enabled[global.config.serverID] = true;
-    this._model = Object.assign({}, defines.extensionModel, ExtensionModel, enable_data);
+    this._model = Object.assign({}, Models.BL_MODEL_EXTENSION, ExtensionModel, enable_data);
     this._extensionCollection = ExtensionCollection;
     this._router = express.Router();
     this._static_router = express.Router();
@@ -41,7 +42,7 @@ function Extension(ExtensionModel, ExtensionCollection) {
         }
         else {
             res.status(404);
-            res.json(defines.errorStacker('Extension is disabled'));
+            res.json(ErrorHelper('Extension is disabled'));
         }
     });
 }
@@ -57,11 +58,11 @@ Extension.prototype._readManifest = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
         let manifest_path = path.join(global.config.extensionSourcesFolder, _this.getId());
-        manifest_path = path.format({ dir: path.normalize(manifest_path), base: defines.extensionManifestFilename});
+        manifest_path = path.format({ dir: path.normalize(manifest_path), base: Constants.BL_DEFAULT_EXTENSION_MANIFEST });
         fs.readJson(manifest_path).then(function(manifest_data) {
             resolve(manifest_data);
         }, function(error) {
-            reject(defines.errorStacker('Reading extension manifest failed', error));
+            reject(ErrorHelper('Reading extension manifest failed', error));
         });
     });
 };
@@ -178,7 +179,7 @@ Extension.prototype.synchronise = function() {
                     _this.setModel(Object.assign({}, local_model, model));
                     resolve(true);
                 }, function(find_error) {
-                    reject(defines.errorStacker('Cannot read from extension registry', find_error));
+                    reject(ErrorHelper('Cannot read from extension registry', find_error));
                 });
             });
         };
@@ -192,7 +193,7 @@ Extension.prototype.synchronise = function() {
                     _this.setModel(model_to_save);
                     resolve(true);
                 }, function (update_error) {
-                    reject(defines.errorStacker('Cannot update extension registry', update_error));
+                    reject(ErrorHelper('Cannot update extension registry', update_error));
                 });
             });
         };
@@ -203,13 +204,13 @@ Extension.prototype.synchronise = function() {
                     mongo_update().then(function () {
                         resolve(true); // All good, found, merged and updated
                     }, function (update_error) {
-                        reject(defines.errorStacker('Failed to update extension', update_error));
+                        reject(ErrorHelper('Failed to update extension', update_error));
                     });
                 }, function (find_error) {
-                    reject(defines.errorStacker('Failed to list extension from the registry', find_error));
+                    reject(ErrorHelper('Failed to list extension from the registry', find_error));
                 });
             }, function(enable_error) {
-                reject(defines.errorStacker('Synchronise cannot enable extension', enable_error));
+                reject(ErrorHelper('Synchronise cannot enable extension', enable_error));
             });
         }, function(__unused__manifest_err) { // Cannot read manifest, forces disabling
             _this.disable().then(function() {
@@ -217,13 +218,13 @@ Extension.prototype.synchronise = function() {
                     mongo_update().then(function () {
                         resolve(true); // Disabled, found, and updated
                     }, function (update_error) {
-                        reject(defines.errorStacker('Failed to update disabled extension', update_error));
+                        reject(ErrorHelper('Failed to update disabled extension', update_error));
                     });
                 }, function (find_error) {
-                    reject(defines.errorStacker('Failed to list extension from the registry', find_error));
+                    reject(ErrorHelper('Failed to list extension from the registry', find_error));
                 });
             }, function(disable_error) {
-                reject(defines.errorStacker('Synchronise cannot disable extension', disable_error));
+                reject(ErrorHelper('Synchronise cannot disable extension', disable_error));
             });
         });
     });

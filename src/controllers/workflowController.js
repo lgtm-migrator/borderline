@@ -1,6 +1,6 @@
 const workflowModule = require('../core/workflows.js');
 const stepModule = require('../core/steps.js');
-const defines = require('../defines.js');
+const { ErrorHelper } = require('borderline-utils');
 
 /**
  * @fn workflowContainer
@@ -39,7 +39,7 @@ workflowController.prototype.getWorkflow = function(__unused__req, res) {
         res.json(result);
     }, function(error) {
         res.status(400);
-        res.json(defines.errorStacker('Failed to list workflows', error));
+        res.json(ErrorHelper('Failed to list workflows', error));
     });
 };
 
@@ -53,7 +53,7 @@ workflowController.prototype.putWorkflow = function(req, res) {
     let data = req.body;
     if (data === null || data === undefined) {
         res.status(400);
-        res.json(defines.errorStacker('Cannot create an empty workflow'));
+        res.json(ErrorHelper('Cannot create an empty workflow'));
         return;
     }
 
@@ -61,7 +61,7 @@ workflowController.prototype.putWorkflow = function(req, res) {
     data.name = data.name ? data.name : 'DefaultWorkflowName';
     if (data.user === null || data.user === undefined) {
         res.status(401);
-        res.json(defines.errorStacker('Cannot create a workflow outside a session'));
+        res.json(ErrorHelper('Cannot create a workflow outside a session'));
         return;
     }
 
@@ -70,7 +70,7 @@ workflowController.prototype.putWorkflow = function(req, res) {
         res.json(result);
     }, function(error) {
         res.status(500);
-        res.json(defines.errorStacker('Failed to create workflow', error));
+        res.json(ErrorHelper('Failed to create workflow', error));
     });
 };
 
@@ -87,7 +87,7 @@ workflowController.prototype.getWorkflowByID = function(req, res) {
         res.json(result);
     }, function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot get workflow by ID',  error));
+        res.json(ErrorHelper('Cannot get workflow by ID',  error));
     });
 };
 
@@ -104,7 +104,7 @@ workflowController.prototype.postWorkflowByID = function(req, res) {
         res.json(result);
     }, function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot update workflow by ID', error));
+        res.json(ErrorHelper('Cannot update workflow by ID', error));
     });
 };
 
@@ -121,7 +121,7 @@ workflowController.prototype.deleteWorkflowByID = function(req, res) {
         res.json(result);
     }, function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot delete workflow by ID', error));
+        res.json(ErrorHelper('Cannot delete workflow by ID', error));
     });
 };
 
@@ -139,7 +139,7 @@ workflowController.prototype.getStep = function(req, res) {
     },
     function(error){
         res.status(404);
-        res.json(defines.errorStacker('Listing workflow steps failed', error));
+        res.json(ErrorHelper('Listing workflow steps failed', error));
     });
 };
 
@@ -156,7 +156,7 @@ workflowController.prototype.putStep = function(req, res) {
         res.json(result);
     }, function(error){
         res.status(400);
-        res.json(defines.errorStacker('Creating workflow step failed', error));
+        res.json(ErrorHelper('Creating workflow step failed', error));
     });
 };
 
@@ -173,7 +173,7 @@ workflowController.prototype.getStepByID = function(req, res) {
         res.json(result);
     }, function (error) {
        res.status(404);
-       res.json(defines.errorStacker('Cannot get step', error));
+       res.json(ErrorHelper('Cannot get step', error));
     });
 };
 
@@ -194,11 +194,11 @@ workflowController.prototype.postStepByID = function(req, res){
             res.json(step_result);
         }, function(workflow_error) {
             res.status(500);
-            res.json(defines.errorStacker('Logging update in workflow failed', workflow_error));
+            res.json(ErrorHelper('Logging update in workflow failed', workflow_error));
         });
     }, function (step_error) {
         res.status(400);
-        res.json(defines.errorStacker('Update step operation failed', step_error));
+        res.json(ErrorHelper('Update step operation failed', step_error));
     });
 };
 
@@ -218,11 +218,11 @@ workflowController.prototype.deleteStepByID = function(req, res) {
             res.json(result);
         }, function(workflow_error) {
             res.status(500);
-            res.json(defines.errorStacker('Logging delete in workflow failed', workflow_error));
+            res.json(ErrorHelper('Logging delete in workflow failed', workflow_error));
         });
     }, function (error) {
         res.status(404);
-        res.json(defines.errorStacker('Delete step operation failed', error));
+        res.json(ErrorHelper('Delete step operation failed', error));
     });
 };
 

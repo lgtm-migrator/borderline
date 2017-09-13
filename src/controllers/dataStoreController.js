@@ -1,13 +1,13 @@
 const dataStoreModule = require('../core/dataStore');
-const defines = require('../defines.js');
+const { ErrorHelper } = require('borderline-utils');
 
 /**
  * @fn dataStoreController
- * @param mongoDBCollection Colletion where the data sources information are stored
+ * @param dataSourcesCollection Collection where the data sources information are stored
  */
-function dataStoreController(mongoDBCollection) {
-    this.sourcesCollection = mongoDBCollection;
-    this.dataStore = new dataStoreModule(mongoDBCollection);
+function dataStoreController(dataSourcesCollection) {
+    this.sourcesCollection = dataSourcesCollection;
+    this.dataStore = new dataStoreModule(dataSourcesCollection);
 
     this.getDataStore = dataStoreController.prototype.getDataStore.bind(this);
     this.postDataStore = dataStoreController.prototype.postDataStore.bind(this);
@@ -32,7 +32,7 @@ dataStoreController.prototype.getDataStore = function(__unused__req, res) {
         res.json(result);
     }, function(error) {
         res.status(500);
-        res.json(defines.errorStacker('Failed to list data sources', error));
+        res.json(ErrorHelper('Failed to list data sources', error));
     });
 };
 
@@ -47,7 +47,7 @@ dataStoreController.prototype.postDataStore = function(req, res) {
     let data_source = req.body;
     if (data_source === null || data_source === undefined) {
         res.status(400);
-        res.json(defines.errorStacker('Cannot create an empty data source'));
+        res.json(ErrorHelper('Cannot create an empty data source'));
         return;
     }
     this.dataStore.createDataSource(data_source).then(function(result) {
@@ -55,7 +55,7 @@ dataStoreController.prototype.postDataStore = function(req, res) {
         res.json(result);
     }, function(error) {
         res.status(500);
-        res.json(defines.errorStacker('Failed to list data sources', error));
+        res.json(ErrorHelper('Failed to list data sources', error));
     });
 };
 
@@ -73,7 +73,7 @@ dataStoreController.prototype.getDataStoreByID = function(req, res) { //GET a si
         res.json(result);
     }, function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot get data source by ID: ', error));
+        res.json(ErrorHelper('Cannot get data source by ID: ', error));
     });
 };
 
@@ -93,7 +93,7 @@ dataStoreController.prototype.putDataStoreByID = function(req, res) {  // PUT Up
         res.json(result);
     }, function(error) {
         res.status(400);
-        res.json(defines.errorStacker('Cannot update data source by ID', error));
+        res.json(ErrorHelper('Cannot update data source by ID', error));
     });
 };
 
@@ -111,7 +111,7 @@ dataStoreController.prototype.deleteDataStoreByID = function(req, res) {
         res.json({deleted: result});
     }, function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot delete data source by ID', error));
+        res.json(ErrorHelper('Cannot delete data source by ID', error));
     });
 };
 
@@ -129,7 +129,7 @@ dataStoreController.prototype.getUserDataSources = function(req, res) {  //GET a
         res.json(result);
     }, function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot get user data sources', error));
+        res.json(ErrorHelper('Cannot get user data sources', error));
     });
 };
 
@@ -147,12 +147,12 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
 
     if (user_id === undefined || user_id === null || user_id === '') {
         res.status(400);
-        res.json(defines.errorStacker('Missing user_id'));
+        res.json(ErrorHelper('Missing user_id'));
         return;
     }
     if (source_id === undefined || source_id === null || source_id === '') {
         res.status(400);
-        res.json(defines.errorStacker('Missing source_id'));
+        res.json(ErrorHelper('Missing source_id'));
         return;
     }
     let subscription = Object.assign({}, req.body, { user_id: user_id });
@@ -162,7 +162,7 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
         res.json(success);
     }, function(error) {
         res.status(500);
-        res.json(defines.errorStacker('Cannot subscribe', error));
+        res.json(ErrorHelper('Cannot subscribe', error));
     });
 };
 
@@ -182,7 +182,7 @@ dataStoreController.prototype.deleteUserDataSourceByID = function(req, res) { //
         res.json(success);
     }, function(error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot unsubscribe', error));
+        res.json(ErrorHelper('Cannot unsubscribe', error));
     });
 };
 

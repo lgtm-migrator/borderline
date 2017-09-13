@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const ObjectID = require('mongodb').ObjectID;
 const speakeasy = require('speakeasy');
-const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn UserAccounts
@@ -31,11 +31,11 @@ UserAccounts.prototype.findAll = function(){
     return  new Promise(function(resolve, reject) {
         that.userCollection.find().toArray().then(function(result) {
             if (result === null || result === undefined)
-                reject(defines.errorStacker('No users ?!'));
+                reject(ErrorHelper('No users ?!'));
             else
                 resolve(result);
         }, function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -51,7 +51,7 @@ UserAccounts.prototype.findByUsernameAndPassword = function(username, password) 
     return new Promise(function(resolve, reject) {
         that.userCollection.findOne({username: username}).then(function(result) {
             if (result === null || result === undefined) {
-                reject(defines.errorStacker('Invalid username/password'));
+                reject(ErrorHelper('Invalid username/password'));
                 return;
             }
             let salt = result.salt || '';
@@ -61,10 +61,10 @@ UserAccounts.prototype.findByUsernameAndPassword = function(username, password) 
             if (hash_pass === result.password)
                 resolve(result);
             else
-                reject(defines.errorStacker('Invalid username/password'));
+                reject(ErrorHelper('Invalid username/password'));
         },
         function(error) {
-            reject(defines.errorStacker('Reading users db failed', error));
+            reject(ErrorHelper('Reading users db failed', error));
         });
     });
 };
@@ -87,7 +87,7 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
         let hash = crypto.createHmac('sha512', salt);
         hash.update(password);
         let hash_pass = hash.digest('hex');
-        let new_user = Object.assign({}, defines.userModel, {
+        let new_user = Object.assign({}, Models.BL_MODEL_USER, {
             username: username,
             salt: salt,
             password: hash_pass,
@@ -99,7 +99,7 @@ UserAccounts.prototype.registerExternalByUsernameAndPassword = function(username
             new_user._id = result.insertedId;
             resolve(new_user);
         }, function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -114,12 +114,12 @@ UserAccounts.prototype.findById = function(id) {
     return new Promise(function(resolve, reject) {
         that.userCollection.findOne({ _id : new ObjectID(id) }).then(function(result) {
             if (result === null || result === undefined)
-                reject(defines.errorStacker('No match for id: ' + id));
+                reject(ErrorHelper('No match for id: ' + id));
             else
                 resolve(result);
         },
         function (error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -136,16 +136,16 @@ UserAccounts.prototype.updateById = function(id, data) {
         if (data.hasOwnProperty('_id')) //Removes ID field because its managed by mongoDB
             delete data._id;
         //Create object from model and data
-        let updated_user = Object.assign({}, defines.userModel, data);
+        let updated_user = Object.assign({}, Models.BL_MODEL_USER, data);
         //Perform database update
         that.userCollection.findOneAndReplace({ _id : new ObjectID(id) }, updated_user).then(function(result) {
                 if (result === null || result === undefined)
-                    reject(defines.errorStacker('No match for id: ' + id));
+                    reject(ErrorHelper('No match for id: ' + id));
                 else
                     resolve(result);
             },
             function (error) {
-                reject(defines.errorStacker(error));
+                reject(ErrorHelper(error));
             });
     });
 };
@@ -162,7 +162,7 @@ UserAccounts.prototype.deleteById = function(id) {
         that.userCollection.findOneAndDelete({ _id : new ObjectID(id) }).then(function(result) {
             resolve(result.value);
         }, function (error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -183,11 +183,11 @@ UserAccounts.prototype.regenerateSecret = function(id) {
                     resolve(user);
                 },
                 function (error) {
-                    reject(defines.errorStacker('Update user with new secret failed', error));
+                    reject(ErrorHelper('Update user with new secret failed', error));
                 });
             },
             function (error) {
-                reject(defines.errorStacker('Generate secret failed', error));
+                reject(ErrorHelper('Generate secret failed', error));
             }
         );
     });

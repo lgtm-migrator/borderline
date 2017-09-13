@@ -1,14 +1,16 @@
 let userExtensionModule = require('../core/userExtensions');
-const defines = require('../defines.js');
+const { ErrorHelper } = require('borderline-utils');
 
 /**
  * @fn UserExtensionController
  * @desc Controller to manage the users extensions subscriptions
- * @param mongoDBCollection MongoDB collection where the extension are stored
+ * @param userCollection MongoDB collection where the users are stored
+ * @param extensionCollection MongoDB collection where the extensions are stored
  * @constructor
  */
-function UserExtensionController(mongoDBCollection) {
-    this.extensionCollection = mongoDBCollection;
+function UserExtensionController(userCollection, extensionCollection) {
+    this.userCollection = userCollection;
+    this.extensionCollection = extensionCollection;
     this.userExtension = new userExtensionModule(this.extensionCollection);
 
     this.getExtensions = UserExtensionController.prototype.getExtensions.bind(this);
@@ -31,7 +33,7 @@ UserExtensionController.prototype.getExtensions = function(req, res) {
     },
     function (error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot list extension for ' + user_id + ' user ID', error));
+        res.json(ErrorHelper('Cannot list extension for ' + user_id + ' user ID', error));
     });
 };
 
@@ -49,7 +51,7 @@ UserExtensionController.prototype.deleteExtensions = function(req, res) {
     },
     function (error) {
         res.status(404);
-        res.json(defines.errorStacker('Cannot erase user extensions', error));
+        res.json(ErrorHelper('Cannot erase user extensions', error));
     });
 };
 
@@ -69,7 +71,7 @@ UserExtensionController.prototype.subscribeExtension = function(req, res) {
         },
         function (error) {
             res.status(404);
-            res.json(defines.errorStacker('Cannot register user extension', error));
+            res.json(ErrorHelper('Cannot register user extension', error));
         }
     );
 };
@@ -90,7 +92,7 @@ UserExtensionController.prototype.unsubscribeExtension = function(req, res) {
         },
         function (error) {
             res.status(404);
-            res.json(defines.errorStacker('Cannot remove user extension', error));
+            res.json(ErrorHelper('Cannot remove user extension', error));
         }
     );
 };

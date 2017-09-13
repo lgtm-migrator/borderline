@@ -4,7 +4,7 @@ const path = require('path');
 
 //Local modules
 let Extension = require('./extension');
-const defines = require('../defines.js');
+const { ErrorHelper, Constants } = require('borderline-utils');
 
 /**
  * @fn ExtensionStore
@@ -47,7 +47,7 @@ ExtensionStore.prototype.openStore = function() {
             }
             resolve(true);
         }, function(db_error) {
-            reject(defines.errorStacker('Fail to sync with DB', db_error));
+            reject(ErrorHelper('Fail to sync with DB', db_error));
         });
     });
 };
@@ -78,7 +78,7 @@ ExtensionStore.prototype.getExtensionById = function(extensionId) {
         if (_this.extensions.hasOwnProperty(extensionId))
             resolve(_this.extensions[extensionId]);
         else
-            reject(defines.errorStacker('Cannot find extension [' + extensionId + ']'));
+            reject(ErrorHelper('Cannot find extension [' + extensionId + ']'));
     });
 };
 
@@ -137,10 +137,10 @@ ExtensionStore.prototype._scanDatabase = function() {
             Promise.all(sync_promises).then(function(__unused__true_array) {
                 resolve(i);
             }, function(sync_error) {
-                reject(defines.errorStacker('Update extensions from DB failed', sync_error));
+                reject(ErrorHelper('Update extensions from DB failed', sync_error));
             });
         }, function(find_error) {
-            reject(defines.errorStacker('Cannot list extension from DB', find_error));
+            reject(ErrorHelper('Cannot list extension from DB', find_error));
         });
     });
 };
@@ -154,7 +154,7 @@ ExtensionStore.prototype._startExtensionUpdate = function() {
         }, function(err) {
             console.error(err.toString());  // eslint-disable-line no-console
         });
-    }, defines.extensionUpdateInterval); // Every seconds
+    }, Constants.BL_DEFAULT_EXTENSION_FREQUENCY); // Every seconds
 };
 
 ExtensionStore.prototype._stopExtensionUpdate = function() {
