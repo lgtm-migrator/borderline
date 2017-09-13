@@ -144,17 +144,17 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
     let _this = this;
 
     // Import & instantiate controller modules
-    let queryControllerModule = require('./queryController.js');
+    let queryControllerModule = require('./controllers/queryController.js');
     _this.queryController = new queryControllerModule(_this.queryCollection, _this.storage);
-    let endpointControllerModule = require('./endpointController.js');
+    let endpointControllerModule = require('./controllers/endpointController.js');
     _this.endpointController = new endpointControllerModule(_this.queryCollection, _this.storage);
-    let credentialsControllerModule = require('./credentialsController.js');
+    let credentialsControllerModule = require('./controllers/credentialsController.js');
     _this.credentialsController = new credentialsControllerModule(_this.queryCollection, _this.storage);
-    let inputControllerModule = require('./inputController.js');
+    let inputControllerModule = require('./controllers/inputController.js');
     _this.inputController = new inputControllerModule(_this.queryCollection, _this.storage);
-    let outputControllerModule = require('./outputController.js');
+    let outputControllerModule = require('./controllers/outputController.js');
     _this.outputController = new outputControllerModule(_this.queryCollection, _this.storage);
-    let executionControllerModule = require('./executionController.js');
+    let executionControllerModule = require('./controllers/executionController.js');
     _this.executionController = new executionControllerModule(_this.queryCollection, _this.storage);
 
     // Setup controllers URIs

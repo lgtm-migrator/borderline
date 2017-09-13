@@ -1,4 +1,4 @@
-let defines = require('./defines.js');
+let defines = require('../defines.js');
 const ObjectID = require('mongodb').ObjectID;
 
 /**
