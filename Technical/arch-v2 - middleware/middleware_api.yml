@@ -1,7 +1,7 @@
 ---
 swagger: '2.0'
 info:
-  version: 0.0.1
+  version: 0.4.0
   title: Borderline middleware API
   description: |
     #### Middleware API
@@ -172,7 +172,7 @@ paths:
                 200:
                     description: Get success
                     schema:
-                        $ref: '#/definitions/InputModel'
+                        $ref: '#/definitions/DataModel'
                 401:
                     description: Get failure
                     schema:
@@ -191,7 +191,7 @@ paths:
                 200:
                     description: Update success
                     schema:
-                        $ref: '#/definitions/InputModel'
+                        $ref: '#/definitions/DataModel'
                 401:
                     description: Update failed
                     schema:
@@ -218,7 +218,7 @@ paths:
                 200:
                     description: Get success
                     schema:
-                        $ref: '#/definitions/OutputModel'
+                        $ref: '#/definitions/DataModel'
                 401:
                     description: Get failure
                     schema:
@@ -237,7 +237,7 @@ paths:
                 200:
                     description: Update success
                     schema:
-                        $ref: '#/definitions/OutputModel'
+                        $ref: '#/definitions/DataModel'
                 401:
                     description: Update failed
                     schema:
@@ -261,31 +261,27 @@ paths:
         get:
             description: Get a query status, from its unique identifier
             responses: 
-				200:
-					description: Get success
-					schema:
-						$ref: '#/definitions/StatusModel'
-				404:
-					description: Unknown query
-					schema:
-						$ref: '#definitions/ErrorModel'
-    /query/execute:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/StatusModel'
+                404:
+                    description: Unknown query
+                    schema:
+                        $ref: '#definitions/ErrorModel'
+    /query/{query_id}/execute:
         parameters:
             -
-                name: query
+                name: query_id
                 required: true
-                in: body
-                description: Query execution context
-                schema:
-                    type: object
-                    properties:
-                        query:
-                            type: string
-                            description: Query unique identifier to execute
-                        nocache:
-                            type: boolean
-                            description: Prevents the middleware from caching the result
-                
+                in: path
+                type: string
+                description: Unique identifier of the query to execute
+            -   
+                name: nocache
+                in: query
+                type: boolean
+                description: If set to true, the middleware will NOT store the result in its cache
         post:
             description: Perform the query on the underlying endpoint or retreive from cache
             responses:
@@ -363,17 +359,15 @@ definitions:
           type: object
           description: Additional properties, depends on DataSourceModel.sourceType
         cache:
-          type: array
-          items:
-            type: object
-            description: Storage pointer to the cached data
-            properties:
-                dataSize:
-                    type: integer
-                    description: Total number of bytes occupied by the data
-                dataId:
-                    type: string
-                    description: Data blob unique identifier in the object storage system
+          type: object
+          description: Storage pointer to the cached data
+          properties:
+            dataSize:
+                type: integer
+                description: Total number of bytes occupied by the data
+            storageId:
+                type: string
+                description: Data blob unique identifier in the object storage system
 
     QueryModel:
         type: object

@@ -1,7 +1,7 @@
 ---
 swagger: '2.0'
 info:
-  version: 0.0.2
+  version: 0.3.0
   title: Borderline server API
   description: |
     #### Rest API for the borderline project
@@ -189,7 +189,7 @@ paths:
                 description: Id of the extension
                 in: path
                 type: string
-        head:
+        get:
             tags: [ extension ]
             description: Get an extension metadata
             responses:
@@ -200,10 +200,7 @@ paths:
                 default:
                     description: Cannot retreive extension information
                     schema:
-                        $ref: '#/definitions/ErrorModel'
-        get:
-            tags: [ extension ]
-            description:  
+                        $ref: '#/definitions/ErrorModel' 
         post:
             tags: [ extension ]
             description: Update extension content
@@ -723,20 +720,14 @@ definitions:
                 type: array
                 description: Extensions IDs used in this step
                 items:
-					type: string
-					description: An extension ID
-			queries:
-				type: array
-				description: Reference on queries used by this step
-				items:
-					type: string
-					description: A query ID
-			cloud_data:
-				type: array
-				description: Reference on data in the borderline cloud interface
-				items:
-					type: string
-					description: An extension ID
+                    type: string
+                    description: An extension ID
+            queries:
+                type: array
+                description: Reference on queries used by this step
+                items:
+                    type: string
+                    description: A query ID
     WorkflowStepModel:
         type: object
         description: Workflow step description
