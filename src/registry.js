@@ -121,9 +121,10 @@ Registry.prototype._sync = function() {
         let mongo_id = model_update._id;
         delete model_update._id; // Let mongoDB handle ids
         _this._registryCollection.findOneAndUpdate({_id: new ObjectID(mongo_id)}, model_update, { returnOriginal: false, upsert: true}).then(function(result) {
-            console.log(result);
             // Assign global identifier value of this process
             _global_process_identifier = result.value._id.toHexString();
+            // Update local model with whats inside the DB
+            _this.setModel(result.value);
             resolve(true); // All good, update successful
         }, function(update_error) {
             reject(ErrorStack('Update registry failed', update_error));
