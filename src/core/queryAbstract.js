@@ -424,9 +424,9 @@ QueryAbstract.prototype.registerExecutionError = function(errorObject) {
 QueryAbstract.prototype.fetchModel = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
-        _this.queryCollection.findOne({_id: new ObjectID(_this.model['_id'])}).then(function(result) {
+        _this.queryCollection.findOne({_id: new ObjectID(_this.model._id)}).then(function(result) {
             _this.model = result;
-            resolve(this.model);
+            resolve(_this.model);
         }, function(error) {
             reject(ErrorHelper(error));
         });
@@ -445,8 +445,7 @@ QueryAbstract.prototype.pushModel = function() {
             if (result.ok === 1)
                 resolve(_this.model);
             else
-                reject(ErrorHelper('Update query model failed',
-                    { error : result.lastErrorObject.toString() }));
+                reject(ErrorHelper('Update query model failed', result.lastErrorObject.toString()));
        }, function (error) {
           reject(ErrorHelper('MongoDB error', error));
        });
