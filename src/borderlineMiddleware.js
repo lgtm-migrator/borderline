@@ -152,8 +152,6 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .get(_this.credentialsController.getQueryById)
         .put(_this.credentialsController.putQueryById)
         .delete(_this.credentialsController.deleteQueryById);
-    _this.app.route(prefix + '/:query_id/credentials/isAuth')
-        .get(_this.credentialsController.getQueryAuthById);
     _this.app.route(prefix + '/:query_id/input')
         .get(_this.inputController.getQueryById)
         .put(_this.inputController.putQueryById)
@@ -162,10 +160,10 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function(prefix) {
         .get(_this.outputController.getQueryById)
         .put(_this.outputController.putQueryById)
         .delete(_this.outputController.deleteQueryById);
-    _this.app.route('/execute')
-        .post(multer().single('file'), _this.executionController.executeQuery);
-    _this.app.route('/execute/:query_id')
-        .get(_this.executionController.getQueryById);
+    _this.app.route(prefix + '/:query_id/execute')
+        .post(multer().single('file'), _this.executionController.executeQueryByID);
+    _this.app.route(prefix + '/:query_id/status')
+        .get(_this.executionController.getQueryStatusById);
 };
 
 /**

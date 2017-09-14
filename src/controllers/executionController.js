@@ -1,5 +1,6 @@
 const QueryFactory = require('../core/queryFactory.js');
 const { ErrorHelper } = require('borderline-utils');
+const defines = require('../defines.js');
 
 /**
  * @fn ExecutionController
@@ -9,53 +10,59 @@ const { ErrorHelper } = require('borderline-utils');
  * @constructor
  */
 function ExecutionController(queryCollection, storage) {
+    // Init member vars
     this.queryCollection = queryCollection;
     this.storage = storage;
     this.queryFactory = new QueryFactory(queryCollection, storage);
+    this._execution_promises = [];
 
-    //Bind member functions
-    this.executeQuery = ExecutionController.prototype.executeQuery.bind(this);
-    this.getQueryById = ExecutionController.prototype.getQueryById.bind(this);
+    // Bind public member functions
+    this.executeQueryByID = ExecutionController.prototype.executeQueryByID.bind(this);
+    this.getQueryStatusById = ExecutionController.prototype.getQueryStatusById.bind(this);
+
+    // Bind private member functions
+    this._internalExecutor = ExecutionController.prototype._internalExecutor.bind(this);
 }
 
 /**
- * @fn executeQuery
+ * @fn executeQueryByID
  * @desc Executes the query identified by the query_id
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExecutionController.prototype.executeQuery = function(req, res) {
+ExecutionController.prototype.executeQueryByID = function(req, res) {
     let _this = this;
 
-    if (req.body === null || req.body === undefined ||
-        req.body.query === undefined) {
+    let query_id = req.params.query_id;
+    if (query_id === null || query_id === undefined) {
         res.status(401);
-        res.json({error: 'Requested execution is missing parameters'});
-        return;
+        res.json({error: 'Missing query_id'});
     }
-    let query_id = req.body.query;
-
-    _this.queryFactory.fromID(query_id).then(function(queryObject) {
-        queryObject.execute(req).then(function(result) {
+    else {
+        _this.queryFactory.fromID(query_id).then(function(queryObject) {
+            let exec_promise = _this._internalExecutor(queryObject);
+            _this._execution_promises.push(exec_promise);
             res.status(200);
-            res.json(result);
-        }, function (error) {
+            res.json(true);
+
+            // Silently catch and log execution errors
+            exec_promise.catch(function(error) {
+               console.error(error.toString());  // eslint-disable-line no-console
+            });
+        }, function(factory_error) {
             res.status(401);
-            res.json(ErrorHelper('Execute query failed', error));
+            res.json(ErrorHelper('Cannot execute query', factory_error))
         });
-    }, function (error) {
-        res.status(401);
-        res.json(ErrorHelper('Unknown query ' + query_id, error));
-    });
+    }
 };
 
 /**
- * @fn getQueryById
- * @desc Retreive the current execution status for a specific query
+ * @fn getQueryStatusById
+ * @desc Retrieves the current execution status for a specific query
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExecutionController.prototype.getQueryById = function(req, res) {
+ExecutionController.prototype.getQueryStatusById = function(req, res) {
     let query_id = req.params.query_id;
     if (query_id === undefined || query_id === null) {
         res.status(401);
@@ -64,10 +71,68 @@ ExecutionController.prototype.getQueryById = function(req, res) {
     }
     this.queryFactory.fromID(query_id).then(function(queryObject) {
         res.status(200);
-        res.json(queryObject.model.status);
+        res.json(queryObject.getModel().status);
     }, function (error) {
        res.status(401);
        res.json(ErrorHelper('Get query execution status failed', error));
+    });
+};
+
+/**
+ * @fn _internalExecutor
+ * @param queryObject {QueryAbstract} Executes a query from its abstract representation
+ * @return {Promise} Resolve to true after all the execution succeeded or rejects an error stack
+ * @private
+ */
+ExecutionController.prototype._internalExecutor = function(queryObject) {
+    return new Promise(function(resolve, reject) {
+        let error_callback = function(error_object) {
+            queryObject.updateExecutionStatus({
+                end: new Date(),
+                info: JSON.stringify(error_object),
+                status: defines.status.ERROR
+            });
+            reject(ErrorHelper('Execution failed', error_object));
+        };
+
+        let init_staqe = [
+            queryObject.updateExecutionStatus({
+                start: new Date(),
+                info: 'Preparing..',
+                status: defines.status.INITIALIZE
+            }),
+            queryObject.initialize()
+        ];
+
+        Promise.all(init_staqe).then(function() {
+            let exec_stage = [
+                queryObject.updateExecutionStatus({
+                    stage: new Date(),
+                    info: 'Running..',
+                    status: defines.status.EXECUTE
+                }),
+                queryObject.execute()
+            ];
+            Promise.all(exec_stage).then(function() {
+                let terminate_stage = [
+                    queryObject.updateExecutionStatus({
+                        stage: new Date(),
+                        info: 'Finishing..',
+                        status: defines.status.TERMINATE
+                    }),
+                    queryObject.terminate()
+                ];
+                Promise.all(terminate_stage).then(function() {
+                    queryObject.updateExecutionStatus({
+                        end: new Date(),
+                        info: 'Youpi !',
+                        status: defines.status.DONE
+                    }).then(function() {
+                        resolve(true);
+                    }, error_callback)
+                }, error_callback);
+           }, error_callback);
+        }, error_callback);
     });
 };
 

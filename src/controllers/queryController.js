@@ -98,7 +98,7 @@ QueryController.prototype.postNewQueryTyped = function(req, res) {
 
     let endpointModel = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, { sourceType: query_type});
     //Create new query from here
-    let newQuery = Object.assign({}, Models.BL_MODEL_QUERY, { endpoint: endpointModel } , req.body);
+    let newQuery = Object.assign({}, Models.BL_MODEL_QUERY, { endpoint: endpointModel }, req.body);
     this.queryCollection.insertOne(newQuery).then(function(r) {
         if (r.insertedCount === 1) {
             res.status(200);

@@ -1,6 +1,8 @@
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
+const defines = require('../src/defines.js');
+
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
 let test_server = new TestServer();
@@ -8,25 +10,27 @@ let g_query_id = '';
 const ts171_query = {
     endpoint: { sourceType: "TS171", sourceName: "Transmart instance", sourceHost: "http://transmart.thehyve.net",  sourcePort: 80,  public: false },
     credentials: { username: "demo-user", password: "demo-user" },
-    input: {
-        local: {
-            uri: "/v2/observations?constraint=",
-            params: {
-                type: "combination", operator: "and",
-                args: [
-                    { type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\" },
-                    { type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\" }
-                ],
+    input: [
+        {
+            metadata: {
+                uri: "/v2/observations?constraint=",
+                params: {
+                    type: "combination", operator: "and",
+                    args: [
+                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\"},
+                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\"}
+                    ],
+                },
+                type: 'clinical'
             },
-            type: 'clinical'
-        },
-        std: {}
-    },
+            cache: {},
+        }
+    ],
     status: { status: "unknown", start: null, end: null, info: "" },
-    output: {
-        local: { dataSize: 0, dataId: null},
-        std: { dataSize: 0, dataId: null }
-    }
+    output: [ {
+        metadata: {},
+        cache: {}
+    } ]
 };
 
 beforeAll(function() {
@@ -85,13 +89,13 @@ test('Create a VALID test TS171 query, save the id as ref', function(done) {
 });
 
 test('Execute current query_id, check its started', function(done) {
-    expect.assertions(4);
+    expect.assertions(3);
     request({
         method: 'POST',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/execute',
+        uri: '/query/' + g_query_id + '/execute',
         json: true,
-        body: { query: g_query_id }
+        body: { nocache: false }
     }, function(error, response, body) {
         if (error) {
             done.fail(error.toString());
@@ -99,8 +103,7 @@ test('Execute current query_id, check its started', function(done) {
         }
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.status).toBeDefined();
-        expect(body.status).toEqual('running');
+        expect(body).toBeTruthy();
         done();
     });
 });
@@ -112,7 +115,7 @@ test('Wait 10 secs, Check execution status current query is done', function(done
         request({
             method: 'GET',
             baseUrl: 'http://127.0.0.1:' + config.port,
-            uri: '/execute/' + g_query_id,
+            uri: '/query/' + g_query_id + '/status',
             json: true
         }, function (error, response, body) {
             if (error) {
@@ -122,7 +125,7 @@ test('Wait 10 secs, Check execution status current query is done', function(done
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
-            expect(body.status).toEqual('done');
+            expect(body.status).toEqual(defines.status.DONE);
             done();
         });
     }, 10000);
@@ -144,7 +147,7 @@ test('Retrieve output for the current query', function(done) {
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
         let body_json = JSON.parse(body);
-        expect(body_json.dimensionDeclarations).toBeDefined();
+        expect(body_json.hasOwnProperty('cells')).toBeTruthy();
         done();
     });
 });
@@ -165,8 +168,7 @@ test('Update output for the current query', function(done) {
         expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        let body_json = JSON.parse(body);
-        expect(body_json.test).toEqual('testme');
+        expect(body.cache).toBeDefined();
         done();
     });
 });
@@ -207,8 +209,7 @@ test('Update output for the current query, after a delete operation', function(d
         expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        let body_json = JSON.parse(body);
-        expect(body_json.test).toBeTruthy();
+        expect(body.cache).toBeDefined();
         done();
     });
 });

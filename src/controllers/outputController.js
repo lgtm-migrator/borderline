@@ -32,12 +32,12 @@ OutputController.prototype.getQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.getOutputStd().then(function(result) {
+        queryObject.getOutput().then(function(result) {
             res.status(200);
             res.json(result);
         }, function(error) {
             res.status(401);
-            res.json(ErrorHelper('Output std extract failed', error));
+            res.json(ErrorHelper('Output extraction failed', error));
         });
     }, function(error) {
         res.status(401);
@@ -61,9 +61,9 @@ OutputController.prototype.putQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.setOutputStd(data).then(function(local_data) {
+        queryObject.setOutput(data).then(function(data_model) {
             res.status(200);
-            res.json(local_data);
+            res.json(data_model);
         }, function(error) {
             res.status(401);
             res.json(ErrorHelper('Updating output failed', error));
@@ -89,13 +89,13 @@ OutputController.prototype.deleteQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.model.output = Object.assign({}, Models.BL_MODEL_QUERY.output);
-        queryObject.pushModel().then(function() {
+        // Todo: Should erase of the old storage object if any
+        queryObject.setOutput({}).then(function(data_model) {
             res.status(200);
-            res.json(queryObject.model.output.std);
+            res.json(data_model);
         }, function(error) {
             res.status(401);
-            res.json(ErrorHelper('Delete from model failed', error));
+            res.json(ErrorHelper('Updating output failed', error));
         });
     }, function(error) {
         res.status(401);

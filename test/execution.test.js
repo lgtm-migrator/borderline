@@ -1,33 +1,35 @@
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
+const defines = require('../src/defines.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 12000; // 12 seconds
 
 let test_server = new TestServer();
 let g_query_id = '';
 const ts171_query = {
     endpoint: { sourceType: "TS171", sourceName: "Transmart instance", sourceHost: "http://transmart.thehyve.net",  sourcePort: 80,  public: false },
     credentials: { username: "demo-user", password: "demo-user" },
-    input: {
-        local: {
-            uri: "/v2/observations?constraint=",
-            params: {
-                type: "combination", operator: "and",
-                args: [
-                    { type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\" },
-                    { type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\" }
-                ],
+    input: [ {
+            metadata: {
+                uri: "/v2/observations?constraint=",
+                params: {
+                    type: "combination", operator: "and",
+                    args: [
+                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\"},
+                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\"}
+                    ],
+                },
+                 type: 'clinical'
             },
-            type: 'clinical'
-        },
-        std: {}
-    },
+            cache: {}
+        }
+    ],
     status: { status: "unknown", start: null, end: null, info: "" },
-    output: {
-        local: { dataSize: 0, dataId: null},
-        std: { dataSize: 0, dataId: null }
-    }
+    output: [ {
+        metadata: {},
+        cache: {}
+    } ]
 };
 
 beforeAll(function() {
@@ -45,9 +47,9 @@ test('Execute a query with invalid_id', function(done) {
     request({
         method: 'POST',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/execute',
+        uri: '/query/invalid_query_id_Not_Object_id_compatible/execute',
         json: true,
-        body: { query: 'invalid_query_id_Not_Object_id_compatible' }
+        body: { nocache: true }
     }, function(error, response, body) {
         if (error) {
             done.fail(error.toString());
@@ -90,13 +92,13 @@ test('Create a test TS171 query with invalid credentials, save the id as ref', f
 });
 
 test('Execute current query_id, check its started', function(done) {
-    expect.assertions(4);
+    expect.assertions(3);
     request({
         method: 'POST',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/execute',
+        uri: '/query/' + g_query_id + '/execute',
         json: true,
-        body: { query: g_query_id }
+        body: { nocache: false }
     }, function(error, response, body) {
         if (error) {
             done.fail(error.toString());
@@ -104,8 +106,7 @@ test('Execute current query_id, check its started', function(done) {
         }
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.status).toBeDefined();
-        expect(body.status).toEqual('running');
+        expect(body).toBeTruthy();
         done();
     });
 });
@@ -116,7 +117,7 @@ test('Wait 5 secs, Check execution status current query, check auth failed', fun
         request({
             method: 'GET',
             baseUrl: 'http://127.0.0.1:' + config.port,
-            uri: '/execute/' + g_query_id,
+            uri: '/query/' + g_query_id + '/status',
             json: true
         }, function (error, response, body) {
             if (error) {
@@ -126,7 +127,7 @@ test('Wait 5 secs, Check execution status current query, check auth failed', fun
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
-            expect(body.status).toEqual('error');
+            expect(body.status).toEqual(defines.status.ERROR);
             done();
         });
     }, 5000);
@@ -177,11 +178,11 @@ test('Create a VALID test TS171 query, save the id as ref', function(done) {
 });
 
 test('Execute current query_id, check its started', function(done) {
-    expect.assertions(4);
+    expect.assertions(3);
     request({
         method: 'POST',
         baseUrl: 'http://127.0.0.1:' + config.port,
-        uri: '/execute',
+        uri: '/query/' + g_query_id + '/execute',
         json: true,
         body: { query: g_query_id }
     }, function(error, response, body) {
@@ -191,8 +192,7 @@ test('Execute current query_id, check its started', function(done) {
         }
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.status).toBeDefined();
-        expect(body.status).toEqual('running');
+        expect(body).toBeTruthy();
         done();
     });
 });
@@ -204,7 +204,7 @@ test('Wait 10 secs, Check execution status current query is done', function(done
         request({
             method: 'GET',
             baseUrl: 'http://127.0.0.1:' + config.port,
-            uri: '/execute/' + g_query_id,
+            uri: '/query/' + g_query_id + '/status',
             json: true
         }, function (error, response, body) {
             if (error) {
@@ -214,7 +214,7 @@ test('Wait 10 secs, Check execution status current query is done', function(done
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
-            expect(body.status).toEqual('done');
+            expect(body.status).toEqual(defines.status.DONE);
             done();
         });
     }, 10000);

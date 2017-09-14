@@ -75,10 +75,6 @@ test('Get {query_id} credentials, check type fields username and password are pr
             done.fail(error.toString());
             return;
         }
-        if (response.statusCode !== 200) {
-            done.fail('Status code is not 200');
-            return;
-        }
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
         expect(body.username).toBeDefined();

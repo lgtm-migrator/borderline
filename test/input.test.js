@@ -62,7 +62,7 @@ test('Get query input for invalid query_id', function(done) {
 });
 
 test('Get {query_id} input, check its empty', function(done) {
-    expect.assertions(6);
+    expect.assertions(3);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
@@ -74,11 +74,8 @@ test('Get {query_id} input, check its empty', function(done) {
             return;
         }
         expect(response).toBeDefined();
-        expect(response.statusCode).toEqual(200);
+        expect(response.statusCode).toEqual(401);
         expect(body).toBeDefined();
-        expect(body.std).toBeDefined();
-        expect(Object.keys(body.std).length).toEqual(0);
-        expect(Object.keys(body.local).length).toEqual(0);
         done();
     });
 });
@@ -112,15 +109,15 @@ test('Write query input for {query_id} with dummy TS171 query', function(done) {
         expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.uri).toBeDefined();
-        expect(body.params).toBeDefined();
+        expect(body.metadata).toBeDefined();
+        expect(body.metadata.uri).toBeDefined();
         done();
     });
 });
 
 
 test('Get query input for {query_id}, check previously set fields are present', function(done) {
-    expect.assertions(6);
+    expect.assertions(5);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
@@ -132,9 +129,8 @@ test('Get query input for {query_id}, check previously set fields are present', 
         expect(response).toBeDefined();
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.std).toBeDefined();
-        expect(body.std.uri).toBeDefined();
-        expect(body.std.params).toBeDefined();
+        expect(body.uri).toBeDefined();
+        expect(body.params).toBeDefined();
         done();
     });
 });

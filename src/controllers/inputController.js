@@ -61,28 +61,22 @@ InputController.prototype.putQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.setInputStd(data).then(function(local_data) {
-            queryObject.pushModel().then(function() {
-                res.status(200);
-                res.json(local_data);
-            }, function(error) {
-                res.status(401);
-                res.json(ErrorHelper('Updating input model failed', error));
-            });
+        queryObject.setInput(data).then(function(local_data) {
+            res.status(200);
+            res.json(local_data);
         }, function (error) {
             res.status(401);
-            res.json(ErrorHelper('Updating input from std failed', error));
+            res.json(ErrorHelper('Updating input failed', error));
         });
     }, function(error) {
         res.status(401);
-        res.json(ErrorHelper('Updating query failed', error));
+        res.json(ErrorHelper('Update query failed', error));
     });
 };
 
 /**
  * @fn deleteQueryById
- * @desc Removes input from target query.
- * Removes both std and local inputs and sets defaults from defined
+ * @desc Removes input from target query by reset the field to nothing.
  * @param req Express.js request object
  * @param res Express.js response object
  */
@@ -94,19 +88,17 @@ InputController.prototype.deleteQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.model.input = Object.assign({}, Models.BL_MODEL_QUERY.input);
-        queryObject.pushModel().then(function() {
+        queryObject.setInput({}).then(function(data_model) {
             res.status(200);
-            res.json(queryObject.model.input);
+            res.json(data_model);
         }, function(error) {
           res.status(401);
-          res.json(ErrorHelper('Delete from model failed', error));
+          res.json(ErrorHelper('Reset input from model failed', error));
         });
     }, function(error) {
         res.status(401);
         res.json(ErrorHelper('Delete failed', error));
     });
 };
-
 
 module.exports = InputController;

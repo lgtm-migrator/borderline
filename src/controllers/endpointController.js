@@ -34,7 +34,7 @@ EndpointController.prototype.getQueryById = function(req, res) {
     }
     this.factory.fromID(query_id).then(function(queryObject) {
         res.status(200);
-        res.json(queryObject.model.endpoint);
+        res.json(queryObject.getModel().endpoint);
     }, function(error) {
         res.status(401);
         res.json(ErrorHelper('Error retrieving query from ID', error));
@@ -65,8 +65,8 @@ EndpointController.prototype.putQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.model.endpoint = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, data);
-        queryObject.pushModel().then(function() {
+        queryObject.setModel({ endpoint: Object.assign({}, Models.BL_MODEL_DATA_SOURCE, data)});
+        queryObject._pushModel().then(function() {
             res.status(200);
             res.json(data);
         }, function(error) {
@@ -93,11 +93,11 @@ EndpointController.prototype.deleteQueryById = function(req, res) {
         return;
     }
     this.factory.fromID(query_id).then(function(queryObject) {
-        let type = queryObject.model.endpoint.sourceType;
-        queryObject.model.endpoint = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, {sourceType: type});
-        queryObject.pushModel().then(function() {
+        let type = queryObject.getModel().endpoint.sourceType;
+        queryObject.setModel({ endpoint: Object.assign({}, Models.BL_MODEL_DATA_SOURCE, {sourceType: type}) });
+        queryObject._pushModel().then(function() {
             res.status(200);
-            res.json(queryObject.model.endpoint);
+            res.json(queryObject.getModel().endpoint);
         }, function(error) {
             res.status(401);
             res.json(ErrorHelper('Delete endpoint from model failed', error));
