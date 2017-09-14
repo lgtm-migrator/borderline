@@ -53,9 +53,10 @@ export default class SVG extends Component {
                 .then(response => response.text())
                 .then(text => (new DOMParser()).parseFromString(DOMPurify.sanitize(text), 'image/svg+xml').documentElement);
         SVG.cache[this.props.src].then(element => {
-            this.setState({
-                element: element
-            });
+            if (this.refs.svg)
+                this.setState({
+                    element: element
+                });
         });
     }
 
@@ -64,8 +65,8 @@ export default class SVG extends Component {
         const { element } = this.state;
 
         if (element === null)
-            return <div { ...this.props } />;
+            return <div ref="svg" { ...this.props } />;
         else
-            return <svg {...this.attributeMapping(element.attributes) } dangerouslySetInnerHTML={{ __html: element.innerHTML }} { ...this.props } />;
+            return <svg ref="svg" {...this.attributeMapping(element.attributes) } dangerouslySetInnerHTML={{ __html: element.innerHTML }} { ...this.props } />;
     }
 }
