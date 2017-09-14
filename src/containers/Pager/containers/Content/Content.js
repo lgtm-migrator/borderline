@@ -14,7 +14,7 @@ class Content extends Component {
         const panels = Object.keys(views).map(key => {
             const Content = views[key].view;
             return (
-                <Enclave key={views[key].origin} domain={'extensions'} modelName={views[key].origin} >
+                <Enclave key={`${Math.random().toString(36).substr(2, 5)}|${views[key].origin}`} domain={'extensions'} modelName={views[key].origin} >
                     <Route path={`/${views[key].path}`} component={Content} />
                 </Enclave>
             );

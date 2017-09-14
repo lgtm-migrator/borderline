@@ -5,18 +5,21 @@ const types = {
 
 export const actions = {};
 export const epics = {};
+
+const initial = {
+    pages: []
+};
+
 export const reducers = {
     pageReducer:
-    (state = {
-        pages: {}
-    }, action) => {
+    (state = initial, action) => {
 
         switch (action.type) {
             case types.PAGE_DOCK:
                 return pageDock(state, action);
             case '@@core/session/SESSION_LOGOUT':
             case 'STOP':
-                return logoutCleanup(state);
+                return initial;
             default:
                 return state;
         }
@@ -29,19 +32,12 @@ const pageDock = (state, action) => {
         action.icon === undefined || action.icon === null ||
         action.view === undefined || action.view === null)
         return state;
-    state.pages[action.path] = {
+    state.pages.push({
         path: action.path,
         icon: action.icon,
         view: action.view,
-        proxy: action.proxy,
         origin: action.__origin__
-    };
-    return state;
-};
-
-const logoutCleanup = (state) => {
-
-    state.pages = {};
+    });
     return state;
 };
 

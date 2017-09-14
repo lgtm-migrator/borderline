@@ -104,13 +104,15 @@ export const epics = {
 
 };
 
+const initial = {
+    ok: false,
+    working: false,
+    attempts: 0
+};
+
 export const reducers = {
     sessionReducer:
-    (state = {
-        ok: false,
-        working: false,
-        attempts: 0
-    }, action) => {
+    (state = initial, action) => {
 
         switch (action.type) {
             case types.SESSION_RECOVER:
@@ -127,6 +129,8 @@ export const reducers = {
                 return sessionLogoutSuccess(state);
             case types.SESSION_VALID:
                 return sessionValid(state);
+            case 'STOP':
+                return initial;
             default:
                 return state;
         }

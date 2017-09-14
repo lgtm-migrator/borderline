@@ -118,12 +118,14 @@ export const epics = {
 
 };
 
+const initial = {
+    ok: false,
+    list: {}
+};
+
 export const reducers = {
     extensionReducer:
-    (state = {
-        ok: false,
-        list: {}
-    }, action) => {
+    (state = initial, action) => {
 
         switch (action.type) {
             case types.EXTENSIONS_SUCCESS:
@@ -133,7 +135,7 @@ export const reducers = {
             case types.EXTENSION_UNIT_SUCCESS:
                 return extensionUnitSuccess(state, action);
             case 'STOP':
-                return extensionCleanup(state);
+                return initial;
             default:
                 return state;
         }
@@ -165,12 +167,6 @@ const extensionsDidLoad = (state) => {
 const extensionUnitSuccess = (state, action) => {
     state.list[action.extension.id].model = () => { };
     state.list[action.extension.id].loaded = true;
-    return state;
-};
-
-const extensionCleanup = (state) => {
-    state.ok = false;
-    state.list = {};
     return state;
 };
 

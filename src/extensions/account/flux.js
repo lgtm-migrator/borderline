@@ -15,6 +15,12 @@ export const actions = {
         icon: NavigationButton,
         view: View
     }),
+    dockToPagers: () => ({
+        type: '@@core/pager/PAGE_DOCK',
+        path: 'account2',
+        icon: NavigationButton,
+        view: View
+    }),
 
     getCurrentUser: () => ({
         type: '@@core/session/SESSION_FETCH',
@@ -29,21 +35,24 @@ export const epics = {
         .mergeMap(() =>
             Observable.concat(
                 Observable.of(actions.dockToPager()),
+                Observable.of(actions.dockToPagers()),
                 Observable.of(actions.getCurrentUser())
             ))
 
 };
 
+const initial = {};
+
 export const reducers = {
 
     accountReducer:
-    (state = {}, action) => {
+    (state = initial, action) => {
 
         switch (action.type) {
             case types.ACCOUNT_HYDRATE:
                 return hydrateAccount(state, action);
             case 'STOP':
-                return clearAccount(state);
+                return initial;
             default:
                 return state;
         }
@@ -53,12 +62,6 @@ export const reducers = {
 const hydrateAccount = (state, action) => {
 
     state.user = action.user;
-    return state;
-};
-
-const clearAccount = (state) => {
-
-    delete state.user;
     return state;
 };
 
