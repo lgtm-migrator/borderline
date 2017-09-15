@@ -214,6 +214,7 @@ QueryTransmart17_1.prototype.setOutput = function(data) {
         // Store the data in STD format
         let std_data = _this._transmartToStd(data);
         let bytes_data = JSON.stringify(std_data);
+        // Todo: Should erase of the old storage object if any
         _this._storage.createObject(bytes_data).then(function(storage_id) {
             // Update model to remember where we stored the data
             let data_model = Object.assign({}, Models.BL_MODEL_DATA,

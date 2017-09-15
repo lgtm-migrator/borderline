@@ -25,6 +25,7 @@ function QueryFactory(queryCollection, storage) {
 QueryFactory.prototype.fromModel = function(queryModel) {
     let _this = this;
     return new Promise(function(resolve, reject) {
+        // Todo: Use a configuration file to make it dynamic
         switch (queryModel.endpoint.sourceType) {
             case Constants.BL_QUERY_TYPE_TS171:
                 resolve(new Query_TS171(queryModel, _this.queryCollection, _this.storage));
