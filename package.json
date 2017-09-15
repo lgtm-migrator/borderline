@@ -30,12 +30,12 @@
     "babel-preset-es2015": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "eslint": "4.6.1",
-    "jest": "^21.0.2"
+    "jest": "^21.1.0"
   },
   "dependencies": {
     "adm-zip": "0.4.7",
     "body-parser": "1.18.1",
-    "borderline-utils": "^0.1.0",
+    "borderline-utils": "^0.1.1",
     "connect-mongo": "1.3.2",
     "express": "4.15.4",
     "express-session": "1.15.5",

@@ -24,6 +24,7 @@ function BorderlineServer(config) {
     this.start = BorderlineServer.prototype.start.bind(this);
     this.stop = BorderlineServer.prototype.stop.bind(this);
     this.extensionError = BorderlineServer.prototype.extensionError.bind(this);
+    this.setupRegistry = BorderlineServer.prototype.setupRegistry.bind(this);
     this.setupUserAccount = BorderlineServer.prototype.setupUserAccount.bind(this);
     this.setupDataStore = BorderlineServer.prototype.setupDataStore.bind(this);
     this.setupExtensionStore = BorderlineServer.prototype.setupExtensionStore.bind(this);
@@ -78,6 +79,7 @@ BorderlineServer.prototype.start = function() {
             _this._registryHandler();
 
             //Setup route using controllers
+            _this.setupRegistry();
             _this.setupUserAccount();
             _this.setupDataStore();
             _this.setupExtensionStore();
@@ -129,6 +131,7 @@ BorderlineServer.prototype._registryHandler = function () {
     _this.registryHelper = new RegistryHelper(Constants.BL_SERVER_SERVICE, _this.registryCollection);
     // Sets properties in the registry
     _this.registryHelper.setModel({
+        status: Constants.BL_SERVICE_STATUS_IDLE,
         version: package_json.version,
         port: _this.config.port
     });
@@ -165,6 +168,19 @@ BorderlineServer.prototype._connectDb = function () {
             reject(ErrorHelper('One of the db connection failed', error));
         });
     });
+};
+
+/**
+ * @fn setupRegistry
+ * @desc Initialize the registry related routes
+ */
+BorderlineServer.prototype.setupRegistry = function() {
+    // Import the controller
+    let registryController = require('./controllers/registryController');
+    this.registryController = new registryController(this.registryHelper);
+
+    this.app.get('/status', this.registryController.getServiceStatus);
+    this.app.get('/details', this.registryController.getServiceDetails);
 };
 
 /**
