@@ -19,6 +19,11 @@ module.exports = {
         BL_SERVER_SERVICE: defines.serverServiceName,
         BL_MIDDLEWARE_SERVICE: defines.middlewareServiceName,
 
+        BL_SERVICE_STATUS_UNKNOWN: defines.statusServiceUnknown,
+        BL_SERVICE_STATUS_IDLE: defines.statusServiceIdle,
+        BL_SERVICE_STATUS_BUSY: defines.statusServiceBusy,
+        BL_SERVICE_STATUS_DEAD: defines.statusServiceDead,
+
         BL_GLOBAL_COLLECTION_REGISTRY: defines.global_registryCollectionName,
         BL_GLOBAL_COLLECTION_SESSIONS: defines.global_sessionCollectionName,
         BL_GLOBAL_COLLECTION_STORAGE: defines.global_storageCollectionName,
