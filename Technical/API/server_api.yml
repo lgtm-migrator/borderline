@@ -1,7 +1,7 @@
 ---
 swagger: '2.0'
 info:
-  version: 0.3.0
+  version: 0.3.2
   title: Borderline server API
   description: |
     #### Rest API for the borderline project
@@ -10,6 +10,36 @@ schemes:
 host: 127.0.0.1:3000
 basePath: /
 paths:
+    /status:
+        get:
+            tags: [ registry ]
+            description: Get the current status of the service
+            responses:
+                200:
+                    description: The status is known
+                    schema:
+                        type: object
+                        properties:
+                            status:
+                                type: string
+                                description: Value of the service status
+                500:
+                    description: The status is unknown
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /details:
+        get:
+            tags: [ registry ]
+            description: Get the current status of the service
+            responses:
+                200:
+                    description: The status is known
+                    schema:
+                        $ref: '#/definitions/RegistryModel'
+                500:
+                    description: The status is unknown
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
     /login:
         post:
             tags: [ auth, session ]
@@ -362,6 +392,23 @@ paths:
                     description: No deletion has occured
                     schema:
                         $ref: '#/definitions/ErrorModel'
+    /users/{user_id}/data_sources:
+        parameters:
+            -
+                name: user_id
+                required: true
+                type: string
+                in: path
+                description: User identifier to manipulate
+        get:
+            tags: []
+            description: Get all the data sources for a specific user
+            responses:
+                200:
+                    description:
+                    type: array
+                    items:
+                        $ref: '#/definitions/DataSourceModel'
     /users/{user_id}/data_sources/{source_id}:
         parameters:
             -
@@ -413,9 +460,6 @@ paths:
                                 type: string
                             user:
                                 description: "User identifier creating the workflow.(Optional: Defaults to current user)"
-                                type: string
-                            root:
-                                description: "Root unique identifier for the new workflow. (Optional: Defaults to null)"
                                 type: string
             responses:
                 200:
@@ -511,20 +555,7 @@ paths:
                     description: Step creation data
                     in: body
                     schema:
-                        type: object
-                        properties:
-                            parent:
-                                type: string
-                                description: Parent step unique identifier, null for root step
-                            extension:
-                                type: string
-                                description: Extension used during this new Step
-                            action:
-                                type: string
-                                description: Action registered by the Extension
-                            data:
-                                type: object
-                                description: Context data from the extension
+                        $ref: '#/definitions/StepModel'
             responses:
                 200:
                     description: Creation success
@@ -624,6 +655,68 @@ definitions:
             error:
                 type: string
                 description: A more detailed error message
+    RegistryModel:
+        description: Model to represent a service status
+        properties:
+            type:
+                type: string
+                description: Type of the borderline service
+            status:
+                type: string
+                description: Current status of the service. Defaults to 'borderline_service_idle'
+            lastUpdate:
+                type: string
+                format: dateTime
+                description: Timestamp of the last update of this model
+            port:
+                type: integer
+                description: TCP Port the service is listening on
+            ip:
+                type: string
+                description: IPv4 address of the machine
+            hostname:
+                type: string
+                description: Domain name associated with this machine
+            system:
+                type: object
+                description: Hardware speciciafations
+                properties:
+                    arch:
+                        type: string
+                        description: System architecture label
+                    type:
+                        type: string
+                        description: System type label
+                    platform:
+                        type: string
+                        description: Operating system name
+                    version:
+                        type: string
+                        description: Operation system version number
+            cpu:
+                type: object
+                description: Information about the cpu
+                properties:
+                    cores:
+                        type: array
+                        items:
+                            type: object
+                            description: A single core properties list
+                    loadavg:
+                        type: array
+                        description: The load average for the last 1, 5 and 15 minutes
+                        items:
+                            type: number
+            memory:
+                type: object
+                description: Information about the memory
+                properties:
+                    total:
+                        type: string
+                        description: Total memory on the system. Unit is provided in the value
+                    free:
+                        type: string
+                        description: Available memory on the system. Unit is provided in the value
     UserModel:
         type: object
         properties:

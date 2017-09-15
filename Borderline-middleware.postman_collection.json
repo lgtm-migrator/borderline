@@ -8,6 +8,34 @@
 	},
 	"item": [
 		{
+			"name": "Registry",
+			"description": "",
+			"item": [
+				{
+					"name": "GET status",
+					"request": {
+						"url": "{{middleware_url}}/status",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "GET full details",
+					"request": {
+						"url": "{{middleware_url}}/details",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Create",
 			"description": "",
 			"item": [
@@ -851,7 +879,7 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/execute",
+						"url": "{{middleware_url}}/query/{{current_query}}/execute",
 						"method": "POST",
 						"header": [
 							{
@@ -885,23 +913,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/execute",
+						"url": "{{middleware_url}}/query/{{current_query}}/execute",
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "query",
-									"value": "{{current_query}}",
-									"description": "",
-									"type": "text"
-								},
-								{
 									"key": "file",
 									"description": "",
 									"type": "file",
-									"src": "batman.png"
+									"src": "README.md"
+								},
+								{
+									"key": "nocache",
+									"value": "false",
+									"description": "",
+									"type": "text"
 								}
 							]
 						},
@@ -927,7 +955,7 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/execute/{{current_query}}",
+						"url": "{{middleware_url}}/query/{{current_query}}/status",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -953,7 +981,7 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/execute/{{current_query}}",
+						"url": "{{middleware_url}}/query/{{current_query}}/status",
 						"method": "GET",
 						"header": [
 							{

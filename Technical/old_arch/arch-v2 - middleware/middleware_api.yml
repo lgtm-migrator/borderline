@@ -1,0 +1,369 @@
+---
+swagger: '2.0'
+info:
+  version: 0.4.0
+  title: Borderline middleware API
+  description: |
+    #### Middleware API
+    This API is designed to abstract Transmart and I2B2 backends, with possible support for other endpoints later on.
+    Query format is based on the Transmart 17.1 Rest API.
+    The abstraction layer this middleware provides allows for caching of the requests previously made, for resuming and tracking requests.
+schemes:
+  - http
+host: localhost:3000
+basePath: /
+paths:
+    /query/new:
+        get:
+            tags: [ ]
+            description: Create a new empty query
+            responses:
+                200:
+                    description: New empty query created
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: New empty query error
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        post:
+            tags: [ ]
+            description: Creates a new query from parameters
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                      $ref: '#/definitions/QueryModel'
+            responses:
+                200:
+                    description: New query created
+                    schema:
+                        $ref: '#/definitions/QueryModel'
+                401:
+                    description: Creating a new query failed
+                    schema:
+                        $ref: "#/definitions/ErrorModel"
+    /query/{query_id}/data_source:
+        parameters:
+            -
+                name: query_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a query data source referenced by its unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/DataSourceModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a query data source from its query unique identifier
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        description: Transmart 17.1 json query
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/DataSourceModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a query data source inside its query. Referenced by unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /query/{query_id}/credentials:
+        parameters:
+            -
+                name: query_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a query credentials referenced by its unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/CredentialsModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a query credentials from its query unique identifier
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        description: Transmart 17.1 json query
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/CredentialsModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a query credentials inside its query. Referenced by unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /query/{query_id}/input:
+        parameters:
+            -
+                name: query_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a query input referenced by its unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/DataModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a query input from its query unique identifier
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        description: Transmart 17.1 json query
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/DataModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a query input inside its query. Referenced by unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /query/{query_id}/output:
+        parameters:
+            -
+                name: query_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a query result data referenced by its unique identifier
+            responses:
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/DataModel'
+                401:
+                    description: Get failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            description: Update a query output from its query unique identifier
+            parameters:
+                -
+                    name: query
+                    required: true
+                    in: body
+                    schema:
+                        type: object
+                        description: Transmart 17.1 json query
+            responses:
+                200:
+                    description: Update success
+                    schema:
+                        $ref: '#/definitions/DataModel'
+                401:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            description: Delete a query output inside its query. Referenced by unique identifier
+            responses:
+                200:
+                    description: Deletion success
+                401:
+                    description: Deletion failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /query/{query_id}/status:
+        parameters:
+            -
+                name: query_id
+                required: true
+                in: path
+                type: string
+        get:
+            description: Get a query status, from its unique identifier
+            responses: 
+                200:
+                    description: Get success
+                    schema:
+                        $ref: '#/definitions/ExecutionModel'
+                404:
+                    description: Unknown query
+                    schema:
+                        $ref: '#definitions/ErrorModel'
+    /query/{query_id}/execute:
+        parameters:
+            -
+                name: query_id
+                required: true
+                in: path
+                type: string
+                description: Unique identifier of the query to execute
+            -   
+                name: nocache
+                in: query
+                type: boolean
+                description: If set to true, the middleware will NOT store the result in its cache
+        post:
+            description: Perform the query on the underlying endpoint or retreive from cache
+            responses:
+                200:
+                    description: Success execution
+                    schema:
+                      type: object
+                      description: Transmart 17.1 json response, even for i2b2 backend
+                401:
+                    description: Failed to perform query
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+
+definitions:
+    ErrorModel:
+        type: object
+        properties:
+            error:
+                type: string
+                description: A more detailed error message
+    ExecutionModel:
+        type: object
+        properties:
+            status:
+                type: string
+                description: The current execution status of a query. [unknown, running, done, error]
+            start:
+                type: string
+                format: date-time
+                description: Timestamp of the submition date
+            end:
+                type: string
+                format: data-time
+                description: Timestamp of the execution termination
+            info:
+                type: object
+                description: Additionnal information if any
+    CredentialsModel:
+        type: object
+        properties:
+            _id:
+                type: string
+                description: User unique identifier
+            username:
+                type: string
+            password:
+                type: string
+                description: Password hash
+    DataSourceModel:
+        type: object
+        properties:
+            sourceType:
+                type: string
+                description: Type of the underlying data source. Supported values are [ transmart, i2b2, eAE_v2.0 ]
+            sourceName:
+                type: string
+                description: Display name
+            sourceHost:
+                type: string
+                description: Url or Ip where the source is hosted
+            sourcePort:
+                type: integer
+                description: Port used by this data source
+            public:
+                type: boolean
+                description: Publicly available, without auth endpoint
+    
+    DataModel:
+      type: object
+      properties:
+        label:
+            type: string
+            description: Display name and/or brief description of the content
+        metadata:
+          type: object
+          description: Additional properties, depends on DataSourceModel.sourceType
+        cache:
+          type: object
+          description: Storage pointer to the cached data
+          properties:
+            dataSize:
+                type: integer
+                description: Total number of bytes occupied by the data
+            storageId:
+                type: string
+                description: Data blob unique identifier in the object storage system
+
+    QueryModel:
+        type: object
+        properties:
+            id:
+                type: string
+                description: Query unique identifier
+            credentials:
+                $ref: '#/definitions/CredentialsModel'
+            endpoint:
+                $ref: '#/definitions/DataSourceModel'
+            status:
+                $ref: '#/definitions/StatusModel'
+            input:
+                type: array
+                items:
+                    $ref: '#/definitions/DataModel'
+            output:
+                type: array
+                items:
+                    $ref: '#/definitions/DataModel'
