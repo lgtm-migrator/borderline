@@ -1,20 +1,19 @@
-// Vendor modules
 const ObjectID = require('mongodb').ObjectID;
+const { ErrorHelper, Constants } = require('borderline-utils');
 
-// Project modules
-const Query_TS171 = require('./ts171/queryObject.js');
-const defines = require('../defines.js');
+const Query_TS171 = require('./queryObject_TS171.js');
+const Query_File = require('./queryObject_File.js');
 
 /**
  * @fn QueryFactory
  * @desc Factory class for the different queries implementations
  * @param queryCollection MongoDb collection where all the queries are stored
- * @param queryGridFS MongoDB collection for the queries result data
+ * @param storage Object storage instance to store queries result data
  * @constructor
  */
-function QueryFactory(queryCollection, queryGridFS) {
+function QueryFactory(queryCollection, storage) {
     this.queryCollection = queryCollection;
-    this.queryGridFS = queryGridFS;
+    this.storage = storage;
 }
 
 /**
@@ -24,15 +23,20 @@ function QueryFactory(queryCollection, queryGridFS) {
  * @return {Promise} A Promise resolving to the allocated implementation Object
  */
 QueryFactory.prototype.fromModel = function(queryModel) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         switch (queryModel.endpoint.sourceType) {
-            case 'TS171':
-                resolve(new Query_TS171(queryModel, _this.queryCollection, _this.queryGridFS));
-            case 'eHS':
-                reject(defines.errorStacker('eHS support is not implemented (yet ?)'));
+            case Constants.BL_QUERY_TYPE_TS171:
+                resolve(new Query_TS171(queryModel, _this.queryCollection, _this.storage));
+                break;
+            case Constants.BL_QUERY_TYPE_FILE:
+                resolve(new Query_File(queryModel, _this.queryCollection, _this.storage));
+                break;
+            case Constants.BL_QUERY_TYPE_EAE:
+                reject(ErrorHelper('eAE support is not implemented, yet!!!'));
+                break;
             default:
-                reject(defines.errorStacker('Type [' + queryModel.endpoint.sourceType + '] is unknown'));
+                reject(ErrorHelper('Type [' + queryModel.endpoint.sourceType + '] is unknown'));
         }
     });
 };
@@ -43,25 +47,25 @@ QueryFactory.prototype.fromModel = function(queryModel) {
  * @return {Promise} A Promise resolving to the allocated implementation Object
  */
 QueryFactory.prototype.fromID = function(query_id) {
-    var _this = this;
+    let _this = this;
     return new Promise(function(resolve, reject) {
         try {
             _this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function (queryModel) {
-                if (queryModel == null || queryModel == undefined) {
-                    reject(defines.errorStacker('Unknown id ' + query_id));
+                if (queryModel === null || queryModel === undefined) {
+                    reject(ErrorHelper('Unknown id ' + query_id));
                     return;
                 }
                 _this.fromModel(queryModel).then(function (queryObj) {
                     resolve(queryObj);
                 }, function (error) {
-                    reject(defines.errorStacker(error));
+                    reject(ErrorHelper(error));
                 });
             }, function (error) {
-                reject(defines.errorStacker(query_id + ' not found', error));
+                reject(ErrorHelper(query_id + ' not found', error));
             });
         }
         catch (error) {
-            reject(defines.errorStacker('From ID caught error', error));
+            reject(ErrorHelper('From ID caught error', error));
         }
     });
 };

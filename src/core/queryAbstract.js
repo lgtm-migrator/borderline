@@ -1,399 +1,184 @@
-// Vendor modules
 const ObjectID = require('mongodb').ObjectID;
-
-// Local modules
-const defines = require('../defines.js');
-const ObjectStorage = require('./objectStorage.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn QueryAbstract
  * @desc Implementation independent query representation. MUST be inherited by the specific implementations
  * @param queryModel Plain JS Object, stored in DB
  * @param queryCollection MongoDB collection where the model is stored
- * @param queryGridFS MongoDB gridFS object to read/write query result
+ * @param storage Object storage instance to read/write query result
  * @constructor
  */
-function QueryAbstract(queryModel, queryCollection, queryGridFS) {
-    this.model = queryModel;
-    this.queryCollection = queryCollection;
-    this.queryGridFS = queryGridFS;
-    this.storage = new ObjectStorage(this.queryGridFS);
+function QueryAbstract(queryModel, queryCollection, storage) {
+    this._model = queryModel;
+    this._queryCollection = queryCollection;
+    this._storage = storage;
 
-    //Bind member functions
-    this.registerExecutionStart = QueryAbstract.prototype.registerExecutionStart.bind(this);
-    this.registerExecutionEnd = QueryAbstract.prototype.registerExecutionEnd.bind(this);
-    this.registerExecutionError = QueryAbstract.prototype.registerExecutionError.bind(this);
+
+    // Bind public member functions
+    this.getModel = QueryAbstract.prototype.getModel.bind(this);
+    this.setModel = QueryAbstract.prototype.setModel.bind(this);
+    this.getInputModel = QueryAbstract.prototype.getInputModel.bind(this);
+    this.setInputModel = QueryAbstract.prototype.setInputModel.bind(this);
+    this.getOutputModel = QueryAbstract.prototype.getOutputModel.bind(this);
+    this.setOutputModel = QueryAbstract.prototype.setOutputModel.bind(this);
+    this.updateExecutionStatus = QueryAbstract.prototype.updateExecutionStatus.bind(this);
+
+    // Bind public pure virtual functions
+    this.initialize = QueryAbstract.prototype.initialize.bind(this);
+    this.execute = QueryAbstract.prototype.execute.bind(this);
+    this.terminate = QueryAbstract.prototype.terminate.bind(this);
+    this.interrupt = QueryAbstract.prototype.interrupt.bind(this);
+    this.getInput = QueryAbstract.prototype.getInput.bind(this);
+    this.setInput = QueryAbstract.prototype.setInput.bind(this);
+    this.getOutput = QueryAbstract.prototype.getOutput.bind(this);
+    this.setOutput = QueryAbstract.prototype.setOutput.bind(this);
+
+    // Bind protected member functions
+    this._pushModel = QueryAbstract.prototype._pushModel.bind(this);
+    this._fetchModel = QueryAbstract.prototype._fetchModel.bind(this);
 }
 
+
 /**
- * @fn isAuth
- * @desc Returns true if this query has a non-expired token
- * @pure
+ * @fn getModel
+ * @desc Getter on internal model data structure
+ * @return {Object} JSON object as stored in the DB
  */
-QueryAbstract.prototype.isAuth = function() {
-    throw 'isAuth must be overloaded in implementation';
+QueryAbstract.prototype.getModel = function() {
+    return this._model;
 };
 
 /**
- * @fn execute
- * @pure
+ * @fn setModel
+ * @desc Merges the provided model properties with the internal model
+ * @param newModel JS object to merge in the model
+ * @return {Object} Updated model
+ */
+QueryAbstract.prototype.setModel = function(newModel) {
+    this._model = Object.assign({}, this._model, newModel);
+    return this._model;
+};
+
+/**
+ * @fn getInputModel
+ * @desc Getter on the input description
+ * @return {Array} Always returns an array of BL_DATA_MODEL
+ */
+QueryAbstract.prototype.getInputModel = function() {
+    let input = [];
+
+    if (this._model && Array.isArray(this._model.input))
+        input = this._model.input;
+    return input;
+};
+
+/**
+ * @fn setInputModel
+ * @desc Setter on the input model
+ * @param data_models {Array | Object} Model of the data to store in the input description
+ * @return This model input after update
+ */
+QueryAbstract.prototype.setInputModel = function(data_models) {
+    if (Array.isArray(data_models))
+        this._model = Object.assign({}, this._model, {input: data_models}); // Will always succeed and set the input field
+    else
+        this._model = Object.assign({}, this._model, {input: [data_models]}); // Will always succeed and set the input field
+    return this._model.input;
+};
+
+/**
+ * @fn getOutputModel
+ * @desc Getter on the output description
+ * @return {Array} Always returns an array of BL_DATA_MODEL
+ */
+QueryAbstract.prototype.getOutputModel = function() {
+    let output = [];
+
+    if (this._model && Array.isArray(this._model.output))
+        output = this._model.output;
+    return output;
+};
+
+/**
+ * @fn setOutputModel
+ * @desc Setter on the output model
+ * @param data_models {Array | Object} Model of the data to store in the output description
+ * @return This model output after update
+ */
+QueryAbstract.prototype.setOutputModel = function(data_models) {
+    if (Array.isArray(data_models))
+        this._model = Object.assign({}, this._model, {output: data_models}); // Will always succeed and set the output field
+    else
+        this._model = Object.assign({}, this._model, {output: [data_models]}); // Will always succeed and set the output field
+    return this._model.output;
+};
+
+/**
+ * @fn updateExecutionStatus
+ * @param new_status_properties {Object}
+ * @return {Promise}
+ */
+QueryAbstract.prototype.updateExecutionStatus = function(new_status_properties) {
+    let _this = this;
+    return new Promise(function(resolve, reject) {
+        _this._model.status = Object.assign({}, Models.BL_MODEL_EXECUTION,
+            _this._model.status, new_status_properties);
+        _this._pushModel().then(function() {
+            resolve(true);
+        }, function(push_error) {
+            reject(ErrorHelper('Updating execution status failed', push_error));
+        });
+    });
+};
+
+/**
+ * @fn initialize
+ * @desc First stage execution of this query
+ * @param __unused__request The Express.js HTTP request that triggered the execution
+ */
+QueryAbstract.prototype.initialize = function(__unused__request = null) {
+    throw 'Pure implementation should not be called';
+};
+
+/**
+ * @execute
+ * @desc Core execution method of a query
  */
 QueryAbstract.prototype.execute = function() {
-  throw "Execute should be overloaded by implementations";
+    throw 'Pure implementation should not be called';
 };
 
 /**
- * @fn input_local2standard
- * @pure
+ * @fn terminate
+ * @desc Last execution stage to teardown after the core execution.
  */
-QueryAbstract.prototype.input_local2standard = function(data) {
-    throw "Input local to standard should be overloaded";
-};
-/**
- * @fn input_standard2local
- * @pure
- */
-QueryAbstract.prototype.input_standard2local = function(data) {
-    throw "Input standard to local should be overloaded";
-};
-/**
- * @fn output_local2standard
- * @pure
- */
-QueryAbstract.prototype.output_local2standard = function(data) {
-    throw "Output local to standard should be overloaded";
-};
-/**
- * @fn output_standard2local
- * @pure
- */
-QueryAbstract.prototype.output_standard2local = function(data) {
-    throw "Output standard to local should be overloaded";
+QueryAbstract.prototype.terminate = function() {
+    throw 'Pure implementation should not be called';
 };
 
 /**
- * @fn getInput
- * @return {Promise} A Promise resolving model's input
+ * @fn interrupt
+ * @desc Attempts to interrupt at any stage
  */
+QueryAbstract.prototype.interrupt = function() {
+    throw 'Pure implementation should not be called';
+};
+
 QueryAbstract.prototype.getInput = function() {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-       try {
-            resolve(_this.model.input);
-       }
-       catch (error) {
-           reject(defines.errorStacker(error));
-       }
-    });
+    throw 'Pure implementation should not be called';
 };
 
-/**
- * @fn getInputLocal
- * @return {Promise} A promise resolving to the local input value
- */
-QueryAbstract.prototype.getInputLocal = function() {
-    var _this = this;
-    return new Promise(function (resolve, reject) {
-        if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('local'))
-            resolve(_this.model.input.local);
-        else
-            reject(defines.errorStacker('No local input'));
-    });
+QueryAbstract.prototype.setInput = function() {
+    throw 'Pure implementation should not be called';
 };
 
-/**
- * @fn getInputStd
- * @return {Promise} A promise resolving to the standardized input
- */
-QueryAbstract.prototype.getInputStd = function() {
-    var _this = this;
-    return new Promise(function (resolve, reject) {
-        if (_this.model.hasOwnProperty('input') && _this.model.input.hasOwnProperty('std'))
-            resolve(_this.model.input.std);
-        else
-            reject(defines.errorStacker('Missing standard input'));
-    });
-};
-
-/**
- * @fn setInputStd
- * @param std_data The data object to transform and store
- * @return {Promise} A Promise resolving the stored model in local format
- */
-QueryAbstract.prototype.setInputStd = function(std_data) {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        try {
-            //Transform to local format
-            var local_data = _this.input_standard2local(std_data);
-            //Store into model
-            _this.model.input.local = local_data;
-            _this.model.input.std = std_data;
-            //Send back local input
-            resolve(_this.model.input.local);
-        }
-        catch (error) {
-            reject(defines.errorStacker(error));
-        }
-    });
-};
-
-/**
- * @fn setInputLocal
- * @param local_data The data object to transform and store
- * @return {Promise} A Promise resolving the stored model to standard format
- */
-QueryAbstract.prototype.setInputLocal = function(local_data) {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        try {
-            //Transform to local format
-            var std_data = _this.input_local2standard(local_data);
-            //Store into model
-            _this.model.input.local = local_data;
-            _this.model.input.std = std_data;
-            //Send back std input
-            resolve(_this.model.input.std);
-        }
-        catch (error) {
-            reject(defines.errorStacker(error));
-        }
-    });
-};
-
-/**
- * @fn getOutput
- * @desc Retrieves output data from the model
- * @return {Promise} A Promise resolving to data model expanded with its content from storage
- */
 QueryAbstract.prototype.getOutput = function() {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        try {
-            var data = _this.model.output;
-            var promises = [
-                _this.storage.getObject(data.local.dataId),
-                _this.storage.getObject(data.std.dataId)
-            ];
-            Promise.all(promises).then(function (values) {
-                data.local.data = values[0];
-                data.std.data = values[1];
-                resolve(data);
-            }, function(error) {
-                reject(defines.errorStacker(error));
-            })
-        }
-        catch (error) {
-            reject(defines.errorStacker('getOutput caught error', error));
-        }
-    });
+    throw 'Pure implementation should not be called';
 };
 
-/**
- * @fn getOutputLocal
- * @return {Promise} Resolves to output local data content
- */
-QueryAbstract.prototype.getOutputLocal = function() {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('local')) {
-            _this.storage.getObject(_this.model.output.local.dataId).then(function(local_data) {
-                resolve(local_data);
-            }, function (error) {
-                reject(defines.errorStacker('Get local output failed', error));
-            });
-        }
-        else {
-            reject(defines.errorStacker('No local output data'));
-        }
-    });
-};
-
-/**
- * @fn getOutputStd
- * @return {Promise} Resolves to output standard data content
- */
-QueryAbstract.prototype.getOutputStd = function() {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        if (_this.model.hasOwnProperty('output') && _this.model.output.hasOwnProperty('std') &&
-            _this.model.output.std.hasOwnProperty('dataId') &&
-            _this.model.output.std.dataId !== null) {
-            _this.storage.getObject(_this.model.output.std.dataId).then(function(std_data) {
-                resolve(std_data);
-            }, function (error) {
-                reject(defines.errorStacker('Get std output failed', error));
-            });
-        }
-        else {
-            reject(defines.errorStacker('No std output data'));
-        }
-    });
-};
-
-/**
- * @fn setOutputLocal
- * @desc Stores the output data into the model from the local data format
- * @param data Output data in the local format
- * @return {Promise} A Promise resolving the output to standard data model
- */
-QueryAbstract.prototype.setOutputLocal = function(local_data) {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        try {
-            //Compute std format
-            var std_data = _this.output_local2standard(local_data);
-
-            var promises = [];
-            //Is it an update or a creation
-            if (_this.model.output.local.hasOwnProperty('dataId') === false ||
-                _this.model.output.local.dataId === null ||
-                _this.model.output.local.dataId.length == 0 ||
-                _this.model.output.std.hasOwnProperty('dataId') === false ||
-                _this.model.output.std === null ||
-                _this.model.output.std.dataId.length == 0) {
-                promises.push(_this.storage.createObject(local_data));
-                promises.push(_this.storage.createObject(std_data));
-            } else {
-                promises.push(_this.storage.setObject(_this.model.output.local.dataId, local_data));
-                promises.push(_this.storage.setObject(_this.model.output.std.dataId, std_data));
-            }
-
-            Promise.all(promises).then(function(values) {
-                //Update output model
-                _this.model.output.local.dataSize = local_data.length;
-                _this.model.output.std.dataSize = std_data.length;
-                _this.model.output.local.dataId = values[0];
-                _this.model.output.std.dataId = values[1];
-                _this.pushModel().then(function() {
-                    resolve(std_data);
-                }, function (error) {
-                    reject(defines.errorStacker('Save output locations failed', error));
-                });
-            }, function(error) {
-                reject(defines.errorStacker(error));
-            });
-        }
-        catch (error) {
-            reject(defines.errorStacker('Caught exception', error));
-        }
-    });
-};
-
-/**
- * @fn setOutputStd
- * @desc Stores the output data into the model from the Std data format
- * @param data Output data in the standard format
- * @return {Promise} A Promise resolving the output to local data model
- */
-QueryAbstract.prototype.setOutputStd = function(std_data) {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        try {
-            //Compute std format
-            var local_data = _this.output_standard2local(std_data);
-
-            var promises = [];
-            //Is it an update or a creation
-            if (_this.model.output.local.hasOwnProperty('dataId') === false ||
-                _this.model.output.local.dataId === null ||
-                _this.model.output.local.dataId.length == 0 ||
-                _this.model.output.std.hasOwnProperty('dataId') === false ||
-                _this.model.output.std === null ||
-                _this.model.output.std.dataId.length == 0) {
-                promises.push(_this.storage.createObject(local_data));
-                promises.push(_this.storage.createObject(std_data));
-            } else {
-                promises.push(_this.storage.setObject(_this.model.output.local.dataId, local_data));
-                promises.push(_this.storage.setObject(_this.model.output.std.dataId, std_data));
-            }
-
-            Promise.all(promises).then(function(values) {
-                //Update output model
-                _this.model.output.local.dataSize = local_data.length;
-                _this.model.output.std.dataSize = std_data.length;
-                _this.model.output.local.dataId = values[0];
-                _this.model.output.std.dataId = values[1];
-                _this.pushModel().then(function() {
-                    resolve(local_data);
-                }, function (error) {
-                    reject(defines.errorStacker(error));
-                });
-            }, function(error) {
-                reject(defines.errorStacker('Storage failed', error));
-            });
-        }
-        catch (error) {
-            reject(defines.errorStacker('Caught exception', error));
-        }
-    });
-};
-
-/**
- * @fn registerExecutionStart
- * @desc Update current model status to running execution
- * @return {Promise} Resolving to the new status
- */
-QueryAbstract.prototype.registerExecutionStart = function() {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        var new_status = Object.assign({}, defines.executionModel, {
-            status: 'running',
-            start: new Date(),
-            end: null,
-            info: 'Will perform query'
-        });
-        _this.model.status = new_status;
-        _this.pushModel().then(function(model) {
-            resolve(_this.model.status);
-        }, function(error) {
-            reject(defines.errorStacker('Starting execution update fail', error));
-        })
-    });
-};
-
-/**
- * @fn registerExecutionEnd
- * @desc Update current model status to execution success
- * @return {Promise} Resolving to the new status
- */
-QueryAbstract.prototype.registerExecutionEnd = function() {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        var new_status = Object.assign({}, _this.model.status, {
-            status: 'done',
-            end: new Date(),
-            info: 'All good'
-        });
-        _this.model.status = new_status;
-        _this.pushModel().then(function(model) {
-            resolve(_this.model.status);
-        }, function(error) {
-            reject(defines.errorStacker('Ending execution update fail', error));
-        })
-    });
-};
-
-/**
- * @fn registerExecutionError
- * @desc Update current model status to error state
- * @return {Promise} Resolving to the new status
- */
-QueryAbstract.prototype.registerExecutionError = function(errorObject) {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-        var new_status = Object.assign({}, _this.model.status, {
-            status: 'error',
-            end: new Date(),
-            info: errorObject
-        });
-        _this.model.status = new_status;
-        _this.pushModel().then(function(model) {
-            resolve(_this.model.status);
-        }, function(error) {
-            reject(defines.errorStacker('Error execution update fail', error));
-        })
-    });
+QueryAbstract.prototype.setOutput = function() {
+    throw 'Pure implementation should not be called';
 };
 
 /**
@@ -401,34 +186,33 @@ QueryAbstract.prototype.registerExecutionError = function(errorObject) {
  * @desc Overwrites this Query model with the one from the DB
  * @return {Promise} A Promise resolving to the synchronised model
  */
-QueryAbstract.prototype.fetchModel = function() {
-    var _this = this;
+QueryAbstract.prototype._fetchModel = function() {
+    let _this = this;
     return new Promise(function(resolve, reject) {
-        _this.queryCollection.findOne({_id: new ObjectID(_this.model['_id'])}).then(function(result) {
-            _this.model = result;
-            resolve(this.model);
+        _this._queryCollection.findOne({_id: new ObjectID(_this._model._id)}).then(function(result) {
+            _this._model = result;
+            resolve(_this._model);
         }, function(error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
 
 /**
  * @fn pushModel
- * @desc Overwrite the model inside the databasewith the current one.
+ * @desc Overwrite the model inside the database with the current one.
  * @return {Promise} A Promise resolving to the synchronised model
  */
-QueryAbstract.prototype.pushModel = function() {
-    var _this = this;
+QueryAbstract.prototype._pushModel = function() {
+    let _this = this;
     return new Promise(function(resolve, reject) {
-       _this.queryCollection.findOneAndReplace({_id: new ObjectID(_this.model._id)}, _this.model).then(function(result) {
-            if (result.ok == 1)
-                resolve(_this.model);
+       _this._queryCollection.findOneAndReplace({_id: new ObjectID(_this._model._id)}, _this._model).then(function(result) {
+            if (result.ok === 1)
+                resolve(_this._model);
             else
-                reject(defines.errorStacker('Update query model failed',
-                    { error : result.lastErrorObject.toString() }));
+                reject(ErrorHelper('Update query model failed', result.lastErrorObject.toString()));
        }, function (error) {
-          reject(defines.errorStacker(error));
+          reject(ErrorHelper('MongoDB error', error));
        });
     });
 };

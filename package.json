@@ -1,44 +1,53 @@
 {
-  "name": "borderline-middleware",
-  "version": "0.2.0",
-  "description": "",
-  "main": "./src/borderlineMiddleware.js",
-  "scripts": {
-    "start": "node ./src/index.js",
-    "lint": "eslint src"
-  },
-  "keywords": [
-    "borderline",
-    "etricks",
-    "zirg",
-    "ZirgMaster"
-  ],
-  "author": "Jean Grizet <jean.grizet16@imperial.ac.uk>",
-  "license": "MIT",
-  "readme": "README.md",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dsi-icl/borderline-middleware.git"
-  },
-  "bugs": {
-    "url": "https://github.com/dsi-icl/borderline-middleware/issues"
-  },
-  "homepage": "https://github.com/dsi-icl/borderline-middleware#readme",
-  "devDependencies": {
-    "babel-core": "6.24.1",
-    "babel-eslint": "7.2.3",
-    "babel-loader": "7.0.0",
-    "babel-preset-es2015": "6.24.1",
-    "babel-preset-stage-0": "6.24.1",
-    "eslint": "3.19.0"
-  },
-  "dependencies": {
-    "body-parser": "1.17.1",
-    "express": "4.15.3",
-    "fs-extra": "3.0.1",
-    "ip": "1.1.5",
-    "mongodb": "2.2.26",
-    "request": "2.81.0",
-    "uuid": "3.0.1"
-  }
+    "name": "borderline-middleware",
+    "version": "0.4.0",
+    "description": "",
+    "main": "./src/borderlineMiddleware.js",
+    "scripts": {
+        "start": "node ./src/index.js",
+        "lint": "eslint src",
+        "test": "jest --runInBand --colors"
+    },
+    "keywords": [
+        "borderline",
+        "middleware",
+        "etricks",
+        "zirg",
+        "ZirgMaster"
+    ],
+    "contributors": [
+        "Jean Grizet <jean.grizet16@imperial.ac.uk>",
+        "Axel Oehmichen <axelfrancois.oehmichen11@imperial.ac.uk>",
+        "Florian Guitton <f.guitton@imperial.ac.uk>"
+    ],
+    "license": "MIT",
+    "readme": "README.md",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dsi-icl/borderline-middleware.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dsi-icl/borderline-middleware/issues"
+    },
+    "homepage": "https://github.com/dsi-icl/borderline-middleware#readme",
+    "devDependencies": {
+        "babel-core": "6.26.0",
+        "babel-eslint": "^8.0.0",
+        "babel-preset-es2015": "6.24.1",
+        "babel-preset-stage-0": "6.24.1",
+        "eslint": "4.6.1",
+        "jest": "^21.0.2"
+    },
+    "dependencies": {
+        "body-parser": "1.18.1",
+        "borderline-utils": "^0.1.0",
+        "express": "4.15.4",
+        "fs-extra": "^4.0.0",
+        "memorystream": "0.3.1",
+        "mongodb": "2.2.31",
+        "multer": "^1.3.0",
+        "os2": "0.0.11",
+        "request": "2.81.0",
+        "uuid": "^3.1.0"
+    }
 }
