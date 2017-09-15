@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn Steps
@@ -28,7 +28,7 @@ function Steps(workflowCollection, stepCollection) {
  * @return {Promise} Resolves to an array of steps on success
  */
 Steps.prototype.getAll = function(workflow_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.stepCollection.find({workflow: new ObjectID(workflow_id)}).toArray().then(function(result) {
             if (result === null || result === undefined || result.length === 0)
@@ -38,7 +38,7 @@ Steps.prototype.getAll = function(workflow_id) {
         },
         function(error) {
             reject(error);
-        })
+        });
     });
 };
 
@@ -53,11 +53,11 @@ Steps.prototype._graphInsert = function(node, stepData) {
         return stepData;
     }
 
-    if (node.id == stepData.parent) {
+    if (node.id === stepData.parent) {
         node.children.push(stepData);
     }
 
-    for (var i = 0; i < node.children.length; i++) {
+    for (let i = 0; i < node.children.length; i++) {
         node.children[i] = this._graphInsert(node.children[i], stepData);
     }
     return node;
@@ -70,35 +70,39 @@ Steps.prototype._graphInsert = function(node, stepData) {
  * @return {Promise} Resolve to the created step
  */
 Steps.prototype.create = function(workflow_id, step_data) {
-    var that = this;
-    var time = new Date();
-    var stepModel = Object.assign({
+    let that = this;
+    let time = new Date();
+    let stepModel = Object.assign({}, Models.BL_MODEL_STEP, {
         create: time,
         update: time,
         workflow: workflow_id,
     }, step_data);
 
     return new Promise(function(resolve, reject) {
-        that.stepCollection.insertOne(stepModel).then(function (stepResult) {
+        that.stepCollection.insertOne(stepModel).then(function (__unused__stepResult) {
             that.workflowCollection.findOne({_id: new ObjectID(workflow_id) }).then(function (foundWorkflow) {
-                var stepGraph = {
+                if (foundWorkflow === null || foundWorkflow === undefined) {
+                    reject(ErrorHelper('Create step in invalid workflow'));
+                    return;
+                }
+                let stepGraph = Object.assign({}, {
                     id: stepModel._id,
                     parent: step_data.parent,
                     children: []
-                };
+                });
                 foundWorkflow.graph = that._graphInsert(foundWorkflow.graph, stepGraph);
                 foundWorkflow.update = time;
-                that.workflowCollection.findOneAndReplace({_id: new ObjectID(workflow_id)}, foundWorkflow, {upsert: true}).then(function(updatedWorkflow) {
+                that.workflowCollection.findOneAndReplace({_id: new ObjectID(workflow_id)}, foundWorkflow, {upsert: true}).then(function(__unused__updatedWorkflow) {
                     resolve(stepModel);
                 }, function(updateError) {
-                    reject(defines.errorStacker('Create step update error', updateError));
+                    reject(ErrorHelper('Create step update error', updateError));
                 });
 
             }, function (workflowError) {
-                reject(defines.errorStacker('Create step workflow error', workflowError));
+                reject(ErrorHelper('Create step workflow error', workflowError));
             });
         }, function (stepError) {
-            reject(defines.errorStacker('Create step step error', stepError));
+            reject(ErrorHelper('Create step step error', stepError));
         });
     });
 };
@@ -110,17 +114,17 @@ Steps.prototype.create = function(workflow_id, step_data) {
  * @return {Promise} Resolves to the step data on success
  */
 Steps.prototype.getByID = function(step_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.stepCollection.findOne({_id: new ObjectID(step_id)}).then(function (success) {
             if (success === null || success === undefined) {
-                reject(defines.errorStacker('Unknown step with id ' + step_id));
+                reject(ErrorHelper('Unknown step with id ' + step_id));
             }
             else {
                 resolve(success);
             }
         }, function (error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -132,22 +136,23 @@ Steps.prototype.getByID = function(step_id) {
  * @return {Promise} Returns the updated object on success
  */
 Steps.prototype.updateByID = function(step_id, step_data) {
-    var that = this;
-    var time = new Date();
+    let that = this;
+    let time = new Date();
 
     return new Promise(function(resolve, reject) {
         delete step_data._id;
         delete step_data.create;
         step_data.update = time;
-        that.stepCollection.findOneAndUpdate({_id: new ObjectID(step_id)}, {$set: step_data}, {returnOriginal: false}).then(function (success) {
+        let updated_step = Object.assign({}, Models.BL_MODEL_STEP, step_data);
+        that.stepCollection.findOneAndUpdate({_id: new ObjectID(step_id)}, {$set: updated_step}, {returnOriginal: false}).then(function (success) {
             if (success === null || success === undefined || success.value === null || success.value === undefined) {
-                reject(defines.errorStacker('Unknown step with id ' + step_id));
+                reject(ErrorHelper('Unknown step with id ' + step_id));
             }
             else {
                 resolve(success.value);
             }
         }, function (error) {
-            reject(defines.errorStacker(error));
+            reject(ErrorHelper(error));
         });
     });
 };
@@ -159,18 +164,18 @@ Steps.prototype.updateByID = function(step_id, step_data) {
  * @return {Promise} Resolves to the deleted step on success
  */
 Steps.prototype.deleteByID = function(step_id) {
-  var that = this;
+  let that = this;
 
   return new Promise(function(resolve, reject) {
       that.stepCollection.findOneAndDelete({ _id: new ObjectID(step_id) }).then(function (success) {
           if (success === null || success === undefined || success.value === null || success.value === undefined) {
-              reject(defines.errorStacker('Unknown step with id ' + step_id));
+              reject(ErrorHelper('Unknown step with id ' + step_id));
           }
           else {
               resolve(success);
           }
       }, function (error) {
-          reject(defines.errorStacker(error));
+          reject(ErrorHelper(error));
       });
   });
 };

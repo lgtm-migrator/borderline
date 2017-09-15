@@ -1,0 +1,1 @@
+{ "_id" : { "$oid" : "592409efd3d8901d18974035" }, "sourceType" : "TS171", "sourceName" : "etriks dev 2", "sourceHost" : "http://postgres-ci.transmartfoundation.org/transmart/", "sourcePort" : 8080, "public" : true, "users" : [  ], "default" : true }

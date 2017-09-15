@@ -1,28 +1,23 @@
-var express = require('express');
-var app = express();
+let express = require('express');
+let os = require('os');
+let config = require('../config/borderline.config.js');
+let BorderlineServer = require('./borderlineServer.js');
 
-var config = require('../config/borderline.config.js');
-var BorderlineServer = require('./borderlineServer.js');
+let web_app = express();
+let borderline_server = new BorderlineServer(config);
 
-//Remove unwanted express headers
-app.set('x-powered-by', false);
-
-app.use(BorderlineServer({
-    mongoURL: config.mongoURL,
-    extensionSourcesFolder: config.extensionSourcesFolder,
-    extensionFileSystemFolder: config.extensionFileSystemFolder,
-    uiFolder: config.uiFolder,
-    development: true,
-    enableCors: config.enableCors,
-    port: config.port
-}
-));
-
-app.listen(config.port, function (err) {
-    if (err) {
-        console.error(err);
-        return;
-    }
-
-    console.log(`Listening at http://localhost:${config.port}/`);
+borderline_server.start().then(function(borderline_router) {
+    // Remove unwanted express headers
+    web_app.set('x-powered-by', false);
+    web_app.use(borderline_router);
+    web_app.listen(config.port, function (error) {
+        if (error) {
+            console.error(error); // eslint-disable-line no-console
+            return;
+        }
+        console.log(`Listening at http://${os.hostname()}:${config.port}/`); // eslint-disable-line no-console
+    });
+}, function(error) {
+    console.error(error); // eslint-disable-line no-console
 });
+

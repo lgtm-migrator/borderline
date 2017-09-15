@@ -1,7 +1,5 @@
-const fs = require('fs-extra');
-const path = require('path');
 const ObjectID = require('mongodb').ObjectID;
-const defines = require('../defines.js');
+const { ErrorHelper, Models } = require('borderline-utils');
 
 /**
  * @fn dataStore
@@ -29,7 +27,7 @@ function dataStore(dataStoreCollection) {
  * @return {Promise} Resolve to an array containing the data sources
  */
 dataStore.prototype.findAll = function() {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.find().toArray().then(function(result) {
             if (result === null || result === undefined || result.length === 0)
@@ -37,7 +35,7 @@ dataStore.prototype.findAll = function() {
             else
                 resolve(result);
         }, function(error) {
-            reject(defines.errorStacker('Find operation failed', error));
+            reject(ErrorHelper('Find operation failed', error));
         });
     });
 };
@@ -48,20 +46,24 @@ dataStore.prototype.findAll = function() {
  * @return {Promise} Resolve to the inserted data source on success
  */
 dataStore.prototype.createDataSource = function(data_source) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
-        for (var i = 0; i < data_source.users.length; i++) {
+        //Transform users ID string to objectID for Mongo
+        for (let i = 0; i < data_source.users.length; i++) {
             data_source.users[i] = new ObjectID(data_source.users[i]);
         }
-        that.sourcesCollection.insertOne(data_source).then(function(success) {
-            if (success.insertedCount == 1) {
+        //Create new data source from model default
+        let new_data_source = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, data_source);
+        //Insert into database
+        that.sourcesCollection.insertOne(new_data_source).then(function(success) {
+            if (success.insertedCount === 1) {
                 resolve(success.ops[0]);
             }
             else {
-                reject(defines.errorStacker('Did not manage to register a new data source'));
+                reject(ErrorHelper('Did not manage to register a new data source'));
             }
         }, function(error) {
-            reject(defines.errorStacker('New data source insert operation failed', error));
+            reject(ErrorHelper('New data source insert operation failed', error));
         });
     });
 };
@@ -73,15 +75,15 @@ dataStore.prototype.createDataSource = function(data_source) {
  * @return {Promise} Resolves to the data source on success
  */
 dataStore.prototype.getDataSourceByID = function(source_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.findOne({_id: new ObjectID(source_id) }).then(function(result) {
             if (result === null || result === undefined)
-                reject(defines.errorStacker('No match for id: ' + source_id));
+                reject(ErrorHelper('No match for id: ' + source_id));
             else
                 resolve(result);
         }, function(error) {
-           reject(defines.errorStacker('Find data source by ID failed', error));
+           reject(ErrorHelper('Find data source by ID failed', error));
         });
     });
 };
@@ -93,22 +95,24 @@ dataStore.prototype.getDataSourceByID = function(source_id) {
  * @return {Promise} Resolves to the update data source on success
  */
 dataStore.prototype.updateDataSourceByID = function(source_id, data) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
-        if (data.hasOwnProperty('_id')) //Transforms ID to mongo ObjectID type
+        if (data.hasOwnProperty('_id')) //Remove _id from data to prevent replace error in mongo
             delete data._id;
-        for (var i = 0; i < data.users; i++) {
+        //transform user IDs
+        for (let i = 0; i < data.users; i++) {
             data.users[i] = new ObjectID(data.users[i]);
         }
-        that.sourcesCollection.findOneAndReplace({_id: new ObjectID(source_id) }, data).then(function(result) {
+        //Create new data source from model default
+        let updated_data_source = Object.assign({}, Models.BL_MODEL_DATA_SOURCE, data);
+        that.sourcesCollection.findOneAndReplace({_id: new ObjectID(source_id) }, updated_data_source).then(function(result) {
             if (result === null || result === undefined)
-                reject(defines.errorStacker('No match for id: ' + source_id));
+                reject(ErrorHelper('No match for id: ' + source_id));
             else {
-                data._id = result.value._id;
-                resolve(data);
+                resolve(result.value);
             }
         }, function(error) {
-            reject(defines.errorStacker('Update datasource failed', error));
+            reject(ErrorHelper('Update datasource failed', error));
         });
     });
 };
@@ -120,12 +124,12 @@ dataStore.prototype.updateDataSourceByID = function(source_id, data) {
  * @return {Promise} Resolves to the deleted data source on success
  */
 dataStore.prototype.deleteDataSourceByID = function(source_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.findOneAndDelete({_id: new ObjectID(source_id)}).then(function (result) {
             resolve(result.value);
         }, function (error) {
-            reject(defines.errorStacker('Delete a data source fail', error));
+            reject(ErrorHelper('Delete a data source fail', error));
         });
     });
 };
@@ -137,12 +141,12 @@ dataStore.prototype.deleteDataSourceByID = function(source_id) {
  * @return {Promise} Resolve to an array of data sources on success
  */
 dataStore.prototype.getDataStoreByUserID = function(user_id) {
-    var that = this;
+    let that = this;
     return  new Promise(function(resolve, reject) {
         that.sourcesCollection.find({ users: new ObjectID(user_id) }).toArray().then(function(result) {
             resolve(result);
         }, function(error) {
-            reject(defines.errorStacker('Get data sources by user fails', error));
+            reject(ErrorHelper('Get data sources by user fails', error));
         });
     });
 };
@@ -150,33 +154,39 @@ dataStore.prototype.getDataStoreByUserID = function(user_id) {
 /**
  * @fn subscribeUserToDataSource
  * @desc Flags a user as using a data source
- * @param user_id User referenced by its unique identifier
  * @param source_id The reference ID to the data source
- * @return {Promise} Resolves to the update data source on success
+ * @param subscription User id and credentials for this subscription
+ * @return {Promise} Resolves to the updated data source on success
  */
-dataStore.prototype.subscribeUserToDataSource = function(user_id, source_id) {
-    var that = this;
+dataStore.prototype.subscribeUserToDataSource = function(source_id, subscription) {
+    let that = this;
     return new Promise(function(resolve, reject) {
+        if (!subscription.hasOwnProperty('user_id') ||
+            !subscription.hasOwnProperty('username') ||
+            !subscription.hasOwnProperty('password')) {
+            reject(ErrorHelper('Missing subscription fields'));
+            return;
+        }
+        subscription.user_id = new ObjectID(subscription.user_id);
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
                                          {
                                              $addToSet: {
-                                                 users: new ObjectID(user_id)
+                                                 users: subscription
                                              }
                                          })
             .then(function(success) {
-                if (success.matchedCount == 0) {
-                    reject(defines.errorStacker('Invalid user_id or source_id'));
+                if (success.matchedCount === 0) {
+                    reject(ErrorHelper('Invalid user_id or source_id'));
                     return;
                 }
-                if (success.modifiedCount == 0) {
-                    reject(defines.errorStacker('Already subscribed'));
+                if (success.modifiedCount === 0) {
+                    reject(ErrorHelper('Already subscribed'));
                     return;
                 }
                 resolve(success);
             }, function(error) {
-                reject(defines.errorStacker('Subscribe failed to save', error));
-            }
-            );
+                reject(ErrorHelper('Subscribe failed to save', error));
+            });
     });
 };
 
@@ -188,26 +198,26 @@ dataStore.prototype.subscribeUserToDataSource = function(user_id, source_id) {
  * @return {Promise} Resolves to the update data source on success
  */
 dataStore.prototype.unsubscribeUserFromDataSource = function(user_id, source_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.sourcesCollection.updateOne({ _id: new ObjectID(source_id) },
             {
                 $pull: {
-                    users: new ObjectID(user_id)
+                    users: { user_id: new ObjectID(user_id) }
                 }
             })
             .then(function(success) {
-                if (success.matchedCount == 0) {
-                    reject(defines.errorStacker('Invalid user_id or source_id'));
+                if (success.matchedCount === 0) {
+                    reject(ErrorHelper('Invalid user_id or source_id'));
                     return;
                 }
-                if (success.modifiedCount == 0) {
-                    reject(defines.errorStacker('Was not subscribed'));
+                if (success.modifiedCount === 0) {
+                    reject(ErrorHelper('Was not subscribed'));
                     return;
                 }
                 resolve(success);
             }, function(error) {
-                reject(defines.errorStacker('Unsubscribe failed to save', error));
+                reject(ErrorHelper('Unsubscribe failed to save', error));
             });
     });
 };

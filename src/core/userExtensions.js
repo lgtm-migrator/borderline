@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const defines = require('../defines.js');
+const { ErrorHelper } = require('borderline-utils');
 
 /**
  * @fn userExtensions
@@ -23,14 +23,14 @@ function UserExtensions(extensionCollection) {
  * @return {Promise} Resolves to an array on this user's extensions
  */
 UserExtensions.prototype.listExtensions = function(user_id) {
-    var that = this;
+    let that = this;
     return new Promise(function (resolve, reject) {
         that.extensionCollection.find({ users: [ new ObjectID(user_id) ] }).toArray().then(
             function (result) {
                 resolve(result);
             },
             function (error) {
-                reject(defines.errorStacker('List error', error));
+                reject(ErrorHelper('List error', error));
             }
         );
     });
@@ -43,7 +43,7 @@ UserExtensions.prototype.listExtensions = function(user_id) {
  * @return {Promise} Resolves to the updated user on success
  */
 UserExtensions.prototype.clearExtensions = function(user_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.extensionCollection.updateMany(
             { _id: new ObjectID(user_id) },
@@ -57,7 +57,7 @@ UserExtensions.prototype.clearExtensions = function(user_id) {
                     resolve(success);
                 },
                 function(error) {
-                    reject(defines.errorStacker('Clear extensions subs error', error));
+                    reject(ErrorHelper('Clear extensions subs error', error));
                 }
             );
     });
@@ -71,7 +71,7 @@ UserExtensions.prototype.clearExtensions = function(user_id) {
  * @return {Promise} Resolves to the update extension on success
  */
 UserExtensions.prototype.subscribe = function(user_id, extension_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.extensionCollection.updateOne(
             { _id: extension_id },
@@ -82,18 +82,18 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
             })
             .then(
                 function(success) {
-                    if (success.matchedCount == 0) {
-                        reject(defines.errorStacker('Invalid user_id or extension_id'));
+                    if (success.matchedCount === 0) {
+                        reject(ErrorHelper('Invalid user_id or extension_id'));
                         return;
                     }
-                    if (success.modifiedCount == 0) {
-                        reject(defines.errorStacker('Already subscribed'));
+                    if (success.modifiedCount === 0) {
+                        reject(ErrorHelper('Already subscribed'));
                         return;
                     }
                     resolve(success);
                 },
                 function(error) {
-                    reject(defines.errorStacker('Extension subscribe error', error));
+                    reject(ErrorHelper('Extension subscribe error', error));
                 }
             );
     });
@@ -107,7 +107,7 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
  * @return {Promise} Resolves to the update extension on success
  */
 UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
-    var that = this;
+    let that = this;
     return new Promise(function(resolve, reject) {
         that.extensionCollection.updateOne(
             { _id: extension_id },
@@ -118,18 +118,18 @@ UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
             })
             .then(
                 function(success) {
-                    if (success.matchedCount == 0) {
-                        reject(defines.errorStacker('Invalid user_id or extension_id'));
+                    if (success.matchedCount === 0) {
+                        reject(ErrorHelper('Invalid user_id or extension_id'));
                         return;
                     }
-                    if (success.modifiedCount == 0) {
-                        reject(defines.errorStacker('Already subscribed'));
+                    if (success.modifiedCount === 0) {
+                        reject(ErrorHelper('Already unsubscribed'));
                         return;
                     }
                     resolve(success);
                 },
                 function(error) {
-                    reject(defines.errorStacker('Extension subscribe error', error));
+                    reject(ErrorHelper('Extension subscribe error', error));
                 }
             );
     });

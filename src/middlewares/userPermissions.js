@@ -1,4 +1,4 @@
-const defines = require('../defines.js');
+const { ErrorHelper } = require('borderline-utils');
 
 /**
  * @fn adminPrivileges
@@ -14,7 +14,7 @@ module.exports.adminPrivileges = function(req, res, next) {
         return;
     }
     res.status(403);
-    res.json(defines.errorStacker('Permission denied'));
+    res.json(ErrorHelper('Permission denied'));
 };
 
 /**
@@ -31,7 +31,7 @@ module.exports.userPrivileges = function(req, res, next) {
         return;
     }
     res.status(403);
-    res.json(defines.errorStacker('Permission denied'));
+    res.json(ErrorHelper('Permission denied'));
 };
 
 /**
@@ -53,5 +53,5 @@ module.exports.userOrAdminPrivileges = function(req, res, next) {
       return;
   }
   res.status(403);
-  res.json(defines.errorStacker('Permission denied'));
+  res.json(ErrorHelper('Permission denied'));
 };

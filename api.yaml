@@ -612,7 +612,7 @@ definitions:
                 description: Display name
             sourceHost:
                 type: string
-                description: Url or Ip where the source is hosted
+                description: URL or IP where the source is hosted
             sourcePort:
                 type: integer
                 description: Port used by this endpoint
