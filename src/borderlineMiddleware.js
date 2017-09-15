@@ -49,12 +49,12 @@ BorderlineMiddleware.prototype.start = function() {
     let _this = this;
     return new Promise(function (resolve, reject) {
         _this._connectDb().then(function () {
+            // Start status periodic update
+            _this._registryHandler();
+
             // Setup route using controllers
             _this._setupQueryEndpoints('/query');
-
-            // Start status periodic update
             _this.setupRegistry();
-            _this._registryHandler();
 
             resolve(_this.app); // All good, returns application
         }, function (error) {
