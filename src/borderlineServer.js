@@ -59,18 +59,18 @@ function BorderlineServer(config) {
  * @return {Promise} Resolve to a native Express.js router ready to use on success.
  * In case of error, an ErrorStack is rejected.
  */
-BorderlineServer.prototype.start = function() {
+BorderlineServer.prototype.start = function () {
     let _this = this;
-    return  new Promise(function(resolve, reject) {
-        _this._connectDb().then(function() {
+    return new Promise(function (resolve, reject) {
+        _this._connectDb().then(function () {
             // Setup sessions with third party middleware
             _this.app.use(expressSession({
-                    secret: 'borderline',
-                    saveUninitialized: false,
-                    resave: false,
-                    cookie: { secure: false },
-                    store: _this.mongoStore
-                })
+                secret: 'borderline',
+                saveUninitialized: false,
+                resave: false,
+                cookie: { secure: false },
+                store: _this.mongoStore
+            })
             );
             _this.app.use(passport.initialize());
             _this.app.use(passport.session());
@@ -88,7 +88,7 @@ BorderlineServer.prototype.start = function() {
 
             // All good, return the express app router
             resolve(_this.app);
-        }, function(error) {
+        }, function (error) {
             reject(ErrorHelper('Could not connect to the database', error));
         });
     });
@@ -100,14 +100,14 @@ BorderlineServer.prototype.start = function() {
  * express router MUST be released and this service endpoints are expected to fail.
  * @return {Promise} Resolve to true on success, ErrorStack otherwise
  */
-BorderlineServer.prototype.stop = function() {
+BorderlineServer.prototype.stop = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Stop periodic update of the registry
         _this.registryHelper.stopPeriodicUpdate();
 
         // Disconnect mongoDB --force
-        _this.db.close(true).then(function(main_error) {
+        _this.db.close(true).then(function (main_error) {
             if (main_error)
                 reject(ErrorHelper('Closing main mongoDB connection failed', main_error));
             else {
@@ -161,8 +161,8 @@ BorderlineServer.prototype._connectDb = function () {
         });
     });
 
-    return new Promise(function(resolve, reject) {
-        Promise.all([main_db]).then(function(__unused__true_array) {
+    return new Promise(function (resolve, reject) {
+        Promise.all([main_db]).then(function (__unused__true_array) {
             resolve(true);
         }, function (error) {
             reject(ErrorHelper('One of the db connection failed', error));
@@ -174,7 +174,7 @@ BorderlineServer.prototype._connectDb = function () {
  * @fn setupRegistry
  * @desc Initialize the registry related routes
  */
-BorderlineServer.prototype.setupRegistry = function() {
+BorderlineServer.prototype.setupRegistry = function () {
     // Import the controller
     let registryController = require('./controllers/registryController');
     this.registryController = new registryController(this.registryHelper);
@@ -204,15 +204,15 @@ BorderlineServer.prototype.setupUserAccount = function () {
     this.app.route('/whoami')
         .get(this.userAccountController.whoAmI); //GET current session user
     this.app.route('/2step/:user_id/')
-        .put(this.userAccountController.put2step); //PUT regenerate secret
+        .put(this.userPermissionsMiddleware.userOrAdminPrivileges, this.userAccountController.put2step); //PUT regenerate secret
     this.app.route('/2step/login')
         .post(this.userAccountController.login2); //POST login with 2 step ON
     this.app.route('/users')
         .get(this.userPermissionsMiddleware.adminPrivileges, this.userAccountController.getUsers);//GET returns the list of users
     this.app.route('/users/:user_id')
-        .get(this.userAccountController.getUserById) //GET user details by ID
-        .post(this.userAccountController.postUserById) //POST Update user details
-        .delete(this.userAccountController.deleteUserById); //DELETE Removes a user
+        .get(this.userPermissionsMiddleware.userOrAdminPrivileges, this.userAccountController.getUserById) //GET user details by ID
+        .post(this.userPermissionsMiddleware.userOrAdminPrivileges, this.userAccountController.postUserById) //POST Update user details
+        .delete(this.userPermissionsMiddleware.adminPrivileges, this.userAccountController.deleteUserById); //DELETE Removes a user
     // ] Login and sessions routes
 };
 
@@ -234,10 +234,10 @@ BorderlineServer.prototype.setupDataStore = function () {
         .put(this.dataStoreController.putDataStoreByID) // PUT Update a single data source
         .delete(this.dataStoreController.deleteDataStoreByID); //DELETE a single data source
     this.app.route('/users/:user_id/data_sources')
-        .get(this.dataStoreController.getUserDataSources); // GET all user's data sources
+        .get(this.userPermissionsMiddleware.userOrAdminPrivileges, this.dataStoreController.getUserDataSources); // GET all user's data sources
     this.app.route('/users/:user_id/data_sources/:source_id')
-        .post(this.dataStoreController.postUserDataSourceByID) //POST Subscribe a user to a data source
-        .delete(this.dataStoreController.deleteUserDataSourceByID); // DELETE Unsubscribe user to data source
+        .post(this.userPermissionsMiddleware.userOrAdminPrivileges, this.dataStoreController.postUserDataSourceByID) //POST Subscribe a user to a data source
+        .delete(this.userPermissionsMiddleware.userOrAdminPrivileges, this.dataStoreController.deleteUserDataSourceByID); // DELETE Unsubscribe user to data source
     // ] Data sources routes
 };
 
@@ -283,11 +283,11 @@ BorderlineServer.prototype.setupUserExtensions = function () {
 
     //[ Extensions subscriptions
     this.app.route('/users/:user_id/extensions')
-        .get(this.userExtensionController.getExtensions) //GET List user extensions
-        .delete(this.userExtensionController.deleteExtensions); //DELETE Forget all extensions for user
+        .get(this.userPermissionsMiddleware.userOrAdminPrivileges, this.userExtensionController.getExtensions) //GET List user extensions
+        .delete(this.userPermissionsMiddleware.userOrAdminPrivileges, this.userExtensionController.deleteExtensions); //DELETE Forget all extensions for user
     this.app.route('/users/:user_id/extensions/:extension_id')
-        .put(this.userExtensionController.subscribeExtension) //PUT Subscribe a user to extension
-        .delete(this.userExtensionController.unsubscribeExtension); //DELETE Un-subscribe from a extension
+        .put(this.userPermissionsMiddleware.userOrAdminPrivileges, this.userExtensionController.subscribeExtension) //PUT Subscribe a user to extension
+        .delete(this.userPermissionsMiddleware.userOrAdminPrivileges, this.userExtensionController.unsubscribeExtension); //DELETE Un-subscribe from a extension
     //] Extensions subs
 };
 
