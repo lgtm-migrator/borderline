@@ -53,8 +53,7 @@ const stepModel = {
     update: '', //Datetime
     workflow: '',
     user: '',
-    extension: '',
-    action: '',
+    extension: [],
     context: {}
 };
 
@@ -78,7 +77,7 @@ const credentialsModel = {
 };
 
 const executionModel = {
-    status: 'unknown',
+    status: 'query-status-unknown',
     start: null,
     end: null,
     info: ''
@@ -98,11 +97,15 @@ const queryModel = {
     endpoint: dataSourceModel,
     credentials: credentialsModel,
     status: executionModel,
-    input: dataModel,
-    output: dataModel
+    input: [ ] ,
+    output: [ ]
 };
 
 module.exports = {
+    serverServiceName: 'borderline-server-panzer',
+    middlewareServiceName: 'borderline-middleware-flammenwerfer',
+    uiServiceName: 'borderline-ui-blitzkrieg',
+
     global_registryCollectionName: 'borderline_global_registry',
     global_storageCollectionName: 'borderline_global_storage',
     global_sessionCollectionName: 'borderline_global_sessions',
@@ -114,8 +117,18 @@ module.exports = {
     server_extensionsCollectionName: 'borderline_server_extensions',
     middleware_queryCollectionName: 'borderline_middleware_queries',
 
-    serverServiceName: 'borderline-server-panzer',
-    middlewareServiceName: 'borderline-middleware-flammenwerfer',
+
+    queryTypeTransmart: 'TS171',
+    queryTypeFile: 'File',
+    queryTypeEAE: 'eAE.v2',
+
+    queryStatusUnknown: 'query-status-unknown',
+    queryStatusError: 'query-status-error',
+    queryStatusInitialize: 'query-status-0',
+    queryStatusExecute: 'query-status-1',
+    queryStatusTerminate: 'query-status-2',
+    queryStatusDone: 'query-status-3',
+
     sessionTimeout: 6 * (24 * 60 * 60), // 6 Days
     registryUpdateInterval: 5 * 1000, // 5 * 1000 ms = 5 seconds
     extensionUpdateInterval: 10 * 1000, // 10 * 1000 ms = 10 seconds

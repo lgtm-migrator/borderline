@@ -34,7 +34,19 @@ module.exports = {
         BL_DEFAULT_SESSION_TIMEOUT: defines.sessionTimeout,
         BL_DEFAULT_REGISTRY_FREQUENCY: defines.registryUpdateInterval,
         BL_DEFAULT_EXTENSION_FREQUENCY: defines.extensionUpdateInterval,
-        BL_DEFAULT_EXTENSION_MANIFEST: defines.extensionManifestFilename
+        BL_DEFAULT_EXTENSION_MANIFEST: defines.extensionManifestFilename,
+
+
+        BL_QUERY_TYPE_TS171: defines.queryTypeTransmart,
+        BL_QUERY_TYPE_FILE: defines.queryTypeFile,
+        BL_QUERY_TYPE_EAE: defines.queryTypeEAE,
+
+        BL_QUERY_STATUS_UNKNOWN: defines.queryStatusUnknown,
+        BL_QUERY_STATUS_ERROR: defines.queryStatusError,
+        BL_QUERY_STATUS_INITIALIZE: defines.queryStatusInitialize,
+        BL_QUERY_STATUS_EXECUTE: defines.queryStatusExecute,
+        BL_QUERY_STATUS_TERMINATE: defines.queryStatusTerminate,
+        BL_QUERY_STATUS_DONE: defines.queryStatusDone
     },
     ErrorHelper: ErrorStack,
     RegistryHelper: RegistryModule,
