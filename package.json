@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "body-parser": "1.18.1",
-        "borderline-utils": "git+https://github.com/dsi-icl/borderline-utils.git",
+        "borderline-utils": "^0.1.0",
         "express": "4.15.4",
         "fs-extra": "^4.0.0",
         "memorystream": "0.3.1",
