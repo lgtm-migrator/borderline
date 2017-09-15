@@ -15,7 +15,7 @@ function BorderlineMiddleware(config) {
     // Bind public member functions
     this.start = BorderlineMiddleware.prototype.start.bind(this);
     this.stop = BorderlineMiddleware.prototype.stop.bind(this);
-
+    this.setupRegistry = BorderlineMiddleware.prototype.setupRegistry.bind(this);
 
     // Bind private member functions
     this._connectDb = BorderlineMiddleware.prototype._connectDb.bind(this);
@@ -53,6 +53,7 @@ BorderlineMiddleware.prototype.start = function() {
             _this._setupQueryEndpoints('/query');
 
             // Start status periodic update
+            _this.setupRegistry();
             _this._registryHandler();
 
             resolve(_this.app); // All good, returns application
@@ -103,6 +104,7 @@ BorderlineMiddleware.prototype._registryHandler = function() {
     _this.registryHelper = new RegistryHelper(Constants.BL_MIDDLEWARE_SERVICE, _this.registryCollection);
     // Sets properties in the registry
     _this.registryHelper.setModel({
+        status: Constants.BL_SERVICE_STATUS_IDLE,
         version: package_file.version,
         port: _this.config.port
     });
@@ -111,6 +113,18 @@ BorderlineMiddleware.prototype._registryHandler = function() {
     _this.registryHelper.startPeriodicUpdate(Constants.BL_DEFAULT_REGISTRY_FREQUENCY);
 };
 
+/**
+ * @fn setupRegistry
+ * @desc Initialize the registry related routes
+ */
+BorderlineMiddleware.prototype.setupRegistry = function() {
+    // Import the controller
+    let registryController = require('./controllers/registryController.js');
+    this.registryController = new registryController(this.registryHelper);
+
+    this.app.get('/status', this.registryController.getServiceStatus);
+    this.app.get('/details', this.registryController.getServiceDetails);
+};
 
 /**
  * @fn _setupQueryEndpoints
