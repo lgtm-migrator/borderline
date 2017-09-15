@@ -132,18 +132,35 @@ QueryAbstract.prototype.updateExecutionStatus = function(new_status_properties) 
     });
 };
 
-QueryAbstract.prototype.initialize = function() {
+/**
+ * @fn initialize
+ * @desc First stage execution of this query
+ * @param __unused__request The Express.js HTTP request that triggered the execution
+ */
+QueryAbstract.prototype.initialize = function(__unused__request = null) {
     throw 'Pure implementation should not be called';
 };
 
+/**
+ * @execute
+ * @desc Core execution method of a query
+ */
 QueryAbstract.prototype.execute = function() {
     throw 'Pure implementation should not be called';
 };
 
+/**
+ * @fn terminate
+ * @desc Last execution stage to teardown after the core execution.
+ */
 QueryAbstract.prototype.terminate = function() {
     throw 'Pure implementation should not be called';
 };
 
+/**
+ * @fn interrupt
+ * @desc Attempts to interrupt at any stage
+ */
 QueryAbstract.prototype.interrupt = function() {
     throw 'Pure implementation should not be called';
 };

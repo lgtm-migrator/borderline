@@ -1,7 +1,6 @@
 const request = require('request');
 const { ErrorHelper, Models } = require('borderline-utils');
 const QueryAbstract = require('./queryAbstract.js');
-const defines = require('../defines.js');
 
 /**
  * @fn QueryTransmart17_1
@@ -55,6 +54,11 @@ QueryTransmart17_1.prototype.initialize = function() {
     });
 };
 
+/**
+ * @fn execute
+ * @desc Performs the execution of the query. For TS17.1, sends the request to the endpoint
+ * @return {Promise} Resolve to true on success or reject the ErrorHelper when it goes wrong
+ */
 QueryTransmart17_1.prototype.execute = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
@@ -114,7 +118,6 @@ QueryTransmart17_1.prototype.interrupt = function() {
     return new Promise(function(resolve, reject) {
         if (_this._query_request) {
             _this._query_request.abort();
-
             resolve(true);
         }
         else {

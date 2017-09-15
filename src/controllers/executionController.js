@@ -40,7 +40,7 @@ ExecutionController.prototype.executeQueryByID = function(req, res) {
     }
     else {
         _this.queryFactory.fromID(query_id).then(function(queryObject) {
-            let exec_promise = _this._internalExecutor(queryObject);
+            let exec_promise = _this._internalExecutor(queryObject, req);
             _this._execution_promises.push(exec_promise);
             res.status(200);
             res.json(true);
@@ -51,7 +51,7 @@ ExecutionController.prototype.executeQueryByID = function(req, res) {
             });
         }, function(factory_error) {
             res.status(401);
-            res.json(ErrorHelper('Cannot execute query', factory_error))
+            res.json(ErrorHelper('Cannot execute query', factory_error));
         });
     }
 };
@@ -81,10 +81,11 @@ ExecutionController.prototype.getQueryStatusById = function(req, res) {
 /**
  * @fn _internalExecutor
  * @param queryObject {QueryAbstract} Executes a query from its abstract representation
+ * @param request Express.js request object received to trigger execution
  * @return {Promise} Resolve to true after all the execution succeeded or rejects an error stack
  * @private
  */
-ExecutionController.prototype._internalExecutor = function(queryObject) {
+ExecutionController.prototype._internalExecutor = function(queryObject, request) {
     return new Promise(function(resolve, reject) {
         let error_callback = function(error_object) {
             queryObject.updateExecutionStatus({
@@ -101,7 +102,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject) {
                 info: 'Preparing..',
                 status: defines.status.INITIALIZE
             }),
-            queryObject.initialize()
+            queryObject.initialize(request)
         ];
 
         Promise.all(init_staqe).then(function() {
@@ -129,7 +130,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject) {
                         status: defines.status.DONE
                     }).then(function() {
                         resolve(true);
-                    }, error_callback)
+                    }, error_callback);
                 }, error_callback);
            }, error_callback);
         }, error_callback);
