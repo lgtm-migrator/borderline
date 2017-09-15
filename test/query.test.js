@@ -1,7 +1,7 @@
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
-
+const { Constants } = require('borderline-utils');
 
 let test_server = new TestServer();
 let g_query_id = '';
@@ -114,7 +114,7 @@ test('Create TS171 query, save the id as ref', function(done) {
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
-            expect(body.status.status).toEqual('unknown');
+            expect(body.status.status).toEqual(Constants.BL_QUERY_STATUS_UNKNOWN);
             expect(body._id).toBeDefined();
             g_query_id = body._id;
             done();
@@ -138,7 +138,7 @@ test('Get TS171 query from {query_id}, check _id and sourceType', function(done)
         expect(body._id).toBeDefined();
         expect(body._id).toEqual(g_query_id);
         expect(body.endpoint).toBeDefined();
-        expect(body.endpoint.sourceType).toEqual('TS171');
+        expect(body.endpoint.sourceType).toEqual(Constants.BL_QUERY_TYPE_TS171);
         done();
     });
 });

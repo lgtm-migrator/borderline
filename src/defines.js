@@ -1,11 +1,9 @@
+const { Constants } = require('borderline-utils');
+
 module.exports = {
-    status: {
-        UNKNOWN: 'query-status-unknown',
-        ERROR: 'query-status-error',
-        INITIALIZE: 'query-status-0',
-        EXECUTE: 'query-status-1',
-        TERMINATE: 'query-status-2',
-        DONE: 'query-status-3'
-    },
-    endpointTypes: ['TS171', 'File', 'eAE.v2']
+    endpointTypes: [
+        Constants.BL_QUERY_TYPE_TS171,
+        Constants.BL_QUERY_TYPE_FILE,
+        Constants.BL_QUERY_TYPE_EAE
+    ]
 };

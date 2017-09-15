@@ -1,7 +1,7 @@
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
-
+const { Constants } = require('borderline-utils');
 
 let test_server = new TestServer();
 let g_query_id = '';
@@ -35,7 +35,7 @@ test('Create stub TS171 query, save the id as ref', function(done) {
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
-            expect(body.status.status).toEqual('unknown');
+            expect(body.status.status).toEqual(Constants.BL_QUERY_STATUS_UNKNOWN);
             expect(body._id).toBeDefined();
             g_query_id = body._id;
             done();

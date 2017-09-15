@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const { ErrorHelper } = require('borderline-utils');
+const { ErrorHelper, Constants } = require('borderline-utils');
 
 const Query_TS171 = require('./queryObject_TS171.js');
 const Query_File = require('./queryObject_File.js');
@@ -26,14 +26,14 @@ QueryFactory.prototype.fromModel = function(queryModel) {
     let _this = this;
     return new Promise(function(resolve, reject) {
         switch (queryModel.endpoint.sourceType) {
-            case 'TS171':
+            case Constants.BL_QUERY_TYPE_TS171:
                 resolve(new Query_TS171(queryModel, _this.queryCollection, _this.storage));
                 break;
-            case 'File':
+            case Constants.BL_QUERY_TYPE_FILE:
                 resolve(new Query_File(queryModel, _this.queryCollection, _this.storage));
                 break;
-            case 'eHS':
-                reject(ErrorHelper('eHS support is not implemented'));
+            case Constants.BL_QUERY_TYPE_EAE:
+                reject(ErrorHelper('eAE support is not implemented, yet!!!'));
                 break;
             default:
                 reject(ErrorHelper('Type [' + queryModel.endpoint.sourceType + '] is unknown'));

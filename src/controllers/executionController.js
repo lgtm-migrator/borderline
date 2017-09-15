@@ -1,6 +1,5 @@
 const QueryFactory = require('../core/queryFactory.js');
-const { ErrorHelper } = require('borderline-utils');
-const defines = require('../defines.js');
+const { ErrorHelper, Constants } = require('borderline-utils');
 
 /**
  * @fn ExecutionController
@@ -91,7 +90,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
             queryObject.updateExecutionStatus({
                 end: new Date(),
                 info: JSON.stringify(error_object),
-                status: defines.status.ERROR
+                status: Constants.BL_QUERY_STATUS_ERROR
             });
             reject(ErrorHelper('Execution failed', error_object));
         };
@@ -100,7 +99,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
             queryObject.updateExecutionStatus({
                 start: new Date(),
                 info: 'Preparing..',
-                status: defines.status.INITIALIZE
+                status: Constants.BL_QUERY_STATUS_INITIALIZE
             }),
             queryObject.initialize(request)
         ];
@@ -110,7 +109,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
                 queryObject.updateExecutionStatus({
                     stage: new Date(),
                     info: 'Running..',
-                    status: defines.status.EXECUTE
+                    status: Constants.BL_QUERY_STATUS_EXECUTE
                 }),
                 queryObject.execute()
             ];
@@ -119,7 +118,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
                     queryObject.updateExecutionStatus({
                         stage: new Date(),
                         info: 'Finishing..',
-                        status: defines.status.TERMINATE
+                        status: Constants.BL_QUERY_STATUS_TERMINATE
                     }),
                     queryObject.terminate()
                 ];
@@ -127,7 +126,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
                     queryObject.updateExecutionStatus({
                         end: new Date(),
                         info: 'Youpi !',
-                        status: defines.status.DONE
+                        status: Constants.BL_QUERY_STATUS_DONE
                     }).then(function() {
                         resolve(true);
                     }, error_callback);

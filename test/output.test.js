@@ -1,7 +1,7 @@
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
-const defines = require('../src/defines.js');
+const { Constants } = require('borderline-utils');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
@@ -26,7 +26,7 @@ const ts171_query = {
             cache: {},
         }
     ],
-    status: { status: "unknown", start: null, end: null, info: "" },
+    status: { status: Constants.BL_QUERY_STATUS_UNKNOWN, start: null, end: null, info: "" },
     output: [ {
         metadata: {},
         cache: {}
@@ -80,7 +80,7 @@ test('Create a VALID test TS171 query, save the id as ref', function(done) {
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
-            expect(body.status.status).toEqual('unknown');
+            expect(body.status.status).toEqual(Constants.BL_QUERY_STATUS_UNKNOWN);
             expect(body._id).toBeDefined();
             g_query_id = body._id;
             done();
@@ -125,7 +125,7 @@ test('Wait 10 secs, Check execution status current query is done', function(done
             expect(response.statusCode).toEqual(200);
             expect(body).toBeDefined();
             expect(body.status).toBeDefined();
-            expect(body.status).toEqual(defines.status.DONE);
+            expect(body.status).toEqual(Constants.BL_QUERY_STATUS_DONE);
             done();
         });
     }, 10000);
