@@ -9,7 +9,7 @@ const { ErrorHelper, Models } = require('borderline-utils');
  * @constructor
  */
 function ExtensionStoreController(extensionCollection) {
-    this.extensionCollection  = extensionCollection;
+    this.extensionCollection = extensionCollection;
     this.extensionStore = new ExtensionStore(extensionCollection);
 
     this.getAllExtensions = ExtensionStoreController.prototype.getAllExtensions.bind(this);
@@ -20,7 +20,7 @@ function ExtensionStoreController(extensionCollection) {
     this.postExtensionByID = ExtensionStoreController.prototype.postExtensionByID.bind(this);
     this.deleteExtensionByID = ExtensionStoreController.prototype.deleteExtensionByID.bind(this);
 
-    this.extensionStore.openStore().catch(function(error) {
+    this.extensionStore.openStore().catch(function (error) {
         console.error(error.toString()); // eslint-disable-line no-console
     });
 }
@@ -30,9 +30,9 @@ function ExtensionStoreController(extensionCollection) {
  * @param __unused__req Unused Express.js request Object
  * @param res Express.js response Object, .status and .json methods are used
  */
-ExtensionStoreController.prototype.getAllExtensions = function(__unused__req, res) {
+ExtensionStoreController.prototype.getAllExtensions = function (__unused__req, res) {
     let _this = this;
-    _this.extensionCollection.find().toArray().then(function(ext_array) {
+    _this.extensionCollection.find().toArray().then(function (ext_array) {
         if (ext_array) {
             // Processes MongoDB ObjectID to string
             for (let i = 0; i < ext_array.length; i++)
@@ -45,7 +45,7 @@ ExtensionStoreController.prototype.getAllExtensions = function(__unused__req, re
             res.status(404);
             res.json(ErrorHelper('No extensions yet'));
         }
-    }, function(findall_error) {
+    }, function (findall_error) {
         res.status(501);
         res.json(ErrorHelper('Cannot list all extensions', findall_error));
     });
@@ -55,7 +55,7 @@ ExtensionStoreController.prototype.getAllExtensions = function(__unused__req, re
  * @fn getExtensionStoreRouter
  * @return {Router} Express router where the extension get mounted at
  */
-ExtensionStoreController.prototype.getExtensionStoreRouter = function() {
+ExtensionStoreController.prototype.getExtensionStoreRouter = function () {
     return this.extensionStore.router;
 };
 
@@ -66,9 +66,9 @@ ExtensionStoreController.prototype.getExtensionStoreRouter = function() {
  * @param req Express.js request object
  * @param res Express.js response objec
  */
-ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
+ExtensionStoreController.prototype.postExtensionStore = function (req, res) {
 
-    if (typeof req.files === 'undefined' || req.files === null || req.files.length === 0){
+    if (typeof req.files === 'undefined' || req.files === null || req.files.length === 0) {
         res.status(400);
         res.json(ErrorHelper('Zip file upload failed'));
         return;
@@ -88,7 +88,7 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
         extensions.push(ext);
     }
 
-    this.extensionCollection.insertMany(extensions).then(function(result) {
+    this.extensionCollection.insertMany(extensions).then(function (result) {
         if (result.insertedCount > 0 && result.ops) {
             res.status(200);
             res.json(result.ops);
@@ -97,7 +97,7 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
             res.status(500);
             res.json(ErrorHelper('Nothing inserted, abort'));
         }
-    }, function(db_error) {
+    }, function (db_error) {
         res.status(500);
         res.json(ErrorHelper('Cannot insert extensions in DB', db_error));
     });
@@ -109,9 +109,9 @@ ExtensionStoreController.prototype.postExtensionStore = function(req, res) {
  * @param req
  * @param res
  */
-ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
+ExtensionStoreController.prototype.getExtensionByID = function (req, res) {
     let id = req.params.id;
-    this.extensionCollection.findOne({_id: new ObjectID(id)}).then(function(result) {
+    this.extensionCollection.findOne({ _id: new ObjectID(id) }).then(function (result) {
         if (result) {
             res.status(200);
             res.json(result);
@@ -120,14 +120,10 @@ ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
             res.status(501);
             res.json(ErrorHelper('Failed to get extension data'));
         }
-    }, function(db_error) {
+    }, function (db_error) {
         res.status(404);
-        res.json(ErrorHelper('Unknown extension Id ' +  id, db_error));
+        res.json(ErrorHelper('Unknown extension Id ' + id, db_error));
     });
-
-
-
-
 };
 
 /**
@@ -137,7 +133,7 @@ ExtensionStoreController.prototype.getExtensionByID = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
+ExtensionStoreController.prototype.postExtensionByID = function (req, res) {
     let id = req.params.id;
     if (typeof req.files === 'undefined' || req.files.length !== 1) {
         res.status(406);
@@ -150,13 +146,13 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
     // create a Model to insert in DB with a ref on the ObjectStorage
     // Let the object store refresh itself
 
-    let update_model = Object.assign({},Models.BL_MODEL_EXTENSION, req.body, {
+    let update_model = Object.assign({}, Models.BL_MODEL_EXTENSION, req.body, {
         zipFile: req.files[0].originalname,
         message: 'Please extract to plugin dir locally'
     });
     delete update_model._id; // Let mongo handle ids
-    this.extensionCollection.findOneAndUpdate({_id: new ObjectID(id)},
-        { $set: update_model }, { returnOriginal: false }).then(function(update_result) {
+    this.extensionCollection.findOneAndUpdate({ _id: new ObjectID(id) },
+        { $set: update_model }, { returnOriginal: false }).then(function (update_result) {
             if (update_result.lastErrorObject.n === 1) {
                 res.status(200);
                 res.json(update_result.value);
@@ -165,10 +161,10 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
                 res.status(500);
                 res.json(ErrorHelper('Update aborted', update_result.lastErrorObject));
             }
-    }, function(update_error) {
-        res.status(501);
-        res.json(ErrorHelper('Cannot update extension model', update_error));
-    });
+        }, function (update_error) {
+            res.status(501);
+            res.json(ErrorHelper('Cannot update extension model', update_error));
+        });
 };
 
 /**
@@ -177,7 +173,7 @@ ExtensionStoreController.prototype.postExtensionByID = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
+ExtensionStoreController.prototype.deleteExtensionByID = function (req, res) {
     let id = req.params.id;
     if (id === undefined || id === null) {
         res.status(404);
@@ -185,7 +181,7 @@ ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
         return;
     }
 
-    this.extensionCollection.findOneAndDelete({_id: new ObjectID(id)}).then(function(result) {
+    this.extensionCollection.findOneAndDelete({ _id: new ObjectID(id) }).then(function (result) {
         if (result.lastErrorObject.n === 1) {
             // Todo: Remove files form local FS if need be
             res.status(200);
@@ -195,7 +191,7 @@ ExtensionStoreController.prototype.deleteExtensionByID = function(req, res) {
             res.status(404);
             res.json(ErrorHelper('Failed to delete extension ' + id));
         }
-    }, function(delete_error) {
+    }, function (delete_error) {
         res.status(404);
         res.json(ErrorHelper('Cannot delete extension', delete_error));
     });

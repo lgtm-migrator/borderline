@@ -30,6 +30,7 @@ function BorderlineServer(config) {
     this.setupExtensionStore = BorderlineServer.prototype.setupExtensionStore.bind(this);
     this.setupUserExtensions = BorderlineServer.prototype.setupUserExtensions.bind(this);
     this.setupWorkflows = BorderlineServer.prototype.setupWorkflows.bind(this);
+    this.setupMiddlware = BorderlineServer.prototype.setupMiddlware.bind(this);
 
     // Define config in global scope (needed for server extensions)
     global.config = this.config;
@@ -85,6 +86,7 @@ BorderlineServer.prototype.start = function () {
             _this.setupExtensionStore();
             _this.setupUserExtensions();
             _this.setupWorkflows();
+            _this.setupMiddlware();
 
             // All good, return the express app router
             resolve(_this.app);
@@ -317,6 +319,19 @@ BorderlineServer.prototype.setupWorkflows = function () {
         .post(this.workflowController.postStepByID) //POST A step by ID in a Workflow by ID
         .delete(this.workflowController.deleteStepByID); //DELETE a step by ID in a workflow by ID
     // ] Workflow endpoints
+};
+
+/**
+ * @fn setupMiddlware
+ * @desc Initialize workflow management routes and controller
+ */
+BorderlineServer.prototype.setupMiddlware = function () {
+    let middlewareControllerModule = require('./controllers/middlewareController');
+    this.middlewareController = new middlewareControllerModule(this.registryCollection);
+
+    //[ Middleware endpoints
+    this.app.use('/query', this.middlewareController.getMiddlewareRouter()); //Extensions routers connect here
+    // ] Middleware endpoints
 };
 
 /**
