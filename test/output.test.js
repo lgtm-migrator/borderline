@@ -8,17 +8,17 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 let test_server = new TestServer();
 let g_query_id = '';
 const ts171_query = {
-    endpoint: { sourceType: "TS171", sourceName: "Transmart instance", sourceHost: "http://transmart.thehyve.net",  sourcePort: 80,  public: false },
-    credentials: { username: "demo-user", password: "demo-user" },
+    endpoint: { type: 'TS171', name: 'Transmart instance', host: 'transmart.thehyve.net', port: 80, protocol: 'http', baseUrl: '', public: false },
+    credentials: { username: 'demo-user', password: 'demo-user' },
     input: [
         {
             metadata: {
-                uri: "/v2/observations?constraint=",
+                uri: '/v2/observations?constraint=',
                 params: {
-                    type: "combination", operator: "and",
+                    type: 'combination', operator: 'and',
                     args: [
-                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\"},
-                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\"}
+                        { type: 'concept', path: '\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\' },
+                        { type: 'concept', path: '\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\' }
                     ],
                 },
                 type: 'clinical'
@@ -26,16 +26,16 @@ const ts171_query = {
             cache: {},
         }
     ],
-    status: { status: Constants.BL_QUERY_STATUS_UNKNOWN, start: null, end: null, info: "" },
-    output: [ {
+    status: { status: Constants.BL_QUERY_STATUS_UNKNOWN, start: null, end: null, info: '' },
+    output: [{
         metadata: {},
         cache: {}
-    } ]
+    }]
 };
 
-beforeAll(function() {
+beforeAll(function () {
     return new Promise(function (resolve, reject) {
-        test_server.start(config).then(function() {
+        test_server.start(config).then(function () {
             resolve(true);
         }, function (error) {
             reject(error.toString());
@@ -43,7 +43,7 @@ beforeAll(function() {
     });
 });
 
-test('Retrieve output for unknown query id', function(done) {
+test('Retrieve output for unknown query id', function (done) {
     expect.assertions(3);
     request({
         method: 'POST',
@@ -51,7 +51,7 @@ test('Retrieve output for unknown query id', function(done) {
         uri: '/query/hibou_qui_pue/output',
         json: true,
         body: { query: g_query_id }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -63,7 +63,7 @@ test('Retrieve output for unknown query id', function(done) {
     });
 });
 
-test('Create a VALID test TS171 query, save the id as ref', function(done) {
+test('Create a VALID test TS171 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
@@ -88,7 +88,7 @@ test('Create a VALID test TS171 query, save the id as ref', function(done) {
     );
 });
 
-test('Execute current query_id, check its started', function(done) {
+test('Execute current query_id, check its started', function (done) {
     expect.assertions(3);
     request({
         method: 'POST',
@@ -96,7 +96,7 @@ test('Execute current query_id, check its started', function(done) {
         uri: '/query/' + g_query_id + '/execute',
         json: true,
         body: { nocache: false }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -109,9 +109,9 @@ test('Execute current query_id, check its started', function(done) {
 });
 
 
-test('Wait 10 secs, Check execution status current query is done', function(done) {
+test('Wait 10 secs, Check execution status current query is done', function (done) {
     expect.assertions(4);
-    setTimeout(function() {
+    setTimeout(function () {
         request({
             method: 'GET',
             baseUrl: 'http://127.0.0.1:' + config.port,
@@ -131,14 +131,14 @@ test('Wait 10 secs, Check execution status current query is done', function(done
     }, 10000);
 });
 
-test('Retrieve output for the current query', function(done) {
+test('Retrieve output for the current query', function (done) {
     expect.assertions(4);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/output',
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -152,15 +152,15 @@ test('Retrieve output for the current query', function(done) {
     });
 });
 
-test('Update output for the current query', function(done) {
+test('Update output for the current query', function (done) {
     expect.assertions(4);
     request({
         method: 'PUT',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/output',
-        body : { test:  'testme' },
+        body: { test: 'testme' },
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -173,14 +173,14 @@ test('Update output for the current query', function(done) {
     });
 });
 
-test('Delete output for the current query', function(done) {
+test('Delete output for the current query', function (done) {
     expect.assertions(2);
     request({
         method: 'DELETE',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/output',
         json: true
-    }, function(error, response, __unused__body) {
+    }, function (error, response, __unused__body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -191,17 +191,17 @@ test('Delete output for the current query', function(done) {
     });
 });
 
-test('Update output for the current query, after a delete operation', function(done) {
+test('Update output for the current query, after a delete operation', function (done) {
     expect.assertions(4);
     request({
         method: 'PUT',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/output',
         json: true,
-        body : {
+        body: {
             test: true
         }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -215,7 +215,7 @@ test('Update output for the current query, after a delete operation', function(d
 });
 
 
-test('Delete current TS171 {query_id}', function(done) {
+test('Delete current TS171 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {
@@ -234,7 +234,7 @@ test('Delete current TS171 {query_id}', function(done) {
     );
 });
 
-afterAll(function() {
+afterAll(function () {
     g_query_id = null;
     return test_server.stop();
 });

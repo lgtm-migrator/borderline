@@ -8,7 +8,7 @@ let BorderlineMiddleware = require('./borderlineMiddleware.js');
 app.set('x-powered-by', false);
 
 let middleware = new BorderlineMiddleware(config);
-middleware.start().then(function(middlware_router) {
+middleware.start().then(function (middlware_router) {
     app.use(middlware_router);
     app.listen(config.port, function (err) {
         if (err) {
@@ -16,7 +16,7 @@ middleware.start().then(function(middlware_router) {
         }
         console.log(`Listening at http://localhost:${config.port}/`); // eslint-disable-line no-console
     });
-}, function(error) {
+}, function (error) {
     console.error(error); // eslint-disable-line no-console
 });
 

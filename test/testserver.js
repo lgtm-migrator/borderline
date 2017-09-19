@@ -9,9 +9,9 @@ function TestServer() {
     this.stop = TestServer.prototype.stop.bind(this);
 }
 
-TestServer.prototype.start = function(config) {
+TestServer.prototype.start = function (config) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Setup node env to test during test
         process.env.TEST = 1;
 
@@ -19,9 +19,9 @@ TestServer.prototype.start = function(config) {
         _this.borderline_middleware = new BorderlineMiddleware(config);
 
         // Start serving on config.port
-        _this.borderline_middleware.start().then(function(middleware_router) {
+        _this.borderline_middleware.start().then(function (middleware_router) {
             _this._app.use(middleware_router);
-            _this._server = _this._app.listen(config.port, function(error) {
+            _this._server = _this._app.listen(config.port, function (error) {
                 if (error)
                     reject(error);
                 else {
@@ -29,26 +29,26 @@ TestServer.prototype.start = function(config) {
                     console.log('Test server listening on ' + config.port); // eslint-disable-line no-console
                 }
             });
-        }, function(error) {
+        }, function (error) {
             reject(error);
         });
     });
 };
 
-TestServer.prototype.stop = function() {
+TestServer.prototype.stop = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Remove test flag from env
         delete process.env.TEST;
 
-        _this.borderline_middleware.stop().then(function() {
-            _this._server.close(function(error) {
+        _this.borderline_middleware.stop().then(function () {
+            _this._server.close(function (error) {
                 if (error)
                     reject(error);
                 else
                     resolve(true);
             });
-        }, function(error) {
+        }, function (error) {
             reject(error);
         });
     });

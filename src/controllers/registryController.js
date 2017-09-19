@@ -15,7 +15,7 @@ function RegistryController(registryHelper) {
 }
 
 
-RegistryController.prototype.getServiceStatus = function(__unused__req, res) {
+RegistryController.prototype.getServiceStatus = function (__unused__req, res) {
     let current_status = this._registry.getStatus();
     if (current_status) {
         res.status(200);
@@ -28,7 +28,7 @@ RegistryController.prototype.getServiceStatus = function(__unused__req, res) {
 };
 
 
-RegistryController.prototype.getServiceDetails = function(__unused__req, res) {
+RegistryController.prototype.getServiceDetails = function (__unused__req, res) {
     let current_details = this._registry.getModel();
     if (current_details) {
         res.status(200);

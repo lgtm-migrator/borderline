@@ -6,9 +6,9 @@ const { Constants } = require('borderline-utils');
 let test_server = new TestServer();
 let g_query_id = '';
 
-beforeAll(function() {
+beforeAll(function () {
     return new Promise(function (resolve, reject) {
-        test_server.start(config).then(function() {
+        test_server.start(config).then(function () {
             resolve(true);
         }, function (error) {
             reject(error.toString());
@@ -16,7 +16,7 @@ beforeAll(function() {
     });
 });
 
-test('Create stub TS171 query, save the id as ref', function(done) {
+test('Create stub TS171 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
@@ -43,14 +43,14 @@ test('Create stub TS171 query, save the id as ref', function(done) {
     );
 });
 
-test('Get query input for invalid query_id', function(done) {
+test('Get query input for invalid query_id', function (done) {
     expect.assertions(3);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/invalid_query_id/input',
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
         }
@@ -61,14 +61,14 @@ test('Get query input for invalid query_id', function(done) {
     });
 });
 
-test('Get {query_id} input, check its empty', function(done) {
+test('Get {query_id} input, check its empty', function (done) {
     expect.assertions(3);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/input',
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -80,7 +80,7 @@ test('Get {query_id} input, check its empty', function(done) {
     });
 });
 
-test('Write query input for {query_id} with dummy TS171 query', function(done) {
+test('Write query input for {query_id} with dummy TS171 query', function (done) {
     expect.assertions(5);
     request({
         method: 'PUT',
@@ -91,19 +91,19 @@ test('Write query input for {query_id} with dummy TS171 query', function(done) {
             uri: '/v2/observations?constraint=',
             params: {
                 type: 'Combination',
-                operator: "and",
+                operator: 'and',
                 args: [
                     {
-                        type: "ConceptConstraint",
-                        path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\"
+                        type: 'ConceptConstraint',
+                        path: '\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\'
                     },
                     {
-                        type: "ConceptConstraint",
-                        path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\"
+                        type: 'ConceptConstraint',
+                        path: '\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\'
                     }]
             }
         }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error)
             done.fail(error.toString());
         expect(response).toBeDefined();
@@ -116,14 +116,14 @@ test('Write query input for {query_id} with dummy TS171 query', function(done) {
 });
 
 
-test('Get query input for {query_id}, check previously set fields are present', function(done) {
+test('Get query input for {query_id}, check previously set fields are present', function (done) {
     expect.assertions(5);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/input',
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error)
             done.fail(error);
         expect(response).toBeDefined();
@@ -135,7 +135,7 @@ test('Get query input for {query_id}, check previously set fields are present', 
     });
 });
 
-test('Delete stub TS171 {query_id}', function(done) {
+test('Delete stub TS171 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {
@@ -154,7 +154,7 @@ test('Delete stub TS171 {query_id}', function(done) {
     );
 });
 
-afterAll(function() {
+afterAll(function () {
     g_query_id = null;
     return test_server.stop();
 });

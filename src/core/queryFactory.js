@@ -22,11 +22,11 @@ function QueryFactory(queryCollection, storage) {
  * @param queryModel Plain JS object data model
  * @return {Promise} A Promise resolving to the allocated implementation Object
  */
-QueryFactory.prototype.fromModel = function(queryModel) {
+QueryFactory.prototype.fromModel = function (queryModel) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Todo: Use a configuration file to make it dynamic
-        switch (queryModel.endpoint.sourceType) {
+        switch (queryModel.endpoint.type) {
             case Constants.BL_QUERY_TYPE_TS171:
                 resolve(new Query_TS171(queryModel, _this.queryCollection, _this.storage));
                 break;
@@ -37,7 +37,7 @@ QueryFactory.prototype.fromModel = function(queryModel) {
                 reject(ErrorHelper('eAE support is not implemented, yet!!!'));
                 break;
             default:
-                reject(ErrorHelper('Type [' + queryModel.endpoint.sourceType + '] is unknown'));
+                reject(ErrorHelper('Type [' + queryModel.endpoint.type + '] is unknown'));
         }
     });
 };
@@ -47,11 +47,11 @@ QueryFactory.prototype.fromModel = function(queryModel) {
  * @param query_id Unique identifier string used by MongoDB
  * @return {Promise} A Promise resolving to the allocated implementation Object
  */
-QueryFactory.prototype.fromID = function(query_id) {
+QueryFactory.prototype.fromID = function (query_id) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         try {
-            _this.queryCollection.findOne({_id: new ObjectID(query_id)}).then(function (queryModel) {
+            _this.queryCollection.findOne({ _id: new ObjectID(query_id) }).then(function (queryModel) {
                 if (queryModel === null || queryModel === undefined) {
                     reject(ErrorHelper('Unknown id ' + query_id));
                     return;

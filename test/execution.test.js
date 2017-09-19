@@ -8,33 +8,33 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 12000; // 12 seconds
 let test_server = new TestServer();
 let g_query_id = '';
 const ts171_query = {
-    endpoint: { sourceType: "TS171", sourceName: "Transmart instance", sourceHost: "http://transmart.thehyve.net",  sourcePort: 80,  public: false },
-    credentials: { username: "demo-user", password: "demo-user" },
-    input: [ {
-            metadata: {
-                uri: "/v2/observations?constraint=",
-                params: {
-                    type: "combination", operator: "and",
-                    args: [
-                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\"},
-                        {type: "concept", path: "\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\"}
-                    ],
-                },
-                 type: 'clinical'
+    endpoint: { type: 'TS171', name: 'Transmart instance', host: 'transmart.thehyve.net', port: 80, protocol: 'http', baseUrl: '', public: false },
+    credentials: { username: 'demo-user', password: 'demo-user' },
+    input: [{
+        metadata: {
+            uri: '/v2/observations?constraint=',
+            params: {
+                type: 'combination', operator: 'and',
+                args: [
+                    { type: 'concept', path: '\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Male\\' },
+                    { type: 'concept', path: '\\Public Studies\\CATEGORICAL_VALUES\\Demography\\Gender\\Female\\' }
+                ],
             },
-            cache: {}
-        }
+            type: 'clinical'
+        },
+        cache: {}
+    }
     ],
-    status: { status: Constants.BL_QUERY_STATUS_UNKNOWN, start: null, end: null, info: "" },
-    output: [ {
+    status: { status: Constants.BL_QUERY_STATUS_UNKNOWN, start: null, end: null, info: '' },
+    output: [{
         metadata: {},
         cache: {}
-    } ]
+    }]
 };
 
-beforeAll(function() {
+beforeAll(function () {
     return new Promise(function (resolve, reject) {
-        test_server.start(config).then(function() {
+        test_server.start(config).then(function () {
             resolve(true);
         }, function (error) {
             reject(error.toString());
@@ -42,7 +42,7 @@ beforeAll(function() {
     });
 });
 
-test('Execute a query with invalid_id', function(done) {
+test('Execute a query with invalid_id', function (done) {
     expect.assertions(2);
     request({
         method: 'POST',
@@ -50,7 +50,7 @@ test('Execute a query with invalid_id', function(done) {
         uri: '/query/invalid_query_id_Not_Object_id_compatible/execute',
         json: true,
         body: { nocache: true }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
         }
@@ -60,7 +60,7 @@ test('Execute a query with invalid_id', function(done) {
     });
 });
 
-test('Create a test TS171 query with invalid credentials, save the id as ref', function(done) {
+test('Create a test TS171 query with invalid credentials, save the id as ref', function (done) {
     expect.assertions(6);
     let query_data = Object.assign({}, ts171_query, {
         credentials: {
@@ -91,7 +91,7 @@ test('Create a test TS171 query with invalid credentials, save the id as ref', f
     );
 });
 
-test('Execute current query_id, check its started', function(done) {
+test('Execute current query_id, check its started', function (done) {
     expect.assertions(3);
     request({
         method: 'POST',
@@ -99,7 +99,7 @@ test('Execute current query_id, check its started', function(done) {
         uri: '/query/' + g_query_id + '/execute',
         json: true,
         body: { nocache: false }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -111,9 +111,9 @@ test('Execute current query_id, check its started', function(done) {
     });
 });
 
-test('Wait 5 secs, Check execution status current query, check auth failed', function(done) {
+test('Wait 5 secs, Check execution status current query, check auth failed', function (done) {
     expect.assertions(4);
-    setTimeout(function() {
+    setTimeout(function () {
         request({
             method: 'GET',
             baseUrl: 'http://127.0.0.1:' + config.port,
@@ -133,7 +133,7 @@ test('Wait 5 secs, Check execution status current query, check auth failed', fun
     }, 5000);
 });
 
-test('Delete current TS171 {query_id}', function(done) {
+test('Delete current TS171 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {
@@ -152,7 +152,7 @@ test('Delete current TS171 {query_id}', function(done) {
     );
 });
 
-test('Create a VALID test TS171 query, save the id as ref', function(done) {
+test('Create a VALID test TS171 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
@@ -177,7 +177,7 @@ test('Create a VALID test TS171 query, save the id as ref', function(done) {
     );
 });
 
-test('Execute current query_id, check its started', function(done) {
+test('Execute current query_id, check its started', function (done) {
     expect.assertions(3);
     request({
         method: 'POST',
@@ -185,7 +185,7 @@ test('Execute current query_id, check its started', function(done) {
         uri: '/query/' + g_query_id + '/execute',
         json: true,
         body: { query: g_query_id }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -198,9 +198,9 @@ test('Execute current query_id, check its started', function(done) {
 });
 
 
-test('Wait 10 secs, Check execution status current query is done', function(done) {
+test('Wait 10 secs, Check execution status current query is done', function (done) {
     expect.assertions(4);
-    setTimeout(function() {
+    setTimeout(function () {
         request({
             method: 'GET',
             baseUrl: 'http://127.0.0.1:' + config.port,
@@ -221,7 +221,7 @@ test('Wait 10 secs, Check execution status current query is done', function(done
 });
 
 
-test('Delete current TS171 {query_id}', function(done) {
+test('Delete current TS171 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {
@@ -240,7 +240,7 @@ test('Delete current TS171 {query_id}', function(done) {
     );
 });
 
-afterAll(function() {
+afterAll(function () {
     g_query_id = null;
     return test_server.stop();
 });

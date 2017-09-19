@@ -36,14 +36,14 @@ QueryFile.prototype.constructor = QueryFile;
  * @param request The Express.js HTTP request that triggered the execution
  * @return Promise
 */
-QueryAbstract.prototype.initialize = function(request) {
+QueryAbstract.prototype.initialize = function (request) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (request !== null && request !== undefined) {
             if (request.hasOwnProperty('file')) {
-                _this._receiveFile(request.file).then(function() {
+                _this._receiveFile(request.file).then(function () {
                     resolve(true);
-                }, function(file_error) {
+                }, function (file_error) {
                     reject(ErrorHelper('File upload error', file_error));
                 });
             }
@@ -63,7 +63,7 @@ QueryAbstract.prototype.initialize = function(request) {
  * Does nothing because the file upload happen during initialize
  * @return {Promise.<boolean>} Always true
  */
-QueryFile.prototype.execute = function() {
+QueryFile.prototype.execute = function () {
     return Promise.resolve(true);
 };
 
@@ -72,7 +72,7 @@ QueryFile.prototype.execute = function() {
  * @desc Implementation of the execution teardown. Does nothing because the file is already stored.
  * @return {Promise.<boolean>} Always true
  */
-QueryFile.prototype.terminate = function() {
+QueryFile.prototype.terminate = function () {
     return Promise.resolve(true);
 };
 
@@ -82,7 +82,7 @@ QueryFile.prototype.terminate = function() {
  * So query file upload cannot be interrupted.
  * @return {Promise.<ErrorHelper>} Always rejects an error
  */
-QueryFile.prototype.interrupt = function() {
+QueryFile.prototype.interrupt = function () {
     return Promise.reject(ErrorHelper('Cannot interrupt file uploads'));
 };
 
@@ -92,7 +92,7 @@ QueryFile.prototype.interrupt = function() {
  * @warning Always reject because file upload queries never use the input
  * @return {Promise.reject}
  */
-QueryFile.prototype.getInput = function() {
+QueryFile.prototype.getInput = function () {
     return new Promise.reject(ErrorHelper('File queries have no inputs!'));
 };
 
@@ -102,7 +102,7 @@ QueryFile.prototype.getInput = function() {
  * @warning Always reject because file upload query doesnt need input
  * @return {Promise.reject}
  */
-QueryFile.prototype.setInput = function() {
+QueryFile.prototype.setInput = function () {
     return new Promise.reject(ErrorHelper('File queries have no input. Files are stored in the output'));
 };
 
@@ -111,9 +111,9 @@ QueryFile.prototype.setInput = function() {
  * @desc Getter on this query output: content of the file uploaded alongside the execute request.
  * @return {Promise} Resolve to the content of the file from the cache, or rejects an error
  */
-QueryFile.prototype.getOutput = function() {
+QueryFile.prototype.getOutput = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (_this._model.output && _this._model.output.length === 1) {
             let output_model = _this._model.output[0]; // Only one output for File upload queries
             if (output_model.cache && output_model.cache.dataSize && output_model.cache.storageId) {
@@ -139,10 +139,10 @@ QueryFile.prototype.getOutput = function() {
  * @param data Raw data to store
  * @return {Promise} Resolve to the data model on success or reject an error
  */
-QueryFile.prototype.setOutput = function(data) {
+QueryFile.prototype.setOutput = function (data) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
-        _this._storage.createObject(data).then(function(storage_id) {
+    return new Promise(function (resolve, reject) {
+        _this._storage.createObject(data).then(function (storage_id) {
             // Update model to remember where we stored the data
             let data_model = Object.assign({}, Models.BL_MODEL_DATA,
                 {
@@ -152,12 +152,12 @@ QueryFile.prototype.setOutput = function(data) {
                     }
                 });
             _this.setOutputModel(data_model); // Overrides previous cache
-            _this._pushModel().then(function() {
+            _this._pushModel().then(function () {
                 resolve(data_model);
-            }, function(push_error) {
+            }, function (push_error) {
                 reject(ErrorHelper('Saving output query model failed', push_error));
             });
-        }, function(storage_error) {
+        }, function (storage_error) {
             reject(ErrorHelper('Caching output in storage failed', storage_error));
         });
     });
@@ -169,12 +169,12 @@ QueryFile.prototype.setOutput = function(data) {
  * @private
  * @return {Promise} Resolves to the file id in storage on success, rejects with error stack
  */
-QueryFile.prototype._receiveFile = function(file) {
+QueryFile.prototype._receiveFile = function (file) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
-        _this.setOutput(file.buffer).then(function(__unused__data_model) {
+    return new Promise(function (resolve, reject) {
+        _this.setOutput(file.buffer).then(function (__unused__data_model) {
             resolve(true);
-        }, function(output_error) {
+        }, function (output_error) {
             reject(ErrorHelper('Upload file failed', output_error));
         });
     });

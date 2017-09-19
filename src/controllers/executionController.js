@@ -29,26 +29,26 @@ function ExecutionController(queryCollection, storage) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExecutionController.prototype.executeQueryByID = function(req, res) {
+ExecutionController.prototype.executeQueryByID = function (req, res) {
     let _this = this;
 
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
-        res.json({error: 'Missing query_id'});
+        res.json({ error: 'Missing query_id' });
     }
     else {
-        _this.queryFactory.fromID(query_id).then(function(queryObject) {
+        _this.queryFactory.fromID(query_id).then(function (queryObject) {
             let exec_promise = _this._internalExecutor(queryObject, req);
             _this._execution_promises.push(exec_promise);
             res.status(200);
             res.json(true);
 
             // Silently catch and log execution errors
-            exec_promise.catch(function(error) {
-               console.error(error.toString());  // eslint-disable-line no-console
+            exec_promise.catch(function (error) {
+                console.error(error.toString());  // eslint-disable-line no-console
             });
-        }, function(factory_error) {
+        }, function (factory_error) {
             res.status(401);
             res.json(ErrorHelper('Cannot execute query', factory_error));
         });
@@ -61,19 +61,19 @@ ExecutionController.prototype.executeQueryByID = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-ExecutionController.prototype.getQueryStatusById = function(req, res) {
+ExecutionController.prototype.getQueryStatusById = function (req, res) {
     let query_id = req.params.query_id;
     if (query_id === undefined || query_id === null) {
         res.status(401);
         res.json(ErrorHelper('Missing query_id'));
         return;
     }
-    this.queryFactory.fromID(query_id).then(function(queryObject) {
+    this.queryFactory.fromID(query_id).then(function (queryObject) {
         res.status(200);
         res.json(queryObject.getModel().status);
     }, function (error) {
-       res.status(401);
-       res.json(ErrorHelper('Get query execution status failed', error));
+        res.status(401);
+        res.json(ErrorHelper('Get query execution status failed', error));
     });
 };
 
@@ -84,9 +84,9 @@ ExecutionController.prototype.getQueryStatusById = function(req, res) {
  * @return {Promise} Resolve to true after all the execution succeeded or rejects an error stack
  * @private
  */
-ExecutionController.prototype._internalExecutor = function(queryObject, request) {
-    return new Promise(function(resolve, reject) {
-        let error_callback = function(error_object) {
+ExecutionController.prototype._internalExecutor = function (queryObject, request) {
+    return new Promise(function (resolve, reject) {
+        let error_callback = function (error_object) {
             queryObject.updateExecutionStatus({
                 end: new Date(),
                 info: JSON.stringify(error_object),
@@ -104,7 +104,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
             queryObject.initialize(request)
         ];
 
-        Promise.all(init_staqe).then(function() {
+        Promise.all(init_staqe).then(function () {
             let exec_stage = [
                 queryObject.updateExecutionStatus({
                     stage: new Date(),
@@ -113,7 +113,7 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
                 }),
                 queryObject.execute()
             ];
-            Promise.all(exec_stage).then(function() {
+            Promise.all(exec_stage).then(function () {
                 let terminate_stage = [
                     queryObject.updateExecutionStatus({
                         stage: new Date(),
@@ -122,16 +122,16 @@ ExecutionController.prototype._internalExecutor = function(queryObject, request)
                     }),
                     queryObject.terminate()
                 ];
-                Promise.all(terminate_stage).then(function() {
+                Promise.all(terminate_stage).then(function () {
                     queryObject.updateExecutionStatus({
                         end: new Date(),
                         info: 'Youpi !',
                         status: Constants.BL_QUERY_STATUS_DONE
-                    }).then(function() {
+                    }).then(function () {
                         resolve(true);
                     }, error_callback);
                 }, error_callback);
-           }, error_callback);
+            }, error_callback);
         }, error_callback);
     });
 };

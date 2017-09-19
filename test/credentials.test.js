@@ -6,9 +6,9 @@ const { Constants } = require('borderline-utils');
 let test_server = new TestServer();
 let g_query_id = '';
 
-beforeAll(function() {
+beforeAll(function () {
     return new Promise(function (resolve, reject) {
-        test_server.start(config).then(function() {
+        test_server.start(config).then(function () {
             resolve(true);
         }, function (error) {
             reject(error.toString());
@@ -16,7 +16,7 @@ beforeAll(function() {
     });
 });
 
-test('Create stub TS171 query, save the id as ref', function(done) {
+test('Create stub TS171 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
@@ -43,14 +43,14 @@ test('Create stub TS171 query, save the id as ref', function(done) {
     );
 });
 
-test('Get credentials for invalid query_id', function(done) {
+test('Get credentials for invalid query_id', function (done) {
     expect.assertions(3);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/totocoucou/credentials',
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -63,14 +63,14 @@ test('Get credentials for invalid query_id', function(done) {
 });
 
 
-test('Get {query_id} credentials, check type fields username and password are present', function(done) {
+test('Get {query_id} credentials, check type fields username and password are present', function (done) {
     expect.assertions(4);
     request({
         method: 'GET',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/credentials',
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -83,7 +83,7 @@ test('Get {query_id} credentials, check type fields username and password are pr
     });
 });
 
-test('Update {query_id} credentials, check updates and fields', function(done) {
+test('Update {query_id} credentials, check updates and fields', function (done) {
     expect.assertions(6);
     request({
         method: 'PUT',
@@ -94,7 +94,7 @@ test('Update {query_id} credentials, check updates and fields', function(done) {
             username: 'demo-user',
             password: 'demo-user'
         }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -113,14 +113,14 @@ test('Update {query_id} credentials, check updates and fields', function(done) {
     });
 });
 
-test('Reset {query_id} credentials, check fields are back to default', function(done) {
+test('Reset {query_id} credentials, check fields are back to default', function (done) {
     expect.assertions(6);
     request({
         method: 'DELETE',
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id + '/credentials',
         json: true
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             done.fail(error.toString());
             return;
@@ -139,7 +139,7 @@ test('Reset {query_id} credentials, check fields are back to default', function(
     });
 });
 
-test('Delete stub TS171 {query_id}', function(done) {
+test('Delete stub TS171 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {
@@ -158,7 +158,7 @@ test('Delete stub TS171 {query_id}', function(done) {
     );
 });
 
-afterAll(function() {
+afterAll(function () {
     g_query_id = null;
     return test_server.stop();
 });

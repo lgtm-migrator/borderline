@@ -24,22 +24,22 @@ function OutputController(queryCollection, storage) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-OutputController.prototype.getQueryById = function(req, res) {
+OutputController.prototype.getQueryById = function (req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
         res.json(ErrorHelper('Missing query_id'));
         return;
     }
-    this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.getOutput().then(function(result) {
+    this.factory.fromID(query_id).then(function (queryObject) {
+        queryObject.getOutput().then(function (result) {
             res.status(200);
             res.json(result);
-        }, function(error) {
+        }, function (error) {
             res.status(401);
             res.json(ErrorHelper('Output extraction failed', error));
         });
-    }, function(error) {
+    }, function (error) {
         res.status(401);
         res.json(ErrorHelper('Error retrieving query from ID', error));
     });
@@ -52,7 +52,7 @@ OutputController.prototype.getQueryById = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-OutputController.prototype.putQueryById = function(req, res) {
+OutputController.prototype.putQueryById = function (req, res) {
     let query_id = req.params.query_id;
     let data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
@@ -60,15 +60,15 @@ OutputController.prototype.putQueryById = function(req, res) {
         res.json(ErrorHelper('Missing query_id'));
         return;
     }
-    this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.setOutput(data).then(function(data_model) {
+    this.factory.fromID(query_id).then(function (queryObject) {
+        queryObject.setOutput(data).then(function (data_model) {
             res.status(200);
             res.json(data_model);
-        }, function(error) {
+        }, function (error) {
             res.status(401);
             res.json(ErrorHelper('Updating output failed', error));
         });
-    }, function(error) {
+    }, function (error) {
         res.status(401);
         res.json(ErrorHelper('Updating query failed', error));
     });
@@ -81,23 +81,23 @@ OutputController.prototype.putQueryById = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-OutputController.prototype.deleteQueryById = function(req, res) {
+OutputController.prototype.deleteQueryById = function (req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
         res.json(ErrorHelper('Missing query ID'));
         return;
     }
-    this.factory.fromID(query_id).then(function(queryObject) {
+    this.factory.fromID(query_id).then(function (queryObject) {
         // Todo: Should erase of the old storage object if any
-        queryObject.setOutput({}).then(function(data_model) {
+        queryObject.setOutput({}).then(function (data_model) {
             res.status(200);
             res.json(data_model);
-        }, function(error) {
+        }, function (error) {
             res.status(401);
             res.json(ErrorHelper('Updating output failed', error));
         });
-    }, function(error) {
+    }, function (error) {
         res.status(401);
         res.json(ErrorHelper('Delete failed', error));
     });

@@ -24,17 +24,17 @@ function CredentialsController(queryCollection, storage) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-CredentialsController.prototype.getQueryById = function(req, res) {
+CredentialsController.prototype.getQueryById = function (req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined || query_id.length === 0) {
         res.status(401);
         res.json(ErrorHelper('Missing query_id'));
         return;
     }
-    this.factory.fromID(query_id).then(function(queryObject) {
+    this.factory.fromID(query_id).then(function (queryObject) {
         res.status(200);
         res.json(queryObject.getModel().credentials);
-    }, function(error) {
+    }, function (error) {
         res.status(401);
         res.json(ErrorHelper('Error retrieving query from ID', error));
     });
@@ -47,7 +47,7 @@ CredentialsController.prototype.getQueryById = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-CredentialsController.prototype.putQueryById = function(req, res) {
+CredentialsController.prototype.putQueryById = function (req, res) {
     let query_id = req.params.query_id;
     let data = req.body;
     if (query_id === null || query_id === undefined || data === null || data === undefined) {
@@ -55,16 +55,16 @@ CredentialsController.prototype.putQueryById = function(req, res) {
         res.json(ErrorHelper('Missing query_id'));
         return;
     }
-    this.factory.fromID(query_id).then(function(queryObject) {
+    this.factory.fromID(query_id).then(function (queryObject) {
         queryObject.setModel({ credentials: Object.assign({}, Models.BL_MODEL_CREDENTIALS, data) });
-        queryObject._pushModel().then(function() {
+        queryObject._pushModel().then(function () {
             res.status(200);
             res.json(queryObject.getModel().credentials);
-        }, function(error) {
+        }, function (error) {
             res.status(401);
             res.json(ErrorHelper('Updating input model failed', error));
         });
-    }, function(error) {
+    }, function (error) {
         res.status(401);
         res.json(ErrorHelper('Updating query failed', error));
     });
@@ -76,23 +76,23 @@ CredentialsController.prototype.putQueryById = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-CredentialsController.prototype.deleteQueryById = function(req, res) {
+CredentialsController.prototype.deleteQueryById = function (req, res) {
     let query_id = req.params.query_id;
     if (query_id === null || query_id === undefined) {
         res.status(401);
         res.json(ErrorHelper('Missing query ID'));
         return;
     }
-    this.factory.fromID(query_id).then(function(queryObject) {
-        queryObject.setModel({credentials: Object.assign({}, Models.BL_MODEL_CREDENTIALS)});
-        queryObject._pushModel().then(function() {
+    this.factory.fromID(query_id).then(function (queryObject) {
+        queryObject.setModel({ credentials: Object.assign({}, Models.BL_MODEL_CREDENTIALS) });
+        queryObject._pushModel().then(function () {
             res.status(200);
             res.json(queryObject.getModel().credentials);
-        }, function(error) {
-          res.status(401);
-          res.json(ErrorHelper('Delete from model failed', error));
+        }, function (error) {
+            res.status(401);
+            res.json(ErrorHelper('Delete from model failed', error));
         });
-    }, function(error) {
+    }, function (error) {
         res.status(401);
         res.json(ErrorHelper('Delete failed', error));
     });

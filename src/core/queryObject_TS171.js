@@ -43,12 +43,12 @@ QueryTransmart17_1.prototype.constructor = QueryTransmart17_1;
  * @desc Prepare the query execution by authenticating to the Transmart 17.1 endpoint
  * @return {Promise} Resolve to true or rejects an error stack
  */
-QueryTransmart17_1.prototype.initialize = function() {
+QueryTransmart17_1.prototype.initialize = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
-        _this._ensureAuth().then(function() {
+    return new Promise(function (resolve, reject) {
+        _this._ensureAuth().then(function () {
             resolve(true);
-        }, function(auth_error) {
+        }, function (auth_error) {
             reject(ErrorHelper('TS17.1 init query failed', auth_error));
         });
     });
@@ -59,15 +59,15 @@ QueryTransmart17_1.prototype.initialize = function() {
  * @desc Performs the execution of the query. For TS17.1, sends the request to the endpoint
  * @return {Promise} Resolve to true on success or reject the ErrorHelper when it goes wrong
  */
-QueryTransmart17_1.prototype.execute = function() {
+QueryTransmart17_1.prototype.execute = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let credentials = _this.getModel().credentials;
         let endpoint = _this.getModel().endpoint;
         let input = _this.getInputModel()[0].metadata; // TS17.1 query data is here in the right format
         let uri_type_arg = input.hasOwnProperty('type') ? ('&type=' + input.type) : '';
         _this._query_request = request.get({
-            baseUrl: endpoint.sourceHost + ':' + endpoint.sourcePort,
+            baseUrl: endpoint.protocol + '://' + endpoint.host + ':' + endpoint.port + endpoint.baseUrl,
             uri: input.uri + JSON.stringify(input.params) + uri_type_arg,
             headers: {
                 Authorization: 'Bearer ' + credentials.access_token
@@ -92,14 +92,14 @@ QueryTransmart17_1.prototype.execute = function() {
  * @desc Stores the query output
  * @return {Promise} Resolve to the output dataModel on success, error otherwise
  */
-QueryTransmart17_1.prototype.terminate = function() {
+QueryTransmart17_1.prototype.terminate = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let query_result = _this._query_result;
         if (query_result) {
-            _this.setOutput(query_result).then(function(data_model) {
+            _this.setOutput(query_result).then(function (data_model) {
                 resolve(data_model);
-            }, function(output_error) {
+            }, function (output_error) {
                 reject(ErrorHelper('Terminate TS171 saving output failed', output_error));
             });
         }
@@ -113,9 +113,9 @@ QueryTransmart17_1.prototype.terminate = function() {
  * @fn interrupt
  * @desc Attempts to interrupt the current query
  */
-QueryTransmart17_1.prototype.interrupt = function() {
+QueryTransmart17_1.prototype.interrupt = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (_this._query_request) {
             _this._query_request.abort();
             resolve(true);
@@ -131,7 +131,7 @@ QueryTransmart17_1.prototype.interrupt = function() {
  * @desc Getter on this query std Input
  * @return {Promise} Resolve to the query input data in std format, or rejects ErrorHelper
  */
-QueryTransmart17_1.prototype.getInput = function() {
+QueryTransmart17_1.prototype.getInput = function () {
     let _this = this;
     return new Promise(function (resolve, reject) {
         if (_this._model.input && _this._model.input.length === 1) {
@@ -157,17 +157,17 @@ QueryTransmart17_1.prototype.getInput = function() {
  * @param data Std query data to store
  * @return {Promise} Resolve to the data model on success or reject an error
  */
-QueryTransmart17_1.prototype.setInput = function(data) {
+QueryTransmart17_1.prototype.setInput = function (data) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let data_model = Object.assign({}, Models.BL_MODEL_DATA,
             {
                 metadata: _this._stdToTransmart(data) // Transform std query to transmart
             });
         _this.setInputModel(data_model);
-        _this._pushModel().then(function() {
+        _this._pushModel().then(function () {
             resolve(data_model);
-        }, function(push_error) {
+        }, function (push_error) {
             reject(ErrorHelper('Saving the input query model failed', push_error));
         });
     });
@@ -178,9 +178,9 @@ QueryTransmart17_1.prototype.setInput = function(data) {
  * @desc Getter on this TS171 output. Reads the data stored in the object cache if any
  * @return {Promise} Resolves to the std data on success, reject if data is missing or error occurs
  */
-QueryTransmart17_1.prototype.getOutput = function() {
+QueryTransmart17_1.prototype.getOutput = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (_this._model.output && _this._model.output.length === 1) {
             let output_model = _this._model.output[0]; // Only one output from TS171 queries
             if (output_model.cache && output_model.cache.dataSize && output_model.cache.storageId) {
@@ -208,14 +208,14 @@ QueryTransmart17_1.prototype.getOutput = function() {
  * @param data Raw data to store in Std format
  * @return {Promise} Resolve to the data model on success or reject an error
  */
-QueryTransmart17_1.prototype.setOutput = function(data) {
+QueryTransmart17_1.prototype.setOutput = function (data) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Store the data in STD format
         let std_data = _this._transmartToStd(data);
         let bytes_data = JSON.stringify(std_data);
         // Todo: Should erase of the old storage object if any
-        _this._storage.createObject(bytes_data).then(function(storage_id) {
+        _this._storage.createObject(bytes_data).then(function (storage_id) {
             // Update model to remember where we stored the data
             let data_model = Object.assign({}, Models.BL_MODEL_DATA,
                 {
@@ -225,12 +225,12 @@ QueryTransmart17_1.prototype.setOutput = function(data) {
                     }
                 });
             _this.setOutputModel(data_model);
-            _this._pushModel().then(function() {
+            _this._pushModel().then(function () {
                 resolve(data_model);
-            }, function(push_error) {
-               reject(ErrorHelper('Saving output query model failed', push_error));
+            }, function (push_error) {
+                reject(ErrorHelper('Saving output query model failed', push_error));
             });
-        }, function(storage_error) {
+        }, function (storage_error) {
             reject(ErrorHelper('Caching output in storage failed', storage_error));
         });
     });
@@ -240,7 +240,7 @@ QueryTransmart17_1.prototype.setOutput = function(data) {
  * @fn isAuth
  * @desc Returns true if this query has a non-expired token
  */
-QueryTransmart17_1.prototype._isAuth = function() {
+QueryTransmart17_1.prototype._isAuth = function () {
     //Needs first auth if Oauth token details are missing
     if (this.hasOwnProperty('model') === false ||
         this._model.hasOwnProperty('credentials') === false ||
@@ -252,7 +252,7 @@ QueryTransmart17_1.prototype._isAuth = function() {
     let now = new Date();
     //Compute expiration date for this token
     let expires = new Date(this._model.credentials.generated);
-    expires.setTime(expires.getTime() +  this._model.credentials.expires_in * 1000);
+    expires.setTime(expires.getTime() + this._model.credentials.expires_in * 1000);
     //Compares now and expiration date
     return (now < expires);
 };
@@ -263,14 +263,15 @@ QueryTransmart17_1.prototype._isAuth = function() {
  * @return {Promise} Resolves to true on success
  * @private
  */
-QueryTransmart17_1.prototype._doAuth = function() {
+QueryTransmart17_1.prototype._doAuth = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         //Get new credentials from data source
+        console.log(_this._model.endpoint.protocol + '://' + _this._model.endpoint.host + ':' + _this._model.endpoint.port + _this._model.endpoint.baseUrl);
         request.post({
             method: 'POST',
             json: true,
-            baseUrl: _this._model.endpoint.sourceHost + ':' + _this._model.endpoint.sourcePort,
+            baseUrl: _this._model.endpoint.protocol + '://' + _this._model.endpoint.host + ':' + _this._model.endpoint.port + _this._model.endpoint.baseUrl,
             uri: '/oauth/token?grant_type=password&client_id=glowingbear-js' +
             '&username=' + _this._model.credentials.username +
             '&password=' + _this._model.credentials.password
@@ -289,9 +290,9 @@ QueryTransmart17_1.prototype._doAuth = function() {
             }
 
             // Update queryModel
-            let newCredentials = Object.assign({}, _this._model.credentials, body, { generated: new Date()});
-            _this._model = Object.assign({}, _this._model, {credentials: newCredentials});
-            _this._pushModel().then(function() {
+            let newCredentials = Object.assign({}, _this._model.credentials, body, { generated: new Date() });
+            _this._model = Object.assign({}, _this._model, { credentials: newCredentials });
+            _this._pushModel().then(function () {
                 resolve(true);
             }, function (error) {
                 reject(ErrorHelper('Auth save failed', error));
@@ -305,9 +306,9 @@ QueryTransmart17_1.prototype._doAuth = function() {
  * @desc Makes sure this query has a valid OAuth Bearer token
  * @private
  */
-QueryTransmart17_1.prototype._ensureAuth = function() {
+QueryTransmart17_1.prototype._ensureAuth = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         try {
             if (_this._isAuth() === false) {
                 _this._doAuth().then(function () {
@@ -333,7 +334,7 @@ QueryTransmart17_1.prototype._ensureAuth = function() {
  * @warning This method does nothing because we don't have a standard query language yet
  * @private
  */
-QueryTransmart17_1.prototype._stdToTransmart = function(std_data) {
+QueryTransmart17_1.prototype._stdToTransmart = function (std_data) {
     return std_data;
 };
 
@@ -344,7 +345,7 @@ QueryTransmart17_1.prototype._stdToTransmart = function(std_data) {
  * @warning This method does nothing because we don't have a standard query language yet
  * @private
  */
-QueryTransmart17_1.prototype._transmartToStd = function(transmart_data) {
+QueryTransmart17_1.prototype._transmartToStd = function (transmart_data) {
     return transmart_data;
 };
 
