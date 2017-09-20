@@ -56,6 +56,11 @@ BorderlineMiddleware.prototype.start = function () {
             _this._setupQueryEndpoints('/query');
             _this.setupRegistry();
 
+            _this.app.all('/*', function (__unused__req, res) {
+                res.status(400);
+                res.json(ErrorHelper('Bad request'));
+            });
+
             resolve(_this.app); // All good, returns application
         }, function (error) {
             _this.app.all('*', function (__unused__req, res) {
@@ -178,6 +183,11 @@ BorderlineMiddleware.prototype._setupQueryEndpoints = function (prefix) {
         .post(multer().single('file'), _this.executionController.executeQueryByID);
     _this.app.route(prefix + '/:query_id/status')
         .get(_this.executionController.getQueryStatusById);
+    _this.app.route(prefix + '/*')
+        .all(function (__unused__req, res) {
+            res.status(400);
+            res.json(ErrorHelper('Bad request'));
+        });
 };
 
 /**
