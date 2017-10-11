@@ -88,6 +88,11 @@ BorderlineServer.prototype.start = function () {
             _this.setupWorkflows();
             _this.setupMiddlware();
 
+            _this.app.all('/*', function (__unused__req, res) {
+                res.status(400);
+                res.json(ErrorHelper('Bad request'));
+            });
+
             // All good, return the express app router
             resolve(_this.app);
         }, function (error) {
