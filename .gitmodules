@@ -1,0 +1,18 @@
+[submodule "packages/borderline-devutils"]
+	path = packages/borderline-devutils
+	url = https://github.com/dsi-icl/borderline-devutils.git
+[submodule "packages/borderline-server"]
+	path = packages/borderline-server
+	url = https://github.com/dsi-icl/borderline-server.git
+[submodule "packages/borderline-middleware"]
+	path = packages/borderline-middleware
+	url = https://github.com/dsi-icl/borderline-middleware.git
+[submodule "packages/borderline-ui"]
+	path = packages/borderline-ui
+	url = https://github.com/dsi-icl/borderline-ui.git
+[submodule "packages/borderline-documentation"]
+	path = packages/borderline-documentation
+	url = https://github.com/dsi-icl/borderline-documentation.git
+[submodule "packages/borderline-utils"]
+	path = packages/borderline-utils
+	url = https://github.com/dsi-icl/borderline-utils.git
