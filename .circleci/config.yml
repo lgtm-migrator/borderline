@@ -7,28 +7,40 @@ defaults: &defaults
 
 jobs:
   build:
+#    <<: *defaults
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#      - run:
+#          name: Environment verions
+#          command: yarn versions
+#      - run:
+#          name: Installing dependencies
+#          command: yarn install
+#      - run:
+#          name: Upgrading dependencies
+#          command: yarn upgrade
+#      - save_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#          paths:
+#            - ./node_modules
+
+#  publish:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+#      - restore_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Environment verions
           command: yarn versions
       - run:
+          name: Installing dependencies
+          command: yarn install
+      - run:
           name: Upgrading dependencies
           command: yarn upgrade
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-
-  publish:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
       - deploy:
           name: Publishing
           command: node ./bin/borderline-devutils.js publish
@@ -43,7 +55,7 @@ workflows:
     jobs:
       - build:
           context: org-global
-      - publish:
-          context: org-global
-          requires:
-            - build
+      #- publish:
+      #    context: org-global
+      #    requires:
+      #      - build
