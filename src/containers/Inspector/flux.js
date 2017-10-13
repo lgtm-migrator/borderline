@@ -81,7 +81,7 @@ export const epics = {
     (action) => action.ofType(types.EXTENSIONS_LOAD)
         .mergeMap(() =>
             api.fetchExtensionsList()
-                .map(response => response.ok === true ? actions.extensionsSuccess(response.data.extensions) : actions.extensionsFailure())
+                .map(response => response.ok === true ? actions.extensionsSuccess(response.data) : actions.extensionsFailure())
         ),
 
     extensionDownloadFromLoad:
@@ -109,7 +109,7 @@ export const epics = {
         .mergeMap(action =>
             Observable.concat(
                 Observable.of(actions.extensionUnitDidLoad(action.extension)),
-                Observable.from(Object.values(state.retrieve().toJS().list))
+                Observable.from(Object.values(state.list))
                     .every(extension => extension.loaded === true)
                     .filter(loaded => loaded === true)
                     .mapTo(actions.extensionsDidLoad())
@@ -143,11 +143,14 @@ export const reducers = {
 };
 
 const extensionsSuccess = (state, action) => {
-    Observable.from(action.list).map(extension =>
-        state.list[extension.id] = {
+    Observable.from(action.list).map(extension => {
+        if (extension._id === undefined)
+            return false;
+        state.list[extension._id] = {
             loaded: false
-        }
-    ).subscribe();
+        };
+        return true;
+    }).subscribe();
     let count = 0;
     Observable.from(systemExtensions).map(model =>
         state.list[`__sys${count++}__`] = {

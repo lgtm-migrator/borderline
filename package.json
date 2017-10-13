@@ -23,11 +23,12 @@
         "prepublishOnly": "borderline-devutils publish"
     },
     "dependencies": {
+        "borderline-utils": "^0.1.2",
         "dompurify": "1.0.2",
-        "immutable": "3.8.1",
+        "immutable": "3.8.2",
         "monaco-editor": "^0.10.0",
-        "react": "16.0.0-rc.2",
-        "react-dom": "16.0.0-rc.2",
+        "react": "16.0.0",
+        "react-dom": "16.0.0",
         "react-redux": "5.0.6",
         "react-router-dom": "4.2.2",
         "react-router-redux": "5.0.0-alpha.6",
@@ -37,7 +38,7 @@
     },
     "devDependencies": {
         "borderline-devutils": "^0.x",
-        "react-test-renderer": "16.0.0-rc.2",
+        "react-test-renderer": "16.0.0",
         "redux-logger": "3.0.6"
     }
 }
