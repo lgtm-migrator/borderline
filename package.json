@@ -1,6 +1,6 @@
 {
     "name": "borderline-server",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "description": "Multi-browser visualization tool server",
     "main": "./src/borderlineServer.js",
     "scripts": {
@@ -13,7 +13,10 @@
         "borderline",
         "etriks"
     ],
-    "author": "Jean Grizet <jean.grizet16@imperial.ac.uk>",
+    "contributors": [
+        "Jean Grizet <jean.grizet16@imperial.ac.uk>",
+        "Florian Guitton <f.guitton@imperial.ac.uk>"
+    ],
     "license": "MIT",
     "readme": "README.md",
     "repository": {
@@ -27,20 +30,19 @@
     "devDependencies": {
         "babel-core": "6.26.0",
         "babel-eslint": "^8.0.1",
-        "babel-preset-es2015": "6.24.1",
-        "babel-preset-stage-0": "6.24.1",
+        "babel-preset-env": "1.6.0",
         "eslint": "4.8.0",
         "jest": "^21.2.1"
     },
     "dependencies": {
         "adm-zip": "0.4.7",
         "body-parser": "1.18.2",
-        "borderline-utils": "^0.1.2",
+        "borderline-utils": "^0.x",
         "connect-mongo": "2.0.0",
         "express": "4.16.2",
         "express-session": "1.15.6",
         "fs-extra": "^4.0.2",
-        "mongodb": "2.2.31",
+        "mongodb": "2.2.33",
         "multer": "^1.3.0",
         "passport": "0.4.0",
         "request": "2.83.0",
