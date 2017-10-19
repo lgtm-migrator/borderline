@@ -19,26 +19,27 @@
     "scripts": {
         "start": "borderline-devutils start",
         "build": "borderline-devutils build",
-        "test": "borderline-devutils test --env=jsdom",
+        "test": "borderline-devutils test --env=jsdom --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN",
         "prepublishOnly": "borderline-devutils publish"
     },
     "dependencies": {
-        "borderline-utils": "^0.1.2",
-        "dompurify": "1.0.2",
+        "borderline-utils": "^0.1.6",
+        "dompurify": "1.0.4",
         "immutable": "3.8.2",
-        "monaco-editor": "^0.10.0",
-        "react": "16.0.0",
-        "react-dom": "16.0.0",
-        "react-redux": "5.0.6",
+        "monaco-editor": "0.13.1",
+        "react": "16.4.0",
+        "react-dom": "16.4.0",
+        "react-redux": "5.0.7",
         "react-router-dom": "4.2.2",
-        "react-router-redux": "5.0.0-alpha.6",
-        "redux": "3.7.2",
-        "redux-observable": "0.16.0",
-        "rxjs": "5.4.3"
+        "react-router-redux": "5.0.0-alpha.9",
+        "redux": "4.0.0",
+        "redux-observable": "1.0.0-beta.0",
+        "rxjs": "6.2.0"
     },
     "devDependencies": {
-        "borderline-devutils": "^0.x",
-        "react-test-renderer": "16.0.0",
+        "borderline-devutils": "0.4.2",
+        "codacy-coverage": "3.0.0",
+        "react-test-renderer": "16.4.0",
         "redux-logger": "3.0.6"
     }
 }
