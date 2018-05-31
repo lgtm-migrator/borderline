@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node ./src/index.js",
         "lint": "eslint src",
-        "test": "jest --runInBand --colors --verbose"
+        "test": "jest --runInBand --colors --verbose --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN"
     },
     "keywords": [
         "borderline",
@@ -31,6 +31,7 @@
         "babel-core": "6.26.3",
         "babel-eslint": "^8.2.3",
         "babel-preset-env": "^1.7.0",
+        "codacy-coverage": "^3.0.0",
         "eslint": "4.19.1",
         "jest": "^23.1.0"
     },

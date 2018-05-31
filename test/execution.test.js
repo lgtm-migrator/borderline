@@ -111,7 +111,7 @@ test('Execute current query_id, check its started', function (done) {
     });
 });
 
-test('Wait 5 secs, Check execution status current query, check auth failed', function (done) {
+test('Wait 10 secs, Check execution status current query, check auth failed', function (done) {
     expect.assertions(4);
     setTimeout(function () {
         request({
@@ -130,7 +130,7 @@ test('Wait 5 secs, Check execution status current query, check auth failed', fun
             expect(body.status).toEqual(Constants.BL_QUERY_STATUS_ERROR);
             done();
         });
-    }, 5000);
+    }, 10000);
 });
 
 test('Delete current TS171 {query_id}', function (done) {
