@@ -1,12 +1,12 @@
 {
     "name": "borderline-middleware",
-    "version": "0.4.3",
+    "version": "0.4.4",
     "description": "",
     "main": "./src/borderlineMiddleware.js",
     "scripts": {
         "start": "node ./src/index.js",
         "lint": "eslint src",
-        "test": "jest --runInBand --colors"
+        "test": "jest --runInBand --colors --verbose"
     },
     "keywords": [
         "borderline",
@@ -28,22 +28,22 @@
     },
     "homepage": "https://github.com/dsi-icl/borderline-middleware#readme",
     "devDependencies": {
-        "babel-core": "6.26.0",
-        "babel-eslint": "^8.0.1",
-        "babel-preset-env": "^1.6.1",
-        "eslint": "4.9.0",
-        "jest": "^21.2.1"
+        "babel-core": "6.26.3",
+        "babel-eslint": "^8.2.3",
+        "babel-preset-env": "^1.7.0",
+        "eslint": "4.19.1",
+        "jest": "^23.1.0"
     },
     "dependencies": {
-        "body-parser": "1.18.2",
+        "body-parser": "1.18.3",
         "borderline-utils": "^0.1.2",
-        "express": "4.16.2",
-        "fs-extra": "^4.0.2",
+        "express": "4.16.3",
+        "fs-extra": "^6.0.1",
         "memorystream": "0.3.1",
-        "mongodb": "2.2.33",
+        "mongodb": "2.2.31",
         "multer": "^1.3.0",
-        "os2": "0.0.11",
-        "request": "2.83.0",
-        "uuid": "^3.1.0"
+        "os2": "0.0.13",
+        "request": "2.87.0",
+        "uuid": "^3.2.1"
     }
 }

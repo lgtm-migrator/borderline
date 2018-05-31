@@ -8,8 +8,8 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 let test_server = new TestServer();
 let g_query_id = '';
 const ts171_query = {
-    endpoint: { type: 'TS171', name: 'Transmart instance', host: 'transmart.thehyve.net', port: 80, protocol: 'http', baseUrl: '', public: false },
-    credentials: { username: 'demo-user', password: 'demo-user' },
+    endpoint: { type: 'TS171', name: 'Transmart instance', host: 'tm171-release-pg.thehyve.net', port: 80, protocol: 'http', baseUrl: '', public: false },
+    credentials: { username: 'admin', password: 'admin' },
     input: [
         {
             metadata: {
@@ -57,7 +57,7 @@ test('Retrieve output for unknown query id', function (done) {
             return;
         }
         expect(response).toBeDefined();
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(400);
         expect(body).toBeDefined();
         done();
     });

@@ -272,7 +272,7 @@ QueryTransmart17_1.prototype._doAuth = function () {
             method: 'POST',
             json: true,
             baseUrl: _this._model.endpoint.protocol + '://' + _this._model.endpoint.host + ':' + _this._model.endpoint.port + _this._model.endpoint.baseUrl,
-            uri: '/oauth/token?grant_type=password&client_id=glowingbear-js' +
+            uri: '/oauth/token?grant_type=password&client_id=glowingbear-js&client_secret=' +
             '&username=' + _this._model.credentials.username +
             '&password=' + _this._model.credentials.password
         }, function (error, response, body) {

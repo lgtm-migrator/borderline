@@ -8,8 +8,8 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 12000; // 12 seconds
 let test_server = new TestServer();
 let g_query_id = '';
 const ts171_query = {
-    endpoint: { type: 'TS171', name: 'Transmart instance', host: 'transmart.thehyve.net', port: 80, protocol: 'http', baseUrl: '', public: false },
-    credentials: { username: 'demo-user', password: 'demo-user' },
+    endpoint: { type: 'TS171', name: 'Transmart instance', host: 'tm171-release-pg.thehyve.net', port: 80, protocol: 'http', baseUrl: '', public: false },
+    credentials: { username: 'admin', password: 'admin' },
     input: [{
         metadata: {
             uri: '/v2/observations?constraint=',
