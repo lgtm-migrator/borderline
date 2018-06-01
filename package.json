@@ -26,8 +26,8 @@
   "homepage": "https://github.com/dsi-icl/borderline-utils#readme",
   "devDependencies": {
     "babel-core": "6.26.0",
-    "babel-eslint": "^8.0.1",
-    "babel-preset-env": "^1.6.1",
+    "babel-eslint": "8.0.1",
+    "babel-preset-env": "1.6.1",
     "eslint": "4.9.0"
   },
   "dependencies": {
