@@ -85,7 +85,7 @@ BorderlineMiddleware.prototype.stop = function () {
         _this.registryHelper.stopPeriodicUpdate();
 
         // Disconnect DB --force
-        _this.db.close(true).then(function (error) {
+        _this.client.close(true).then(function (error) {
             if (error)
                 reject(ErrorHelper('Closing mongoDB connection failed', error));
             else
@@ -206,18 +206,19 @@ BorderlineMiddleware.prototype._connectDb = function () {
         let promises = [];
         for (let i = 0; i < urls_list.length; i++) {
             let p = new Promise(function (resolve, reject) {
-                mongodb.connect(urls_list[i], function (err, db) {
+                mongodb.connect(urls_list[i], {}, function (err, client) {
                     if (err !== null)
                         reject(ErrorHelper('Database connection failure', err));
                     else
-                        resolve(db);
+                        resolve(client);
                 });
             });
             promises.push(p);
         }
         //Resolve all promises in parallel
-        Promise.all(promises).then(function (databases) {
-            _this.db = databases[0];
+        Promise.all(promises).then(function (clients) {
+            _this.client = clients[0];
+            _this.db = _this.client.db();
             _this.queryCollection = _this.db.collection(Constants.BL_MIDDLEWARE_COLLECTION_QUERY);
             _this.storage = new ObjectStorage({
                 url: _this.config.swiftURL,
