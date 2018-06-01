@@ -39,7 +39,7 @@
         "babel-runtime": "6.26.0",
         "borderline-server": "0.3.4",
         "case-sensitive-paths-webpack-plugin": "2.1.1",
-        "chalk": "2.2.0",
+        "chalk": "2.4.1",
         "codecov": "2.3.0",
         "copy-webpack-plugin": "4.1.1",
         "coveralls": "3.0.0",
