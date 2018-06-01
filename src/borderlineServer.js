@@ -114,7 +114,7 @@ BorderlineServer.prototype.stop = function () {
         _this.registryHelper.stopPeriodicUpdate();
 
         // Disconnect mongoDB --force
-        _this.db.close(true).then(function (main_error) {
+        _this.client.close(true).then(function (main_error) {
             if (main_error)
                 reject(ErrorHelper('Closing main mongoDB connection failed', main_error));
             else {
@@ -157,13 +157,14 @@ BorderlineServer.prototype._registryHandler = function () {
 BorderlineServer.prototype._connectDb = function () {
     let _this = this;
     let main_db = new Promise(function (resolve, reject) {
-        mongodb.connect(_this.config.mongoURL, function (err, db) {
+        mongodb.connect(_this.config.mongoURL, {},function (err, client) {
             if (err !== null && err !== undefined) {
                 reject(ErrorHelper('Failed to connect to mongoDB', err));
                 return;
             }
-            _this.db = db;
-            _this.mongoStore = new MongoStore({ db: db, ttl: Constants.BL_DEFAULT_SESSION_TIMEOUT, collection: Constants.BL_GLOBAL_COLLECTION_SESSIONS });
+            _this.client = client;
+            _this.db = _this.client.db();
+            _this.mongoStore = new MongoStore({ url: _this.config.mongoURL, db: _this.db, ttl: Constants.BL_DEFAULT_SESSION_TIMEOUT, collection: Constants.BL_GLOBAL_COLLECTION_SESSIONS });
             resolve(true);
         });
     });
