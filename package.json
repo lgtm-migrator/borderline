@@ -7,7 +7,7 @@
         "start": "node ./src/index.js",
         "lint": "eslint src",
         "plugin": "webpack --config ./tools/plugin-build/webpack.config.js --colors",
-        "test": "jest --runInBand --colors --verbose --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN"
+        "test": "jest --runInBand --colors --detectOpenHandles --forceExit --verbose --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN"
     },
     "keywords": [
         "borderline",
