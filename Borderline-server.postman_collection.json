@@ -1,35 +1,53 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "dbf87bbe-6657-4fd6-8ea7-7d38ae227b81",
 		"name": "Borderline-server",
-		"_postman_id": "10a8c0b6-32de-173e-6834-2b94956f686b",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Registry",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "GET status",
 					"request": {
-						"url": "{{server_url}}/status",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/status",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"status"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "GET full details",
 					"request": {
-						"url": "{{server_url}}/details",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/details",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"details"
+							]
+						}
 					},
 					"response": []
 				}
@@ -37,7 +55,7 @@
 		},
 		{
 			"name": "Data store",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "List all data sources",
@@ -53,11 +71,21 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources"
+							]
+						}
 					},
 					"response": []
 				},
@@ -79,20 +107,26 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "    {\n      \"sourceType\": \"TS171\",\n      \"sourceName\": \"etriks dev\",\n      \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n      \"public\": false,\n      \"default\": false,\n      \"users\": [ ]\n    }"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/data_sources",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources"
+							]
+						}
 					},
 					"response": []
 				},
@@ -110,11 +144,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources/{{data_source_id}}",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -132,20 +177,126 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources/{{data_source_id}}",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "  {\n    \"sourceType\": \"TS171\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ ]\n  }"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get data sources by user ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe user to data source",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"{{user_id}}\",\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unsubscribe user from data source ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -165,75 +316,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources/{{data_source_id}}",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Get data sources by user ID",
-					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/data_sources/",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Subscribe user to data source",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
-								]
-							}
-						}
-					],
-					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"user_id\": \"{{user_id}}\",\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
+							"raw": ""
 						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Unsubscribe user from data source ",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
-								]
-							}
+						"url": {
+							"raw": "{{server_url}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"{{data_source_id}}"
+							]
 						}
-					],
-					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
-						"method": "DELETE",
-						"header": [],
-						"body": {},
-						"description": ""
 					},
 					"response": []
 				},
@@ -253,11 +351,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources/notvalidid",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/notvalidid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"notvalidid"
+							]
+						}
 					},
 					"response": []
 				},
@@ -278,20 +387,27 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources/coucouhibou",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "  {\n    \"sourceType\": \"etriks\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n  }"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/data_sources/coucouhibou",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"coucouhibou"
+							]
+						}
 					},
 					"response": []
 				},
@@ -311,11 +427,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/data_sources/notavalidid",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/notavalidid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"notavalidid"
+							]
+						}
 					},
 					"response": []
 				},
@@ -335,20 +462,29 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/data_sources/notavaliddatasourceid",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"user_id\": \"{{user_id}}\",\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/notavaliddatasourceid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								"notavaliddatasourceid"
+							]
+						}
 					},
 					"response": []
 				},
@@ -368,11 +504,24 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/NOPE/data_sources/{{data_source_id}}",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/NOPE/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"NOPE",
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
 					},
 					"response": []
 				}
@@ -380,7 +529,7 @@
 		},
 		{
 			"name": "Extension Store",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "List extensions",
@@ -405,26 +554,46 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store"
+							]
+						}
 					},
 					"response": [
 						{
-							"id": "6f1ac7dd-b443-43b8-95bb-00ea45521708",
+							"id": "dfaf48dc-453e-4359-91d1-7932f24e0ad5",
 							"name": "pluginList",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "GET",
 								"header": [],
-								"body": {}
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -470,22 +639,31 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "13",
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						},
 						{
-							"id": "55c7febb-a413-48b7-a5d6-f98365c4a6a1",
+							"id": "11301083-36f3-4ecc-9123-26710e580096",
 							"name": "pluginList",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "GET",
 								"header": [],
-								"body": {}
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -531,7 +709,6 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "13",
 							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
 						}
 					]
@@ -556,7 +733,6 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -564,30 +740,45 @@
 							"formdata": [
 								{
 									"key": "plugin-zip",
-									"type": "file",
-									"src": "README.md"
+									"type": "file"
 								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store"
 							]
 						},
 						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
 					},
 					"response": [
 						{
-							"id": "85504999-817e-4b16-8fad-b188a52922bb",
+							"id": "fcb445dc-bf73-4712-91c2-6c82bf11c147",
 							"name": "pluginUploaded",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
 								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -627,25 +818,31 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "23",
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "bf5c2fae-c931-4292-b63f-471dfe01e7a6",
+							"id": "8b50ef70-16ce-45f4-981e-d41e28c8db1d",
 							"name": "pluginUpload",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
 								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -685,7 +882,6 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "23",
 							"body": "[{\"id\":\"859ddffc98d7\"}]"
 						}
 					]
@@ -704,11 +900,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store/{{pluginID}}",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"{{pluginID}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -731,7 +938,6 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store/{{pluginID}}",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -739,30 +945,46 @@
 							"formdata": [
 								{
 									"key": "plugin-zip",
-									"type": "file",
-									"src": ".gitignore"
+									"type": "file"
 								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"{{pluginID}}"
 							]
 						},
 						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
 					},
 					"response": [
 						{
-							"id": "53917755-74f1-4843-9bc4-6cc1a8930b37",
+							"id": "f2ac5d8a-986a-452a-907d-ad07eb3f5772",
 							"name": "pluginUploaded",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
 								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -802,25 +1024,31 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "23",
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "407307d3-b3df-4ba9-9862-c441eb63e326",
+							"id": "c5a89035-ecac-405d-af36-b21c16f4919e",
 							"name": "pluginUpload",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
 								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -860,7 +1088,6 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "23",
 							"body": "[{\"id\":\"859ddffc98d7\"}]"
 						}
 					]
@@ -879,11 +1106,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store/{{pluginID}}",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"{{pluginID}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -905,7 +1143,6 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store/notavliadpluginid",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -913,30 +1150,46 @@
 							"formdata": [
 								{
 									"key": "plugin-zip",
-									"type": "file",
-									"src": "chat-0.0.1.zip"
+									"type": "file"
 								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/notavliadpluginid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"notavliadpluginid"
 							]
 						},
 						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
 					},
 					"response": [
 						{
-							"id": "0c70252c-fd89-4f3f-a1fc-f686c679de44",
+							"id": "e434206c-d621-45e8-9e9c-9c3f3e90230e",
 							"name": "pluginUploaded",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
 								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -976,25 +1229,31 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "23",
 							"body": "[{\"id\":\"3b9febc1d233\"}]"
 						},
 						{
-							"id": "0687b5b6-b60e-4253-8afc-1b3e60d6c8f2",
+							"id": "f08675e5-2951-4478-a7c3-5c95fa3ae0cf",
 							"name": "pluginUpload",
 							"originalRequest": {
-								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
 								}
 							},
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"_postman_previewtype": "text",
 							"header": [
 								{
 									"name": "Connection",
@@ -1034,7 +1293,6 @@
 								}
 							],
 							"cookie": [],
-							"responseTime": "23",
 							"body": "[{\"id\":\"859ddffc98d7\"}]"
 						}
 					]
@@ -1055,11 +1313,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store/notavalidplugin",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/notavalidplugin",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"notavalidplugin"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1079,11 +1348,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/extension_store/nonostillnotvalid",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/nonostillnotvalid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"nonostillnotvalid"
+							]
+						}
 					},
 					"response": []
 				}
@@ -1091,7 +1371,7 @@
 		},
 		{
 			"name": "User Accounts",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Login as admin and save user id for use",
@@ -1113,18 +1393,15 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/login",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"description": ""
+								"value": "application/x-www-form-urlencoded"
 							},
 							{
 								"key": "Cookie",
-								"value": "test=test;toto=toto",
-								"description": ""
+								"value": "test=test;toto=toto"
 							}
 						],
 						"body": {
@@ -1142,7 +1419,15 @@
 								}
 							]
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/login",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1160,11 +1445,21 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1182,11 +1477,21 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/whoami",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/whoami",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"whoami"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1204,11 +1509,21 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/logout",
 						"method": "POST",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/logout",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1229,11 +1544,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1251,20 +1577,27 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"_id\": \"588b715469a1b64140e00b8a\",\n  \"username\": \"root\",\n  \"salt\": \"1fc162ade209d19e3db9ead000df7d2f\",\n  \"password\": \"1e3ec0ba8a479f3c16169bd2f31b0c5bdc022fbf3a5f4021eaa589c3891f5fa63453f38b1c0f404e183ab24ff47622328b58b9db0cf0d15e09f9f07ec189d717\",\n  \"admin\": true\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1282,28 +1615,49 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}",
 						"method": "DELETE",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Regenerate 2 Step  QR code",
 					"request": {
-						"url": "{{server_url}}/2step/{{user_id}}",
 						"method": "PUT",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/2step/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"2step",
+								"{{user_id}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1324,13 +1678,11 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/login",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"description": ""
+								"value": "application/x-www-form-urlencoded"
 							}
 						],
 						"body": {
@@ -1350,7 +1702,15 @@
 								}
 							]
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/login",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1368,18 +1728,27 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Connection",
 								"value": "close",
-								"description": "",
 								"disabled": true
 							}
 						],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1399,11 +1768,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/iamnotavalidid",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/iamnotavalidid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"iamnotavalidid"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1423,20 +1803,27 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/nono",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"_id\": \"iamnotavaliduserid\",\n  \"username\": \"root\",\n  \"salt\": \"1fc162ade209d19e3db9ead000df7d2f\",\n  \"password\": \"1e3ec0ba8a479f3c16169bd2f31b0c5bdc022fbf3a5f4021eaa589c3891f5fa63453f38b1c0f404e183ab24ff47622328b58b9db0cf0d15e09f9f07ec189d717\",\n  \"admin\": true\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/users/nono",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"nono"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1456,17 +1843,27 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/nonoiamnotokay",
 						"method": "DELETE",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/nonoiamnotokay",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"nonoiamnotokay"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1485,11 +1882,21 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/whoami",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/whoami",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"whoami"
+							]
+						}
 					},
 					"response": []
 				}
@@ -1497,49 +1904,99 @@
 		},
 		{
 			"name": "User extensions",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "List all plugins for user identifed by ID",
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/extensions",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Clear all plugins for user defined by ID",
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/extensions",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Subscribe user identfied by ID to plugin identified by ID",
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
 						"method": "PUT",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions",
+								"{{pluginID}}"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Unsubscribe user identified by ID to plugin identified by ID",
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions",
+								"{{pluginID}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1559,11 +2016,23 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/invalidid/extensions",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/invalidid/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"invalidid",
+								"extensions"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1583,11 +2052,23 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/invaliduserid/extensions",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/invaliduserid/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"invaliduserid",
+								"extensions"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1607,11 +2088,24 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/nonoinvalid/extensions/{{pluginID}}",
 						"method": "PUT",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/nonoinvalid/extensions/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"nonoinvalid",
+								"extensions",
+								"{{pluginID}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1631,11 +2125,24 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/users/{{user_id}}/extensions/nonoinvalidplugin",
 						"method": "PUT",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions/nonoinvalidplugin",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions",
+								"nonoinvalidplugin"
+							]
+						}
 					},
 					"response": []
 				}
@@ -1643,7 +2150,7 @@
 		},
 		{
 			"name": "Workflows",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "List workflows on the server",
@@ -1660,11 +2167,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -1689,13 +2207,11 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"description": ""
+								"value": "application/x-www-form-urlencoded"
 							}
 						],
 						"body": {
@@ -1708,18 +2224,39 @@
 								}
 							]
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/workflow/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								""
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Get a workflow from its unique identifier",
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -1740,42 +2277,27 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"_id\": \"{{workflow_ID}}\",\n  \"name\": \"Updated Workflow name\",\n  \"create\": \"6405499313127948289\",\n  \"update\": \"6405499313127948290\",\n  \"owner\": \"58a198229bc4ca3bb81c937a\",\n  \"read\": [],\n  \"write\": [],\n  \"graph\": {}\n}"
 						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Delete workflow based on workflow_id",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
-								]
-							}
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}"
+							]
 						}
-					],
-					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}",
-						"method": "DELETE",
-						"header": [],
-						"body": {},
-						"description": ""
 					},
 					"response": []
 				},
@@ -1799,20 +2321,29 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -1834,20 +2365,29 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"parent\": \"{{step_ID}}\",\n  \"extension\": \"child-extension\",\n  \"action\": \"@@/workflow/RESULT_CANVAS\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -1865,11 +2405,24 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"{{step_ID}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1890,31 +2443,98 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"_id\": \"{{step_ID}}\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"{{workflow_ID}}\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"{{step_ID}}"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Delete step_id inside curent workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c9b0df3c-4e51-42a4-99bc-52b43bcebb50",
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"{{step_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete workflow based on workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1934,11 +2554,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/iamnotaworkflow",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/iamnotaworkflow",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"iamnotaworkflow"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1958,20 +2589,27 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/nonopasbon",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"_id\": \"{{workflow_ID}}\",\n  \"name\": \"Updated Workflow name\",\n  \"create\": \"6405499313127948289\",\n  \"update\": \"6405499313127948290\",\n  \"owner\": \"58a198229bc4ca3bb81c937a\",\n  \"read\": [],\n  \"write\": [],\n  \"graph\": {}\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/workflow/nonopasbon",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"nonopasbon"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1991,11 +2629,22 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/nonoworkflow",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/nonoworkflow",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"nonoworkflow"
+							]
+						}
 					},
 					"response": []
 				},
@@ -2015,20 +2664,29 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/nopenopenope/step/",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/workflow/nopenopenope/step/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"nopenopenope",
+								"step",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -2048,11 +2706,24 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"nopnostep"
+							]
+						}
 					},
 					"response": []
 				},
@@ -2072,20 +2743,29 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/nopestepid",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"_id\": \"{{step_ID}}\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"58e50d40f1072427c419b775\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/nopestepid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"nopestepid"
+							]
+						}
 					},
 					"response": []
 				},
@@ -2105,11 +2785,24 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/notavlidstep",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/notavlidstep",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"notavlidstep"
+							]
+						}
 					},
 					"response": []
 				},
@@ -2129,11 +2822,24 @@
 						}
 					],
 					"request": {
-						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"nopnostep"
+							]
+						}
 					},
 					"response": []
 				}

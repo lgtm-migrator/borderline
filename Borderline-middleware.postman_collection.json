@@ -1,35 +1,53 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "9caed5aa-c0cf-4745-b0a6-8c34596d2a82",
 		"name": "Borderline-middleware",
-		"_postman_id": "5b514073-278d-bfaa-ea42-8962b04106c7",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Registry",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "GET status",
 					"request": {
-						"url": "{{middleware_url}}/status",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/status",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"status"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "GET full details",
 					"request": {
-						"url": "{{middleware_url}}/details",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/details",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"details"
+							]
+						}
 					},
 					"response": []
 				}
@@ -37,7 +55,7 @@
 		},
 		{
 			"name": "Create",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Create empty query",
@@ -61,11 +79,22 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/new",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
 					},
 					"response": []
 				},
@@ -91,20 +120,27 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/new",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"TS171\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n    \"local\": {},\r\n    \"std\": {}\r\n  },\r\n  \"output\": {\r\n    \"local\": {\r\n      \"dataSize\": 0,\r\n        \"dataId\": null\r\n    },\r\n    \"std\": {\r\n      \"dataSize\": 0,\r\n      \"dataId\": null\r\n    }\r\n  }\r\n}"
+							"raw": "{\r\n  \"endpoint\": {\r\n    \"type\": \"TS171\",\r\n    \"name\": \"Transmart the hyve\",\r\n    \"protocol\": \"http\",\r\n    \"host\": \"glowingbear.thehyve.net\",\r\n    \"baseUrl\": \"\",\r\n    \"port\": 80,\r\n    \"public\": false\r\n  },\r\n  \"credentials\": {\r\n    \"username\": \"demo-user\",\r\n    \"password\": \"demo-user\"\r\n  },\r\n  \"input\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }],\r\n  \"output\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }]\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
 					},
 					"response": []
 				},
@@ -130,20 +166,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/new/TS171",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n   \"non_used_field\": \"coucoutest\"\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/new/TS171",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new",
+								"TS171"
+							]
+						}
 					},
 					"response": []
 				},
@@ -169,20 +213,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/new/File",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/new/File",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new",
+								"File"
+							]
+						}
 					},
 					"response": []
 				},
@@ -203,11 +255,22 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -217,12 +280,13 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "23021d41-1070-4f35-9ba3-8c9fc6f17082",
 								"type": "text/javascript",
 								"exec": [
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"",
 									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"tests[\"valid\"] = jsonData.value.hasOwnProperty('_id') ;",
 									"",
 									"",
 									""
@@ -231,20 +295,27 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"_id\": \"59a7ce455176401d286e1f65\",\n    \"endpoint\": {\n        \"sourceType\": \"TS171\",\n        \"sourceName\": \"Transmart the hyve\",\n        \"sourceHost\": \"http://glowingbear.thehyve.net/\",\n        \"sourcePort\": 80,\n        \"public\": false\n    },\n    \"credentials\": {\n        \"username\": \"demo-user\",\n        \"password\": \"demo-user\",\n        \"access_token\": \"0\",\n        \"expires_in\": 0,\n        \"generated\": \"Thu Aug 31 2017 09:52:26 GMT+0100 (GMT Daylight Time)\"\n    },\n    \"input\": {\n        \"local\": {\n            \"uri\": \"/v2/observations?constraint=\",\n            \"params\": {\n                \"type\": \"Combination\",\n                \"operator\": \"and\",\n                \"args\": [\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\n                    },\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\n                    }\n                ]\n            }\n        },\n        \"std\": {\n            \"uri\": \"/v2/observations?constraint=\",\n            \"params\": {\n                \"type\": \"Combination\",\n                \"operator\": \"and\",\n                \"args\": [\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\n                    },\n                    {\n                        \"type\": \"ConceptConstraint\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\n                    }\n                ]\n            }\n        }\n    },\n    \"status\": {\n        \"status\": \"unknown\",\n        \"start\": null,\n        \"end\": null,\n        \"info\": \"\"\n    },\n    \"output\": {\n        \"local\": {\n            \"dataSize\": 0,\n            \"dataId\": null\n        },\n        \"std\": {\n            \"dataSize\": 0,\n            \"dataId\": null\n        }\n    },\n    \"non_used_field\": \"updated2\"\n}"
+							"raw": "{\n    \"_id\": \"59a7ce455176401d286e1f65\",\n    \"credentials\": {\n        \"_id\": \"\",\n        \"username\": \"admin\",\n        \"password\": \"admin\"\n    },\n   \"endpoint\": {\n        \"type\": \"TS171\",\n        \"name\": \"Transmart\",\n        \"protocol\": \"http\",\n        \"host\": \"tm171-release-pg.thehyve.net\",\n        \"baseUrl\": \"\",\n        \"port\": 80,\n        \"public\": false\n    },\n    \"input\": [{\n        \"metadata\": {\n            \"uri\": \"/v2/observations?constraint=\",\n            \"params\": {\n                \"type\": \"or\",\n                \"args\": [\n                    {\n                        \"type\": \"concept\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\n                    },\n                    {\n                        \"type\": \"concept\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\n                    }\n                ]\n            },\n            \"type\": \"clinical\"\n        },\n        \"cache\": {}\n    }],\n    \"status\": {\n        \"status\": \"custom_status\",\n        \"start\": null,\n        \"end\": null,\n        \"info\": \"\"\n    },\n    \"output\": [{\n        \"metadata\": {},\n        \"cache\": {}\n    }],\n    \"non_used_field\": \"updated2\"\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -267,25 +338,32 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/new",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"input\": {\r\n    \"local\": {},\r\n    \"std\": {}\r\n  },\r\n  \"output\": {\r\n    \"local\": {\r\n      \"dataSize\": 0,\r\n        \"dataId\": null\r\n    },\r\n    \"std\": {\r\n      \"dataSize\": 0,\r\n      \"dataId\": null\r\n    }\r\n  }\r\n}"
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"input\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }],\r\n  \"output\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }]\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "[Error] Create query with missing invalid endpoint",
+					"name": "[Error] Create query with invalid endpoint",
 					"event": [
 						{
 							"listen": "test",
@@ -303,20 +381,27 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/new",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"sourceType\": \"thisshloudmakeitfail\",\r\n    \"sourceName\": \"Transmart\",\r\n    \"sourceHost\": \"http://transmart-pro-test.thehyve.net\",\r\n    \"sourcePort\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": {\r\n    \"local\": {},\r\n    \"std\": {}\r\n  },\r\n  \"output\": {\r\n    \"local\": {\r\n      \"dataSize\": 0,\r\n        \"dataId\": null\r\n    },\r\n    \"std\": {\r\n      \"dataSize\": 0,\r\n      \"dataId\": null\r\n    }\r\n  }\r\n}"
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"type\": \"thisshloudmakeitfail\",\r\n    \"name\": \"Transmart\",\r\n    \"protocol\": \"http\",\r\n    \"host\": \"transmart-pro-test.thehyve.net\",\r\n    \"baseUrl\": \"\",\r\n    \"port\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }],\r\n  \"output\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }]\r\n  }\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
 					},
 					"response": []
 				}
@@ -324,7 +409,7 @@
 		},
 		{
 			"name": "Credentials",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Get query credentials from query_id",
@@ -344,11 +429,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/credentials",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials"
+							]
+						}
 					},
 					"response": []
 				},
@@ -381,20 +478,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/credentials",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"username\": \"demo-user\",\n  \"password\": \"demo-user\",\n  \"access_token\": \"0\",\n  \"expires_in\": 0,\n  \"generated\": \"{{date_now}}\"\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials"
+							]
+						}
 					},
 					"response": []
 				},
@@ -412,14 +517,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/credentials",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials"
+							]
+						}
 					},
 					"response": []
 				},
@@ -441,11 +555,24 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/credentials/isAuth",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials/isAuth",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials",
+								"isAuth"
+							]
+						}
 					},
 					"response": []
 				},
@@ -466,11 +593,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/iamnotavalidqueryid/credentials",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/iamnotavalidqueryid/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"iamnotavalidqueryid",
+								"credentials"
+							]
+						}
 					},
 					"response": []
 				},
@@ -491,14 +630,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/iamnotavliadquery/credentials",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/iamnotavliadquery/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"iamnotavliadquery",
+								"credentials"
+							]
+						}
 					},
 					"response": []
 				}
@@ -506,7 +654,7 @@
 		},
 		{
 			"name": "Endpoint",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Get the endpoint for query_id",
@@ -524,11 +672,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/endpoint",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
 					},
 					"response": []
 				},
@@ -550,20 +710,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/endpoint",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"sourceType\": \"TS171\",\r\n  \"sourceName\": \"Transmart the hyve\",\r\n  \"sourceHost\": \"http://transmart.thehyve.net\",\r\n  \"sourcePort\": 80,\r\n  \"public\": false\r\n}"
+							"raw": "{\r\n  \"type\": \"TS171\",\r\n  \"name\": \"Transmart the hyve\",\r\n  \"protocol\": \"http\",\r\n  \"host\": \"transmart.thehyve.net\",\r\n  \"baseUrl\": \"\",\r\n  \"port\": 80,\r\n  \"public\": false\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
 					},
 					"response": []
 				},
@@ -581,14 +749,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/endpoint",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
 					},
 					"response": []
 				},
@@ -608,11 +785,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/notaquery_id/endpoint",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/notaquery_id/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"notaquery_id",
+								"endpoint"
+							]
+						}
 					},
 					"response": []
 				},
@@ -634,20 +823,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/endpoint",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
 					},
 					"response": []
 				},
@@ -667,14 +864,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/notavalidideither/endpoint",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/notavalidideither/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"notavalidideither",
+								"endpoint"
+							]
+						}
 					},
 					"response": []
 				}
@@ -682,7 +888,7 @@
 		},
 		{
 			"name": "Input",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Get standard format input",
@@ -702,11 +908,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/input",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
 					},
 					"response": []
 				},
@@ -730,20 +948,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/input",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{ \r\n \"uri\": \"/v2/observations?constraint=\",\r\n  \"params\": {\r\n    \"type\": \"combination\", \r\n    \"operator\": \"and\", \r\n    \"args\": [\r\n      {\r\n        \"type\":\"concept\",\r\n        \"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\r\n      },\r\n      {\r\n        \"type\":\"concept\",\r\n        \"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\r\n      }]\r\n   },\r\n   \"type\": \"clinical\"\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
 					},
 					"response": []
 				},
@@ -761,14 +987,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/input",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
 					},
 					"response": []
 				},
@@ -788,11 +1023,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/heyholetsgo/input",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/heyholetsgo/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"heyholetsgo",
+								"input"
+							]
+						}
 					},
 					"response": []
 				},
@@ -812,20 +1059,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/input",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"coucou\": false,\n  \"hibou\": true\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
 					},
 					"response": []
 				},
@@ -845,14 +1100,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/(  .  Y  . )/input",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/(  .  Y  . )/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"(  .  Y  . )",
+								"input"
+							]
+						}
 					},
 					"response": []
 				}
@@ -860,7 +1124,7 @@
 		},
 		{
 			"name": "Execution",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Execute query TS171",
@@ -879,20 +1143,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/execute",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"query\": \"{{current_query}}\",\n  \"nocache\": true\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/execute",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"execute"
+							]
+						}
 					},
 					"response": []
 				},
@@ -913,7 +1185,6 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/execute",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -921,19 +1192,27 @@
 							"formdata": [
 								{
 									"key": "file",
-									"description": "",
 									"type": "file",
-									"src": "README.md"
+									"value": ""
 								},
 								{
 									"key": "nocache",
 									"value": "false",
-									"description": "",
 									"type": "text"
 								}
 							]
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/execute",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"execute"
+							]
+						}
 					},
 					"response": []
 				},
@@ -955,11 +1234,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/status",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/status",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"status"
+							]
+						}
 					},
 					"response": []
 				},
@@ -981,19 +1272,16 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/status",
 						"method": "GET",
 						"header": [
 							{
 								"key": "",
 								"value": "",
-								"description": "",
 								"disabled": true
 							},
 							{
 								"key": "",
 								"value": "",
-								"description": "",
 								"disabled": true
 							}
 						],
@@ -1003,12 +1291,21 @@
 								{
 									"key": "file",
 									"value": "",
-									"description": "",
 									"type": "file"
 								}
 							]
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/status",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"status"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1028,11 +1325,22 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/execute/notaqueryi",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/execute/notaqueryi",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"execute",
+								"notaqueryi"
+							]
+						}
 					},
 					"response": []
 				}
@@ -1040,7 +1348,7 @@
 		},
 		{
 			"name": "Output",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Get query standardized result for query_id",
@@ -1058,11 +1366,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/output",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"output"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1084,20 +1404,28 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/output",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{ \r\n  \"coucou\": \"hibou\",\r\n  \"ZirgMaster\": true\r\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"output"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1120,14 +1448,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/{{current_query}}/output",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"output"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1148,11 +1485,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/(  . Y  .  )/output",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/(  . Y  .  )/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"(  . Y  .  )",
+								"output"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1172,14 +1521,23 @@
 						}
 					],
 					"request": {
-						"url": "{{middleware_url}}/query/nopenopenope/output",
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "{{middleware_url}}/query/nopenopenope/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"nopenopenope",
+								"output"
+							]
+						}
 					},
 					"response": []
 				}
