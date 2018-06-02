@@ -14,7 +14,7 @@
 				{
 					"name": "GET status",
 					"request": {
-						"url": "http://localhost:3000/status",
+						"url": "{{server_url}}/status",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -25,7 +25,7 @@
 				{
 					"name": "GET full details",
 					"request": {
-						"url": "http://localhost:3000/details",
+						"url": "{{server_url}}/details",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -53,7 +53,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources",
+						"url": "{{server_url}}/data_sources",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -79,7 +79,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources",
+						"url": "{{server_url}}/data_sources",
 						"method": "POST",
 						"header": [
 							{
@@ -110,7 +110,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources/{{data_source_id}}",
+						"url": "{{server_url}}/data_sources/{{data_source_id}}",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -132,7 +132,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources/{{data_source_id}}",
+						"url": "{{server_url}}/data_sources/{{data_source_id}}",
 						"method": "PUT",
 						"header": [
 							{
@@ -165,7 +165,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources/{{data_source_id}}",
+						"url": "{{server_url}}/data_sources/{{data_source_id}}",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -176,7 +176,7 @@
 				{
 					"name": "Get data sources by user ID",
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/data_sources/",
+						"url": "{{server_url}}/users/{{user_id}}/data_sources/",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -198,7 +198,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/data_sources/{{data_source_id}}",
+						"url": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
 						"method": "POST",
 						"header": [
 							{
@@ -229,7 +229,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/data_sources/{{data_source_id}}",
+						"url": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -253,7 +253,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources/notvalidid",
+						"url": "{{server_url}}/data_sources/notvalidid",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -278,7 +278,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources/coucouhibou",
+						"url": "{{server_url}}/data_sources/coucouhibou",
 						"method": "PUT",
 						"header": [
 							{
@@ -311,7 +311,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/data_sources/notavalidid",
+						"url": "{{server_url}}/data_sources/notavalidid",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -335,7 +335,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/data_sources/notavaliddatasourceid",
+						"url": "{{server_url}}/users/{{user_id}}/data_sources/notavaliddatasourceid",
 						"method": "POST",
 						"header": [
 							{
@@ -368,7 +368,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/NOPE/data_sources/{{data_source_id}}",
+						"url": "{{server_url}}/users/NOPE/data_sources/{{data_source_id}}",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -405,7 +405,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store",
+						"url": "{{server_url}}/extension_store",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -416,7 +416,7 @@
 							"id": "6f1ac7dd-b443-43b8-95bb-00ea45521708",
 							"name": "pluginList",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "GET",
 								"header": [],
 								"body": {}
@@ -477,7 +477,7 @@
 							"id": "55c7febb-a413-48b7-a5d6-f98365c4a6a1",
 							"name": "pluginList",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "GET",
 								"header": [],
 								"body": {}
@@ -556,7 +556,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store",
+						"url": "{{server_url}}/extension_store",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -569,14 +569,14 @@
 								}
 							]
 						},
-						"description": "Generated from a curl request: \ncurl \\\"http://localhost:3000/plugin_store\\\" -H \\\"Origin: http://localhost:3000\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: http://localhost:3000/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
+						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
 					},
 					"response": [
 						{
 							"id": "85504999-817e-4b16-8fad-b188a52922bb",
 							"name": "pluginUploaded",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -634,7 +634,7 @@
 							"id": "bf5c2fae-c931-4292-b63f-471dfe01e7a6",
 							"name": "pluginUpload",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -704,7 +704,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store/{{pluginID}}",
+						"url": "{{server_url}}/extension_store/{{pluginID}}",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -731,7 +731,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store/{{pluginID}}",
+						"url": "{{server_url}}/extension_store/{{pluginID}}",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -744,14 +744,14 @@
 								}
 							]
 						},
-						"description": "Generated from a curl request: \ncurl \\\"http://localhost:3000/plugin_store\\\" -H \\\"Origin: http://localhost:3000\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: http://localhost:3000/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
+						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
 					},
 					"response": [
 						{
 							"id": "53917755-74f1-4843-9bc4-6cc1a8930b37",
 							"name": "pluginUploaded",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -809,7 +809,7 @@
 							"id": "407307d3-b3df-4ba9-9862-c441eb63e326",
 							"name": "pluginUpload",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -879,7 +879,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store/{{pluginID}}",
+						"url": "{{server_url}}/extension_store/{{pluginID}}",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -905,7 +905,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store/notavliadpluginid",
+						"url": "{{server_url}}/extension_store/notavliadpluginid",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -918,14 +918,14 @@
 								}
 							]
 						},
-						"description": "Generated from a curl request: \ncurl \\\"http://localhost:3000/plugin_store\\\" -H \\\"Origin: http://localhost:3000\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: http://localhost:3000/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
+						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
 					},
 					"response": [
 						{
 							"id": "0c70252c-fd89-4f3f-a1fc-f686c679de44",
 							"name": "pluginUploaded",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -983,7 +983,7 @@
 							"id": "0687b5b6-b60e-4253-8afc-1b3e60d6c8f2",
 							"name": "pluginUpload",
 							"originalRequest": {
-								"url": "http://localhost:3000/plugin_store",
+								"url": "{{server_url}}/plugin_store",
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1055,7 +1055,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store/notavalidplugin",
+						"url": "{{server_url}}/extension_store/notavalidplugin",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1079,7 +1079,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/extension_store/nonostillnotvalid",
+						"url": "{{server_url}}/extension_store/nonostillnotvalid",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -1113,7 +1113,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/login",
+						"url": "{{server_url}}/login",
 						"method": "POST",
 						"header": [
 							{
@@ -1160,7 +1160,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users",
+						"url": "{{server_url}}/users",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1182,7 +1182,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/whoami",
+						"url": "{{server_url}}/whoami",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1204,7 +1204,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/logout",
+						"url": "{{server_url}}/logout",
 						"method": "POST",
 						"header": [],
 						"body": {},
@@ -1229,7 +1229,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}",
+						"url": "{{server_url}}/users/{{user_id}}",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1251,7 +1251,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}",
+						"url": "{{server_url}}/users/{{user_id}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1282,7 +1282,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}",
+						"url": "{{server_url}}/users/{{user_id}}",
 						"method": "DELETE",
 						"header": [
 							{
@@ -1299,7 +1299,7 @@
 				{
 					"name": "Regenerate 2 Step  QR code",
 					"request": {
-						"url": "http://localhost:3000/2step/{{user_id}}",
+						"url": "{{server_url}}/2step/{{user_id}}",
 						"method": "PUT",
 						"header": [],
 						"body": {},
@@ -1324,7 +1324,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/login",
+						"url": "{{server_url}}/login",
 						"method": "POST",
 						"header": [
 							{
@@ -1368,7 +1368,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users",
+						"url": "{{server_url}}/users",
 						"method": "GET",
 						"header": [
 							{
@@ -1399,7 +1399,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/iamnotavalidid",
+						"url": "{{server_url}}/users/iamnotavalidid",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1423,7 +1423,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/nono",
+						"url": "{{server_url}}/users/nono",
 						"method": "POST",
 						"header": [
 							{
@@ -1456,7 +1456,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/nonoiamnotokay",
+						"url": "{{server_url}}/users/nonoiamnotokay",
 						"method": "DELETE",
 						"header": [
 							{
@@ -1485,7 +1485,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/whoami",
+						"url": "{{server_url}}/whoami",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1502,7 +1502,7 @@
 				{
 					"name": "List all plugins for user identifed by ID",
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/extensions",
+						"url": "{{server_url}}/users/{{user_id}}/extensions",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1513,7 +1513,7 @@
 				{
 					"name": "Clear all plugins for user defined by ID",
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/extensions",
+						"url": "{{server_url}}/users/{{user_id}}/extensions",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -1524,7 +1524,7 @@
 				{
 					"name": "Subscribe user identfied by ID to plugin identified by ID",
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/extensions/{{pluginID}}",
+						"url": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
 						"method": "PUT",
 						"header": [],
 						"body": {},
@@ -1535,7 +1535,7 @@
 				{
 					"name": "Unsubscribe user identified by ID to plugin identified by ID",
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/extensions/{{pluginID}}",
+						"url": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -1559,7 +1559,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/invalidid/extensions",
+						"url": "{{server_url}}/users/invalidid/extensions",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1583,7 +1583,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/invaliduserid/extensions",
+						"url": "{{server_url}}/users/invaliduserid/extensions",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -1607,7 +1607,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/nonoinvalid/extensions/{{pluginID}}",
+						"url": "{{server_url}}/users/nonoinvalid/extensions/{{pluginID}}",
 						"method": "PUT",
 						"header": [],
 						"body": {},
@@ -1631,7 +1631,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/users/{{user_id}}/extensions/nonoinvalidplugin",
+						"url": "{{server_url}}/users/{{user_id}}/extensions/nonoinvalidplugin",
 						"method": "PUT",
 						"header": [],
 						"body": {},
@@ -1660,7 +1660,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/",
+						"url": "{{server_url}}/workflow/",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1689,7 +1689,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/",
+						"url": "{{server_url}}/workflow/",
 						"method": "PUT",
 						"header": [
 							{
@@ -1715,7 +1715,7 @@
 				{
 					"name": "Get a workflow from its unique identifier",
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1740,7 +1740,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1771,7 +1771,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -1799,7 +1799,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/",
 						"method": "PUT",
 						"header": [
 							{
@@ -1834,7 +1834,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/",
 						"method": "PUT",
 						"header": [
 							{
@@ -1865,7 +1865,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/{{step_ID}}",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1890,7 +1890,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/{{step_ID}}",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1910,7 +1910,7 @@
 				{
 					"name": "Delete step_id inside curent workflow_id",
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/{{step_ID}}",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -1934,7 +1934,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/iamnotaworkflow",
+						"url": "{{server_url}}/workflow/iamnotaworkflow",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -1958,7 +1958,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/nonopasbon",
+						"url": "{{server_url}}/workflow/nonopasbon",
 						"method": "POST",
 						"header": [
 							{
@@ -1991,7 +1991,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/nonoworkflow",
+						"url": "{{server_url}}/workflow/nonoworkflow",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -2015,7 +2015,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/nopenopenope/step/",
+						"url": "{{server_url}}/workflow/nopenopenope/step/",
 						"method": "PUT",
 						"header": [
 							{
@@ -2048,7 +2048,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/nopnostep",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
 						"method": "GET",
 						"header": [],
 						"body": {},
@@ -2072,7 +2072,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/nopestepid",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/nopestepid",
 						"method": "POST",
 						"header": [
 							{
@@ -2105,7 +2105,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/notavlidstep",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/notavlidstep",
 						"method": "DELETE",
 						"header": [],
 						"body": {},
@@ -2129,7 +2129,7 @@
 						}
 					],
 					"request": {
-						"url": "http://localhost:3000/workflow/{{workflow_ID}}/step/nopnostep",
+						"url": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
 						"method": "GET",
 						"header": [],
 						"body": {},
