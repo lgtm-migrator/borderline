@@ -267,7 +267,6 @@ QueryTransmart17_1.prototype._doAuth = function () {
     let _this = this;
     return new Promise(function (resolve, reject) {
         //Get new credentials from data source
-        console.log(_this._model.endpoint.protocol + '://' + _this._model.endpoint.host + ':' + _this._model.endpoint.port + _this._model.endpoint.baseUrl);
         request.post({
             method: 'POST',
             json: true,

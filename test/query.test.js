@@ -1,3 +1,5 @@
+/* global beforeAll test expect afterAll */
+
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
@@ -85,7 +87,7 @@ test('Delete query from {query_id}, reset query_id ref', function (done) {
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id,
         json: true
-    }, function (error, response, body) {
+    }, function (error, response, __unused__body) {
         if (error)
             done.fail(error.toString());
         expect(response).toBeDefined();
@@ -150,7 +152,7 @@ test('Delete TS171 query from {query_id}', function (done) {
         baseUrl: 'http://127.0.0.1:' + config.port,
         uri: '/query/' + g_query_id,
         json: true
-    }, function (error, response, body) {
+    }, function (error, response, __unused__body) {
         if (error)
             done.fail(error.toString());
         expect(response).toBeDefined();
