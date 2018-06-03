@@ -68,7 +68,7 @@ Registry.prototype.setModel = function(model) {
 Registry.prototype.setStatus = function(newStatus) {
     this._model.status = newStatus;
     this._sync();
-    return _this._model.status;
+    return this._model.status;
 };
 
 /**
@@ -128,7 +128,7 @@ Registry.prototype._sync = function() {
             resolve(true); // All good, update successful
         }, function(update_error) {
             reject(ErrorStack('Update registry failed', update_error));
-        })
+        });
     });
 };
 
