@@ -1,6 +1,6 @@
 {
     "name": "borderline-devutils",
-    "version": "0.2.6",
+    "version": "0.3.0",
     "description": "Configuration and scripts for Borderline development.",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "license": "MIT",
@@ -29,7 +29,7 @@
         "prepublishOnly": "node ./scripts/publish.js"
     },
     "dependencies": {
-        "autoprefixer": "8.5.2",
+        "autoprefixer": "8.6.0",
         "babel-core": "6.26.3",
         "babel-eslint": "8.2.3",
         "babel-jest": "23.0.1",
@@ -44,7 +44,7 @@
         "copy-webpack-plugin": "4.5.1",
         "coveralls": "3.0.1",
         "css-loader": "0.28.11",
-        "dotenv": "5.0.1",
+        "dotenv": "6.0.0",
         "eslint": "4.19.1",
         "eslint-config-react-app": "2.1.0",
         "eslint-loader": "2.0.0",

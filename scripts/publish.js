@@ -1,4 +1,4 @@
-'use strict';
+/* eslint no-console: "off" */
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.NODE_ENV = 'production';
@@ -21,11 +21,11 @@ if (!process.env.CI) {
         chalk.red('It does not appear this is a continuous integration environment.\n' +
             'Borderline is automatically published upon successful integration.\n')
     );
-    process.exit(1)
+    process.exit(1);
 }
 
 // Verify we are not already in the middle of a publish
-const lastArg = ''
+let lastArg = '';
 if (process.env.npm_config_argv)
     lastArg = JSON.parse(process.env.npm_config_argv).original.pop();
 const bypass = '--borderline-bypass';
@@ -88,6 +88,6 @@ if (semver.gt(packageInfo.version, yarnLatestVersion) === true) {
         process.exit(result.status);
     }
 } else {
-    console.log(`Repository package has already reach v${packageInfo.version}.`)
+    console.log(`Repository package has already reach v${packageInfo.version}.`);
 }
 process.exit(0);
