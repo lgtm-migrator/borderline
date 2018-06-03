@@ -32,10 +32,12 @@ const userModel = {
 };
 
 const dataSourceModel = {
-    sourceType: '',
-    sourceName: '',
-    sourceHost: '',
-    sourcePort: 8080,
+    type: '',
+    name: '',
+    protocol: '',
+    host: '',
+    port: 8080,
+    baseUrl: '',
     public: false,
     users: []
 };
