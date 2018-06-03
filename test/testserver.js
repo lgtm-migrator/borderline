@@ -58,7 +58,7 @@ TestServer.prototype.stop = function() {
 };
 
 TestServer.prototype.mongo = function() {
-    return this.borderline_server.db
+    return this.borderline_server.db;
 };
 
 TestServer.prototype.setCookie = function(response) {

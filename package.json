@@ -39,7 +39,7 @@
     "dependencies": {
         "adm-zip": "0.4.11",
         "body-parser": "1.18.3",
-        "borderline-utils": "0.1.4",
+        "borderline-utils": "0.1.6",
         "connect-mongo": "2.0.1",
         "express": "4.16.3",
         "express-session": "1.15.6",

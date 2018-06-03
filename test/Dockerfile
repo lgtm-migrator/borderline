@@ -1,9 +1,5 @@
-# Select source image
-FROM node:wheezy
-
-# Install all dependencies
-RUN apt-get update -q                                   \
-    && apt-get upgrade -y --no-install-recommends
+FROM node:latest@sha256:029279af2fc78171cc7ee25c6a7f933a23213dd30ffd90e389afa4aee61d8ae3
+LABEL maintainer="f.guitton@imperial.ac.uk"
 
 # Create app directories
 RUN mkdir -p /usr/app && mkdir -p /usr/test

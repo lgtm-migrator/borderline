@@ -1,3 +1,5 @@
+/* global beforeAll test expect afterAll */
+
 const config = require('../config/borderline.config');
 const request = require('request');
 let TestServer = require('./testserver.js');
