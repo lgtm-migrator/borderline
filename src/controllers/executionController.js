@@ -42,7 +42,12 @@ ExecutionController.prototype.executeQueryByID = function (req, res) {
             let exec_promise = _this._internalExecutor(queryObject, req);
             _this._execution_promises.push(exec_promise);
             res.status(200);
-            res.json(true);
+            res.json({
+                'status': Constants.BL_QUERY_STATUS_EXECUTE,
+                'start': new Date(),
+                'end': null,
+                'info': ''
+            });
 
             // Silently catch and log execution errors
             exec_promise.catch(function (error) {
