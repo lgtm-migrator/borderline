@@ -1,6 +1,6 @@
 {
     "name": "borderline-devutils",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "description": "Configuration and scripts for Borderline development.",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "license": "MIT",
@@ -38,6 +38,7 @@
         "babel-jest": "23.0.1",
         "babel-loader": "8.0.0-beta.3",
         "babel-plugin-named-asset-import": "1.0.0-next.66cc7a90",
+        "babel-plugin-transform-decorators-legacy": "^1.3.5",
         "babel-preset-react-app": "4.0.0-next.66cc7a90",
         "bfj": "6.1.0",
         "borderline-server": "0.3.4",
