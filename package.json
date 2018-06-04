@@ -32,7 +32,7 @@
     },
     "dependencies": {
         "@babel/core": "7.0.0-beta.49",
-        "@babel/plugin-proposal-decorators": "^7.0.0-beta.49",
+        "@babel/plugin-proposal-decorators": "7.0.0-beta.49",
         "@babel/runtime": "7.0.0-beta.49",
         "autoprefixer": "8.6.0",
         "babel-core": "7.0.0-bridge.0",
@@ -46,7 +46,7 @@
         "case-sensitive-paths-webpack-plugin": "2.1.2",
         "chalk": "2.4.1",
         "confusing-browser-globals": "2.0.0-next.66cc7a90",
-        "copy-webpack-plugin": "^4.5.1",
+        "copy-webpack-plugin": "4.5.1",
         "css-loader": "0.28.11",
         "dotenv": "6.0.0",
         "dotenv-expand": "4.2.0",
