@@ -1,5 +1,3 @@
-'use strict';
-
 const { extname } = require('path');
 
 function namedAssetImportPlugin({ types: t }) {
