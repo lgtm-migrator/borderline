@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint no-console: "off" */
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
