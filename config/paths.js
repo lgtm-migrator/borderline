@@ -1,22 +1,23 @@
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
+const findMonorepo = require('react-dev-utils/workspaceUtils').findMonorepo;
 
 // Make sure any symlinks in the project folder are resolved:
-// https://github.com/facebookincubator/create-react-app/issues/637
+// https://github.com/facebook/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
 const envPublicUrl = process.env.PUBLIC_URL;
 
-function ensureSlash(path, needsSlash) {
-    const hasSlash = path.endsWith('/');
+function ensureSlash(inputPath, needsSlash) {
+    const hasSlash = inputPath.endsWith('/');
     if (hasSlash && !needsSlash) {
-        return path.substr(path, path.length - 1);
+        return inputPath.substr(0, inputPath.length - 1);
     } else if (!hasSlash && needsSlash) {
-        return `${path}/`;
+        return `${inputPath}/`;
     } else {
-        return path;
+        return inputPath;
     }
 }
 
@@ -39,27 +40,6 @@ function getServedPath(appPackageJson) {
 // config after eject: we're in ./config/
 module.exports = {
     dotenv: resolveApp('.env'),
-    appBuild: resolveApp('build'),
-    appPublic: resolveApp('public'),
-    appHtml: resolveApp('public/index.html'),
-    appIndexJs: resolveApp('src/index.js'),
-    appPackageJson: resolveApp('package.json'),
-    appSrc: resolveApp('src'),
-    yarnLockFile: resolveApp('yarn.lock'),
-    testsSetup: resolveApp('src/setupTests.js'),
-    borderlineServerConfig: resolveApp('config/borderline.config.js'),
-    webpackExtraConfig: resolveApp('config/webpack.config.js'),
-    appNodeModules: resolveApp('node_modules'),
-    publicUrl: getPublicUrl(resolveApp('package.json')),
-    servedPath: getServedPath(resolveApp('package.json')),
-};
-
-// @remove-on-eject-begin
-const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
-
-// config before eject: we're in ./node_modules/borderline-devutils/config/
-module.exports = {
-    dotenv: resolveApp('.env'),
     appPath: resolveApp('.'),
     appBuild: resolveApp('build'),
     appPublic: resolveApp('public'),
@@ -67,46 +47,26 @@ module.exports = {
     appIndexJs: resolveApp('src/index.js'),
     appPackageJson: resolveApp('package.json'),
     appSrc: resolveApp('src'),
-    yarnLockFile: resolveApp('yarn.lock'),
     testsSetup: resolveApp('src/setupTests.js'),
-    borderlineServerConfig: resolveApp('config/borderline.config.js'),
-    webpackExtraConfig: resolveApp('config/webpack.config.js'),
     appNodeModules: resolveApp('node_modules'),
     publicUrl: getPublicUrl(resolveApp('package.json')),
     servedPath: getServedPath(resolveApp('package.json')),
-    // These properties only exist before ejecting:
-    ownPath: resolveOwn('.'),
-    ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
 };
 
-const ownPackageJson = require('../package.json');
-const reactScriptsPath = resolveApp(`node_modules/${ownPackageJson.name}`);
-const reactScriptsLinked =
-    fs.existsSync(reactScriptsPath) &&
-    fs.lstatSync(reactScriptsPath).isSymbolicLink();
+let checkForMonorepo = true;
 
-// config before publish: we're in ./packages/borderline-devutils/config/
-if (
-    !reactScriptsLinked &&
-    __dirname.indexOf(path.join('packages', 'borderline-devutils', 'config')) !== -1
-) {
-    module.exports = {
-        dotenv: resolveOwn('template/.env'),
-        appPath: resolveApp('.'),
-        appBuild: resolveOwn('../../build'),
-        appPublic: resolveOwn('template/public'),
-        appHtml: resolveOwn('template/public/index.html'),
-        appIndexJs: resolveOwn('template/src/index.js'),
-        appPackageJson: resolveOwn('package.json'),
-        appSrc: resolveOwn('template/src'),
-        yarnLockFile: resolveOwn('template/yarn.lock'),
-        testsSetup: resolveOwn('template/src/setupTests.js'),
-        appNodeModules: resolveOwn('node_modules'),
-        publicUrl: getPublicUrl(resolveOwn('package.json')),
-        servedPath: getServedPath(resolveOwn('package.json')),
-        // These properties only exist before ejecting:
-        ownPath: resolveOwn('.'),
-        ownNodeModules: resolveOwn('node_modules'),
-    };
+module.exports.srcPaths = [module.exports.appSrc];
+
+module.exports.useYarn = fs.existsSync(
+    path.join(module.exports.appPath, 'yarn.lock')
+);
+
+if (checkForMonorepo) {
+    // if app is in a monorepo (lerna or yarn workspace), treat other packages in
+    // the monorepo as if they are app source
+    const mono = findMonorepo(appDirectory);
+    if (mono.isAppIncluded) {
+        Array.prototype.push.apply(module.exports.srcPaths, mono.pkgs);
+    }
+    module.exports.useYarn = module.exports.useYarn || mono.isYarnWs;
 }
-// @remove-on-eject-end
