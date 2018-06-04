@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+/* eslint no-console: "off" */
 
 const spawn = require('react-dev-utils/crossSpawn');
 const args = process.argv.slice(2);

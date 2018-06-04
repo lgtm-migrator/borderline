@@ -1,5 +1,3 @@
-'use strict';
-
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
@@ -13,7 +11,7 @@ const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const fs = require('fs');
 const eslint = require('./eslint');
-let webpackExtraConfig = {}
+let webpackExtraConfig = {};
 
 if (fs.existsSync(paths.webpackExtraConfig)) {
     webpackExtraConfig = require(paths.webpackExtraConfig)();
@@ -192,7 +190,7 @@ module.exports = {
                                 options: {
                                     importLoaders: 1,
                                     modules: true,
-                                    localIdentName: "[name]__[local]___[hash:base64:5]"
+                                    localIdentName: '[name]__[local]___[hash:base64:5]'
                                 },
                             },
                             {

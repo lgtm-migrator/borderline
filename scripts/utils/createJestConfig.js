@@ -1,5 +1,5 @@
 // @remove-file-on-eject
-'use strict';
+/* eslint no-console: "off" */
 
 const fs = require('fs');
 const chalk = require('chalk');

@@ -1,4 +1,5 @@
-'use strict';
+
+/* eslint no-console: "off" */
 
 const autoprefixer = require('autoprefixer');
 const path = require('path');
@@ -14,7 +15,7 @@ const paths = require('./paths');
 const fs = require('fs');
 const eslint = require('./eslint');
 const getClientEnvironment = require('./env');
-let webpackExtraConfig = {}
+let webpackExtraConfig = {};
 
 if (fs.existsSync(paths.webpackExtraConfig)) {
     webpackExtraConfig = require(paths.webpackExtraConfig)();

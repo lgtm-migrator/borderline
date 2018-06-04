@@ -1,18 +1,19 @@
-'use strict';
+/* global jest */
+
+function _setUpMockResponse(mockType) {
+    return (body, init = {}) => {
+        if (typeof body !== 'string')
+            body = JSON.stringify(body);
+        const response = Promise.resolve(new Response(body, init));
+        fetch[mockType](() => response);
+        return response;
+    };
+}
 
 // We define mocking implementation for fetch if NO_TEST_MOCKING is not defined
 if (!process.env.NO_TEST_MOCKING) {
 
     self.fetch = jest.fn();
-    function _setUpMockResponse(mockType) {
-        return (body, init = {}) => {
-            if (typeof body !== 'string')
-                body = JSON.stringify(body);
-            const response = Promise.resolve(new Response(body, init));
-            fetch[mockType](() => response);
-            return response;
-        };
-    }
 
     // Helpers to mock a success response
     fetch.mockResponseSuccess = _setUpMockResponse('mockImplementation');

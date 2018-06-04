@@ -1,13 +1,10 @@
-'use strict';
-
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const config = require('./webpack.config.dev');
 const paths = require('./paths');
 const fs = require('fs');
-const path = require('path');
 const borderlineServer = require('borderline-server');
-let borderlineConfig = {}
+let borderlineConfig = {};
 
 if (fs.existsSync(paths.borderlineServerConfig)) {
     borderlineConfig = require(paths.borderlineServerConfig);

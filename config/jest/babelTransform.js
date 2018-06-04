@@ -1,5 +1,4 @@
 // @remove-file-on-eject
-'use strict';
 
 const babelJest = require('babel-jest');
 
