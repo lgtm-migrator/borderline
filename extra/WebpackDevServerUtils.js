@@ -1,3 +1,4 @@
+/* eslint no-console: "off" */
 const address = require('address');
 const fs = require('fs');
 const path = require('path');
@@ -99,7 +100,7 @@ function printInstructions(appName, urls, useYarn) {
     console.log();
     console.log('Note that the development build is not optimized.');
     console.log(
-        `To create a production build, use ` +
+        'To create a production build, use ' +
         `${chalk.cyan(`${useYarn ? 'yarn' : 'npm run'} build`)}.`
     );
     console.log();
@@ -385,7 +386,7 @@ function choosePort(host, defaultPort) {
                 }
                 const message =
                     process.platform !== 'win32' && defaultPort < 1024 && !isRoot()
-                        ? `Admin permissions are required to run a server on a port below 1024.`
+                        ? 'Admin permissions are required to run a server on a port below 1024.'
                         : `Something is already running on port ${defaultPort}.`;
                 if (isInteractive) {
                     clearConsole();

@@ -13,6 +13,7 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env');
 
+const fs = require('fs');
 const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
@@ -31,14 +32,21 @@ const createDevServerConfig = require('../config/webpackDevServer.config');
 
 const isInteractive = process.stdout.isTTY;
 
+let borderlineConfig = {};
+
+if (fs.existsSync(paths.borderlineServerConfig)) {
+    borderlineConfig = require(paths.borderlineServerConfig);
+}
+
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
     process.exit(1);
 }
 
 // Tools like Cloud9 rely on this.
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
+const DEFAULT_PORT = borderlineConfig.port || parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
+borderlineConfig.port = DEFAULT_PORT;
 
 if (process.env.HOST) {
     console.log(

@@ -1,3 +1,4 @@
+/* eslint no-console: "off" */
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
