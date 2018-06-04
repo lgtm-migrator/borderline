@@ -8,7 +8,7 @@ const findMonorepo = require('react-dev-utils/workspaceUtils').findMonorepo;
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
-const envPublicUrl = process.env.PUBLIC_URL;
+const envPublicUrl = process.env.PUBLIC_URL; 
 
 function ensureSlash(inputPath, needsSlash) {
     const hasSlash = inputPath.endsWith('/');
@@ -49,6 +49,8 @@ module.exports = {
     appSrc: resolveApp('src'),
     testsSetup: resolveApp('src/setupTests.js'),
     appNodeModules: resolveApp('node_modules'),
+    webpackExtraConfig: resolveApp('config/webpack.config.js'),
+    borderlineServerConfig: resolveApp('config/borderline.config.js'),
     publicUrl: getPublicUrl(resolveApp('package.json')),
     servedPath: getServedPath(resolveApp('package.json')),
 };
