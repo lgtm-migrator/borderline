@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+const WatchMissingNodeModulesPlugin = require('../extra/WatchMissingNodeModulesPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
@@ -231,8 +231,10 @@ module.exports = {
                                             },
                                         ],
                                         [
-                                            require.resolve('babel-plugin-transform-decorators-legacy'),
-                                            {}
+                                            require.resolve('@babel/plugin-proposal-decorators'),
+                                            {
+                                                legacy: true
+                                            }
                                         ]
                                     ],
                                     // This is a feature of `babel-loader` for webpack (not Babel itself).
