@@ -1,6 +1,6 @@
 {
     "name": "borderline-devutils",
-    "version": "0.4.11",
+    "version": "0.4.12",
     "description": "Configuration and scripts for Borderline development.",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "license": "MIT",
