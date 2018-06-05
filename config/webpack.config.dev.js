@@ -236,6 +236,9 @@ module.exports = {
                                             {
                                                 legacy: true
                                             }
+                                        ],
+                                        [
+                                            require.resolve('@babel/plugin-syntax-dynamic-import')
                                         ]
                                     ],
                                     // This is a feature of `babel-loader` for webpack (not Babel itself).
@@ -254,13 +257,18 @@ module.exports = {
                         use: [
                             // This loader parallelizes code compilation, it is optional but
                             // improves compile time on larger projects
-                            require.resolve('thread-loader'),
+                            // TODO - Reactivation thread-load when webpack monaco loader works
+                            // https://github.com/Microsoft/monaco-editor-webpack-plugin/issues/16
+                            // require.resolve('thread-loader'),
                             {
                                 loader: require.resolve('babel-loader'),
                                 options: {
                                     compact: false,
                                     presets: [
                                         require.resolve('babel-preset-react-app/dependencies'),
+                                    ],
+                                    plugins: [
+                                        require.resolve('@babel/plugin-syntax-dynamic-import')
                                     ],
                                     cacheDirectory: true,
                                     highlightCode: true,
