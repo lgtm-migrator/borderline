@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { createLogger } from 'redux-logger';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs-compat';
 import { Map } from 'immutable';
 import createHistory from 'history/createBrowserHistory';
 import ParentTracer from 'containers/ParentTracer';
@@ -38,10 +38,10 @@ class StoreManager {
         this.clearRootEpics();
 
         history = createHistory();
-
+        
         this.middleware = {
             router: routerMiddleware(history),
-            epic: createEpicMiddleware(this.rootEpic)
+            epic:  createEpicMiddleware()
         };
 
         let mutateCompose = compose;
@@ -76,7 +76,8 @@ class StoreManager {
 
         }
 
-        store = createStore(combineReducers(this.asyncReducers), {}, mutateCompose(applyMiddleware(...Object.values(this.middleware))));
+        store = createStore(combineReducers(this.asyncReducers), mutateCompose(applyMiddleware(...Object.values(this.middleware))));
+        this.middleware.epic.run(this.rootEpic)
 
     }
 

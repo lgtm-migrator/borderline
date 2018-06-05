@@ -141,11 +141,11 @@ class Enclave extends Component {
     declareEpics(epics) {
 
         assets[this.state.modelName].epics = epics;
-        storeManager.injectAsyncEpic(this.state.modelName, (action, store) =>
+        storeManager.injectAsyncEpic(this.state.modelName, (action, igressState) =>
             action.mergeMap(a =>
                 Observable.concat(
                     ...Object.values(assets[this.state.modelName].epics).map(epic => {
-                        let state = store.getState()[this.state.modelName];
+                        let state = igressState.value[this.state.modelName];
                         if (state !== undefined)
                             state = state.toJS();
                         return epic(ActionsObservable.of(this.actionDetagger(a)), state).map(a => this.actionTagger(a));

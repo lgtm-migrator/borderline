@@ -13,7 +13,7 @@ export default class Body extends Component {
         children: T.oneOfType([T.array, T.element])
     };
 
-    componentWillMount() {
+    componentDidMount() {
         browserBehaviour.apply();
     }
 

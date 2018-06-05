@@ -9,7 +9,7 @@ class BorderlineProvider extends React.Component {
     // Custom name for container
     static displayName = 'BorderlineProvider';
 
-    componentWillMount() {
+    componentDidMount() {
         window.stateAware = stateAware;
     }
 
