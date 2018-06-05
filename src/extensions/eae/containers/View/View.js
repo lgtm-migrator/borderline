@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 import Editor from 'components/Editor';
-import style from './style.css';
+import style from './style.module.css';
 
 class View extends Component {
 

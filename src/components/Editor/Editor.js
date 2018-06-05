@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { default as T } from 'prop-types';
 import editorLoader from 'utilities/editorLoader';
 import Stale from 'components/Stale';
-import style from './style.css';
+import style from './style.module.css';
 
 class Editor extends Component {
 

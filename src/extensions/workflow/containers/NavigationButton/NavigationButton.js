@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SVG from 'components/SVG';
 import logo from './images/logo.svg';
-import style from './style.css';
+import style from './style.module.css';
 
 class NavigationButton extends Component {
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Enclave from 'containers/Enclave';
 import { stateAware } from 'utilities/storeManager';
-import style from './style.css';
+import style from './style.module.css';
 
 @stateAware(state => ({
     views: state.pages || []

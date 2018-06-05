@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SVG from 'components/SVG';
 import errorIcon from './images/errorIcon.svg';
-import style from './style.css';
+import style from './style.module.css';
 
 export default class Stale extends Component {
 
