@@ -1,31 +1,15 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 // defining editor copy parameters
 const editor = {
-    to: 'vs',
-    ignore: ['**/*languages/**/!(r\.|python\.)*', '**/*nls\.*\.+(js|map)']
+    to: 'vs'
 };
 
 let plugins = [];
-if (process.env.NODE_ENV === 'development')
-    plugins.push(new CopyWebpackPlugin([{
-        context: 'node_modules/monaco-editor/dev/vs',
-        from: '**/*\.+(js|svg|css|map)',
-        to: editor.to,
-        transform: (content) => content.toString().replace('../../min-maps/vs/', '')
-    }], {
-            ignore: editor.ignore
-        }))
-else
-    plugins.push(new CopyWebpackPlugin([{
-        context: 'node_modules/monaco-editor/min/vs',
-        from: '**/*\.+(js|svg|css)',
-        to: editor.to,
-        transform: (content) => content.toString().replace('../../min-maps/vs/', '')
-    }], {
-            ignore: editor.ignore
-        }))
+plugins.push(new MonacoWebpackPlugin({
+    languages: ['python', 'javascript']
+}));
 
 module.exports = () => ({
     plugins
-})
+});
