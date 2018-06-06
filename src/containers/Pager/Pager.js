@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Enclave from 'containers/Enclave';
 import Navigation from './containers/Navigation';
 import Content from './containers/Content';
+import StatusBar from './containers/StatusBar';
 import { reducers } from './flux';
 
 class Pager extends Component {
@@ -14,11 +15,14 @@ class Pager extends Component {
     static modelReducers = reducers;
 
     render() {
-        return [
-            <Navigation key={'navigation'}/>,
-            <Content key={'content'} />,
-            <Enclave key={'inspector'} model={ import('containers/Inspector') } />
-        ];
+        return (
+            <>
+                <Navigation key={'navigation'}/>
+                <Content key={'content'} />
+                <StatusBar key={'status'} />
+                <Enclave key={'inspector'} model={ import('containers/Inspector') } />
+            </>
+        );
     }
 }
 

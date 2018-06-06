@@ -162,6 +162,8 @@ class Enclave extends Component {
         action.__origin__ = this.state.modelName;
         if (process.env.NODE_ENV === 'development' && this.state.model !== null && this.state.model.modelName !== undefined)
             action.__dev_origin__ = this.state.model.modelName;
+        if (action.type === undefined)
+            throw new Error(`Action type has not been defined in ${action.__dev_origin__} message`);
         if (action.type.match(/@@.*?\/.*?\/.*/g) !== null)
             return action;
         return Object.assign({}, action, { type: `@@${this.state.domain}/${this.state.modelName}/${action.type}` });

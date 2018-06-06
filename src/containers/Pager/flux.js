@@ -1,13 +1,15 @@
 const types = {
 
-    PAGE_DOCK: 'PAGE_DOCK'
+    PAGE_DOCK: 'PAGE_DOCK',
+    STATUS_DOCK: 'STATUS_DOCK'
 };
 
 export const actions = {};
 export const epics = {};
 
 const initial = {
-    pages: []
+    pages: [],
+    statuses: []
 };
 
 export const reducers = {
@@ -17,6 +19,8 @@ export const reducers = {
         switch (action.type) {
             case types.PAGE_DOCK:
                 return pageDock(state, action);
+            case types.STATUS_DOCK:
+                return statusDock(state, action);
             case '@@core/session/SESSION_LOGOUT':
             case 'STOP':
                 return initial;
@@ -29,12 +33,22 @@ export const reducers = {
 const pageDock = (state, action) => {
 
     if (action.path === undefined || action.path === null ||
-        action.icon === undefined || action.icon === null ||
         action.view === undefined || action.view === null)
         return state;
     state.pages.push({
         path: action.path,
         icon: action.icon,
+        view: action.view,
+        origin: action.__origin__
+    });
+    return state;
+};
+
+const statusDock = (state, action) => {
+
+    if (action.view === undefined || action.view === null)
+        return state;
+    state.statuses.push({
         view: action.view,
         origin: action.__origin__
     });
