@@ -1,0 +1,22 @@
+.item {
+    display: block;
+    padding: 4px 10px;
+    height: 4vh;
+    line-height: calc(4vh - 8px);
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.4));
+    width: 100%;
+}
+
+.item:hover {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.5));
+}
+
+.workflowsList {
+    position: relative;
+    padding: 20px;
+}
+
+.workflowsDescription {
+    position: relative;
+    padding: 20px;
+}

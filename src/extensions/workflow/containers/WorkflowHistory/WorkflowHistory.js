@@ -1,0 +1,58 @@
+import React, { Component } from 'react';
+import { default as T } from 'prop-types';
+import { Link } from 'react-router-dom';
+import { stateAware } from 'utilities/storeManager';
+import { actions } from '../../flux';
+import style from './style.module.css';
+
+@stateAware(state => ({
+    lastLoaded: state.lastLoaded,
+    workflowsLoading: state.workflowsLoading,
+    workflowsList: state.workflowsList
+}))
+class WorkflowHistory extends Component {
+
+    // Custom name for container
+    static displayName = 'WorkflowHistory';
+    
+    // Types for available context
+    static contextTypes = {
+        dispatch: T.func
+    };
+
+    componentDidMount() {
+        const { workflowsLoading, lastLoaded } = this.props;
+        if (workflowsLoading === false && new Date().getTime() - lastLoaded.getTime() > 5 * 1000)
+            this.context.dispatch(actions.workflowsLoad())
+    }
+
+    render() {
+        const { workflowsLoading, workflowsList } = this.props;
+        let status = null;
+        if (workflowsLoading === true)
+            if (Object.keys(workflowsList).length > 0)
+                status = '(Updating ...)';
+            else
+                status = '(Loading ...)';
+        let list = Object.keys(workflowsList).map((key) =>
+            <Link key={key} to={`/workflow/${key}`}>
+                <div className={style.item}>
+                    <b>{workflowsList[key].name}</b> by {workflowsList[key].owner} last updated {new Date(workflowsList[key].update).toDateString()}
+                </div>
+            </Link>
+        );
+        return (
+            <>
+                <div className={style.workflowsDescription}>
+                    <h1>Workflow History {status}</h1><br />
+                    <div>Here is the list of previous workflow you have worked with or have access too.</div>
+                </div>
+                <div className={style.workflowsList}>
+                    {list}
+                </div>
+            </>
+        );
+    }
+}
+
+export default WorkflowHistory;

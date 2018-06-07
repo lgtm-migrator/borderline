@@ -23,7 +23,16 @@ export const api = {
 
     fetchExtension: (id) => query(`/extensions/${id}/client`, {
         method: 'GET'
-    })
+    }),
+
+    fetchWorkflowsList: (id) => query(`/workflow`, {
+        method: 'GET'
+    }),
+
+    createWorkflow: (workflow) => query(`/workflow`, {
+        method: 'PUT',
+        body: workflow
+    }),
 };
 
 const query = (url, params = {}) => Observable.fromPromise(fetch(`${prefix}${url}`, defaults(params)))
