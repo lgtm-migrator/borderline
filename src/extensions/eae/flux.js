@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs-compat';
 // import NavigationButton from './containers/NavigationButton';
 import StatusIndicator from './containers/StatusIndicator';
 import View from './containers/View';

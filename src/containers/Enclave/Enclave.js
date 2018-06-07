@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs-compat';
 import { fromJS } from 'immutable';
 import { ActionsObservable } from 'redux-observable';
 import storeManager, { store } from 'utilities/storeManager';

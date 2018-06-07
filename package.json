@@ -1,6 +1,6 @@
 {
   "name": "borderline-ui",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Configuration and scripts for Borderline development.",
   "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
   "license": "MIT",
@@ -19,7 +19,7 @@
   "scripts": {
     "start": "cross-env BROWSER=none borderline-devutils start",
     "build": "borderline-devutils build",
-    "test": "borderline-devutils test --env=jsdom --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN",
+    "test": "borderline-devutils test --env=jsdom --verbose --detectOpenHandles --forceExit",
     "prepublishOnly": "borderline-devutils publish"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "react": "16.4.0",
     "react-dom": "16.4.0",
     "react-redux": "5.0.7",
-    "react-router-dom": "4.2.2",
+    "react-router-dom": "4.3.1",
     "react-router-redux": "5.0.0-alpha.9",
     "redux": "4.0.0",
     "redux-observable": "1.0.0-beta.0",
@@ -39,7 +39,7 @@
     "rxjs-compat": "6.2.0"
   },
   "devDependencies": {
-    "borderline-devutils": "0.4.13",
+    "borderline-devutils": "0.4.14",
     "codacy-coverage": "3.0.0",
     "react-test-renderer": "16.4.0",
     "redux-logger": "3.0.6"

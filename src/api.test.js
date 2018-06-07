@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs-compat';
 import api_def, { api } from './api';
 
 it('contains only valid functions', () => {

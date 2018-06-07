@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs-compat';
 import { api } from 'api';
 import systemExtensions from 'extensions';
 
