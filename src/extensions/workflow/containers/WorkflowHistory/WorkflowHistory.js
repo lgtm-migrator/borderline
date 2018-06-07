@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 import { default as T } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
@@ -7,7 +8,7 @@ import style from './style.module.css';
 
 @stateAware(state => ({
     lastLoaded: state.lastLoaded,
-    workflowsLoading: state.workflowsLoading,
+    workflowsListLoading: state.workflowsListLoading,
     workflowsList: state.workflowsList
 }))
 class WorkflowHistory extends Component {
@@ -21,15 +22,15 @@ class WorkflowHistory extends Component {
     };
 
     componentDidMount() {
-        const { workflowsLoading, lastLoaded } = this.props;
-        if (workflowsLoading === false && new Date().getTime() - lastLoaded.getTime() > 5 * 1000)
-            this.context.dispatch(actions.workflowsLoad())
+        const { workflowsListLoading, lastLoaded } = this.props;
+        if (workflowsListLoading === false && new Date().getTime() - lastLoaded.getTime() > 5 * 1000)
+            this.context.dispatch(actions.workflowsListLoad())
     }
 
     render() {
-        const { workflowsLoading, workflowsList } = this.props;
+        const { workflowsListLoading, workflowsList } = this.props;
         let status = null;
-        if (workflowsLoading === true)
+        if (workflowsListLoading === true)
             if (Object.keys(workflowsList).length > 0)
                 status = '(Updating ...)';
             else
@@ -43,6 +44,9 @@ class WorkflowHistory extends Component {
         );
         return (
             <>
+                <Helmet>
+                    <title>Workflow History</title>
+                </Helmet>
                 <div className={style.workflowsDescription}>
                     <h1>Workflow History {status}</h1><br />
                     <div>Here is the list of previous workflow you have worked with or have access too.</div>

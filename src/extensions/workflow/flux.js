@@ -4,13 +4,17 @@ import View from './containers/View';
 
 const types = {
 
+    WORKFLOWS_LIST_LOAD: 'WORKFLOWS_LIST_LOAD',
+    WORKFLOWS_LIST_LOAD_SUCCESS: 'WORKFLOWS_LIST_LOAD_SUCCESS',
+    WORKFLOWS_LIST_LOAD_FAILURE: 'WORKFLOWS_LIST_LOAD_FAILURE',
     WORKFLOW_LOAD: 'WORKFLOW_LOAD',
     WORKFLOW_LOAD_SUCCESS: 'WORKFLOW_LOAD_SUCCESS',
     WORKFLOW_LOAD_FAILURE: 'WORKFLOW_LOAD_FAILURE',
-    WORKFLOW_SET_CURRENT: 'WORKFLOW_SET_CURRENT',
     WORKFLOW_CREATE: 'WORKFLOW_CREATE',
     WORKFLOW_CREATE_SUCCESS: 'WORKFLOW_CREATE_SUCCESS',
-    WORKFLOW_CREATE_FAILURE: 'WORKFLOW_CREATE_FAILURE'
+    WORKFLOW_CREATE_FAILURE: 'WORKFLOW_CREATE_FAILURE',
+    WORKFLOW_PIN: 'WORKFLOW_PIN',
+    WORKFLOW_UNPIN: 'WORKFLOW_UNPIN'
 };
 
 export const actions = {
@@ -22,23 +26,33 @@ export const actions = {
         view: View
     }),
 
-    workflowsLoad: () => ({
-        type: types.WORKFLOW_LOAD
+    workflowsListLoad: () => ({
+        type: types.WORKFLOWS_LIST_LOAD
     }),
 
-    workflowsLoadSuccess: (data) => ({
-        type: types.WORKFLOW_LOAD_SUCCESS,        
+    workflowsListLoadSuccess: (data) => ({
+        type: types.WORKFLOWS_LIST_LOAD_SUCCESS,        
         data: data
     }),
 
-    workflowsLoadFailure: (data) => ({
-        type: types.WORKFLOW_LOAD_SUCCESS,        
+    workflowsListLoadFailure: (data) => ({
+        type: types.WORKFLOWS_LIST_LOAD_SUCCESS,        
         data: data
     }),
 
-    setCurrentWorkflow: (wid) => ({
-        type: types.WORKFLOW_SET_CURRENT,        
+    workflowLoad: (wid) => ({
+        type: types.WORKFLOW_LOAD,        
         workflow: wid
+    }),
+
+    workflowLoadSuccess: (data) => ({
+        type: types.WORKFLOW_LOAD_SUCCESS,        
+        workflow: data
+    }),
+
+    workflowLoadFailure: (data) => ({
+        type: types.WORKFLOW_LOAD_FAILURE,        
+        data: data
     }),
 
     workflowCreate: (data) => ({
@@ -53,7 +67,17 @@ export const actions = {
 
     workflowCreateFailure: (data) => ({
         type: types.WORKFLOW_CREATE_FAILURE,        
-        workflow: data
+        data: data
+    }),
+
+    workflowPin: (wid) => ({
+        type: types.WORKFLOW_PIN,
+        workflow: wid
+    }),
+
+    workflowUnpin: (wid) => ({
+        type: types.WORKFLOW_UNPIN,
+        workflow: wid
     })
 };
 
@@ -63,11 +87,11 @@ export const epics = {
     (action) => action.ofType('START')
         .mapTo(actions.dockToPager()),
 
-    workflowsLoad:
-    (action) => action.ofType(types.WORKFLOW_LOAD)
+    workflowsListLoad:
+    (action) => action.ofType(types.WORKFLOWS_LIST_LOAD)
         .mergeMap(() =>
             api.fetchWorkflowsList()
-                .map(response => response.ok === true ? actions.workflowsLoadSuccess(response.data) : actions.workflowsLoadFailure())
+                .map(response => response.ok === true ? actions.workflowsListLoadSuccess(response.data) : actions.workflowsListLoadFailure())
         ),
 
     workflowsCreate:
@@ -76,6 +100,13 @@ export const epics = {
             api.createWorkflow(action.workflow)
                 .map(response => response.ok === true ? actions.workflowCreateSuccess(response.data) : actions.workflowCreateFailure())
         ),
+
+    workflowLoad:
+    (action) => action.ofType(types.WORKFLOW_LOAD)
+        .mergeMap((action) => 
+            api.loadWorkflow(action.workflow)
+                .map(response => response.ok === true ? actions.workflowLoadSuccess(response.data) : actions.workflowLoadFailure())
+        ),
 };
 
 const initial = {
@@ -83,8 +114,9 @@ const initial = {
     newWorkflow: null,
     lastLoaded: new Date(0),
     workflowLoading: false,
-    workflowsLoading: false,
-    workflowsList: {}
+    workflowsListLoading: false,
+    workflowsList: {},
+    workflowPins: {}
 };
 
 export const reducers = {
@@ -95,20 +127,28 @@ export const reducers = {
         switch (action.type) {
             case 'STOP':
                 return initial;
+            case types.WORKFLOWS_LIST_LOAD:
+                return workflowsListLoad(state);
+            case types.WORKFLOWS_LIST_LOAD_SUCCESS:
+                return workflowsListLoadSuccess(state, action);
+            case types.WORKFLOWS_LIST_LOAD_FAILURE:
+                return workflowsListLoadFailure(state, action);
             case types.WORKFLOW_LOAD:
-                return workflowsLoad(state);
+                return workflowLoad(state, action);
             case types.WORKFLOW_LOAD_SUCCESS:
-                return workflowsLoadSuccess(state, action);
+                return workflowLoadSuccess(state, action);
             case types.WORKFLOW_LOAD_FAILURE:
-                return workflowsLoadFailure(state, action);
-            case types.WORKFLOW_SET_CURRENT:
-                return setCurrentWorkflow(state, action);
+                return workflowLoadFailure(state, action);
             case types.WORKFLOW_CREATE:
                 return workflowCreate(state);
             case types.WORKFLOW_CREATE_SUCCESS:
                 return workflowCreateSuccess(state, action);
             case types.WORKFLOW_CREATE_FAILURE:
                 return workflowCreateFailure(state, action);
+            case types.WORKFLOW_PIN:
+                return workflowPin(state, action);
+            case types.WORKFLOW_UNPIN:
+                return workflowUnpin(state, action);
             case '@@router/LOCATION_CHANGE':
                 return workflowForgetNew(state);
             default:
@@ -123,13 +163,13 @@ export default {
     reducers
 };
 
-const workflowsLoad = (state) => {
-    state.workflowsLoading = true;
+const workflowsListLoad = (state) => {
+    state.workflowsListLoading = true;
     return state;
 };
 
-const workflowsLoadSuccess = (state, action) => {
-    state.workflowsLoading = false;
+const workflowsListLoadSuccess = (state, action) => {
+    state.workflowsListLoading = false;
     state.workflowsList = {};
     action.data.forEach(workflow => {
         state.workflowsList[workflow._id] = workflow
@@ -138,14 +178,27 @@ const workflowsLoadSuccess = (state, action) => {
     return state;
 };
 
-const workflowsLoadFailure = (state, action) => {
-    state.workflowsLoading = false;
+const workflowsListLoadFailure = (state, action) => {
+    state.workflowsListLoading = false;
     state.error = action.data.error;
     return state;
 };
 
-const setCurrentWorkflow = (state, action) => {
-    state.currentWorkflow = action.workflow;
+const workflowLoad = (state) => {
+    state.workflowLoading = true;
+    return state;
+};
+
+const workflowLoadSuccess = (state, action) => {
+    state.workflowLoading = false;
+    state.workflowsList[action.workflow._id] = action.workflow;
+    state.currentWorkflow = action.workflow._id;
+    return state;
+};
+
+const workflowLoadFailure = (state, action) => {
+    state.workflowLoading = false;
+    state.error = action.data.error;
     return state;
 };
 
@@ -156,7 +209,6 @@ const workflowCreate = (state) => {
 
 const workflowCreateSuccess = (state, action) => {
     state.workflowLoading = false;
-    console.log(action);
     state.workflowsList[action.workflow._id] = action.workflow;
     state.newWorkflow = action.workflow._id;
     return state;
@@ -167,6 +219,17 @@ const workflowCreateFailure = (state, action) => {
     state.error = action.data.error;
     return state;
 };
+
+const workflowPin = (state, action) => {
+    state.workflowPins[action.workflow] = true;
+    state.currentWorkflow = action.workflow;
+    return state;
+}
+
+const workflowUnpin = (state, action) => {
+    state.workflowPins[action.workflow] = false;
+    return state;
+}
 
 const workflowForgetNew = (state) => {
     state.newWorkflow = null;

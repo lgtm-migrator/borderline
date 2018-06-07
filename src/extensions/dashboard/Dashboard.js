@@ -1,4 +1,5 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 import { epics } from './flux';
 
 class Dashboard extends Component {
@@ -11,7 +12,11 @@ class Dashboard extends Component {
     static modelEpics = epics;
 
     render() {
-        return null;
+        return (
+            <Helmet>
+                <title>Dashboard</title>
+            </Helmet>
+        );
     }
 }
 

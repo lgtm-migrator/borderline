@@ -33,6 +33,10 @@ export const api = {
         method: 'PUT',
         body: workflow
     }),
+
+    loadWorkflow: (wid) => query(`/workflow/${wid}`, {
+        method: 'GET'
+    })
 };
 
 const query = (url, params = {}) => Observable.fromPromise(fetch(`${prefix}${url}`, defaults(params)))

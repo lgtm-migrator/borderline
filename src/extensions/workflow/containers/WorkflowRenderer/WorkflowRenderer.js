@@ -5,7 +5,9 @@ import { actions } from '../../flux';
 import style from './style.module.css';
 
 @stateAware(state => ({
-    currentWorkflow: state.currentWorkflow
+    currentWorkflow: state.currentWorkflow,
+    workflowsList: state.workflowsList,
+    workflowLoading: state.workflowLoading
 }))
 class WorkflowRenderer extends Component {
 
@@ -17,18 +19,26 @@ class WorkflowRenderer extends Component {
         dispatch: T.func
     };
 
+    shouldComponentUpdate(nextProps) {
+        if (this.props.currentWorkflow !== null)
+            return this.props.currentWorkflow !== nextProps.currentWorkflow;
+        return true;
+    }
+
     componentDidMount() {
-        const { match, currentWorkflow } = this.props;
-        if (currentWorkflow !== match.params.particule)
-            this.context.dispatch(actions.setCurrentWorkflow(match.params.particule));
+        const { match, currentWorkflow, workflowLoading } = this.props;
+        if ((currentWorkflow === null || currentWorkflow !== match.params.particule) && workflowLoading === false)
+            this.context.dispatch(actions.workflowLoad(match.params.particule));
     }
 
     render() {
         const { currentWorkflow } = this.props;
+        if (currentWorkflow === null)
+            return null;
         return (
             <>
                 <div className={style.workflowsDescription}>
-                    Renderer {currentWorkflow === undefined ? '' : `for ${currentWorkflow}`}
+                    Renderer for {currentWorkflow}
                 </div>
             </>
         );

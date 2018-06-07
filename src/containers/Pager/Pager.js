@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 import Enclave from 'containers/Enclave';
 import Navigation from './containers/Navigation';
 import Content from './containers/Content';
@@ -17,6 +18,9 @@ class Pager extends Component {
     render() {
         return (
             <>
+                <Helmet>
+                    <title>Borderline Interface</title>
+                </Helmet>
                 <Navigation key={'navigation'}/>
                 <Content key={'content'} />
                 <StatusBar key={'status'} />

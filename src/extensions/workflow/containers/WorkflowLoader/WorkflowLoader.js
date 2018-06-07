@@ -3,8 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
 import WorkflowRenderer from '../WorkflowRenderer';
 import WorkflowCreator from './WorkflowCreator';
-import { actions } from '../../flux';
-import style from './style.module.css';
 
 @stateAware(state => ({
     currentWorkflow: state.currentWorkflow,

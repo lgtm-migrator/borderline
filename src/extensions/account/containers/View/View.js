@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 import { stateAware } from 'utilities/storeManager';
 
 @stateAware(state => ({
@@ -10,10 +11,19 @@ class View extends Component {
     static displayName = 'View';
 
     render() {
-        if (this.props.user === undefined)
-            return null;
-        const { _id, username, admin } = this.props.user;
-        return <div>View {username} ({_id}) is {admin ? 'admin' : 'not admin'}</div>;
+        let status = null;
+        if (this.props.user !== undefined) {
+            const { _id, username, admin } = this.props.user;
+            status = <div>View {username} ({_id}) is {admin ? 'admin' : 'not admin'}</div>;
+        }
+        return (
+            <>
+                <Helmet>
+                    <title>Account</title>
+                </Helmet>
+                {status}
+            </>
+        );
     }
 }
 
