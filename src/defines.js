@@ -126,8 +126,8 @@ module.exports = {
     middleware_queryCollectionName: 'borderline_middleware_queries',
 
 
-    queryTypeTransmart17_1: 'Transmart 17.1',
-    queryTypeEAE2_0: 'eAE 2.0',
+    queryTypeTransmart17_1: 'TS17_1',
+    queryTypeEAE2_0: 'EAE2_0',
     queryTypeFile: 'File',
 
     queryStatusUnknown: 'query-status-unknown',
