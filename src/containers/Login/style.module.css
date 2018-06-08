@@ -1,6 +1,6 @@
 .box {
     position: absolute;
-    //grid-area: auto / navigation / auto / content;
+    grid-area: auto / navigation / auto / content;
     top: calc(50% - 125px);
     left: calc(50% - 100px);
     height: 250px;

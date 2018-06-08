@@ -25,11 +25,11 @@ export const api = {
         method: 'GET'
     }),
 
-    fetchWorkflowsList: (id) => query(`/workflow`, {
+    fetchWorkflowsList: (id) => query('/workflow', {
         method: 'GET'
     }),
 
-    createWorkflow: (workflow) => query(`/workflow`, {
+    createWorkflow: (workflow) => query('/workflow', {
         method: 'PUT',
         body: workflow
     }),

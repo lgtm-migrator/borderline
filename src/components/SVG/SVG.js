@@ -17,14 +17,14 @@ export default class SVG extends Component {
     propertyFilter(property) {
         let match = null;
         switch (property) {
-            case 'class':
-                return 'className';
-            case 'style':
-                return null;
-            case (match = property.match(/(.*?):(.)(.*)/) || {}).input: /* eslint no-cond-assign: "off" */
-                return match[1] + match[2].toUpperCase() + match[3];
-            default:
-                return property;
+        case 'class':
+            return 'className';
+        case 'style':
+            return null;
+        case (match = property.match(/(.*?):(.)(.*)/) || {}).input: /* eslint no-cond-assign: "off" */
+            return match[1] + match[2].toUpperCase() + match[3];
+        default:
+            return property;
         }
     }
 

@@ -115,24 +115,24 @@ export const reducers = {
     (state = initial, action) => {
 
         switch (action.type) {
-            case types.SESSION_RECOVER:
-                return sessionRecover(state);
-            case types.SESSION_LOGIN:
-                return sessionLogin(state);
-            case types.SESSION_LOGIN_SUCCESS:
-                return sessionLoginSuccess(state, action);
-            case types.SESSION_LOGIN_FAILURE:
-                return sessionLoginFailure(state, action);
-            case types.SESSION_LOGOUT:
-                return sessionLogout(state);
-            case types.SESSION_LOGOUT_SUCCESS:
-                return sessionLogoutSuccess(state);
-            case types.SESSION_VALID:
-                return sessionValid(state);
-            case 'STOP':
-                return initial;
-            default:
-                return state;
+        case types.SESSION_RECOVER:
+            return sessionRecover(state);
+        case types.SESSION_LOGIN:
+            return sessionLogin(state);
+        case types.SESSION_LOGIN_SUCCESS:
+            return sessionLoginSuccess(state, action);
+        case types.SESSION_LOGIN_FAILURE:
+            return sessionLoginFailure(state, action);
+        case types.SESSION_LOGOUT:
+            return sessionLogout(state);
+        case types.SESSION_LOGOUT_SUCCESS:
+            return sessionLogoutSuccess(state);
+        case types.SESSION_VALID:
+            return sessionValid(state);
+        case 'STOP':
+            return initial;
+        default:
+            return state;
         }
     }
 };

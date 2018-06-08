@@ -115,7 +115,7 @@ class Editor extends Component {
                 ...options,
             });
             if (theme)
-            Monaco.editor.setTheme(theme);
+                Monaco.editor.setTheme(theme);
             // After initializing monaco editor
             this.editorDidMount(this.editor, Monaco);
         } else {

@@ -77,7 +77,7 @@ class StoreManager {
         }
 
         store = createStore(combineReducers(this.asyncReducers), mutateCompose(applyMiddleware(...Object.values(this.middleware))));
-        this.middleware.epic.run(this.rootEpic)
+        this.middleware.epic.run(this.rootEpic);
 
     }
 

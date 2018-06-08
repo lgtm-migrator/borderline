@@ -22,4 +22,4 @@ export const canRender = (Component) => {
         </Component>).toJSON();
         expect(tree).toMatchSnapshot();
     });
-}
+};

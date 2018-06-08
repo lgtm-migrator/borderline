@@ -1,9 +1,9 @@
-import storeManager, { store, history, stateAware } from './storeManager';
+import { store, history } from './storeManager';
 
 it('produces a store', () => {
-    store !== undefined && store !== null;
-})
+    expect(store !== undefined && store !== null);
+});
 
 it('produces a history', () => {
-    history !== undefined && history !== null;
-})
+    expect(history !== undefined && history !== null);
+});
