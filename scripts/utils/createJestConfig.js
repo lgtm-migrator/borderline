@@ -34,7 +34,10 @@ module.exports = (resolve, rootDir, srcRoots) => {
             '^(?!.*\\.(js|jsx|mjs|css|json|graphql)$)': resolve('config/jest/fileTransform.js'),
         },
         transformIgnorePatterns: [
-            '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$',
+            // Because of https://github.com/facebook/jest/pull/5941
+            // We only target linux path and let Jest normailise it
+            // TODO Look at https://github.com/facebook/jest/issues/6385 for resolution
+            '/node_modules/.+\\.(js|jsx|mjs)$',
             '^.+\\.module\\.(css|sass|scss)$',
         ],
         moduleNameMapper: {
