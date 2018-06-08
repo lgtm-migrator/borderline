@@ -1,39 +1,45 @@
 {
   "name": "borderline-utils",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Utilities suite for the borderline projects",
-  "main": "./src/index.js",
-  "scripts": {
-    "lint": "eslint src"
-  },
   "keywords": [
     "borderline",
     "utility"
   ],
-  "contributors": [
-    "Jean Grizet <jean.grizet16@imperial.ac.uk>",
-    "Axel Oehmichen <axelfrancois.oehmichen11@imperial.ac.uk>"
-  ],
-  "license": "MIT",
-  "readme": "README.md",
+  "homepage": "https://github.com/dsi-icl/borderline-utils#readme",
+  "bugs": {
+    "url": "https://github.com/dsi-icl/borderline-utils/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dsi-icl/borderline-utils.git"
   },
-  "bugs": {
-    "url": "https://github.com/dsi-icl/borderline-utils/issues"
-  },
-  "homepage": "https://github.com/dsi-icl/borderline-utils#readme",
-  "devDependencies": {
-    "babel-core": "6.26.3",
-    "babel-eslint": "8.2.3",
-    "babel-preset-env": "1.7.0",
-    "eslint": "4.19.1"
+  "license": "MIT",
+  "contributors": [
+    "Jean Grizet <jean.grizet16@imperial.ac.uk>",
+    "Florian Guitton <f.guitton@imperial.ac.uk>",
+    "Axel Oehmichen <axelfrancois.oehmichen11@imperial.ac.uk>"
+  ],
+  "main": "./src/index.js",
+  "scripts": {
+    "lint": "eslint ./",
+    "lint:fix": "eslint ./"
   },
   "dependencies": {
     "bytes": "3.0.0",
     "fs-extra": "6.0.1",
     "ip": "1.1.5",
     "mongodb": "3.0.10"
-  }
+  },
+  "devDependencies": {
+    "babel-core": "6.26.3",
+    "babel-eslint": "8.2.3",
+    "babel-preset-env": "1.7.0",
+    "eslint": "4.19.1"
+  },
+  "engines": {
+    "node": ">= 8.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "readme": "README.md"
 }

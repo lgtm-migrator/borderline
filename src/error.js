@@ -2,7 +2,7 @@ function ErrorStack(error_obj, error_stack) {
     let error = {};
     let error_message = '';
 
-    error.toString = function() {
+    error.toString = function () {
         return JSON.stringify(this);
     };
 
@@ -17,7 +17,7 @@ function ErrorStack(error_obj, error_stack) {
         error_message = 'Undefined';
     else
         error_message = error_obj.toString();
-    error.error =  error_message;
+    error.error = error_message;
 
     //Extract error stack
     if (error_stack === undefined && error_obj.hasOwnProperty('stack'))

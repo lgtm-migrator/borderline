@@ -100,8 +100,8 @@ const queryModel = {
     endpoint: dataSourceModel,
     credentials: credentialsModel,
     status: executionModel,
-    input: [ ] ,
-    output: [ ]
+    input: [],
+    output: []
 };
 
 module.exports = {
@@ -126,9 +126,9 @@ module.exports = {
     middleware_queryCollectionName: 'borderline_middleware_queries',
 
 
-    queryTypeTransmart: 'TS171',
+    queryTypeTransmart17_1: 'Transmart 17.1',
+    queryTypeEAE2_0: 'eAE 2.0',
     queryTypeFile: 'File',
-    queryTypeEAE: 'eAE.v2',
 
     queryStatusUnknown: 'query-status-unknown',
     queryStatusError: 'query-status-error',
@@ -145,8 +145,8 @@ module.exports = {
     registryModel: registryModel,
     userModel: userModel,
     dataSourceModel: dataSourceModel,
-    extensionModel:extensionModel,
-    stepModel : stepModel,
+    extensionModel: extensionModel,
+    stepModel: stepModel,
     workflowStepModel: workflowStepModel,
     workflowModel: workflowModel,
     executionModel: executionModel,

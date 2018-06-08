@@ -42,9 +42,9 @@ module.exports = {
         BL_DEFAULT_EXTENSION_MANIFEST: defines.extensionManifestFilename,
 
 
-        BL_QUERY_TYPE_TS171: defines.queryTypeTransmart,
+        BL_QUERY_TYPE_TS17_1: defines.queryTypeTransmart17_1,
+        BL_QUERY_TYPE_EAE2_0: defines.queryTypeEAE2_0,
         BL_QUERY_TYPE_FILE: defines.queryTypeFile,
-        BL_QUERY_TYPE_EAE: defines.queryTypeEAE,
 
         BL_QUERY_STATUS_UNKNOWN: defines.queryStatusUnknown,
         BL_QUERY_STATUS_ERROR: defines.queryStatusError,
