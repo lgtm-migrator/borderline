@@ -1,2 +1,2 @@
 # borderline-utils
-Borderline utilities package
+Utilities suite for the Borderline projects

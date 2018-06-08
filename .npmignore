@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /tmp
+/mnt
+/test
 
 # dependencies
 /node_modules
@@ -33,11 +35,12 @@ testem.log
 Thumbs.db
 
 /.gitignore
-/.eslintrc
+/.eslint*
 /.editorconfig
 /.dockerignore
 
 /.travis.yml
+/renovate.json
 
 /.idea
 
@@ -47,3 +50,4 @@ Thumbs.db
 
 **/__mocks__/**
 **/__tests__/**
+**/*.test.config.js
