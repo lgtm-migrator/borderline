@@ -41,7 +41,7 @@
         "babel-loader": "8.0.0-beta.3",
         "babel-plugin-named-asset-import": "1.0.0-next.66cc7a90",
         "babel-preset-react-app": "4.0.0-next.66cc7a90",
-        "bfj": "6.1.0",
+        "bfj": "6.1.1",
         "borderline-server": "0.3.4",
         "case-sensitive-paths-webpack-plugin": "2.1.2",
         "chalk": "2.4.1",
