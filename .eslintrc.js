@@ -19,8 +19,11 @@ module.exports = {
         'no-alert': 'error',
         'no-console': 'warn',
         'indent': [
-            'error',
-            4
+            'warn',
+            4,
+            {
+                'SwitchCase': 1
+            }
         ],
         'quotes': [
             'warn',
