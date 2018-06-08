@@ -49,14 +49,14 @@ QueryTransmart17_1.prototype.initialize = function () {
         _this._ensureAuth().then(function () {
             resolve(true);
         }, function (auth_error) {
-            reject(ErrorHelper('TS17.1 init query failed', auth_error));
+            reject(ErrorHelper('Transmart 17.1 init query failed', auth_error));
         });
     });
 };
 
 /**
  * @fn execute
- * @desc Performs the execution of the query. For TS17.1, sends the request to the endpoint
+ * @desc Performs the execution of the query. For Transmart 17.1, sends the request to the endpoint
  * @return {Promise} Resolve to true on success or reject the ErrorHelper when it goes wrong
  */
 QueryTransmart17_1.prototype.execute = function () {
@@ -64,7 +64,7 @@ QueryTransmart17_1.prototype.execute = function () {
     return new Promise(function (resolve, reject) {
         let credentials = _this.getModel().credentials;
         let endpoint = _this.getModel().endpoint;
-        let input = _this.getInputModel()[0].metadata; // TS17.1 query data is here in the right format
+        let input = _this.getInputModel()[0].metadata; // Transmart 17.1 query data is here in the right format
         let uri_type_arg = input.hasOwnProperty('type') ? ('&type=' + input.type) : '';
         _this._query_request = request.get({
             baseUrl: endpoint.protocol + '://' + endpoint.host + ':' + endpoint.port + endpoint.baseUrl,
@@ -100,11 +100,11 @@ QueryTransmart17_1.prototype.terminate = function () {
             _this.setOutput(query_result).then(function (data_model) {
                 resolve(data_model);
             }, function (output_error) {
-                reject(ErrorHelper('Terminate TS171 saving output failed', output_error));
+                reject(ErrorHelper('Terminate TS17_1 saving output failed', output_error));
             });
         }
         else {
-            reject(ErrorHelper('Terminate QueryTS17.1 has no result after execution'));
+            reject(ErrorHelper('Terminate QueryTransmart 17.1 has no result after execution'));
         }
     });
 };
@@ -121,7 +121,7 @@ QueryTransmart17_1.prototype.interrupt = function () {
             resolve(true);
         }
         else {
-            reject(ErrorHelper('TS17.1 query is not running'));
+            reject(ErrorHelper('Transmart 17.1 query is not running'));
         }
     });
 };
@@ -135,17 +135,17 @@ QueryTransmart17_1.prototype.getInput = function () {
     let _this = this;
     return new Promise(function (resolve, reject) {
         if (_this._model.input && _this._model.input.length === 1) {
-            let input_model = _this._model.input[0]; // Only one input for TS171 queries
+            let input_model = _this._model.input[0]; // Only one input for TS17_1 queries
             if (input_model.metadata) {
                 // Input is stored in Transmart format, so we convert back to std
                 resolve(_this._transmartToStd(input_model.metadata));
             }
             else {
-                reject(ErrorHelper('Query TS171 input is empty'));
+                reject(ErrorHelper('Query TS17_1 input is empty'));
             }
         }
         else {
-            reject(ErrorHelper('Query TS171 doesnt have an input'));
+            reject(ErrorHelper('Query TS17_1 doesnt have an input'));
         }
     });
 };
@@ -175,14 +175,14 @@ QueryTransmart17_1.prototype.setInput = function (data) {
 
 /**
  * @fn getOutput
- * @desc Getter on this TS171 output. Reads the data stored in the object cache if any
+ * @desc Getter on this TS17_1 output. Reads the data stored in the object cache if any
  * @return {Promise} Resolves to the std data on success, reject if data is missing or error occurs
  */
 QueryTransmart17_1.prototype.getOutput = function () {
     let _this = this;
     return new Promise(function (resolve, reject) {
         if (_this._model.output && _this._model.output.length === 1) {
-            let output_model = _this._model.output[0]; // Only one output from TS171 queries
+            let output_model = _this._model.output[0]; // Only one output from TS17_1 queries
             if (output_model.cache && output_model.cache.dataSize && output_model.cache.storageId) {
                 _this._storage.getObject(output_model.cache.storageId).then(function (data) {
                     // Data is already in std format
@@ -193,11 +193,11 @@ QueryTransmart17_1.prototype.getOutput = function () {
                 });
             }
             else {
-                reject(ErrorHelper('Query TS171 doesnt have cached output'));
+                reject(ErrorHelper('Query TS17_1 doesnt have cached output'));
             }
         }
         else {
-            reject(ErrorHelper('Query TS171 doesnt have output'));
+            reject(ErrorHelper('Query TS17_1 doesnt have output'));
         }
     });
 };
@@ -272,8 +272,8 @@ QueryTransmart17_1.prototype._doAuth = function () {
             json: true,
             baseUrl: _this._model.endpoint.protocol + '://' + _this._model.endpoint.host + ':' + _this._model.endpoint.port + _this._model.endpoint.baseUrl,
             uri: '/oauth/token?grant_type=password&client_id=glowingbear-js&client_secret=' +
-            '&username=' + _this._model.credentials.username +
-            '&password=' + _this._model.credentials.password
+                '&username=' + _this._model.credentials.username +
+                '&password=' + _this._model.credentials.password
         }, function (error, response, body) {
             if (error !== null) {
                 reject(ErrorHelper('Auth request failed', error));

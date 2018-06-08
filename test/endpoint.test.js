@@ -18,13 +18,13 @@ beforeAll(function () {
     });
 });
 
-test('Create stub TS171 query, save the id as ref', function (done) {
+test('Create stub TS17_1 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
             method: 'POST',
             baseUrl: 'http://127.0.0.1:' + config.port,
-            uri: '/query/new/TS171',
+            uri: '/query/new/TS17_1',
             json: true,
             body: {
                 stubProperty: false
@@ -45,7 +45,7 @@ test('Create stub TS171 query, save the id as ref', function (done) {
     );
 });
 
-test('Get {query_id} endpoint, check type is TS171', function (done) {
+test('Get {query_id} endpoint, check type is TS17_1', function (done) {
     expect.assertions(3);
     request({
         method: 'GET',
@@ -63,7 +63,7 @@ test('Get {query_id} endpoint, check type is TS171', function (done) {
         }
         expect(response.statusCode).toEqual(200);
         expect(body).toBeDefined();
-        expect(body.type).toEqual('TS171');
+        expect(body.type).toEqual('TS17_1');
         done();
     });
 });
@@ -76,7 +76,7 @@ test('Set {query_id} endpoint port to 80, check update happened', function (done
         uri: '/query/' + g_query_id + '/endpoint',
         json: true,
         body: {
-            type: 'TS171',
+            type: 'TS17_1',
             name: 'Transmart 17.1',
             host: 'glowingbear.thehyve.net',
             port: 80,
@@ -114,7 +114,7 @@ test('Reset endpoint for {query_id}, check port is back to default at 8080', fun
     });
 });
 
-test('Delete stub TS171 {query_id}', function (done) {
+test('Delete stub TS17_1 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {

@@ -19,4 +19,3 @@ middleware.start().then(function (middlware_router) {
 }, function (error) {
     console.error(error); // eslint-disable-line no-console
 });
-

@@ -1,7 +1,8 @@
 const ObjectID = require('mongodb').ObjectID;
 const { ErrorHelper, Constants } = require('borderline-utils');
 
-const Query_TS171 = require('./queryObject_TS171.js');
+const Query_TS17_1 = require('./queryObject_TS17_1.js');
+const Query_EAE2_0 = require('./queryObject_EAE2_0.js');
 const Query_File = require('./queryObject_File.js');
 
 /**
@@ -27,14 +28,14 @@ QueryFactory.prototype.fromModel = function (queryModel) {
     return new Promise(function (resolve, reject) {
         // Todo: Use a configuration file to make it dynamic
         switch (queryModel.endpoint.type) {
-            case Constants.BL_QUERY_TYPE_TS171:
-                resolve(new Query_TS171(queryModel, _this.queryCollection, _this.storage));
+            case Constants.BL_QUERY_TYPE_TS17_1:
+                resolve(new Query_TS17_1(queryModel, _this.queryCollection, _this.storage));
+                break;
+            case Constants.BL_QUERY_TYPE_EAE2_0:
+                resolve(new Query_EAE2_0(queryModel, _this.queryCollection, _this.storage));
                 break;
             case Constants.BL_QUERY_TYPE_FILE:
                 resolve(new Query_File(queryModel, _this.queryCollection, _this.storage));
-                break;
-            case Constants.BL_QUERY_TYPE_EAE:
-                reject(ErrorHelper('eAE support is not implemented, yet!!!'));
                 break;
             default:
                 reject(ErrorHelper('Type [' + queryModel.endpoint.type + '] is unknown'));

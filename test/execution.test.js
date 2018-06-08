@@ -9,9 +9,9 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 12000; // 12 seconds
 
 let test_server = new TestServer();
 let g_query_id = '';
-const ts171_query = {
+const TS17_1_query = {
     endpoint: {
-        type: 'TS171',
+        type: 'TS17_1',
         name: 'Transmart instance',
         host: 'tm171-release-pg.thehyve.net',
         port: 80,
@@ -70,9 +70,9 @@ test('Execute a query with invalid_id', function (done) {
     });
 });
 
-test('Create a test TS171 query with invalid credentials, save the id as ref', function (done) {
+test('Create a test TS17_1 query with invalid credentials, save the id as ref', function (done) {
     expect.assertions(6);
-    let query_data = Object.assign({}, ts171_query, {
+    let query_data = Object.assign({}, TS17_1_query, {
         credentials: {
             username: 'invalid',
             password: 'invalid'
@@ -143,7 +143,7 @@ test('Wait 10 secs, Check execution status current query, check auth failed', fu
     }, 10000);
 });
 
-test('Delete current TS171 {query_id}', function (done) {
+test('Delete current TS17_1 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {
@@ -162,7 +162,7 @@ test('Delete current TS171 {query_id}', function (done) {
     );
 });
 
-test('Create a VALID test TS171 query, save the id as ref', function (done) {
+test('Create a VALID test TS17_1 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
@@ -170,7 +170,7 @@ test('Create a VALID test TS171 query, save the id as ref', function (done) {
             baseUrl: 'http://127.0.0.1:' + config.port,
             uri: '/query/new/',
             json: true,
-            body: ts171_query
+            body: TS17_1_query
         }, function (error, response, body) {
             if (error) {
                 done.fail(error.toString());
@@ -231,7 +231,7 @@ test('Wait 10 secs, Check execution status current query is done', function (don
 });
 
 
-test('Delete current TS171 {query_id}', function (done) {
+test('Delete current TS17_1 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {

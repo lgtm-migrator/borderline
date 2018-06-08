@@ -97,13 +97,13 @@ test('Delete query from {query_id}, reset query_id ref', function (done) {
     });
 });
 
-test('Create TS171 query, save the id as ref', function (done) {
+test('Create TS17_1 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
             method: 'POST',
             baseUrl: 'http://127.0.0.1:' + config.port,
-            uri: '/query/new/TS171',
+            uri: '/query/new/TS17_1',
             json: true,
             body: {
                 stubProperty: false
@@ -124,7 +124,7 @@ test('Create TS171 query, save the id as ref', function (done) {
     );
 });
 
-test('Get TS171 query from {query_id}, check _id and type', function (done) {
+test('Get TS17_1 query from {query_id}, check _id and type', function (done) {
     expect.assertions(6);
     request({
         method: 'GET',
@@ -140,12 +140,12 @@ test('Get TS171 query from {query_id}, check _id and type', function (done) {
         expect(body._id).toBeDefined();
         expect(body._id).toEqual(g_query_id);
         expect(body.endpoint).toBeDefined();
-        expect(body.endpoint.type).toEqual(Constants.BL_QUERY_TYPE_TS171);
+        expect(body.endpoint.type).toEqual(Constants.BL_QUERY_TYPE_TS17_1);
         done();
     });
 });
 
-test('Delete TS171 query from {query_id}', function (done) {
+test('Delete TS17_1 query from {query_id}', function (done) {
     expect.assertions(2);
     request({
         method: 'DELETE',

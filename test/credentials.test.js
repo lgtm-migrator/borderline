@@ -18,13 +18,13 @@ beforeAll(function () {
     });
 });
 
-test('Create stub TS171 query, save the id as ref', function (done) {
+test('Create stub TS17_1 query, save the id as ref', function (done) {
     expect.assertions(6);
     request(
         {
             method: 'POST',
             baseUrl: 'http://127.0.0.1:' + config.port,
-            uri: '/query/new/TS171',
+            uri: '/query/new/TS17_1',
             json: true,
             body: {
                 stubProperty: false
@@ -141,7 +141,7 @@ test('Reset {query_id} credentials, check fields are back to default', function 
     });
 });
 
-test('Delete stub TS171 {query_id}', function (done) {
+test('Delete stub TS17_1 {query_id}', function (done) {
     expect.assertions(2);
     request(
         {
