@@ -13,7 +13,8 @@ RUN cat /root/.npm/_logs/*; exit 0;
 
 # Bundle app
 COPY ./.git /usr/app/.git
-COPY ./.eslintrc /usr/app/.eslintrc
+COPY ./.eslintrc.js /usr/app/.eslintrc.js
+COPY ./.eslintignore /usr/app/.eslintignore
 COPY ./src /usr/app/src
 COPY ./test/*.js /usr/app/test/
 COPY ./config/borderline.test.config.js /usr/app/config/borderline.config.js
