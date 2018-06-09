@@ -57,7 +57,7 @@ QueryEAE2_0.prototype.execute = function () {
         let input = _this.getInputModel()[0].metadata;
         _this._query_request = request.post({
             baseUrl: endpoint.protocol + '://' + endpoint.host + ':' + endpoint.port + endpoint.baseUrl,
-            uri: '/job/create',
+            uri: '/job/create/swift',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -239,9 +239,9 @@ QueryEAE2_0.prototype.setOutput = function (data) {
  */
 QueryEAE2_0.prototype._awaitResult = function (job_info) {
     let _this = this;
-    console.debug("Waiting 5 seconds _awaitResult");
+    console.debug("Waiting 1 seconds _awaitResult", job_info);
     return new Promise(function (resolve) {
-        setTimeout(resolve(new Promise(function (resolve, reject) {
+        let timer = setTimeout(() => resolve(new Promise(function (resolve, reject) {
             console.debug("_awaitResult trigger");
             let credentials = _this.getModel().credentials;
             let endpoint = _this.getModel().endpoint;
@@ -265,10 +265,17 @@ QueryEAE2_0.prototype._awaitResult = function (job_info) {
                 }
                 else {
                     // Wait for the analysis to be finished
-                    console.debug("Checking await result", body);
-                    if (body.statusLock === true)
+                    if (body.status.filter(value => -1 !== ['eae_job_error', 'eae_job_dead'].indexOf(value)).length > 0)
+                        reject(ErrorHelper('The job errored or is dead', body.message));
+                    else if (body.status.filter(value => -1 !== ['eae_job_cancelled'].indexOf(value)).length > 0)
+                        reject(ErrorHelper('The job was cancelled', body.message));
+                    else if (body.status.filter(value => -1 !== ['eae_job_done', 'eae_job_completed', 'eae_job_archived'].indexOf(value)).length === 0)
                         resolve(_this._awaitResult(job_info));
-                    resolve(_this._fetchResult(body));
+                    else {
+                        clearTimeout(timer);
+                        console.debug("Gonna fetch result now", body._id);
+                        resolve(_this._fetchResult(body));
+                    }
                 }
             });
         })), 1000);
@@ -289,7 +296,7 @@ QueryEAE2_0.prototype._fetchResult = function (job_info) {
         let endpoint = _this.getModel().endpoint;
         request.post({
             baseUrl: endpoint.protocol + '://' + endpoint.host + ':' + endpoint.port + endpoint.baseUrl,
-            uri: '/job',
+            uri: '/job/results/swift',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -297,7 +304,7 @@ QueryEAE2_0.prototype._fetchResult = function (job_info) {
             body: {
                 eaeUsername: credentials.username,
                 eaeUserToken: credentials.password,
-                jobID: job_info.jobID
+                jobID: job_info._id
             }
         }, function (error, response, body) {
             if (error !== null || response === null || response.statusCode !== 200) {
