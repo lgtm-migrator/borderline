@@ -31,7 +31,7 @@ function UserAccountController(mongoDBCollection) {
  * @param deserializedUser User as a plain JS object with all its properties
  * @param done
  */
-UserAccountController.prototype.serializeUser = function(deserializedUser, done) {
+UserAccountController.prototype.serializeUser = function (deserializedUser, done) {
     if (deserializedUser.hasOwnProperty('_id') === false)
         done('User has no ID', null);
     else {
@@ -49,10 +49,10 @@ UserAccountController.prototype.serializeUser = function(deserializedUser, done)
  * @param serializedUser As returned by deserializeUser
  * @param done Callback to pass the deserialized user result to
  */
-UserAccountController.prototype.deserializeUser = function(serializedUser, done) {
+UserAccountController.prototype.deserializeUser = function (serializedUser, done) {
     this.users.findById(serializedUser.id).then(function (user) {
         done(null, user);
-    }, function(error) {
+    }, function (error) {
         done('Session broke: ' + error, null);
     });
 };
@@ -63,15 +63,14 @@ UserAccountController.prototype.deserializeUser = function(serializedUser, done)
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.getUsers = function(__unused__req, res) {
-   this.users.findAll().then(function(users) {
-       res.status(200);
-       res.json(users);
-   },
-   function(error) {
-      res.status(401);
-      res.json(ErrorHelper('Cannot list users', error));
-   });
+UserAccountController.prototype.getUsers = function (__unused__req, res) {
+    this.users.findAll().then(function (users) {
+        res.status(200);
+        res.json(users);
+    }, function (error) {
+        res.status(401);
+        res.json(ErrorHelper('Cannot list users', error));
+    });
 };
 
 /**
@@ -81,9 +80,9 @@ UserAccountController.prototype.getUsers = function(__unused__req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.login = function(req, res) {
+UserAccountController.prototype.login = function (req, res) {
     let that = this;
-    let rejected = function(reason) {
+    let rejected = function (reason) {
         res.status(400);
         res.send(ErrorHelper('Failed to login', reason));
     };
@@ -103,16 +102,16 @@ UserAccountController.prototype.login = function(req, res) {
                     resolve(user);
                 });
             },
-            function(__unused__error) {
-                return new Promise(function(resolve, reject) {
-                //Try to find user in external DB and create in local
-                that.users.registerExternalByUsernameAndPassword(username, password).then(function (user) {
+            function (__unused__error) {
+                return new Promise(function (resolve, reject) {
+                    //Try to find user in external DB and create in local
+                    that.users.registerExternalByUsernameAndPassword(username, password).then(function (user) {
                         resolve(user);
                     }, reject);
                 });
             }
         )
-        .then(function(user) {
+        .then(function (user) {
             req.login(user, function (err) {
                 if (err) {
                     rejected(err);
@@ -131,8 +130,8 @@ UserAccountController.prototype.login = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.login2 = function(req, res) {
-    let rejected = function(reason) {
+UserAccountController.prototype.login2 = function (req, res) {
+    let rejected = function (reason) {
         res.status(400);
         res.send(ErrorHelper('Failed to login', reason));
     };
@@ -149,13 +148,13 @@ UserAccountController.prototype.login2 = function(req, res) {
         .then(
             function (user) {
                 let verified = speakeasy.totp.verify({
-                        secret: user.secret.base32,
-                        encoding: 'base32',
-                        token: token
-                    }
+                    secret: user.secret.base32,
+                    encoding: 'base32',
+                    token: token
+                }
                 );
                 if (verified) {
-                    req.login(user, function(err) {
+                    req.login(user, function (err) {
                         if (err) {
                             rejected(err.toString());
                         }
@@ -168,7 +167,7 @@ UserAccountController.prototype.login2 = function(req, res) {
                     rejected('2 step identification failed');
                 }
             },
-            function(error) {
+            function (error) {
                 rejected(ErrorHelper(error));
             }
         );
@@ -180,7 +179,7 @@ UserAccountController.prototype.login2 = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.put2step = function(req, res) {
+UserAccountController.prototype.put2step = function (req, res) {
     let user_id = req.params.user_id;
 
     if (user_id === undefined || user_id === null) {
@@ -190,18 +189,17 @@ UserAccountController.prototype.put2step = function(req, res) {
     }
 
     this.users.regenerateSecret(user_id).then(function (user) {
-            if (user === undefined || user === null) {
-                res.status(404);
-                res.json(ErrorHelper('Unknown user id'));
-                return;
-            }
-            res.status(200);
-            res.send(user.secret.otpauth_url);
-        },
-        function(error) {
-            res.status(400);
-            res.json(ErrorHelper(error));
+        if (user === undefined || user === null) {
+            res.status(404);
+            res.json(ErrorHelper('Unknown user id'));
+            return;
         }
+        res.status(200);
+        res.send(user.secret.otpauth_url);
+    }, function (error) {
+        res.status(400);
+        res.json(ErrorHelper(error));
+    }
     );
 };
 
@@ -211,8 +209,8 @@ UserAccountController.prototype.put2step = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.logout = function(req, res) {
-    req.session.destroy(function(err) {
+UserAccountController.prototype.logout = function (req, res) {
+    req.session.destroy(function (err) {
         if (req.user === undefined || req.user === null) {
             res.status(401);
             res.json(ErrorHelper('Not logged in'));
@@ -237,7 +235,7 @@ UserAccountController.prototype.logout = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.whoAmI = function(req, res) {
+UserAccountController.prototype.whoAmI = function (req, res) {
     let Iam = req.user;
     if (Iam === undefined || Iam === null) {
         res.status(404);
@@ -256,14 +254,13 @@ UserAccountController.prototype.whoAmI = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.getUserById = function(req, res) {
+UserAccountController.prototype.getUserById = function (req, res) {
     let user_id = req.params.user_id;
 
-    this.users.findById(user_id).then(function(user) {
+    this.users.findById(user_id).then(function (user) {
         res.status(200);
         res.json(user);
-    },
-    function(error) {
+    }, function (error) {
         res.status(404);
         res.json(ErrorHelper('Can find user by ID', error));
     });
@@ -275,18 +272,16 @@ UserAccountController.prototype.getUserById = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.postUserById = function(req, res) {
+UserAccountController.prototype.postUserById = function (req, res) {
     let user_id = req.params.user_id;
 
-    this.users.updateById(user_id, req.body).then(function (user)
-        {
-            res.status(200);
-            res.json(user);
-        },
-        function(error) {
-            res.status(400);
-            res.json(ErrorHelper('Failed to update user', error));
-        });
+    this.users.updateById(user_id, req.body).then(function (user) {
+        res.status(200);
+        res.json(user);
+    }, function (error) {
+        res.status(400);
+        res.json(ErrorHelper('Failed to update user', error));
+    });
 };
 
 /**
@@ -295,19 +290,17 @@ UserAccountController.prototype.postUserById = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserAccountController.prototype.deleteUserById = function(req, res) {
+UserAccountController.prototype.deleteUserById = function (req, res) {
     let user_id = req.params.user_id;
 
-    this.users.deleteById(user_id).then(function (user)
-        {
-            req.logout();
-            res.status(200);
-            res.json({ deleted: user });
-        },
-        function(error) {
-            res.status(400);
-            res.json(ErrorHelper('Failed to delete user', error));
-        });
+    this.users.deleteById(user_id).then(function (user) {
+        req.logout();
+        res.status(200);
+        res.json({ deleted: user });
+    }, function (error) {
+        res.status(400);
+        res.json(ErrorHelper('Failed to delete user', error));
+    });
 };
 
 module.exports = UserAccountController;

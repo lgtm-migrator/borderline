@@ -16,9 +16,9 @@ function TestServer() {
     this.clearCookie = TestServer.prototype.clearCookie.bind(this);
 }
 
-TestServer.prototype.run = function() {
+TestServer.prototype.run = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Setup node env to test during test
         process.env.TEST = 1;
         // Create server
@@ -38,14 +38,14 @@ TestServer.prototype.run = function() {
     });
 };
 
-TestServer.prototype.stop = function() {
+TestServer.prototype.stop = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Remove test flag from env
         delete process.env.TEST;
         // Stop server & close connections
-        _this.borderline_server.stop().then(function() {
-            _this._web_server.close(function(error) {
+        _this.borderline_server.stop().then(function () {
+            _this._web_server.close(function (error) {
                 if (error)
                     reject(error);
                 else
@@ -57,11 +57,11 @@ TestServer.prototype.stop = function() {
     });
 };
 
-TestServer.prototype.mongo = function() {
+TestServer.prototype.mongo = function () {
     return this.borderline_server.db;
 };
 
-TestServer.prototype.setCookie = function(response) {
+TestServer.prototype.setCookie = function (response) {
     let _this = this;
     if (response && response.headers) {
         // Need to set a new cookie
@@ -82,12 +82,12 @@ TestServer.prototype.setCookie = function(response) {
     }
 };
 
-TestServer.prototype.getCookie = function() {
+TestServer.prototype.getCookie = function () {
     let _this = this;
     return _this._cookies.join(';');
 };
 
-TestServer.prototype.clearCookie = function() {
+TestServer.prototype.clearCookie = function () {
     let _this = this;
     _this._cookies = [];
 };

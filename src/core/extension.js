@@ -35,7 +35,7 @@ function Extension(ExtensionModel, ExtensionCollection) {
     this.synchronise = Extension.prototype.synchronise.bind(this);
 
     // Init the router logic
-    this._router.use(function(req, res, next) {
+    this._router.use(function (req, res, next) {
         if (_this._model.enabled === true) {
             _this._static_router(req, res, next);
         }
@@ -53,14 +53,14 @@ function Extension(ExtensionModel, ExtensionCollection) {
  * @return {Promise} Resolve to the manifest_content on success, or reject an error stack on error
  * @private
  */
-Extension.prototype._readManifest = function() {
+Extension.prototype._readManifest = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let manifest_path = path.join(global.config.extensionSourcesFolder, _this.getId());
         manifest_path = path.format({ dir: path.normalize(manifest_path), base: Constants.BL_DEFAULT_EXTENSION_MANIFEST });
-        fs.readJson(manifest_path).then(function(manifest_data) {
+        fs.readJson(manifest_path).then(function (manifest_data) {
             resolve(manifest_data);
-        }, function(error) {
+        }, function (error) {
             reject(ErrorHelper('Reading extension manifest failed', error));
         });
     });
@@ -71,7 +71,7 @@ Extension.prototype._readManifest = function() {
  * @desc Getter for the extension unique identifier
  * @return A string containing the extension unique identifier, or null if none
  */
-Extension.prototype.getId = function() {
+Extension.prototype.getId = function () {
     if (this._model && this._model._id) {
         if (this._model._id instanceof ObjectID)
             return this._model._id.toHexString();
@@ -86,7 +86,7 @@ Extension.prototype.getId = function() {
  * @desc Retrieves this extension model plain JS object
  * @return JSON object content
  */
-Extension.prototype.getModel = function() {
+Extension.prototype.getModel = function () {
     return this._model;
 };
 
@@ -96,7 +96,7 @@ Extension.prototype.getModel = function() {
  * @param[in] mergeModel All of this object properties will be copy merged to the internal model
  * @return {Boolean} Always true
  */
-Extension.prototype.setModel = function(mergeModel) {
+Extension.prototype.setModel = function (mergeModel) {
     this._model = Object.assign({}, this._model, mergeModel);
     return true;
 };
@@ -106,7 +106,7 @@ Extension.prototype.setModel = function(mergeModel) {
  * @desc Getter on this extension file router
  * @return {Promise} Always resolves to Express.js router type
  */
-Extension.prototype.getRouter = function() {
+Extension.prototype.getRouter = function () {
     return Promise.resolve(this._router);
 };
 
@@ -115,13 +115,13 @@ Extension.prototype.getRouter = function() {
  * @desc Try to enable this extension. On success, all the extensions files will be served by this extension router.
  * @return {Promise} Resolve to the extension manifest on success, reject an error stack otherwise.
  */
-Extension.prototype.enable = function() {
+Extension.prototype.enable = function () {
     let _this = this;
 
-    return new Promise(function(resolve, __unused__reject) {
+    return new Promise(function (resolve, __unused__reject) {
         _this._static_router = express.Router();
         // Serves all the files as static
-        _this._static_router.get('/*', function(req, res) {
+        _this._static_router.get('/*', function (req, res) {
             let uri = req.params[0];
             if (uri === null || uri === undefined || uri.length === 0)
                 uri = 'app.js'; // Defaults to app.js
@@ -148,7 +148,7 @@ Extension.prototype.enable = function() {
  * @desc Disables this extension. The files will no longer be served and the model enabled = false
  * @return {Promise} Always resolve to true
  */
-Extension.prototype.disable = function() {
+Extension.prototype.disable = function () {
     let _this = this;
 
     _this._static_router = express.Router();
@@ -164,31 +164,31 @@ Extension.prototype.disable = function() {
  * @desc
  * @return {Promise}
  */
-Extension.prototype.synchronise = function() {
+Extension.prototype.synchronise = function () {
     let _this = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let mongo_id = _this._model._id;
 
-        let mongo_find = function() {
-            return new Promise(function(resolve, reject) {
-                _this._extensionCollection.findOne({ _id : mongo_id }).then(function (model) {
+        let mongo_find = function () {
+            return new Promise(function (resolve, reject) {
+                _this._extensionCollection.findOne({ _id: mongo_id }).then(function (model) {
                     let local_model = _this.getModel();
                     // Update the enabled status for this server
                     model.enabled[RegistryIdentifier()] = local_model.enabled[RegistryIdentifier()];
                     _this.setModel(Object.assign({}, local_model, model));
                     resolve(true);
-                }, function(find_error) {
+                }, function (find_error) {
                     reject(ErrorHelper('Cannot read from extension registry', find_error));
                 });
             });
         };
 
-        let mongo_update = function() {
-            return new Promise(function(resolve, reject) {
+        let mongo_update = function () {
+            return new Promise(function (resolve, reject) {
                 let local_model = _this.getModel();
                 let model_to_save = Object.assign({}, local_model);
                 delete model_to_save._id; // Let mongo handle ids
-                _this._extensionCollection.replaceOne({_id: mongo_id}, model_to_save, {upsert: true}).then(function() {
+                _this._extensionCollection.replaceOne({ _id: mongo_id }, model_to_save, { upsert: true }).then(function () {
                     _this.setModel(model_to_save);
                     resolve(true);
                 }, function (update_error) {
@@ -197,8 +197,8 @@ Extension.prototype.synchronise = function() {
             });
         };
 
-        _this._readManifest().then(function(__unused__manifest_data) { // Can read, update extension model
-            _this.enable().then(function() {
+        _this._readManifest().then(function (__unused__manifest_data) { // Can read, update extension model
+            _this.enable().then(function () {
                 mongo_find().then(function () {
                     mongo_update().then(function () {
                         resolve(true); // All good, found, merged and updated
@@ -208,11 +208,11 @@ Extension.prototype.synchronise = function() {
                 }, function (find_error) {
                     reject(ErrorHelper('Failed to list extension from the registry', find_error));
                 });
-            }, function(enable_error) {
+            }, function (enable_error) {
                 reject(ErrorHelper('Synchronise cannot enable extension', enable_error));
             });
-        }, function(__unused__manifest_err) { // Cannot read manifest, forces disabling
-            _this.disable().then(function() {
+        }, function (__unused__manifest_err) { // Cannot read manifest, forces disabling
+            _this.disable().then(function () {
                 mongo_find().then(function () {
                     mongo_update().then(function () {
                         resolve(true); // Disabled, found, and updated
@@ -222,7 +222,7 @@ Extension.prototype.synchronise = function() {
                 }, function (find_error) {
                     reject(ErrorHelper('Failed to list extension from the registry', find_error));
                 });
-            }, function(disable_error) {
+            }, function (disable_error) {
                 reject(ErrorHelper('Synchronise cannot disable extension', disable_error));
             });
         });

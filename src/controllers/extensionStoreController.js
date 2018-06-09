@@ -151,8 +151,9 @@ ExtensionStoreController.prototype.postExtensionByID = function (req, res) {
         message: 'Please extract to plugin dir locally'
     });
     delete update_model._id; // Let mongo handle ids
-    this.extensionCollection.findOneAndUpdate({ _id: new ObjectID(id) },
-        { $set: update_model }, { returnOriginal: false }).then(function (update_result) {
+    this.extensionCollection
+        .findOneAndUpdate({ _id: new ObjectID(id) }, { $set: update_model }, { returnOriginal: false })
+        .then(function (update_result) {
             if (update_result.lastErrorObject.n === 1) {
                 res.status(200);
                 res.json(update_result.value);

@@ -136,11 +136,10 @@ WorkflowController.prototype.getStep = function (req, res) {
     this.step.getAll(workflow_id).then(function (result) {
         res.status(200);
         res.json(result);
-    },
-        function (error) {
-            res.status(404);
-            res.json(ErrorHelper('Listing workflow steps failed', error));
-        });
+    }, function (error) {
+        res.status(404);
+        res.json(ErrorHelper('Listing workflow steps failed', error));
+    });
 };
 
 /**

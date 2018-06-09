@@ -25,13 +25,12 @@ function UserExtensionController(userCollection, extensionCollection) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserExtensionController.prototype.getExtensions = function(req, res) {
+UserExtensionController.prototype.getExtensions = function (req, res) {
     let user_id = req.params.user_id;
     this.userExtension.listExtensions(user_id).then(function (list) {
         res.status(200);
         res.json(list);
-    },
-    function (error) {
+    }, function (error) {
         res.status(404);
         res.json(ErrorHelper('Cannot list extension for ' + user_id + ' user ID', error));
     });
@@ -43,13 +42,12 @@ UserExtensionController.prototype.getExtensions = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserExtensionController.prototype.deleteExtensions = function(req, res) {
+UserExtensionController.prototype.deleteExtensions = function (req, res) {
     let user_id = req.params.user_id;
     this.userExtension.clearExtensions(user_id).then(function (success) {
         res.status(200);
         res.json({ success: success });
-    },
-    function (error) {
+    }, function (error) {
         res.status(404);
         res.json(ErrorHelper('Cannot erase user extensions', error));
     });
@@ -61,18 +59,16 @@ UserExtensionController.prototype.deleteExtensions = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserExtensionController.prototype.subscribeExtension = function(req, res) {
+UserExtensionController.prototype.subscribeExtension = function (req, res) {
     let user_id = req.params.user_id;
     let extension_id = req.params.extension_id;
-    this.userExtension.subscribe(user_id, extension_id).then(
-        function(success) {
-            res.status(200);
-            res.json({ success: success });
-        },
-        function (error) {
-            res.status(404);
-            res.json(ErrorHelper('Cannot register user extension', error));
-        }
+    this.userExtension.subscribe(user_id, extension_id).then(function (success) {
+        res.status(200);
+        res.json({ success: success });
+    }, function (error) {
+        res.status(404);
+        res.json(ErrorHelper('Cannot register user extension', error));
+    }
     );
 };
 
@@ -82,18 +78,16 @@ UserExtensionController.prototype.subscribeExtension = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-UserExtensionController.prototype.unsubscribeExtension = function(req, res) {
+UserExtensionController.prototype.unsubscribeExtension = function (req, res) {
     let user_id = req.params.user_id;
     let extension_id = req.params.extension_id;
-    this.userExtension.unsubscribe(user_id, extension_id).then(
-        function(success) {
-            res.status(200);
-            res.json({ success: success });
-        },
-        function (error) {
-            res.status(404);
-            res.json(ErrorHelper('Cannot remove user extension', error));
-        }
+    this.userExtension.unsubscribe(user_id, extension_id).then(function (success) {
+        res.status(200);
+        res.json({ success: success });
+    }, function (error) {
+        res.status(404);
+        res.json(ErrorHelper('Cannot remove user extension', error));
+    }
     );
 };
 

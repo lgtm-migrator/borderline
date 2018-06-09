@@ -1,45 +1,37 @@
 {
     "name": "borderline-server",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "description": "Multi-browser visualization tool server",
-    "main": "./src/borderlineServer.js",
-    "scripts": {
-        "start": "node ./src/index.js",
-        "lint": "eslint src",
-        "plugin": "webpack --config ./tools/plugin-build/webpack.config.js --colors",
-        "test": "jest --runInBand --colors --detectOpenHandles --forceExit --verbose --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN"
-    },
     "keywords": [
         "borderline",
-        "server",
-        "etriks"
+        "etriks",
+        "server"
     ],
-    "contributors": [
-        "Jean Grizet <jean.grizet16@imperial.ac.uk>",
-        "Florian Guitton <f.guitton@imperial.ac.uk>"
-    ],
-    "license": "MIT",
-    "readme": "README.md",
+    "homepage": "https://github.com/dsi-icl/borderline-server#readme",
+    "bugs": {
+        "url": "https://github.com/dsi-icl/borderline-server/issues"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/dsi-icl/borderline-server.git"
     },
-    "bugs": {
-        "url": "https://github.com/dsi-icl/borderline-server/issues"
-    },
-    "homepage": "https://github.com/dsi-icl/borderline-server#readme",
-    "devDependencies": {
-        "babel-core": "6.26.3",
-        "babel-eslint": "8.2.3",
-        "babel-preset-env": "1.7.0",
-        "codacy-coverage": "3.0.0",
-        "eslint": "4.19.1",
-        "jest": "23.1.0"
+    "license": "MIT",
+    "contributors": [
+        "Jean Grizet <jean.grizet16@imperial.ac.uk>",
+        "Florian Guitton <f.guitton@imperial.ac.uk>"
+    ],
+    "main": "./src/borderlineServer.js",
+    "scripts": {
+        "lint": "eslint --ext .jsx --ext .js ./",
+        "lint:fix": "eslint --ext .jsx --ext .js --fix ./",
+        "plugin": "webpack --config ./tools/plugin-build/webpack.config.js --colors",
+        "start": "node ./src/index.js",
+        "test": "jest --runInBand --colors --detectOpenHandles --forceExit --verbose --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN"
     },
     "dependencies": {
         "adm-zip": "0.4.11",
         "body-parser": "1.18.3",
-        "borderline-utils": "0.1.6",
+        "borderline-utils": "0.2.3",
         "connect-mongo": "2.0.1",
         "express": "4.16.3",
         "express-session": "1.15.6",
@@ -49,5 +41,18 @@
         "passport": "0.4.0",
         "request": "2.87.0",
         "speakeasy": "2.0.0"
-    }
+    },
+    "devDependencies": {
+        "babel-core": "6.26.3",
+        "babel-eslint": "8.2.3",
+        "babel-preset-env": "1.7.0",
+        "codacy-coverage": "3.0.0",
+        "eslint": "4.19.1",
+        "jest": "23.1.0"
+    },
+    "engines": {
+        "node": ">= 8.0.0",
+        "npm": ">= 6.0.0"
+    },
+    "readme": "README.md"
 }

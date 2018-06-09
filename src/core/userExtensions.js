@@ -22,10 +22,10 @@ function UserExtensions(extensionCollection) {
  * @param user_id A reference to the user
  * @return {Promise} Resolves to an array on this user's extensions
  */
-UserExtensions.prototype.listExtensions = function(user_id) {
+UserExtensions.prototype.listExtensions = function (user_id) {
     let that = this;
     return new Promise(function (resolve, reject) {
-        that.extensionCollection.find({ users: [ new ObjectID(user_id) ] }).toArray().then(
+        that.extensionCollection.find({ users: [new ObjectID(user_id)] }).toArray().then(
             function (result) {
                 resolve(result);
             },
@@ -42,9 +42,9 @@ UserExtensions.prototype.listExtensions = function(user_id) {
  * @param user_id A reference to the targeted user
  * @return {Promise} Resolves to the updated user on success
  */
-UserExtensions.prototype.clearExtensions = function(user_id) {
+UserExtensions.prototype.clearExtensions = function (user_id) {
     let that = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         that.extensionCollection.updateMany(
             { _id: new ObjectID(user_id) },
             {
@@ -53,10 +53,10 @@ UserExtensions.prototype.clearExtensions = function(user_id) {
                 }
             })
             .then(
-                function(success) {
+                function (success) {
                     resolve(success);
                 },
-                function(error) {
+                function (error) {
                     reject(ErrorHelper('Clear extensions subs error', error));
                 }
             );
@@ -70,9 +70,9 @@ UserExtensions.prototype.clearExtensions = function(user_id) {
  * @param extension_id A reference to the extension
  * @return {Promise} Resolves to the update extension on success
  */
-UserExtensions.prototype.subscribe = function(user_id, extension_id) {
+UserExtensions.prototype.subscribe = function (user_id, extension_id) {
     let that = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         that.extensionCollection.updateOne(
             { _id: extension_id },
             {
@@ -81,7 +81,7 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
                 }
             })
             .then(
-                function(success) {
+                function (success) {
                     if (success.matchedCount === 0) {
                         reject(ErrorHelper('Invalid user_id or extension_id'));
                         return;
@@ -92,7 +92,7 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
                     }
                     resolve(success);
                 },
-                function(error) {
+                function (error) {
                     reject(ErrorHelper('Extension subscribe error', error));
                 }
             );
@@ -106,9 +106,9 @@ UserExtensions.prototype.subscribe = function(user_id, extension_id) {
  * @param extension_id A reference to the extension
  * @return {Promise} Resolves to the update extension on success
  */
-UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
+UserExtensions.prototype.unsubscribe = function (user_id, extension_id) {
     let that = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         that.extensionCollection.updateOne(
             { _id: extension_id },
             {
@@ -117,7 +117,7 @@ UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
                 }
             })
             .then(
-                function(success) {
+                function (success) {
                     if (success.matchedCount === 0) {
                         reject(ErrorHelper('Invalid user_id or extension_id'));
                         return;
@@ -128,7 +128,7 @@ UserExtensions.prototype.unsubscribe = function(user_id, extension_id) {
                     }
                     resolve(success);
                 },
-                function(error) {
+                function (error) {
                     reject(ErrorHelper('Extension subscribe error', error));
                 }
             );

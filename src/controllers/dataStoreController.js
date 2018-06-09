@@ -26,11 +26,11 @@ function dataStoreController(dataSourcesCollection) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.getDataStore = function(__unused__req, res) {
-    this.dataStore.findAll().then(function(result) {
+dataStoreController.prototype.getDataStore = function (__unused__req, res) {
+    this.dataStore.findAll().then(function (result) {
         res.status(200);
         res.json(result);
-    }, function(error) {
+    }, function (error) {
         res.status(500);
         res.json(ErrorHelper('Failed to list data sources', error));
     });
@@ -43,17 +43,17 @@ dataStoreController.prototype.getDataStore = function(__unused__req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.postDataStore = function(req, res) {
+dataStoreController.prototype.postDataStore = function (req, res) {
     let data_source = req.body;
     if (data_source === null || data_source === undefined) {
         res.status(400);
         res.json(ErrorHelper('Cannot create an empty data source'));
         return;
     }
-    this.dataStore.createDataSource(data_source).then(function(result) {
+    this.dataStore.createDataSource(data_source).then(function (result) {
         res.status(200);
         res.json(result);
-    }, function(error) {
+    }, function (error) {
         res.status(500);
         res.json(ErrorHelper('Failed to list data sources', error));
     });
@@ -66,12 +66,12 @@ dataStoreController.prototype.postDataStore = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.getDataStoreByID = function(req, res) { //GET a single data source
+dataStoreController.prototype.getDataStoreByID = function (req, res) { //GET a single data source
     let source_id = req.params.source_id;
-    this.dataStore.getDataSourceByID(source_id).then(function(result){
+    this.dataStore.getDataSourceByID(source_id).then(function (result) {
         res.status(200);
         res.json(result);
-    }, function(error) {
+    }, function (error) {
         res.status(404);
         res.json(ErrorHelper('Cannot get data source by ID: ', error));
     });
@@ -84,14 +84,14 @@ dataStoreController.prototype.getDataStoreByID = function(req, res) { //GET a si
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.putDataStoreByID = function(req, res) {  // PUT Update a single data source
+dataStoreController.prototype.putDataStoreByID = function (req, res) {  // PUT Update a single data source
     let source_id = req.params.source_id;
     let data = req.body;
 
-    this.dataStore.updateDataSourceByID(source_id, data).then(function(result){
+    this.dataStore.updateDataSourceByID(source_id, data).then(function (result) {
         res.status(200);
         res.json(result);
-    }, function(error) {
+    }, function (error) {
         res.status(400);
         res.json(ErrorHelper('Cannot update data source by ID', error));
     });
@@ -104,12 +104,12 @@ dataStoreController.prototype.putDataStoreByID = function(req, res) {  // PUT Up
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.deleteDataStoreByID = function(req, res) {
+dataStoreController.prototype.deleteDataStoreByID = function (req, res) {
     let source_id = req.params.source_id;
-    this.dataStore.deleteDataSourceByID(source_id).then(function(result){
+    this.dataStore.deleteDataSourceByID(source_id).then(function (result) {
         res.status(200);
-        res.json({deleted: result});
-    }, function(error) {
+        res.json({ deleted: result });
+    }, function (error) {
         res.status(404);
         res.json(ErrorHelper('Cannot delete data source by ID', error));
     });
@@ -122,12 +122,12 @@ dataStoreController.prototype.deleteDataStoreByID = function(req, res) {
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.getUserDataSources = function(req, res) {  //GET all user's data sources
+dataStoreController.prototype.getUserDataSources = function (req, res) {  //GET all user's data sources
     let user_id = req.params.user_id;
     this.dataStore.getDataStoreByUserID(user_id).then(function (result) {
         res.status(200);
         res.json(result);
-    }, function(error) {
+    }, function (error) {
         res.status(404);
         res.json(ErrorHelper('Cannot get user data sources', error));
     });
@@ -141,7 +141,7 @@ dataStoreController.prototype.getUserDataSources = function(req, res) {  //GET a
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //POST Subscribe a user to a data source
+dataStoreController.prototype.postUserDataSourceByID = function (req, res) { //POST Subscribe a user to a data source
     let user_id = req.params.user_id;
     let source_id = req.params.source_id;
 
@@ -157,10 +157,10 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
     }
     let subscription = Object.assign({}, req.body, { user_id: user_id });
 
-    this.dataStore.subscribeUserToDataSource(source_id, subscription).then(function(success) {
+    this.dataStore.subscribeUserToDataSource(source_id, subscription).then(function (success) {
         res.status(200);
         res.json(success);
-    }, function(error) {
+    }, function (error) {
         res.status(500);
         res.json(ErrorHelper('Cannot subscribe', error));
     });
@@ -174,13 +174,13 @@ dataStoreController.prototype.postUserDataSourceByID = function(req, res) { //PO
  * @param req Express.js request object
  * @param res Express.js response object
  */
-dataStoreController.prototype.deleteUserDataSourceByID = function(req, res) { //DELETE Unsubscribe user to data source
+dataStoreController.prototype.deleteUserDataSourceByID = function (req, res) { //DELETE Unsubscribe user to data source
     let user_id = req.params.user_id;
     let source_id = req.params.source_id;
-    this.dataStore.unsubscribeUserFromDataSource(user_id, source_id).then(function(success) {
+    this.dataStore.unsubscribeUserFromDataSource(user_id, source_id).then(function (success) {
         res.status(200);
         res.json(success);
-    }, function(error) {
+    }, function (error) {
         res.status(404);
         res.json(ErrorHelper('Cannot unsubscribe', error));
     });

@@ -8,7 +8,7 @@ const { ErrorHelper } = require('borderline-utils');
  * @param res Express.js response object
  * @param next Express.js handler function chain
  */
-module.exports.adminPrivileges = function(req, res, next) {
+module.exports.adminPrivileges = function (req, res, next) {
     if (req.user && req.user.admin === true) {
         next();
         return;
@@ -25,7 +25,7 @@ module.exports.adminPrivileges = function(req, res, next) {
  * @param res Express.js response object
  * @param next Express.js handler function chain
  */
-module.exports.userPrivileges = function(req, res, next) {
+module.exports.userPrivileges = function (req, res, next) {
     if (req.user && req.user._id.toString() === req.params.user_id.toString()) {
         next();
         return;
@@ -43,15 +43,15 @@ module.exports.userPrivileges = function(req, res, next) {
  * @param res Express.js response object
  * @param next Express.js handler function chain
  */
-module.exports.userOrAdminPrivileges = function(req, res, next) {
-  if (req.user && req.user._id.toString() === req.params.user_id.toString()) {
-      next();
-      return;
-  }
-  if (req.user && req.user.admin === true) {
-      next();
-      return;
-  }
-  res.status(403);
-  res.json(ErrorHelper('Permission denied'));
+module.exports.userOrAdminPrivileges = function (req, res, next) {
+    if (req.user && req.user._id.toString() === req.params.user_id.toString()) {
+        next();
+        return;
+    }
+    if (req.user && req.user.admin === true) {
+        next();
+        return;
+    }
+    res.status(403);
+    res.json(ErrorHelper('Permission denied'));
 };

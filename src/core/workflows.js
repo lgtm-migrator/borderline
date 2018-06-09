@@ -22,15 +22,15 @@ function Workflows(workflowCollection) {
  * @desc Find all workflows on the server
  * @return {Promise} Resolves to an array of workflows on success
  */
-Workflows.prototype.findAll = function() {
+Workflows.prototype.findAll = function () {
     let that = this;
-    return new Promise(function(resolve, reject) {
-        that.workflowCollection.find().toArray().then(function(result) {
+    return new Promise(function (resolve, reject) {
+        that.workflowCollection.find().toArray().then(function (result) {
             if (result === null || result === undefined || result.length === 0)
                 resolve([]);
             else
                 resolve(result);
-        }, function(error) {
+        }, function (error) {
             reject(ErrorHelper(error));
         });
     });
@@ -41,7 +41,7 @@ Workflows.prototype.findAll = function() {
  * @param data JSON object describing the workflow
  * @return {Promise} Resolve to the create workflow
  */
-Workflows.prototype.createWorkflow = function(data) {
+Workflows.prototype.createWorkflow = function (data) {
     let that = this;
 
     let time = new Date();
@@ -51,11 +51,10 @@ Workflows.prototype.createWorkflow = function(data) {
         update: time,
         owner: data.user
     });
-    return new Promise(function(resolve, reject) {
-        that.workflowCollection.insertOne(workflowModel).then(function(__unused__success) {
+    return new Promise(function (resolve, reject) {
+        that.workflowCollection.insertOne(workflowModel).then(function (__unused__success) {
             resolve(workflowModel);
-        },
-        function(error) {
+        }, function (error) {
             reject(ErrorHelper(error));
         });
     });
@@ -66,19 +65,17 @@ Workflows.prototype.createWorkflow = function(data) {
  * @param workflow_id A reference to some workflow
  * @return {Promise} Resolves to the updated workflow
  */
-Workflows.prototype.updateTimestamp = function(workflow_id) {
+Workflows.prototype.updateTimestamp = function (workflow_id) {
     let that = this;
     let time = new Date();
-    return new Promise(function(resolve, reject) {
-       that.workflowCollection.findOneAndUpdate(
-           {_id: new ObjectID(workflow_id) },
-           { $set: {update: time} },
-           { returnOriginal: false }).then(
-               function(success) {
-                   resolve(success);
-               }, function (error) {
-                   reject(ErrorHelper(error));
-               }
+    return new Promise(function (resolve, reject) {
+        that.workflowCollection
+            .findOneAndUpdate({ _id: new ObjectID(workflow_id) }, { $set: { update: time } }, { returnOriginal: false })
+            .then(function (success) {
+                resolve(success);
+            }, function (error) {
+                reject(ErrorHelper(error));
+            }
             );
     });
 };
@@ -89,15 +86,15 @@ Workflows.prototype.updateTimestamp = function(workflow_id) {
  * @param workflow_id The reference to te workflow
  * @return {Promise} Resolves to the workflow on success
  */
-Workflows.prototype.getWorkflowByID = function(workflow_id) {
+Workflows.prototype.getWorkflowByID = function (workflow_id) {
     let that = this;
-    return new Promise(function(resolve, reject) {
-        that.workflowCollection.findOne({_id: new ObjectID(workflow_id)}).then(function(result) {
+    return new Promise(function (resolve, reject) {
+        that.workflowCollection.findOne({ _id: new ObjectID(workflow_id) }).then(function (result) {
             if (result === null || result === undefined)
                 reject('No match for workflow with id ' + workflow_id);
             else
                 resolve(result);
-        }, function(error) {
+        }, function (error) {
             reject(ErrorHelper(error));
         });
     });
@@ -109,21 +106,21 @@ Workflows.prototype.getWorkflowByID = function(workflow_id) {
  * @param data The new workflow content
  * @return {Promise} Resolve to the update workflow on success
  */
-Workflows.prototype.updateWorkflowByID = function(workflow_id, data) {
+Workflows.prototype.updateWorkflowByID = function (workflow_id, data) {
     let that = this;
     let time = new Date();
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         delete data._id;
         delete data.create;
         data.update = time;
         let updated_workflow = Object.assign({}, Models.BL_MODEL_WORKFLOW, data);
-        that.workflowCollection.findOneAndUpdate({_id: new ObjectID(workflow_id)}, { $set: updated_workflow}, { returnOriginal: false })
-            .then(function(result) {
+        that.workflowCollection.findOneAndUpdate({ _id: new ObjectID(workflow_id) }, { $set: updated_workflow }, { returnOriginal: false })
+            .then(function (result) {
                 if (result === null || result === undefined)
                     reject(ErrorHelper('Update failed for workflow with id ' + workflow_id));
                 else
                     resolve(result.value);
-            }, function(error) {
+            }, function (error) {
                 reject(ErrorHelper(error));
             });
     });
@@ -135,15 +132,15 @@ Workflows.prototype.updateWorkflowByID = function(workflow_id, data) {
  * @param workflow_id The reference unique identifier to the workflow
  * @return {Promise} Resolves to the deelted workflow on success
  */
-Workflows.prototype.deleteWorkflowByID = function(workflow_id) {
+Workflows.prototype.deleteWorkflowByID = function (workflow_id) {
     let _this = this;
-    return new Promise(function(resolve, reject) {
-        _this.workflowCollection.findOneAndDelete({_id: new ObjectID(workflow_id)}).then(function(result) {
+    return new Promise(function (resolve, reject) {
+        _this.workflowCollection.findOneAndDelete({ _id: new ObjectID(workflow_id) }).then(function (result) {
             if (result === null || result === undefined || result.value === null)
                 reject(ErrorHelper('No match for workflow with id ' + workflow_id));
             else
                 resolve(result.value);
-        }, function(error) {
+        }, function (error) {
             reject(ErrorHelper(error));
         });
     });

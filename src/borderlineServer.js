@@ -157,7 +157,7 @@ BorderlineServer.prototype._registryHandler = function () {
 BorderlineServer.prototype._connectDb = function () {
     let _this = this;
     let main_db = new Promise(function (resolve, reject) {
-        mongodb.connect(_this.config.mongoURL, {},function (err, client) {
+        mongodb.connect(_this.config.mongoURL, {}, function (err, client) {
             if (err !== null && err !== undefined) {
                 reject(ErrorHelper('Failed to connect to mongoDB', err));
                 return;

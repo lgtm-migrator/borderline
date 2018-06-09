@@ -164,20 +164,20 @@ Steps.prototype.updateByID = function(step_id, step_data) {
  * @return {Promise} Resolves to the deleted step on success
  */
 Steps.prototype.deleteByID = function(step_id) {
-  let that = this;
+    let that = this;
 
-  return new Promise(function(resolve, reject) {
-      that.stepCollection.findOneAndDelete({ _id: new ObjectID(step_id) }).then(function (success) {
-          if (success === null || success === undefined || success.value === null || success.value === undefined) {
-              reject(ErrorHelper('Unknown step with id ' + step_id));
-          }
-          else {
-              resolve(success);
-          }
-      }, function (error) {
-          reject(ErrorHelper(error));
-      });
-  });
+    return new Promise(function(resolve, reject) {
+        that.stepCollection.findOneAndDelete({ _id: new ObjectID(step_id) }).then(function (success) {
+            if (success === null || success === undefined || success.value === null || success.value === undefined) {
+                reject(ErrorHelper('Unknown step with id ' + step_id));
+            }
+            else {
+                resolve(success);
+            }
+        }, function (error) {
+            reject(ErrorHelper(error));
+        });
+    });
 };
 
 module.exports = Steps;
