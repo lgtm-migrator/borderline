@@ -51,3 +51,4 @@ Thumbs.db
 **/__mocks__/**
 **/__tests__/**
 **/*.test.config.js
+Dockerfile
