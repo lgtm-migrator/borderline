@@ -264,6 +264,9 @@ QueryEAE2_0.prototype._awaitResult = function (job_info) {
                     reject(ErrorHelper('Execute request failed', error));
                 }
                 else {
+                    _this.updateExecutionStatus({
+                        proxied: body.status
+                    });
                     // Wait for the analysis to be finished
                     if (body.status.filter(value => -1 !== ['eae_job_error', 'eae_job_dead'].indexOf(value)).length > 0)
                         reject(ErrorHelper('The job errored or is dead', body.message));
