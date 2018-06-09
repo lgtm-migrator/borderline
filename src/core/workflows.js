@@ -20,12 +20,12 @@ function Workflows(workflowCollection) {
 /**
  * @fn findAll
  * @desc Find all workflows on the server
- * @return {Promise} Resolves to an array of workflows on success
+ * @return {Promise} Resolves to an array of workflows sorted by descending update time on success
  */
 Workflows.prototype.findAll = function () {
     let that = this;
     return new Promise(function (resolve, reject) {
-        that.workflowCollection.find().toArray().then(function (result) {
+        that.workflowCollection.find().sort({ update: -1 }).toArray().then(function (result) {
             if (result === null || result === undefined || result.length === 0)
                 resolve([]);
             else

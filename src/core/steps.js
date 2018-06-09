@@ -25,12 +25,12 @@ function Steps(workflowCollection, stepCollection) {
  * @fn getAll
  * @desc Retrieves all the step for a workflow
  * @param workflow_id A reference to the workflow
- * @return {Promise} Resolves to an array of steps on success
+ * @return {Promise} Resolves to an array of steps sorted by descending creation time on success
  */
 Steps.prototype.getAll = function (workflow_id) {
     let that = this;
     return new Promise(function (resolve, reject) {
-        that.stepCollection.find({ workflow: new ObjectID(workflow_id) }).toArray().then(function (result) {
+        that.stepCollection.find({ workflow: new ObjectID(workflow_id) }).sort({ create: -1 }).toArray().then(function (result) {
             if (result === null || result === undefined || result.length === 0)
                 resolve([]);
             else
