@@ -13,7 +13,7 @@ import style from './style.module.css';
 class WorkflowPins extends Component {
 
     // Custom name for container
-    static displayName = 'WorkflowPins';    
+    static displayName = 'WorkflowPins';
 
     // Types for available context
     static contextTypes = {
@@ -30,8 +30,7 @@ class WorkflowPins extends Component {
 
     gotoWorkflow = (wid) => {
         const { currentWorkflow, history, match } = this.props;
-        console.error();
-        if (wid !== currentWorkflow)
+        if (wid !== currentWorkflow || match.params.particule === 'history' || match.params.particule === 'new')
             history.push(`${match.path.substr(0, match.path.lastIndexOf(':particule'))}${wid}`);
     }
 
@@ -39,7 +38,7 @@ class WorkflowPins extends Component {
         const { currentWorkflow, workflowsList, workflowPins, match } = this.props;
         const _this = this;
         const ModelButton = (innerProps) => {
-            if (match.params.particule === 'history' && innerProps.pinned === undefined)
+            if ((match.params.particule === 'history' || match.params.particule === 'new') && innerProps.pinned === undefined)
                 return null;
             if (match.params.particule === innerProps.wid && innerProps.pinned === undefined & workflowPins[innerProps.wid] === true)
                 return null;
@@ -54,8 +53,8 @@ class WorkflowPins extends Component {
                     {innerProps.pinned !== undefined ? (
                         <span className={style.actions} role="img" aria-label="Pin" onClick={() => _this.unpinWorkflow(innerProps.wid)}>&#128473;</span>
                     ) : (
-                        <span className={style.actions} role="img" aria-label="Pin" onClick={() => _this.pinWorkflow(innerProps.wid)}>&#128204;</span>
-                    )}
+                            <span className={style.actions} role="img" aria-label="Pin" onClick={() => _this.pinWorkflow(innerProps.wid)}>&#128204;</span>
+                        )}
                 </div>
             );
         };
