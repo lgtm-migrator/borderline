@@ -17,15 +17,15 @@ export const reducers = {
     (state = initial, action) => {
 
         switch (action.type) {
-        case types.PAGE_DOCK:
-            return pageDock(state, action);
-        case types.STATUS_DOCK:
-            return statusDock(state, action);
-        case '@@core/session/SESSION_LOGOUT':
-        case 'STOP':
-            return initial;
-        default:
-            return state;
+            case types.PAGE_DOCK:
+                return pageDock(state, action);
+            case types.STATUS_DOCK:
+                return statusDock(state, action);
+            case '@@core/session/SESSION_LOGOUT':
+            case 'STOP':
+                return initial;
+            default:
+                return state;
         }
     }
 };

@@ -50,11 +50,12 @@ class WorkflowPins extends Component {
                         <title>Workflow: {workflowsList[innerProps.wid].name}</title>
                     </Helmet>
                     <span>{workflowsList[innerProps.wid].name}&nbsp;</span>
-                    {innerProps.pinned !== undefined ? (
-                        <span className={style.actions} role="img" aria-label="Pin" onClick={() => _this.unpinWorkflow(innerProps.wid)}>&#128473;</span>
-                    ) : (
+                    {
+                        innerProps.pinned !== undefined ?
+                            <span className={style.actions} role="img" aria-label="Pin" onClick={() => _this.unpinWorkflow(innerProps.wid)}>&#128473;</span>
+                            :
                             <span className={style.actions} role="img" aria-label="Pin" onClick={() => _this.pinWorkflow(innerProps.wid)}>&#128204;</span>
-                        )}
+                    }
                 </div>
             );
         };

@@ -128,16 +128,16 @@ export const reducers = {
     (state = initial, action) => {
 
         switch (action.type) {
-        case types.EXTENSIONS_SUCCESS:
-            return extensionsSuccess(state, action);
-        case types.EXTENSIONS_DID_LOAD:
-            return extensionsDidLoad(state);
-        case types.EXTENSION_UNIT_SUCCESS:
-            return extensionUnitSuccess(state, action);
-        case 'STOP':
-            return initial;
-        default:
-            return state;
+            case types.EXTENSIONS_SUCCESS:
+                return extensionsSuccess(state, action);
+            case types.EXTENSIONS_DID_LOAD:
+                return extensionsDidLoad(state);
+            case types.EXTENSION_UNIT_SUCCESS:
+                return extensionUnitSuccess(state, action);
+            case 'STOP':
+                return initial;
+            default:
+                return state;
         }
     }
 };

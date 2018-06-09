@@ -20,7 +20,7 @@ class StatusBar extends Component {
                 </Enclave>
             );
         });
-        
+
         return (
             <div className={style.statusBar}>
                 {items}

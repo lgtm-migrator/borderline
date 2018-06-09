@@ -6,7 +6,7 @@ import style from './style.module.css';
 class WorkflowCreator extends Component {
 
     // Custom name for container
-    static displayName = 'WorkflowCreator';    
+    static displayName = 'WorkflowCreator';
 
     // Types for available context
     static contextTypes = {

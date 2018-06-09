@@ -25,7 +25,7 @@ export const api = {
         method: 'GET'
     }),
 
-    fetchWorkflowsList: (id) => query('/workflow', {
+    fetchWorkflowsList: () => query('/workflow', {
         method: 'GET'
     }),
 

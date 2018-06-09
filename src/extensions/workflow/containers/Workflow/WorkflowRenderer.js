@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
+import { Route } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
 import { actions } from '../../flux';
-import style from './style.module.css';
+import { StepNavigation } from '../Step';
 
 @stateAware(state => ({
     currentWorkflow: state.currentWorkflow,
-    workflowsList: state.workflowsList,
     workflowLoading: state.workflowLoading
 }))
 class WorkflowRenderer extends Component {
 
     // Custom name for container
     static displayName = 'WorkflowRenderer';
-    
+
     // Types for available context
     static contextTypes = {
         dispatch: T.func
@@ -35,13 +35,7 @@ class WorkflowRenderer extends Component {
         const { currentWorkflow } = this.props;
         if (currentWorkflow === null)
             return null;
-        return (
-            <>
-                <div className={style.workflowsDescription}>
-                    Renderer for {currentWorkflow}
-                </div>
-            </>
-        );
+        return <Route component={StepNavigation} />;
     }
 }
 

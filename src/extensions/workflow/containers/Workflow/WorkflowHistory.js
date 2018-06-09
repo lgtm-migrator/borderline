@@ -7,7 +7,7 @@ import { actions } from '../../flux';
 import style from './style.module.css';
 
 @stateAware(state => ({
-    lastLoaded: state.lastLoaded,
+    workflowsLastLoaded: state.workflowsLastLoaded,
     workflowsListLoading: state.workflowsListLoading,
     workflowsList: state.workflowsList
 }))
@@ -15,16 +15,16 @@ class WorkflowHistory extends Component {
 
     // Custom name for container
     static displayName = 'WorkflowHistory';
-    
+
     // Types for available context
     static contextTypes = {
         dispatch: T.func
     };
 
     componentDidMount() {
-        const { workflowsListLoading, lastLoaded } = this.props;
-        if (workflowsListLoading === false && new Date().getTime() - lastLoaded.getTime() > 5 * 1000)
-            this.context.dispatch(actions.workflowsListLoad())
+        const { workflowsListLoading, workflowsLastLoaded } = this.props;
+        if (workflowsListLoading === false && new Date().getTime() - workflowsLastLoaded.getTime() > 5 * 1000)
+            this.context.dispatch(actions.workflowsListLoad());
     }
 
     render() {
@@ -37,7 +37,7 @@ class WorkflowHistory extends Component {
                 status = '(Loading ...)';
         let list = Object.keys(workflowsList).map((key) =>
             <Link key={key} to={`/workflow/${key}`}>
-                <div className={style.item}>
+                <div className={style.historyItem}>
                     <b>{workflowsList[key].name}</b> by {workflowsList[key].owner} last updated {new Date(workflowsList[key].update).toDateString()}
                 </div>
             </Link>

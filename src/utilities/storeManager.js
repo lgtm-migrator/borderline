@@ -38,7 +38,7 @@ class StoreManager {
         this.clearRootEpics();
 
         history = createHistory();
-        
+
         this.middleware = {
             router: routerMiddleware(history),
             epic:  createEpicMiddleware()

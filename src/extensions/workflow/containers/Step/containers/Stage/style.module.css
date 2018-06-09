@@ -1,0 +1,7 @@
+.stage {
+    grid-area: stage;
+}
+
+.plop {
+    grid-area: sidebar;
+}

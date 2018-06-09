@@ -42,12 +42,12 @@ export const reducers = {
     (state = initial, action) => {
 
         switch (action.type) {
-        case types.ACCOUNT_HYDRATE:
-            return hydrateAccount(state, action);
-        case 'STOP':
-            return initial;
-        default:
-            return state;
+            case types.ACCOUNT_HYDRATE:
+                return hydrateAccount(state, action);
+            case 'STOP':
+                return initial;
+            default:
+                return state;
         }
     }
 };

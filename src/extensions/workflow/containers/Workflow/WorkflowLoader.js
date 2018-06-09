@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
-import WorkflowRenderer from '../WorkflowRenderer';
+import WorkflowRenderer from './WorkflowRenderer';
 import WorkflowCreator from './WorkflowCreator';
 
 @stateAware(state => ({
@@ -21,15 +21,15 @@ class WorkflowLoader extends Component {
                     const innerMatch = innerProps.match;
                     if (innerMatch.params.particule === 'new') {
                         if (newWorkflow !== null)
-                            return <Redirect to={`${match.url.replace(/\/$/, '')}/${newWorkflow}`} />
-                        return <WorkflowCreator/>;
+                            return <Redirect to={`${match.url.replace(/\/$/, '')}/${newWorkflow}`} />;
+                        return <WorkflowCreator />;
                     }
-                    return <WorkflowRenderer {...innerProps}  />;
+                    return <WorkflowRenderer {...innerProps} />;
                 }} />
                 <Route component={() => {
                     if (currentWorkflow === null)
-                        return <Redirect to={`${match.url.replace(/\/$/, '')}/history`} />
-                    return <Redirect to={`${match.url}/${currentWorkflow}`} />
+                        return <Redirect to={`${match.url.replace(/\/$/, '')}/history`} />;
+                    return <Redirect to={`${match.url}/${currentWorkflow}`} />;
                 }} />
             </Switch>
         );
