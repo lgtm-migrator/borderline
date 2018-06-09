@@ -1,21 +1,17 @@
 {
     "name": "borderline-devutils",
-    "version": "0.4.17",
+    "version": "0.4.18",
     "description": "Configuration and scripts for Borderline development.",
-    "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
-    "license": "MIT",
+    "homepage": "https://github.com/dsi-icl/borderline-devutils#readme",
+    "bugs": {
+        "url": "https://github.com/dsi-icl/borderline-devutils/issues"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/dsi-icl/borderline-devutils.git"
     },
-    "bugs": {
-        "url": "https://github.com/dsi-icl/borderline-devutils/issues"
-    },
-    "homepage": "https://github.com/dsi-icl/borderline-devutils#readme",
-    "engines": {
-        "node": ">= 8.0.0",
-        "npm": ">= 6.0.0"
-    },
+    "license": "MIT",
+    "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "files": [
         "bin",
         "config",
@@ -27,22 +23,23 @@
         "borderline-devutils": "./bin/borderline-devutils.js"
     },
     "scripts": {
-        "lint": "eslint .",
+        "lint": "eslint ./",
+        "lint:fix": "eslint --fix ./",
         "prepublishOnly": "node ./scripts/publish.js"
     },
     "dependencies": {
         "@babel/core": "7.0.0-beta.49",
         "@babel/plugin-proposal-decorators": "7.0.0-beta.49",
         "@babel/runtime": "7.0.0-beta.49",
-        "autoprefixer": "8.6.1",
+        "autoprefixer": "8.6.2",
         "babel-core": "7.0.0-bridge.0",
         "babel-eslint": "8.2.3",
         "babel-jest": "23.0.1",
         "babel-loader": "8.0.0-beta.3",
         "babel-plugin-named-asset-import": "1.0.0-next.66cc7a90",
         "babel-preset-react-app": "4.0.0-next.66cc7a90",
-        "bfj": "6.1.0",
-        "borderline-server": "0.3.4",
+        "bfj": "6.1.1",
+        "borderline-server": "0.3.5",
         "case-sensitive-paths-webpack-plugin": "2.1.2",
         "chalk": "2.4.1",
         "confusing-browser-globals": "2.0.0-next.66cc7a90",
@@ -92,6 +89,10 @@
     },
     "optionalDependencies": {
         "fsevents": "1.2.4"
+    },
+    "engines": {
+        "node": ">= 8.0.0",
+        "npm": ">= 6.0.0"
     },
     "browserslist": {
         "development": [
