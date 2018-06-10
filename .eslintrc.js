@@ -30,7 +30,7 @@ module.exports = {
             'single'
         ],
         'semi': [
-            'error',
+            'warn',
             'always'
         ],
         'strict': [
@@ -43,7 +43,7 @@ module.exports = {
         'no-trailing-spaces': 'warn',
         'no-irregular-whitespace': 'error',
         'no-unused-vars': [
-            'error',
+            'warn',
             {
                 'vars': 'all',
                 'args': 'all',
