@@ -1,3 +1,4 @@
+import { mapTo } from 'rxjs/operators';
 import NavigationButton from './containers/NavigationButton';
 import View from './containers/View';
 
@@ -14,8 +15,8 @@ export const actions = {
 export const epics = {
 
     enclaveBoot:
-    (action) => action.ofType('START')
-        .mapTo(actions.dockToPager())
+        (action) => action.ofType('START')
+            .pipe(mapTo(actions.dockToPager()))
 
 };
 

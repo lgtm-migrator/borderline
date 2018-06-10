@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs-compat';
+import { from, of, concat } from 'rxjs';
+import { mergeMap, mapTo, map, defaultIfEmpty, every, filter } from 'rxjs/operators';
 import { api } from 'api';
 import systemExtensions from 'extensions';
 
@@ -74,47 +75,47 @@ export const actions = {
 export const epics = {
 
     enclaveBoot:
-    (action) => action.ofType('START')
-        .mapTo(actions.extensionsLoad()),
+        (action) => action.ofType('START')
+            .pipe(mapTo(actions.extensionsLoad())),
 
     extensionRetrieveLoad:
-    (action) => action.ofType(types.EXTENSIONS_LOAD)
-        .mergeMap(() =>
-            api.fetchExtensionsList()
-                .map(response => response.ok === true ? actions.extensionsSuccess(response.data) : actions.extensionsFailure())
-        ),
+        (action) => action.ofType(types.EXTENSIONS_LOAD)
+            .pipe(mergeMap(() =>
+                api.fetchExtensionsList()
+                    .pipe(map(response => response.ok === true ? actions.extensionsSuccess(response.data) : actions.extensionsFailure()))
+            )),
 
     extensionDownloadFromLoad:
-    (action) => action.ofType(types.EXTENSIONS_SUCCESS)
-        .mergeMap(action =>
-            Observable.from(action.list).defaultIfEmpty(null).map(extension =>
-                extension === null ? actions.extensionsDidLoad() : actions.extensionUnitLoad(extension)
-            )
-        ),
+        (action) => action.ofType(types.EXTENSIONS_SUCCESS)
+            .pipe(mergeMap(action =>
+                from(action.list).pipe(defaultIfEmpty(null), map(extension =>
+                    extension === null ? actions.extensionsDidLoad() : actions.extensionUnitLoad(extension)
+                ))
+            )),
 
     extensionPassthroughOnFail:
-    (action) => action.ofType(types.EXTENSIONS_FAILURE)
-        .mergeMap(() =>
-            Observable.of(actions.extensionsDidLoad())
-        ),
+        (action) => action.ofType(types.EXTENSIONS_FAILURE)
+            .pipe(mergeMap(() =>
+                of(actions.extensionsDidLoad())
+            )),
 
     extensionRetrieveSingle:
-    (action) => action.ofType(types.EXTENSION_UNIT_LOAD)
-        .mergeMap(action =>
-            Observable.of(actions.extensionUnitSucces(action.extension))
-        ),
+        (action) => action.ofType(types.EXTENSION_UNIT_LOAD)
+            .pipe(mergeMap(action =>
+                of(actions.extensionUnitSucces(action.extension))
+            )),
 
     extensionSingleComplete:
-    (action, state) => action.ofType(types.EXTENSION_UNIT_SUCCESS)
-        .mergeMap(action =>
-            Observable.concat(
-                Observable.of(actions.extensionUnitDidLoad(action.extension)),
-                Observable.from(Object.values(state.list))
-                    .every(extension => extension.loaded === true)
-                    .filter(loaded => loaded === true)
-                    .mapTo(actions.extensionsDidLoad())
-            )
-        )
+        (action, state) => action.ofType(types.EXTENSION_UNIT_SUCCESS)
+            .pipe(mergeMap(action =>
+                concat(
+                    of(actions.extensionUnitDidLoad(action.extension)),
+                    from(Object.values(state.list)).pipe(
+                        every(extension => extension.loaded === true),
+                        filter(loaded => loaded === true)
+                    ).pipe(mapTo(actions.extensionsDidLoad()))
+                )
+            ))
 
 };
 
@@ -125,39 +126,39 @@ const initial = {
 
 export const reducers = {
     extensionReducer:
-    (state = initial, action) => {
+        (state = initial, action) => {
 
-        switch (action.type) {
-            case types.EXTENSIONS_SUCCESS:
-                return extensionsSuccess(state, action);
-            case types.EXTENSIONS_DID_LOAD:
-                return extensionsDidLoad(state);
-            case types.EXTENSION_UNIT_SUCCESS:
-                return extensionUnitSuccess(state, action);
-            case 'STOP':
-                return initial;
-            default:
-                return state;
+            switch (action.type) {
+                case types.EXTENSIONS_SUCCESS:
+                    return extensionsSuccess(state, action);
+                case types.EXTENSIONS_DID_LOAD:
+                    return extensionsDidLoad(state);
+                case types.EXTENSION_UNIT_SUCCESS:
+                    return extensionUnitSuccess(state, action);
+                case 'STOP':
+                    return initial;
+                default:
+                    return state;
+            }
         }
-    }
 };
 
 const extensionsSuccess = (state, action) => {
-    Observable.from(action.list).map(extension => {
+    from(action.list).pipe(map(extension => {
         if (extension._id === undefined)
             return false;
         state.list[extension._id] = {
             loaded: false
         };
         return true;
-    }).subscribe();
+    })).subscribe();
     let count = 0;
-    Observable.from(systemExtensions).map(model =>
+    from(systemExtensions).pipe(map(model =>
         state.list[`__sys${count++}__`] = {
             model: model,
             loaded: true
         }
-    ).subscribe();
+    )).subscribe();
     return state;
 };
 

@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs-compat';
+import { of, concat } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 // import NavigationButton from './containers/NavigationButton';
 import StatusIndicator from './containers/StatusIndicator';
 import View from './containers/View';
@@ -21,12 +22,12 @@ export const actions = {
 export const epics = {
 
     enclaveBoot:
-    (action) => action.ofType('START')
-        .mergeMap(() =>
-            Observable.concat(
-                Observable.of(actions.dockToPager()),
-                Observable.of(actions.dockToStatusBar())
-            )),
+        (action) => action.ofType('START')
+            .pipe(mergeMap(() =>
+                concat(
+                    of(actions.dockToPager()),
+                    of(actions.dockToStatusBar())
+                )))
 
 };
 

@@ -1,4 +1,5 @@
 import { api } from 'api';
+import { mergeMap, mapTo, map } from 'rxjs/operators';
 import NavigationButton from './containers/NavigationButton';
 import View from './containers/View';
 
@@ -103,35 +104,35 @@ export const epics = {
 
     enclaveBoot:
         (action) => action.ofType('START')
-            .mapTo(actions.dockToPager()),
+            .pipe(mapTo(actions.dockToPager())),
 
     workflowsListLoad:
         (action) => action.ofType(types.WORKFLOWS_LIST_LOAD)
-            .mergeMap(() =>
+            .pipe(mergeMap(() =>
                 api.fetchWorkflowsList()
-                    .map(response => response.ok === true ? actions.workflowsListLoadSuccess(response.data) : actions.workflowsListLoadFailure(response.data))
-            ),
+                    .pipe(map(response => response.ok === true ? actions.workflowsListLoadSuccess(response.data) : actions.workflowsListLoadFailure(response.data)))
+            )),
 
     stepsListLoad:
         (action) => action.ofType(types.STEPS_LIST_LOAD)
-            .mergeMap((action) =>
+            .pipe(mergeMap((action) =>
                 api.fetchStepsList(action.workflow)
-                    .map(response => response.ok === true ? actions.stepsListLoadSuccess(response.data) : actions.stepsListLoadFailure(response.data))
-            ),
+                    .pipe(map(response => response.ok === true ? actions.stepsListLoadSuccess(response.data) : actions.stepsListLoadFailure(response.data)))
+            )),
 
     workflowsCreate:
         (action) => action.ofType(types.WORKFLOW_CREATE)
-            .mergeMap((action) =>
+            .pipe(mergeMap((action) =>
                 api.createWorkflow(action.workflow)
-                    .map(response => response.ok === true ? actions.workflowCreateSuccess(response.data) : actions.workflowCreateFailure(response.data))
-            ),
+                    .pipe(map(response => response.ok === true ? actions.workflowCreateSuccess(response.data) : actions.workflowCreateFailure(response.data)))
+            )),
 
     workflowLoad:
         (action) => action.ofType(types.WORKFLOW_LOAD)
-            .mergeMap((action) =>
+            .pipe(mergeMap((action) =>
                 api.loadWorkflow(action.workflow)
-                    .map(response => response.ok === true ? actions.workflowLoadSuccess(response.data) : actions.workflowLoadFailure(response.data))
-            ),
+                    .pipe(map(response => response.ok === true ? actions.workflowLoadSuccess(response.data) : actions.workflowLoadFailure(response.data)))
+            )),
 };
 
 const initial = {
