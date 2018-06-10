@@ -2,5 +2,6 @@ export default [
     import('./dashboard'),
     import('./workflow'),
     import('./eae'),
-    import('./account')
+    import('./account'),
+    import('./info')
 ];
