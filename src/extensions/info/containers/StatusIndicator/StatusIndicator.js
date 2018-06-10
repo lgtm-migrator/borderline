@@ -17,7 +17,7 @@ class StatusIndicator extends Component {
         };
     }
 
-    toogleInfo = (e) => {
+    toogleInfo = () => {
         this.setState({
             showInfo: !this.state.showInfo,
             position: this.handle.current.getBoundingClientRect()
@@ -27,7 +27,6 @@ class StatusIndicator extends Component {
     render() {
         const { position: { x, width }, showInfo } = this.state;
         const left = x + width / 2 - 20;
-        console.debug(left);
         return (
             <div className={style.status} onClick={this.toogleInfo.bind(this)} ref={this.handle}>
                 <SVG src={logo} className={style.logo} />

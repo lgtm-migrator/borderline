@@ -14,22 +14,22 @@ class WorkflowDispatch extends Component {
     static displayName = 'WorkflowDispatch';
 
     render() {
-        const { match, currentWorkflow, newWorkflow } = this.props;
+        const { match: { url }, currentWorkflow, newWorkflow } = this.props;
         return (
             <Switch>
-                <Route path={`${match.url}/:particule`} component={(innerProps) => {
+                <Route path={`${url}/:particule`} component={(innerProps) => {
                     const innerMatch = innerProps.match;
                     if (innerMatch.params.particule === 'new') {
                         if (newWorkflow !== null)
-                            return <Redirect to={`${match.url.replace(/\/$/, '')}/${newWorkflow}`} />;
+                            return <Redirect to={`${url.replace(/\/$/, '')}/${newWorkflow}`} />;
                         return <WorkflowCreator />;
                     }
                     return <WorkflowRenderer {...innerProps} />;
                 }} />
                 <Route component={() => {
                     if (currentWorkflow === null)
-                        return <Redirect to={`${match.url.replace(/\/$/, '')}/history`} />;
-                    return <Redirect to={`${match.url}/${currentWorkflow}`} />;
+                        return <Redirect to={`${url.replace(/\/$/, '')}/history`} />;
+                    return <Redirect to={`${url}/${currentWorkflow}`} />;
                 }} />
             </Switch>
         );

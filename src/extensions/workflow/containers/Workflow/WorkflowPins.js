@@ -45,11 +45,11 @@ class WorkflowPins extends Component {
             if (innerProps.wid === undefined || innerProps.wid === null)
                 return null;
             return (
-                <div className={`${style.button} ${innerProps.pinned !== undefined ? style.pinned : ''} ${match.params.particule === innerProps.wid ? style.active : ''}`} onClick={() => _this.gotoWorkflow(innerProps.wid)}>
+                <div className={`${style.button} ${innerProps.pinned !== undefined ? style.pinned : ''} ${innerProps.current !== undefined ? style.current : ''} ${match.params.particule === innerProps.wid ? style.active : ''}`} onClick={() => _this.gotoWorkflow(innerProps.wid)}>
                     <Helmet>
                         <title>Workflow: {workflowsList[innerProps.wid].name}</title>
                     </Helmet>
-                    <span>{workflowsList[innerProps.wid].name}&nbsp;</span>
+                    <span>{workflowsList[innerProps.wid].name}</span>
                     {
                         innerProps.pinned !== undefined ?
                             <span className={style.actions} role="img" aria-label="Pin" onClick={() => _this.unpinWorkflow(innerProps.wid)}>&#128473;</span>
@@ -65,7 +65,7 @@ class WorkflowPins extends Component {
         return (
             <>
                 {pins}
-                <ModelButton wid={currentWorkflow} />
+                <ModelButton wid={currentWorkflow} current />
             </>
         );
     }
