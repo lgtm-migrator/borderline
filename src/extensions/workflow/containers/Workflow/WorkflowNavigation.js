@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
-import WorkflowLoader from './WorkflowLoader';
+import WorkflowDispatch from './WorkflowDispatch';
 import WorkflowHistory from './WorkflowHistory';
 import WorkflowPins from './WorkflowPins';
 import style from './style.module.css';
@@ -27,7 +27,7 @@ class WorkflowNavigation extends Component {
                 <div key='panel' className={style.panel}>
                     <Switch>
                         <Route path={`${match.url}/history`} component={WorkflowHistory} />
-                        <Route component={WorkflowLoader} />
+                        <Route component={WorkflowDispatch} />
                     </Switch>
                 </div>
             </>

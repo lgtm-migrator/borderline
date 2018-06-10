@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-// import { Switch, Route, NavLink } from 'react-router-dom';
-// import WorkflowLoader from './WorkflowLoader';
-// import WorkflowHistory from './WorkflowHistory';
-// import WorkflowPins from './WorkflowPins';
-import style from './style.module.css';
+import { Route, Switch } from 'react-router-dom';
+import StepLoader from './StepLoader';
 
 class StepNavigation extends Component {
 
@@ -12,13 +9,13 @@ class StepNavigation extends Component {
 
     render() {
 
-        // const { match } = this.props;
+        const { match } = this.props;
+
         return (
-            <>
-                <div key='menu' className={style.menu}>
-                    Navigation for Steps
-                </div>
-            </>
+            <Switch>
+                <Route path={`${match.url}/step/:sid`} component={StepLoader} />
+                <Route component={StepLoader} />
+            </Switch>
         );
     }
 }

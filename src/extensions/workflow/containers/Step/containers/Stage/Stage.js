@@ -10,7 +10,6 @@ class Stage extends Component {
         return (
             <div className={style.stage}>
                 Stage
-                <div className={style.plop}>PLOP</div>
             </div>
         );
     }

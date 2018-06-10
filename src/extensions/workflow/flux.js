@@ -29,8 +29,9 @@ export const actions = {
         view: View
     }),
 
-    stepsListLoad: () => ({
-        type: types.STEPS_LIST_LOAD
+    stepsListLoad: (workflow) => ({
+        type: types.STEPS_LIST_LOAD,
+        workflow: workflow
     }),
 
     stepsListLoadSuccess: (data) => ({
@@ -108,21 +109,28 @@ export const epics = {
         (action) => action.ofType(types.WORKFLOWS_LIST_LOAD)
             .mergeMap(() =>
                 api.fetchWorkflowsList()
-                    .map(response => response.ok === true ? actions.workflowsListLoadSuccess(response.data) : actions.workflowsListLoadFailure())
+                    .map(response => response.ok === true ? actions.workflowsListLoadSuccess(response.data) : actions.workflowsListLoadFailure(response.data))
+            ),
+
+    stepsListLoad:
+        (action) => action.ofType(types.STEPS_LIST_LOAD)
+            .mergeMap((action) =>
+                api.fetchStepsList(action.workflow)
+                    .map(response => response.ok === true ? actions.stepsListLoadSuccess(response.data) : actions.stepsListLoadFailure(response.data))
             ),
 
     workflowsCreate:
         (action) => action.ofType(types.WORKFLOW_CREATE)
             .mergeMap((action) =>
                 api.createWorkflow(action.workflow)
-                    .map(response => response.ok === true ? actions.workflowCreateSuccess(response.data) : actions.workflowCreateFailure())
+                    .map(response => response.ok === true ? actions.workflowCreateSuccess(response.data) : actions.workflowCreateFailure(response.data))
             ),
 
     workflowLoad:
         (action) => action.ofType(types.WORKFLOW_LOAD)
             .mergeMap((action) =>
                 api.loadWorkflow(action.workflow)
-                    .map(response => response.ok === true ? actions.workflowLoadSuccess(response.data) : actions.workflowLoadFailure())
+                    .map(response => response.ok === true ? actions.workflowLoadSuccess(response.data) : actions.workflowLoadFailure(response.data))
             ),
 };
 
@@ -148,6 +156,12 @@ export const reducers = {
             switch (action.type) {
                 case 'STOP':
                     return initial;
+                case types.STEPS_LIST_LOAD:
+                    return stepsListLoad(state);
+                case types.STEPS_LIST_LOAD_SUCCESS:
+                    return stepsListLoadSuccess(state, action);
+                case types.STEPS_LIST_LOAD_FAILURE:
+                    return stepsListLoadFailure(state, action);
                 case types.WORKFLOWS_LIST_LOAD:
                     return workflowsListLoad(state);
                 case types.WORKFLOWS_LIST_LOAD_SUCCESS:
@@ -184,6 +198,34 @@ export default {
     reducers
 };
 
+const stepsListLoad = (state) => {
+    state.stepsListLoading = true;
+    return state;
+};
+
+const stepsListLoadSuccess = (state, action) => {
+    let maxDate = new Date(0);
+    state.stepsListLoading = false;
+    state.stepssList = {};
+    action.data.forEach(step => {
+        if (state.stepsList[step.workflow] === undefined)
+            state.stepsList[step.workflow] = {};
+        state.stepsList[step.workflow][step._id] = step;
+        if (state.currentStep === null || new Date(step.create) > maxDate) {
+            state.currentStep = step._id;
+            maxDate = new Date(step.create);
+        }
+    });
+    state.stepsLastLoaded = new Date();
+    return state;
+};
+
+const stepsListLoadFailure = (state, action) => {
+    state.stepsListLoading = false;
+    state.error = action.data.error;
+    return state;
+};
+
 const workflowsListLoad = (state) => {
     state.workflowsListLoading = true;
     return state;
@@ -215,6 +257,10 @@ const workflowLoadSuccess = (state, action) => {
     state.workflowLoading = false;
     state.workflowsList[action.workflow._id] = action.workflow;
     state.currentWorkflow = action.workflow._id;
+    state.stepsList = {};
+    state.stepsListLoading = false;
+    state.stepsLastLoaded = new Date(0);
+    state.currentStep = null;
     return state;
 };
 

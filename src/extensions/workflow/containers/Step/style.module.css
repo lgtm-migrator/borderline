@@ -1,6 +1,10 @@
-.workflowLayout { 
+.stepLayout { 
     height: 100%;
     width: 100%;   
     display: grid;
     grid: "sidebar stage" 100% / 30vh calc(100vw - 20vh);
+}
+
+.stepsCreateDescription, .stepsCreateForm {
+    padding: 20px;
 }

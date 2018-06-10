@@ -8,10 +8,10 @@ import WorkflowCreator from './WorkflowCreator';
     currentWorkflow: state.currentWorkflow,
     newWorkflow: state.newWorkflow
 }))
-class WorkflowLoader extends Component {
+class WorkflowDispatch extends Component {
 
     // Custom name for container
-    static displayName = 'WorkflowLoader';
+    static displayName = 'WorkflowDispatch';
 
     render() {
         const { match, currentWorkflow, newWorkflow } = this.props;
@@ -36,4 +36,4 @@ class WorkflowLoader extends Component {
     }
 }
 
-export default WorkflowLoader;
+export default WorkflowDispatch;

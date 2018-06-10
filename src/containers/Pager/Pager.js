@@ -21,10 +21,10 @@ class Pager extends Component {
                 <Helmet>
                     <title>Borderline Interface</title>
                 </Helmet>
-                <Navigation key={'navigation'}/>
+                <Navigation key={'navigation'} />
                 <Content key={'content'} />
                 <StatusBar key={'status'} />
-                <Enclave key={'inspector'} model={ import('containers/Inspector') } />
+                <Enclave key={'inspector'} model={import('containers/Inspector')} />
             </>
         );
     }

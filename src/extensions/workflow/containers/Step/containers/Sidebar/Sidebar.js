@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Switch } from 'react-router-dom';
 import style from './style.module.css';
 
 class Sidebar extends Component {
@@ -10,9 +9,7 @@ class Sidebar extends Component {
     render() {
         return (
             <div className={style.sidebar}>
-                <Switch>
-                    plop
-                </Switch>
+                plop
             </div>
         );
     }

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
 import { stateAware } from 'utilities/storeManager';
-import { actions } from '../../flux';
 import Sidebar from './containers/Sidebar';
 import Stage from './containers/Stage';
 import style from './style.module.css';
 
 @stateAware(state => ({
     currentStep: state.currentStep,
-    stepsListLoading: state.stepsListLoading
+    stepsList: state.stepsList[state.currentWorkflow]
 }))
 class StepRenderer extends Component {
 
@@ -26,19 +25,13 @@ class StepRenderer extends Component {
         return true;
     }
 
-    componentDidMount() {
-        const { match, currentStep, stepsListLoading } = this.props;
-        if ((currentStep === null || currentStep !== match.params.particule) && stepsListLoading === false)
-            this.context.dispatch(actions.stepsListLoad(match.params.particule));
-    }
-
     render() {
         const { currentStep } = this.props;
         if (currentStep === null)
             return null;
         return (
-            <div className={style.workflowLayout}>
-                <Sidebar {...this.props} />
+            <div className={style.stepLayout}>
+                <Sidebar />
                 <Stage />
             </div>
         );
