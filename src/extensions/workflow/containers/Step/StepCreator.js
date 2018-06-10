@@ -22,7 +22,6 @@ class StepCreator extends Component {
 
     render() {
         let { root } = this.props;
-        console.debug(root);
         return (
             <>
                 <div className={style.stepsCreateDescription}>
