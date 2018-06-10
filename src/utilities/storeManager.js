@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import { BehaviorSubject } from 'rxjs';
 import { mergeMap, mapTo } from 'rxjs/operators';
@@ -19,8 +19,7 @@ class StoreManager {
     setDefaults() {
 
         this.asyncReducers = {
-            default: (state = Map({})) => state,
-            router: routerReducer
+            default: (state = Map({})) => state
         };
         this.asyncEpics = {
             default: (action) => action.ofType('@@NULL').pipe(mapTo({ type: '@@TERMINATED' }))
@@ -77,14 +76,14 @@ class StoreManager {
 
         }
 
-        store = createStore(combineReducers(this.asyncReducers), mutateCompose(applyMiddleware(...Object.values(this.middleware))));
+        store = createStore(connectRouter(history)(combineReducers(this.asyncReducers)), mutateCompose(applyMiddleware(...Object.values(this.middleware))));
         this.middleware.epic.run(this.rootEpic);
 
     }
 
     injectAsyncReducer(modelName, asyncReducer) {
         this.asyncReducers[modelName] = asyncReducer;
-        store.replaceReducer(combineReducers(this.asyncReducers));
+        store.replaceReducer(connectRouter(history)(combineReducers(this.asyncReducers)));
     }
 
     injectAsyncEpic = (modelName, asyncEpic) => {
