@@ -19,7 +19,7 @@ class Injector extends Component {
         const { isDoneDiscoverying, extensions } = this.props;
         if (isDoneDiscoverying === true)
             return Object.keys(extensions).map((key) =>
-                <Enclave key={key} domain={'extensions'} modelName={key} model={extensions[key].model} />
+                <Enclave key={key} domain={'extensions'} model={extensions[key].model} />
             );
         return null;
     }
