@@ -46,7 +46,11 @@ export const epics = {
                     of(actions.dockToPager()),
                     of(actions.dockToStatusBar()),
                     of(actions.dockToWorkflow())
-                )))
+                ))),
+
+    workflowStarted:
+        (action) => action.ofType('@@extensions/workflow/STARTED')
+            .pipe(mergeMap(() => of(actions.dockToWorkflow())))
 
 };
 

@@ -8,6 +8,7 @@ export const actions = {
         type: '@@extensions/workflow/STEP_TYPE_DOCK',
         profile: {
             name: 'Transmart Cohort',
+            identifier: 'cohort',
             input: [],
             output: ['tm_result'],
             sidebar: {
@@ -26,7 +27,15 @@ export const epics = {
 
     enclaveBoot:
         (action) => action.ofType('START')
-            .pipe(mergeMap(() => of(actions.dockToWorkflow())))
+            .pipe(mergeMap(() => of(actions.dockToWorkflow()))),
+
+    workflowStarted:
+        (action) => action.ofType('@@extensions/workflow/STARTED')
+            .pipe(mergeMap(() => {
+                // eslint-disable-next-line no-console
+                console.info('Transmart resonded to @@extensions/workflow/STARTED');
+                return of(actions.dockToWorkflow());
+            }))
 
 };
 

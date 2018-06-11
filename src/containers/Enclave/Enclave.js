@@ -128,8 +128,10 @@ class Enclave extends Component {
     }
 
     startModel(prevState) {
-        if (prevState.done !== this.state.done && this.state.done === true && this.state.ready === true)
+        if (prevState.done !== this.state.done && this.state.done === true && this.state.ready === true) {
             this.dispatchProxy()({ type: 'START' });
+            this.dispatchProxy()({ type: 'STARTED' });
+        }
     }
 
     declareReducers(reducers) {
