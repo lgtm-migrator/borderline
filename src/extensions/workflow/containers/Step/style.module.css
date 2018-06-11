@@ -2,9 +2,14 @@
     height: 100%;
     width: 100%;   
     display: grid;
-    grid: "sidebar stage" 100% / 30vh calc(100vw - 20vh);
+    grid: "sidebar stage" 100% / 30vw calc(100% - 30vw);
 }
 
 .stepsCreateDescription, .stepsCreateForm {
     padding: 20px;
+}
+
+.stepsCreateForm button {
+    display: block;
+    margin-bottom: 20px;
 }

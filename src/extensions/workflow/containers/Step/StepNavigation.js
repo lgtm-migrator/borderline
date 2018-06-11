@@ -9,11 +9,11 @@ class StepNavigation extends Component {
 
     render() {
 
-        const { match } = this.props;
+        const { match: { url } } = this.props;
 
         return (
             <Switch>
-                <Route path={`${match.url}/step/:sid`} component={StepLoader} />
+                <Route path={`${url}/step/:sid`} component={StepLoader} />
                 <Route component={StepLoader} />
             </Switch>
         );
