@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
-import { actions } from '../../flux';
+import { stateAware } from 'utilities/storeManager';
+// import { actions } from '../../flux';
 import style from './style.module.css';
 
+@stateAware(state => ({
+    stepTypes: state.stepTypes,
+    currentOutput: state.currentOutput
+}))
 class StepCreator extends Component {
 
     // Custom name for container
@@ -15,13 +20,22 @@ class StepCreator extends Component {
 
     createStep = (e) => {
         e.preventDefault();
-        this.context.dispatch(actions.workflowCreate({
-            name: this.refs.workflowName.value
-        }));
+        // this.context.dispatch(actions.workflowCreate({
+        //     name: this.refs.workflowName.value
+        // }));
     }
 
     render() {
-        let { root } = this.props;
+        const { root, stepTypes, currentOutput } = this.props;
+        const typeList = Object.keys(stepTypes).map((extension) =>
+            Object.keys(stepTypes[extension]).map((eid) => {
+                const { input, name } = stepTypes[extension][eid];
+                if (input !== undefined && input.length > 0 && input.includes(currentOutput) === false)
+                    return null;
+                return <button key={eid} data-stype={eid} onSubmit={this.createStep.bind(this)}>{name}</button>;
+            })
+        ).reduce((prev, current) => prev.concat(current), []);
+
         return (
             <>
                 <div className={style.stepsCreateDescription}>
@@ -38,9 +52,7 @@ class StepCreator extends Component {
                     }
                 </div>
                 <form className={style.stepsCreateForm}>
-                    <button data-stype="cohort" onSubmit={this.createStep.bind(this)}>A patient cohort</button><br /><br />
-                    <button data-stype="text" onSubmit={this.createStep.bind(this)}>A free form text</button><br /><br />
-                    <button data-stype="file" onSubmit={this.createStep.bind(this)}>A file</button><br /><br />
+                    {typeList}
                 </form>
             </>
         );

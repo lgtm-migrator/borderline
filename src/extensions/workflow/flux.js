@@ -8,6 +8,7 @@ const types = {
     STEPS_LIST_LOAD: 'STEPS_LIST_LOAD',
     STEPS_LIST_LOAD_SUCCESS: 'STEPS_LIST_LOAD_SUCCESS',
     STEPS_LIST_LOAD_FAILURE: 'STEPS_LIST_LOAD_FAILURE',
+    STEP_LOAD: 'STEP_LOAD',
     WORKFLOWS_LIST_LOAD: 'WORKFLOWS_LIST_LOAD',
     WORKFLOWS_LIST_LOAD_SUCCESS: 'WORKFLOWS_LIST_LOAD_SUCCESS',
     WORKFLOWS_LIST_LOAD_FAILURE: 'WORKFLOWS_LIST_LOAD_FAILURE',
@@ -28,6 +29,11 @@ export const actions = {
         path: 'workflow',
         icon: NavigationButton,
         view: View
+    }),
+
+    stepLoad: (step) => ({
+        type: types.STEP_LOAD,
+        step: step
     }),
 
     stepsListLoad: (workflow) => ({
@@ -142,6 +148,8 @@ const initial = {
     stepsListLoading: false,
     stepsLastLoaded: new Date(0),
     stepsList: {},
+    stepTypes: {},
+    currentOutput: null,
     workflowsListLoading: false,
     workflowsLastLoaded: new Date(0),
     workflowsList: {},
@@ -163,6 +171,8 @@ export const reducers = {
                     return stepsListLoadSuccess(state, action);
                 case types.STEPS_LIST_LOAD_FAILURE:
                     return stepsListLoadFailure(state, action);
+                case types.STEP_LOAD:
+                    return stepLoad(state, action);
                 case types.WORKFLOWS_LIST_LOAD:
                     return workflowsListLoad(state);
                 case types.WORKFLOWS_LIST_LOAD_SUCCESS:
@@ -187,6 +197,8 @@ export const reducers = {
                     return workflowUnpin(state, action);
                 case '@@router/LOCATION_CHANGE':
                     return workflowForgetNew(state);
+                case '@@extensions/workflow/STEP_TYPE_DOCK':
+                    return stepExtensionDock(state, action);
                 default:
                     return state;
             }
@@ -227,6 +239,12 @@ const stepsListLoadFailure = (state, action) => {
     return state;
 };
 
+const stepLoad = (state, action) => {
+    state.currentStep = action.step;
+    state.currentOutput = null;
+    return state;
+};
+
 const workflowsListLoad = (state) => {
     state.workflowsListLoading = true;
     return state;
@@ -262,6 +280,7 @@ const workflowLoadSuccess = (state, action) => {
     state.stepsListLoading = false;
     state.stepsLastLoaded = new Date(0);
     state.currentStep = null;
+    state.currentOutput = null;
     return state;
 };
 
@@ -302,5 +321,12 @@ const workflowUnpin = (state, action) => {
 
 const workflowForgetNew = (state) => {
     state.newWorkflow = null;
+    return state;
+};
+
+const stepExtensionDock = (state, action) => {
+    if (state.stepTypes[action.__origin__] === undefined)
+        state.stepTypes[action.__origin__] = {};
+    state.stepTypes[action.__origin__][Math.random().toString(36).substr(2, 5)] = action.profile;
     return state;
 };

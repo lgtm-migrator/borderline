@@ -24,9 +24,13 @@ class StepLoader extends Component {
     };
 
     componentDidMount() {
-        const { stepsListLoading, stepsLastLoaded, currentWorkflow } = this.props;
-        if (stepsListLoading === false && stepsLastLoaded.getTime() === new Date(0).getTime())
+        const { stepsListLoading, stepsLastLoaded, currentWorkflow, currentStep, match } = this.props;
+        if (stepsListLoading === false && stepsLastLoaded.getTime() === new Date(0).getTime()) {
             this.context.dispatch(actions.stepsListLoad(currentWorkflow));
+            return;
+        }
+        if (currentStep !== null && currentStep !== match.params.sid)
+            this.context.dispatch(actions.stepLoad(match.params.sid));
     }
 
     render() {
