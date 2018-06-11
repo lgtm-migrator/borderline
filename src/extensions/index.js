@@ -1,7 +1,9 @@
 export default [
     import('./dashboard'),
     import('./workflow'),
-    import('./eae'),
     import('./account'),
-    import('./info')
+    import('./info'),
+    import('./eae'),
+    import('./file'),
+    import('./transmart'),
 ];
