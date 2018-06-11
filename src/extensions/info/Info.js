@@ -7,7 +7,7 @@ class Info extends Component {
     static displayName = 'Information';
 
     // Custom properties for borderline model
-    static modelName = 'info_help';
+    static modelName = 'info';
     static modelEpics = epics;
 
     render() {
