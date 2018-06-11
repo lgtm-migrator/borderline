@@ -1,4 +1,5 @@
 import { api } from 'api';
+import { of } from 'rxjs';
 import { mergeMap, mapTo, map } from 'rxjs/operators';
 import NavigationButton from './containers/NavigationButton';
 import View from './containers/View';
@@ -9,6 +10,12 @@ const types = {
     STEPS_LIST_LOAD_SUCCESS: 'STEPS_LIST_LOAD_SUCCESS',
     STEPS_LIST_LOAD_FAILURE: 'STEPS_LIST_LOAD_FAILURE',
     STEP_LOAD: 'STEP_LOAD',
+    STEP_LOAD_SUCCESS: 'STEP_LOAD_SUCCESS',
+    STEP_LOAD_FAILURE: 'STEP_LOAD_FAILURE',
+    STEP_CREATE: 'STEP_CREATE',
+    STEP_CREATE_SUCCESS: 'STEP_CREATE_SUCCESS',
+    STEP_CREATE_FAILURE: 'STEP_CREATE_FAILURE',
+    STEP_TYPE_DOCK: 'STEP_TYPE_DOCK',
     WORKFLOWS_LIST_LOAD: 'WORKFLOWS_LIST_LOAD',
     WORKFLOWS_LIST_LOAD_SUCCESS: 'WORKFLOWS_LIST_LOAD_SUCCESS',
     WORKFLOWS_LIST_LOAD_FAILURE: 'WORKFLOWS_LIST_LOAD_FAILURE',
@@ -34,6 +41,27 @@ export const actions = {
     stepLoad: (step) => ({
         type: types.STEP_LOAD,
         step: step
+    }),
+
+    stepCreate: (eid) => ({
+        type: types.STEP_CREATE,
+        step: {
+            extension: eid
+        }
+    }),
+
+    stepCreateAborted: (data) => ({
+        type: types.STEP_CREATE_ABORTED
+    }),
+
+    stepCreateSuccess: (data) => ({
+        type: types.STEP_CREATE_SUCCESS,
+        data: data
+    }),
+
+    stepCreateFailure: (data) => ({
+        type: types.STEP_CREATE_FAILURE,
+        data: data
     }),
 
     stepsListLoad: (workflow) => ({
@@ -112,12 +140,6 @@ export const epics = {
         (action) => action.ofType('START')
             .pipe(mapTo(actions.dockToPager())),
 
-    workflowsListLoad:
-        (action) => action.ofType(types.WORKFLOWS_LIST_LOAD)
-            .pipe(mergeMap(() =>
-                api.fetchWorkflowsList()
-                    .pipe(map(response => response.ok === true ? actions.workflowsListLoadSuccess(response.data) : actions.workflowsListLoadFailure(response.data)))
-            )),
 
     stepsListLoad:
         (action) => action.ofType(types.STEPS_LIST_LOAD)
@@ -126,7 +148,24 @@ export const epics = {
                     .pipe(map(response => response.ok === true ? actions.stepsListLoadSuccess(response.data) : actions.stepsListLoadFailure(response.data)))
             )),
 
-    workflowsCreate:
+    stepCreate:
+        (action, state) => action.ofType(types.STEP_CREATE)
+            .pipe(mergeMap((action) => {
+                const step = Object.assign({}, action.step, { parent: state.currentStep });
+                if (state.workflowLoading === true || state.workflowsListLoading === true || state.stepsListLoading === true)
+                    return of(actions.stepCreateAborted());
+                return api.createStep(state.currentWorkflow, step)
+                    .pipe(map(response => response.ok === true ? actions.stepCreateSuccess(response.data) : actions.stepCreateFailure(response.data)));
+            })),
+
+    workflowsListLoad:
+        (action) => action.ofType(types.WORKFLOWS_LIST_LOAD)
+            .pipe(mergeMap(() =>
+                api.fetchWorkflowsList()
+                    .pipe(map(response => response.ok === true ? actions.workflowsListLoadSuccess(response.data) : actions.workflowsListLoadFailure(response.data)))
+            )),
+
+    workflowCreate:
         (action) => action.ofType(types.WORKFLOW_CREATE)
             .pipe(mergeMap((action) =>
                 api.createWorkflow(action.workflow)
@@ -142,6 +181,7 @@ export const epics = {
 };
 
 const initial = {
+    currentOutput: null,
     currentWorkflow: null,
     currentStep: null,
     newWorkflow: null,
@@ -149,7 +189,6 @@ const initial = {
     stepsLastLoaded: new Date(0),
     stepsList: {},
     stepTypes: {},
-    currentOutput: null,
     workflowsListLoading: false,
     workflowsLastLoaded: new Date(0),
     workflowsList: {},
@@ -173,6 +212,12 @@ export const reducers = {
                     return stepsListLoadFailure(state, action);
                 case types.STEP_LOAD:
                     return stepLoad(state, action);
+                case types.STEP_CREATE_SUCCESS:
+                    return stepCreateSuccess(state, action);
+                case types.STEP_CREATE_FAILURE:
+                    return stepCreateFailure(state, action);
+                case types.STEP_TYPE_DOCK:
+                    return stepExtensionDock(state, action);
                 case types.WORKFLOWS_LIST_LOAD:
                     return workflowsListLoad(state);
                 case types.WORKFLOWS_LIST_LOAD_SUCCESS:
@@ -197,8 +242,6 @@ export const reducers = {
                     return workflowUnpin(state, action);
                 case '@@router/LOCATION_CHANGE':
                     return workflowForgetNew(state);
-                case '@@extensions/workflow/STEP_TYPE_DOCK':
-                    return stepExtensionDock(state, action);
                 default:
                     return state;
             }
@@ -242,6 +285,22 @@ const stepsListLoadFailure = (state, action) => {
 const stepLoad = (state, action) => {
     state.currentStep = action.step;
     state.currentOutput = null;
+    return state;
+};
+
+const stepCreateSuccess = (state, action) => {
+    if (state.stepsList[action.data.workflow] === undefined)
+        state.stepsList[action.data.workflow] = {};
+    state.stepsList[action.data.workflow][action.data._id] = action.data;
+    state.currentStep = action.data._id;
+    state.currentOutput = state.stepTypes[action.data.extension].output;
+    return state;
+};
+
+const stepCreateFailure = (state, action) => {
+    state.currentStep = null;
+    state.currentOutput = null;
+    state.error = action.data.error;
     return state;
 };
 
@@ -325,8 +384,15 @@ const workflowForgetNew = (state) => {
 };
 
 const stepExtensionDock = (state, action) => {
-    if (state.stepTypes[action.__origin__] === undefined)
-        state.stepTypes[action.__origin__] = {};
-    state.stepTypes[action.__origin__][Math.random().toString(36).substr(2, 5)] = action.profile;
+    const { profile } = action;
+    // eslint-disable-next-line no-console
+    console.info('Workflow docked', action.profile);
+    if (typeof profile.name !== 'string' ||
+        typeof profile.identifier !== 'string' ||
+        profile.identifier.length <= 0 ||
+        Array.isArray(profile.input) !== true ||
+        Array.isArray(profile.output) !== true)
+        return state;
+    state.stepTypes[`${action.__origin__}/${profile.identifier}`] = profile;
     return state;
 };

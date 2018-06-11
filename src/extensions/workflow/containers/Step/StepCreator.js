@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
 import { stateAware } from 'utilities/storeManager';
-// import { actions } from '../../flux';
+import { actions } from '../../flux';
 import style from './style.module.css';
 
 @stateAware(state => ({
@@ -18,23 +18,18 @@ class StepCreator extends Component {
         dispatch: T.func
     };
 
-    createStep = (e) => {
-        e.preventDefault();
-        // this.context.dispatch(actions.workflowCreate({
-        //     name: this.refs.workflowName.value
-        // }));
+    createStep = (eid) => {
+        this.context.dispatch(actions.stepCreate(eid));
     }
 
     render() {
         const { root, stepTypes, currentOutput } = this.props;
-        const typeList = Object.keys(stepTypes).map((extension) =>
-            Object.keys(stepTypes[extension]).map((eid) => {
-                const { input, name } = stepTypes[extension][eid];
-                if (input !== undefined && input.length > 0 && input.includes(currentOutput) === false)
-                    return null;
-                return <button key={eid} data-stype={eid} onSubmit={this.createStep.bind(this)}>{name}</button>;
-            })
-        ).reduce((prev, current) => prev.concat(current), []);
+        const typeList = Object.keys(stepTypes).map((eid) => {
+            const { input, name } = stepTypes[eid];
+            if (input !== undefined && input.length > 0 && input.includes(currentOutput) === false)
+                return null;
+            return <button key={eid} onClick={() => this.createStep(eid)}>{name}</button>;
+        });
 
         return (
             <>
@@ -51,7 +46,7 @@ class StepCreator extends Component {
                         </>
                     }
                 </div>
-                <form className={style.stepsCreateForm}>
+                <form className={style.stepsCreateForm} onSubmit={(e) => e.preventDefault()}>
                     {typeList}
                 </form>
             </>

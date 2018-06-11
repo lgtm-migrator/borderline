@@ -39,6 +39,11 @@ export const api = {
         body: workflow
     }),
 
+    createStep: (workflow, step) => query(`/workflow/${workflow}/step`, {
+        method: 'PUT',
+        body: step
+    }),
+
     loadWorkflow: (wid) => query(`/workflow/${wid}`, {
         method: 'GET'
     })
