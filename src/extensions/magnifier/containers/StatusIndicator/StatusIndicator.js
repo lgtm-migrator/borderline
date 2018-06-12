@@ -32,7 +32,7 @@ class StatusIndicator extends Component {
     zoomApply = (e) => {
         e.preventDefault();
         this.setState({
-            zoomLevel: this.zoom(Number.parseInt(this.refs.zoomLevelRequest.value))
+            zoomLevel: this.zoom(Number.parseInt(this.refs.zoomLevelRequest.value, 10))
         });
     }
 
