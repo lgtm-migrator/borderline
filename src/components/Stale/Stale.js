@@ -15,7 +15,11 @@ export default class Stale extends Component {
     render() {
         return (
             <div className={style.stale} >
-                <SVG src={errorIcon} />
+                <div className={style.middler} >
+                    <div className={style.wrapper}>
+                        <SVG src={errorIcon} />
+                    </div>
+                </div>
             </div>
         );
     }
