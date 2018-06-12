@@ -50,7 +50,7 @@ export const actions = {
         }
     }),
 
-    stepCreateAborted: (data) => ({
+    stepCreateAborted: () => ({
         type: types.STEP_CREATE_ABORTED
     }),
 
