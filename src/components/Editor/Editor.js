@@ -39,7 +39,6 @@ class Editor extends Component {
         language: 'javascript',
         theme: 'vs-dark',
         options: {
-            fontSize: 12,
             // contextmenu: false,
             quickSuggestions: false,
             automaticLayout: true
@@ -60,6 +59,7 @@ class Editor extends Component {
     }
 
     componentDidMount() {
+        this.props.options.fontSize = Number.parseFloat(window.getComputedStyle(document.querySelector('html')).getPropertyValue('--font-size'));
         this.initMonaco();
     }
 
