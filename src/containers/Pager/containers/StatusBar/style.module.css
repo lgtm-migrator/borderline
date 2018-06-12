@@ -6,7 +6,7 @@
 .statusItem {
     display: inline-block;
     height: 100%;
-    max-width: 300px;
+    max-width: 30em;
     overflow: hidden;
     position: relative;
     color: var(--color-font-active);

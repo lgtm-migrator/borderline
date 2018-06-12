@@ -4,22 +4,22 @@
 }
 
 .menu {
-    height: 4vh;
+    height: 3em;
     width: 100%;
     text-align: right;
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.8));
 }
 
 .logo * {
-    fill: #fff;
+    fill: #FFFFFF;
 }
 
 .navButton {
     display: inline-block;
     text-align: center;
-    padding: 1vh;
-    height: 4vh;
-    width: 4vh;
+    padding: 0.7em;
+    height: 3em;
+    width: 3em;
 }
 
 .navButton:hover {
@@ -32,22 +32,23 @@
 
 .stepButton {
     display: block;
-    height: 2.5vh;
-    line-height: 2.5vh;
+    height: 2em;
+    line-height: 2em;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 1em;
 }
 
 .stepButton:hover {
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.45));
 }
 
-.stepActive, .stepActive:hover {
+.stepActive,
+.stepActive:hover {
     color: var(--color-font-active);
     background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.3));
 }
 
 .panel {
-    height: calc(100% - 4vh);
+    height: calc(100% - 2em);
     width: 100%;
 }

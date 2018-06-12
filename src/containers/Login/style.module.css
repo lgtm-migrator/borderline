@@ -1,27 +1,27 @@
 .box {
     position: absolute;
     grid-area: auto / navigation / auto / content;
-    top: calc(50% - 125px);
-    left: calc(50% - 100px);
-    height: 250px;
-    width: 200px;
+    top: calc(50% - 12em);
+    left: calc(50% - 10em);
+    height: 25em;
+    width: 20em;
 }
 
 .form {
     text-align: center;
-    line-height: 40px;
+    line-height: 4em;
 }
 
 .title {
-    padding-top: calc(50% - 200px);
+    padding-top: calc(50% - 20em);
     text-align: center;
-    padding-bottom: 10px;
+    padding-bottom: 1em;
     cursor: default;
 }
 
 .title span {
     color: var(--color-font-active);
-    font-size: 39px;
+    font-size: 3.9em;
 }
 
 .title strong {
@@ -31,10 +31,10 @@
 .error {
     display: block;
     width: 100%;
-    line-height: 20px;
+    line-height: 2em;
     background-color: var(--color-error);
     color: var(--color-font-active);
-    padding: 5px;
+    padding: 0.5em;
     word-wrap: break-word;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -1,38 +1,38 @@
 .status {
     height: 100%;
-    width: 39px;
+    width: 3.9em;
     line-height: 100%;
-    padding: 1px 10px 1px 10px;
+    padding: 0.1em 1em 0.1em 1em;
     display: inline-block;
+}
+
+.logo * {
+    fill: #FFFFFF;
 }
 
 .status:hover * {
     cursor: pointer;
 }
 
-.logo * {
-    fill: #fff;
-}
-
 .infoBox {
     position: fixed;
     cursor: default;
-    height: 200px;
-    width: 400px;
-    bottom: 5vh;
+    height: 20em;
+    width: 40em;
+    bottom: 4em;
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.2));
-    border: solid 1px hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.8));
-    padding: 20px;
+    border: solid 0.1em hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.8));
+    padding: 2em;
 }
 
 .infoBox::after {
     content: "";
-    bottom: -11px;
-    left: 10px;
+    bottom: -1.1em;
+    left: 1em;
     position: absolute;
-	border-left: 10px solid transparent;
-	border-right: 10px solid transparent;
-	border-top: 10px solid var(--color-accent);
+    border-left: 1em solid transparent;
+    border-right: 1em solid transparent;
+    border-top: 1em solid var(--color-accent);
 }
 
 .infoHide {
@@ -42,6 +42,7 @@
 .infoBox span {
     white-space: normal;
 }
+
 .infoBox a {
     color: var(--color-accent);
 }

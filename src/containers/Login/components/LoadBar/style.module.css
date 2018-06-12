@@ -2,12 +2,13 @@
     display: inline-block;
     position: relative;
     width: 100%;
-    height: 30px;
+    height: 2.5em;
     overflow: hidden;
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2));
 }
 
-.loader::before, .loader::after {
+.loader::before,
+.loader::after {
     content: '';
     position: absolute;
     top: 0;
@@ -34,23 +35,29 @@
     0% {
         transform: translateX(-100%);
     }
+
     20% {
         transform: translateX(0);
     }
+
     60% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(100%);
     }
 }
+
 @keyframes accent {
     0% {
         transform: translateX(-100%);
     }
+
     50% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(100%);
     }
