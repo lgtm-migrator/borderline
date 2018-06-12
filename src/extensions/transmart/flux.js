@@ -13,7 +13,7 @@ export const actions = {
             output: ['tm_result'],
             sidebar: {
                 analyses: {
-                    path: '/van',
+                    path: 'van',
                     icon: VennIcon,
                     panel: VennPanel
                 }

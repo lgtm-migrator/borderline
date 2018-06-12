@@ -27,7 +27,7 @@ export const actions = {
             output: ['eae_result'],
             sidebar: {
                 analyses: {
-                    path: '/analyses',
+                    path: 'analyses',
                     icon: AnalysesIcon,
                     panel: AnalysesPanel
                 }

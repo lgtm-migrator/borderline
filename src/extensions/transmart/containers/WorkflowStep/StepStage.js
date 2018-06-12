@@ -13,6 +13,7 @@ class StepStage extends Component {
 #! python
 import sys
 import time
+import florian
 
 retrieve_params = sys.argv[1] + '\\n'
 
@@ -28,8 +29,7 @@ with open('output/test_out.txt', 'w') as f:
             line = f2.read()
             f.write(line)
     f.close()
-    
-                    `} />
+`} />
         );
     }
 }
