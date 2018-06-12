@@ -11,7 +11,7 @@
 }
 
 .logo * {
-    fill: #FFFFFF;
+    fill: var(--color-font-active);
 }
 
 .navButton {
