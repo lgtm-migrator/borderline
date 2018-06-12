@@ -59,8 +59,8 @@
 }
 
 .actions {
-    margin-left: 1em;
-    margin-right: -1em;
+    margin-left: 0.5em;
+    margin-right: 0;
     opacity: 0.5;
 }
 
@@ -89,12 +89,12 @@
 
 .workflowsList {
     position: relative;
-    padding: 0.2em;
+    padding: 2em;
 }
 
 .workflowsDescription {
     position: relative;
-    padding: 0.2em;
+    padding: 2em;
 }
 
 .workflowsCreateDescription,
