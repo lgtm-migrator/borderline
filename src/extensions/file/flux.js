@@ -1,17 +1,29 @@
-import { of } from 'rxjs';
+import { of, concat } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { StepStage } from './containers/WorkflowStep';
+import { UploadStage } from './containers/WorkflowStep';
+import { TextStage } from './containers/WorkflowStep';
 
 export const actions = {
 
-    dockToWorkflow: () => ({
+    dockUploadToWorkflow: () => ({
         type: '@@extensions/workflow/STEP_TYPE_DOCK',
         profile: {
             name: 'File Upload',
-            identifier: 'file',
+            identifier: 'upload',
             input: [],
             output: ['file_result'],
-            stage: StepStage
+            stage: UploadStage
+        }
+    }),
+
+    dockTextToWorkflow: () => ({
+        type: '@@extensions/workflow/STEP_TYPE_DOCK',
+        profile: {
+            name: 'Free Text',
+            identifier: 'text',
+            input: [],
+            output: ['file_result'],
+            stage: TextStage
         }
     })
 };
@@ -20,11 +32,21 @@ export const epics = {
 
     enclaveBoot:
         (action) => action.ofType('START')
-            .pipe(mergeMap(() => of(actions.dockToWorkflow()))),
+            .pipe(mergeMap(() =>
+                concat(
+                    of(actions.dockUploadToWorkflow()),
+                    of(actions.dockTextToWorkflow())
+                )
+            )),
 
     workflowStarted:
         (action) => action.ofType('@@extensions/workflow/STARTED')
-            .pipe(mergeMap(() => of(actions.dockToWorkflow())))
+            .pipe(mergeMap(() =>
+                concat(
+                    of(actions.dockUploadToWorkflow()),
+                    of(actions.dockTextToWorkflow())
+                )
+            )),
 };
 
 export const reducers = {

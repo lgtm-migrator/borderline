@@ -1,3 +1,5 @@
-import StepStageHandle from './StepStage';
+import UploadStageHandle from './TextStage';
+import TextStageHandle from './TextStage';
 
-export const StepStage = StepStageHandle;
+export const UploadStage = UploadStageHandle;
+export const TextStage = TextStageHandle;

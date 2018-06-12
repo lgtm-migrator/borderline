@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-class StepStage extends Component {
+class UploadStage extends Component {
 
     // Custom name for container
-    static displayName = 'StepStage';
+    static displayName = 'UploadStage';
 
     render() {
         return (
@@ -12,4 +12,4 @@ class StepStage extends Component {
     }
 }
 
-export default StepStage;
+export default UploadStage;
