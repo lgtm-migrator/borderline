@@ -262,7 +262,7 @@ const stepsListLoad = (state) => {
 const stepsListLoadSuccess = (state, action) => {
     let maxDate = new Date(0);
     state.stepsListLoading = false;
-    state.stepssList = {};
+    state.stepsList = {};
     action.data.forEach(step => {
         if (state.stepsList[step.workflow] === undefined)
             state.stepsList[step.workflow] = {};
@@ -385,8 +385,6 @@ const workflowForgetNew = (state) => {
 
 const stepExtensionDock = (state, action) => {
     const { profile } = action;
-    // eslint-disable-next-line no-console
-    console.info('Workflow docked', action.profile);
     if (typeof profile.name !== 'string' ||
         typeof profile.identifier !== 'string' ||
         profile.identifier.length <= 0 ||

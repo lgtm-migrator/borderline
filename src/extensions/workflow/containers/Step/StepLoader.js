@@ -43,7 +43,7 @@ class StepLoader extends Component {
             return null;
         if (match.params.sid === undefined || match.params.sid === null)
             return <Redirect to={`${match.url}/step/${currentStep}`} />;
-        return <StepRenderer />;
+        return <StepRenderer match={match} />;
     }
 }
 

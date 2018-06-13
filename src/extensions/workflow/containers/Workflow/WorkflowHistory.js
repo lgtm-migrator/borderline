@@ -29,6 +29,8 @@ class WorkflowHistory extends Component {
 
     render() {
         const { workflowsListLoading, workflowsList } = this.props;
+        if (workflowsList === null || workflowsList === undefined)
+            return null;
         let status = null;
         if (workflowsListLoading === true)
             if (Object.keys(workflowsList).length > 0)

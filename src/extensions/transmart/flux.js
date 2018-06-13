@@ -31,11 +31,7 @@ export const epics = {
 
     workflowStarted:
         (action) => action.ofType('@@extensions/workflow/STARTED')
-            .pipe(mergeMap(() => {
-                // eslint-disable-next-line no-console
-                console.info('Transmart resonded to @@extensions/workflow/STARTED');
-                return of(actions.dockToWorkflow());
-            }))
+            .pipe(mergeMap(() => of(actions.dockToWorkflow())))
 
 };
 

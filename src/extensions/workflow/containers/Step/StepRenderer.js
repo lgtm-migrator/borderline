@@ -6,8 +6,7 @@ import Stage from './containers/Stage';
 import style from './style.module.css';
 
 @stateAware(state => ({
-    currentStep: state.currentStep,
-    stepsList: state.stepsList[state.currentWorkflow]
+    currentStep: state.currentStep
 }))
 class StepRenderer extends Component {
 
@@ -26,13 +25,13 @@ class StepRenderer extends Component {
     }
 
     render() {
-        const { currentStep } = this.props;
+        const { currentStep, match } = this.props;
         if (currentStep === null)
             return null;
         return (
             <div className={style.stepLayout}>
-                <Sidebar />
-                <Stage />
+                <Sidebar match={match} />
+                <Stage match={match} />
             </div>
         );
     }

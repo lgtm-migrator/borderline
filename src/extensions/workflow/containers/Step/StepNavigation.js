@@ -13,7 +13,7 @@ class StepNavigation extends Component {
 
         return (
             <Switch>
-                <Route path={`${url}/step/:sid`} component={StepLoader} />
+                <Route path={`${url}/step/:sid`} render={StepLoader} />
                 <Route component={StepLoader} />
             </Switch>
         );

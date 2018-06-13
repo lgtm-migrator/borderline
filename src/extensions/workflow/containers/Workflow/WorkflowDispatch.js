@@ -17,7 +17,7 @@ class WorkflowDispatch extends Component {
         const { match: { url }, currentWorkflow, newWorkflow } = this.props;
         return (
             <Switch>
-                <Route path={`${url}/:particule`} component={(innerProps) => {
+                <Route path={`${url}/:particule`} render={(innerProps) => {
                     const innerMatch = innerProps.match;
                     if (innerMatch.params.particule === 'new') {
                         if (newWorkflow !== null)

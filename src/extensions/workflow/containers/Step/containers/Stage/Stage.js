@@ -13,9 +13,11 @@ class Stage extends Component {
 
     render() {
         const { stepTypes, currentStep } = this.props;
+        if (!currentStep || stepTypes[currentStep.extension] === null || stepTypes[currentStep.extension] === undefined)
+            return null;
         const Stage = stepTypes[currentStep.extension].stage;
         return (
-            <Route component={Stage} />
+            <Route render={props => <Stage {...props} />} />
         );
     }
 }

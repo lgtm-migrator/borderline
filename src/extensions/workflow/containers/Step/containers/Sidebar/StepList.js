@@ -13,14 +13,13 @@ class StepList extends Component {
     static displayName = 'StepList';
 
     render() {
-        const { stepsList, currentStep } = this.props;
-        return (
-            <Route component={({ match: { url } }) => Object.keys(stepsList).map((sid) =>
-                <Link to={`${url.substr(0, url.lastIndexOf('/'))}/${sid}`} className={`${style.stepButton} ${sid === currentStep ? style.stepActive : ''}`} key={sid}>
-                    {stepsList[sid].extension}
-                </Link>
-            )} />
-        );
+        const { stepsList, currentStep, match: { url } } = this.props;
+        const list = Object.keys(stepsList).map((sid) =>
+            <Link to={`${url.substr(0, url.lastIndexOf('/'))}/${sid}`} className={`${style.stepButton} ${sid === currentStep ? style.stepActive : ''}`} key={sid}>
+                {stepsList[sid].extension}
+            </Link>
+        )
+        return <>{list}</>;
     }
 }
 

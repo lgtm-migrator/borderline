@@ -25,9 +25,9 @@ class View extends Component {
             </div>,
             <div key='panel' className={style.panel}>
                 <Switch>
-                    <Route path={`${url}/select`} component={() => <div>Coucou Select</div>} />
-                    <Route path={`${url}/analysis`} component={() => <Editor language="r" />} />
-                    <Route path={`${url}/result`} component={() => <div>Storm Result</div>} />
+                    <Route path={`${url}/select`} render={() => <div>Coucou Select</div>} />
+                    <Route path={`${url}/analysis`} render={() => <Editor language="r" />} />
+                    <Route path={`${url}/result`} render={() => <div>Storm Result</div>} />
                 </Switch>
             </div>
         ];

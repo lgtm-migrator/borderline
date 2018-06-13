@@ -22,11 +22,11 @@ class WorkflowNavigation extends Component {
                     <NavLink to={`${url}/history`} activeClassName={style.active} className={style.button}>
                         Workflow history
                     </NavLink>
-                    <Route path={`${url}/:particule`} component={WorkflowPins} />
+                    <Route path={`${url}/:particule`} render={WorkflowPins} />
                 </div>
                 <div key='panel' className={style.panel}>
                     <Switch>
-                        <Route path={`${url}/history`} component={WorkflowHistory} />
+                        <Route path={`${url}/history`} render={WorkflowHistory} />
                         <Route component={WorkflowDispatch} />
                     </Switch>
                 </div>
