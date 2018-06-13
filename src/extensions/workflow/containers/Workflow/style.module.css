@@ -1,0 +1,103 @@
+.menu {
+    height: 3em;
+    width: 100%;
+    background-color: var(--color-background);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.panel {
+    height: 100%;
+    width: 100%;
+    padding-top: 3em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.button {
+    display: inline-block;
+    text-align: center;
+    line-height: 3em;
+    height: 3em;
+    padding: 0 1em;
+    color: var(--color-font);
+    border-bottom: 0.2em solid hsla(0, 0%, 0%, 0);
+    transition: border 200ms, color 200ms;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.4));
+}
+
+.button:hover * {
+    cursor: pointer;
+}
+
+.button.active {
+    color: var(--color-font-active);
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.4));
+    border-bottom: 0.2em solid var(--color-accent);
+}
+
+.shiningButton {
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.5));
+    color: var(--color-font-active);
+}
+
+.shiningButton:hover {
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.7));
+    color: var(--color-font-active);
+}
+
+.current {
+    font-style: italic;
+}
+
+.actions {
+    margin-left: 0.5em;
+    margin-right: 0;
+    opacity: 0.5;
+}
+
+.pinned .actions,
+.button:hover .actions {
+    opacity: 0.5;
+}
+
+.button .actions:hover,
+.pinned .actions:hover {
+    opacity: 1;
+}
+
+.historyItem {
+    display: block;
+    padding: 0.4em 1em;
+    height: 3em;
+    line-height: calc(3em - 0.8em);
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.4));
+    width: 100%;
+}
+
+.historyItem:hover {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.5));
+}
+
+.workflowsList {
+    position: relative;
+    padding: 2em;
+}
+
+.workflowsDescription {
+    position: relative;
+    padding: 2em;
+}
+
+.workflowsCreateDescription,
+.workflowsCreateForm {
+    padding: 2em;
+}

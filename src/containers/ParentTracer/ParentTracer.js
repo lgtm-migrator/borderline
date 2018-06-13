@@ -11,10 +11,10 @@ class ParentTracer extends Component {
     };
 
     get displayName() {
-        return `ParentTracer${this.state.connector !== undefined ? `(${this.state.connector.displayName || this.state.connector.name})` : '(Component)'}`;
+        return `ParentTracer${this.state !== null && this.state.connector !== null && this.state.connector !== undefined ? `(${this.state.connector.displayName || this.state.connector.name})` : '(Component)'}`;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({
             connector: connect(
                 (state, ownProps) => this.props.mapStateToProps(state[this.context.modelName] !== undefined ? state[this.context.modelName].toJS() : {}, ownProps),
@@ -27,7 +27,10 @@ class ParentTracer extends Component {
         const filteredProps = Object.assign({}, this.props);
         delete filteredProps.tracedComponent;
         delete filteredProps.mapStateToProps;
-        return <this.state.connector {...filteredProps} />;
+        if (this.state !== null && this.state.connector !== null && this.state.connector !== undefined)
+            return <this.state.connector {...filteredProps} />;
+        else
+            return null;
     }
 }
 

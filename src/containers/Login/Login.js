@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import LoadBar from './components/LoadBar';
 import { stateAware } from 'utilities/storeManager';
 import { actions } from 'containers/Session/flux';
-import style from './style.css';
+import style from './style.module.css';
 
 @stateAware(state => ({
     isAuthenticated: state.ok,

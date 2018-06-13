@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { history, store, stateAware } from 'utilities/storeManager';
 import BorderlineApplication from 'BorderlineApplication';
 
@@ -9,7 +9,7 @@ class BorderlineProvider extends React.Component {
     // Custom name for container
     static displayName = 'BorderlineProvider';
 
-    componentWillMount() {
+    componentDidMount() {
         window.stateAware = stateAware;
     }
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { WorkflowNavigation } from '../Workflow';
 
 class View extends Component {
 
@@ -6,7 +7,10 @@ class View extends Component {
     static displayName = 'View';
 
     render() {
-        return <div>Workflow</div>;
+
+        return (
+            <WorkflowNavigation {...this.props} />
+        );
     }
 }
 

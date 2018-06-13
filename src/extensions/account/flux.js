@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs';
+import { of, concat } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import NavigationButton from './containers/NavigationButton';
 import View from './containers/View';
 
@@ -25,12 +26,12 @@ export const actions = {
 export const epics = {
 
     enclaveBoot:
-    (action) => action.ofType('START')
-        .mergeMap(() =>
-            Observable.concat(
-                Observable.of(actions.dockToPager()),
-                Observable.of(actions.getCurrentUser())
-            ))
+        (action) => action.ofType('START')
+            .pipe(mergeMap(() =>
+                concat(
+                    of(actions.dockToPager()),
+                    of(actions.getCurrentUser())
+                )))
 
 };
 
@@ -39,17 +40,17 @@ const initial = {};
 export const reducers = {
 
     accountReducer:
-    (state = initial, action) => {
+        (state = initial, action) => {
 
-        switch (action.type) {
-            case types.ACCOUNT_HYDRATE:
-                return hydrateAccount(state, action);
-            case 'STOP':
-                return initial;
-            default:
-                return state;
+            switch (action.type) {
+                case types.ACCOUNT_HYDRATE:
+                    return hydrateAccount(state, action);
+                case 'STOP':
+                    return initial;
+                default:
+                    return state;
+            }
         }
-    }
 };
 
 const hydrateAccount = (state, action) => {

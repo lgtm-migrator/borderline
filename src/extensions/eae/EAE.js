@@ -7,7 +7,7 @@ class EAE extends Component {
     static displayName = 'EAE';
 
     // Custom properties for borderline model
-    static modelName = 'EAE';
+    static modelName = 'eae';
     static modelEpics = epics;
 
     render() {

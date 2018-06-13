@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import * as Monaco from 'monaco-editor';
 import { default as T } from 'prop-types';
-import editorLoader from 'utilities/editorLoader';
 import Stale from 'components/Stale';
-import style from './style.css';
+import style from './style.module.css';
 
 class Editor extends Component {
 
@@ -39,7 +39,6 @@ class Editor extends Component {
         language: 'javascript',
         theme: 'vs-dark',
         options: {
-            fontSize: 12,
             // contextmenu: false,
             quickSuggestions: false,
             automaticLayout: true
@@ -60,11 +59,11 @@ class Editor extends Component {
     }
 
     componentDidMount() {
-        this.afterViewInit();
+        this.props.options.fontSize = Number.parseFloat(window.getComputedStyle(document.querySelector('html')).getPropertyValue('--font-size'));
+        this.initMonaco();
     }
 
     componentDidUpdate(prevProps) {
-        const context = this.props.context || window;
         if (this.props.value !== this.__current_value) {
             // Always refer to the latest value
             this.__current_value = this.props.value;
@@ -76,7 +75,7 @@ class Editor extends Component {
             }
         }
         if (prevProps.language !== this.props.language) {
-            context.monaco.editor.setModelLanguage(this.editor.getModel(), this.props.language);
+            Monaco.editor.setModelLanguage(this.editor.getModel(), this.props.language);
         }
     }
 
@@ -104,38 +103,29 @@ class Editor extends Component {
         });
     }
 
-    afterViewInit() {
-        this.disposed = false;
-        editorLoader.getPromise().then(() => {
-            if (this.disposed)
-                return;
-            this.initMonaco();
-        });
-    }
-
     initMonaco() {
         const value = this.props.value !== null ? this.props.value : this.props.defaultValue;
         const { language, theme, options } = this.props;
-        const context = this.props.context || window;
-        if (this.containerElement && typeof context.monaco !== 'undefined') {
+        if (this.containerElement && typeof Monaco !== 'undefined') {
             // Before initializing monaco editor
-            this.editorWillMount(context.monaco);
-            this.editor = context.monaco.editor.create(this.containerElement, {
+            this.editorWillMount(Monaco);
+            this.editor = Monaco.editor.create(this.containerElement, {
                 value,
                 language,
                 ...options,
             });
             if (theme)
-                context.monaco.editor.setTheme(theme);
+                Monaco.editor.setTheme(theme);
             // After initializing monaco editor
-            this.editorDidMount(this.editor, context.monaco);
+            this.editorDidMount(this.editor, Monaco);
+        } else {
+            throw new Error('Text editor could not be initialized');
         }
     }
 
     destroyMonaco() {
         if (this.editor !== undefined)
             this.editor.dispose();
-        this.disposed = true;
     }
 
     assignRef = (component) => {

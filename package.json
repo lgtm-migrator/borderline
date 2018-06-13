@@ -1,44 +1,65 @@
 {
     "name": "borderline-ui",
-    "version": "0.1.5",
+    "version": "0.1.8",
     "description": "Configuration and scripts for Borderline development.",
-    "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
-    "license": "MIT",
+    "homepage": "https://github.com/dsi-icl/borderline-ui#readme",
+    "bugs": {
+        "url": "https://github.com/dsi-icl/borderline-ui/issues"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/dsi-icl/borderline-ui.git"
     },
-    "bugs": {
-        "url": "https://github.com/dsi-icl/borderline-ui/issues"
-    },
-    "homepage": "https://github.com/dsi-icl/borderline-ui#readme",
-    "engines": {
-        "node": ">= 7.10.1",
-        "yarn": ">= 0.17.8"
-    },
+    "license": "MIT",
+    "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "scripts": {
-        "start": "borderline-devutils start",
         "build": "borderline-devutils build",
-        "test": "borderline-devutils test --env=jsdom",
-        "prepublishOnly": "borderline-devutils publish"
+        "lint": "eslint --ext .jsx --ext .js ./ && stylelint ./**/*.css",
+        "lint:fix": "eslint --ext .jsx --ext .js --fix ./ && stylelint --fix ./**/*.css",
+        "prepublishOnly": "borderline-devutils publish",
+        "start": "cross-env BROWSER=none borderline-devutils start",
+        "test": "borderline-devutils test --env=jsdom --verbose --detectOpenHandles --forceExit"
     },
     "dependencies": {
-        "borderline-utils": "^0.1.2",
-        "dompurify": "1.0.2",
+        "borderline-utils": "0.2.3",
+        "connected-react-router": "^4.3.0",
+        "dompurify": "1.0.4",
+        "eslint": "^5.0.0-alpha.4",
         "immutable": "3.8.2",
-        "monaco-editor": "^0.10.1",
-        "react": "16.0.0",
-        "react-dom": "16.0.0",
-        "react-redux": "5.0.6",
-        "react-router-dom": "4.2.2",
-        "react-router-redux": "5.0.0-alpha.8",
-        "redux": "3.7.2",
-        "redux-observable": "0.16.0",
-        "rxjs": "5.5.0"
+        "monaco-editor": "0.13.1",
+        "monaco-editor-webpack-plugin": "1.2.1",
+        "react": "16.4.0",
+        "react-dom": "16.4.0",
+        "react-helmet": "^5.2.0",
+        "react-redux": "5.0.7",
+        "react-router-dom": "4.3.1",
+        "redux": "4.0.0",
+        "redux-observable": "1.0.0-beta.1",
+        "rxjs": "6.2.1"
     },
     "devDependencies": {
-        "borderline-devutils": "^0.x",
-        "react-test-renderer": "16.0.0",
-        "redux-logger": "3.0.6"
+        "borderline-devutils": "0.4.19",
+        "codacy-coverage": "3.0.0",
+        "react-test-renderer": "16.4.0",
+        "redux-logger": "3.0.6",
+        "stylelint": "9.2.1",
+        "stylelint-config-standard": "18.2.0"
+    },
+    "engines": {
+        "node": ">= 7.10.1",
+        "npm": ">= 6.0.0"
+    },
+    "browserslist": {
+        "development": [
+            "last 2 chrome versions",
+            "last 2 firefox versions",
+            "last 2 edge versions"
+        ],
+        "production": [
+            ">1%",
+            "last 4 versions",
+            "Firefox ESR",
+            "not ie < 11"
+        ]
     }
 }

@@ -1,0 +1,17 @@
+.statusBar {
+    grid-area: status;
+    background-color: var(--color-accent);
+}
+
+.statusItem {
+    display: inline-block;
+    height: 100%;
+    max-width: 30em;
+    overflow: hidden;
+    position: relative;
+    color: var(--color-font-active);
+}
+
+.statusItem:hover {
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 1.1));
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
-import { Observable } from 'rxjs';
+import { concat } from 'rxjs';
+import { mergeMap, map } from 'rxjs/operators';
 import { fromJS } from 'immutable';
 import { ActionsObservable } from 'redux-observable';
 import storeManager, { store } from 'utilities/storeManager';
@@ -106,6 +107,7 @@ class Enclave extends Component {
 
     displayError(message) {
         if (process.env.NODE_ENV === 'development')
+            // eslint-disable-next-line no-console
             console.error(`There was a problem creating an enclave: ${message}`);
     }
 
@@ -126,8 +128,10 @@ class Enclave extends Component {
     }
 
     startModel(prevState) {
-        if (prevState.done !== this.state.done && this.state.done === true && this.state.ready === true)
+        if (prevState.done !== this.state.done && this.state.done === true && this.state.ready === true) {
             this.dispatchProxy()({ type: 'START' });
+            this.dispatchProxy()({ type: 'STARTED' });
+        }
     }
 
     declareReducers(reducers) {
@@ -141,17 +145,15 @@ class Enclave extends Component {
     declareEpics(epics) {
 
         assets[this.state.modelName].epics = epics;
-        storeManager.injectAsyncEpic(this.state.modelName, (action, store) =>
-            action.mergeMap(a =>
-                Observable.concat(
-                    ...Object.values(assets[this.state.modelName].epics).map(epic => {
-                        let state = store.getState()[this.state.modelName];
-                        if (state !== undefined)
-                            state = state.toJS();
-                        return epic(ActionsObservable.of(this.actionDetagger(a)), state).map(a => this.actionTagger(a));
-                    })
-                )
-            )
+        storeManager.injectAsyncEpic(this.state.modelName, (action, igressState) =>
+            action.pipe(mergeMap(a =>
+                concat(...Object.values(assets[this.state.modelName].epics).map(epic => {
+                    let state = igressState.value[this.state.modelName];
+                    if (state !== undefined)
+                        state = state.toJS();
+                    return epic(ActionsObservable.of(this.actionDetagger(a)), state).pipe(map(a => this.actionTagger(a)));
+                }))
+            ))
         );
         this.setState({
             epics: epics
@@ -162,6 +164,8 @@ class Enclave extends Component {
         action.__origin__ = this.state.modelName;
         if (process.env.NODE_ENV === 'development' && this.state.model !== null && this.state.model.modelName !== undefined)
             action.__dev_origin__ = this.state.model.modelName;
+        if (action.type === undefined)
+            throw new Error(`Action type has not been defined in ${action.__dev_origin__} message`);
         if (action.type.match(/@@.*?\/.*?\/.*/g) !== null)
             return action;
         return Object.assign({}, action, { type: `@@${this.state.domain}/${this.state.modelName}/${action.type}` });

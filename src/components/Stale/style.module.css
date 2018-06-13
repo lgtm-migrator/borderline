@@ -1,0 +1,34 @@
+.stale {
+    background-color: var(--color-error);
+    width: 100%;
+    height: 100%;
+    display: table;
+    z-index: 1000000;
+}
+
+.middler {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    max-height: 10em;
+    height: 100%;
+}
+
+.wrapper svg {
+    --logo-height: 0.3em;
+
+    padding-top: var(--logo-height);
+    height: calc(100% - var(--logo-height));
+    max-height: 10em;
+    position: absolute;
+}
+
+.wrapper svg * {
+    fill: var(--color-font-active);
+}

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
+import style from './style.module.css';
 
 class View extends Component {
 
@@ -6,7 +8,17 @@ class View extends Component {
     static displayName = 'View';
 
     render() {
-        return <div>Dashboard</div>;
+        return (
+            <>
+                <Helmet>
+                    <title>Dashboard</title>
+                </Helmet>
+                <div key='menu' className={style.menu}></div>
+                <div key='panel' className={style.panel}>
+                    Dashboard
+                </div>
+            </>
+        );
     }
 }
 

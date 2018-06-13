@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import Enclave from 'containers/Enclave';
 import { stateAware } from 'utilities/storeManager';
-import style from './style.css';
+import style from './style.module.css';
 
 @stateAware(state => ({
     buttons: state.pages || []
@@ -13,6 +13,8 @@ class Navigation extends Component {
         const { buttons } = this.props;
         const links = Object.keys(buttons).map(key => {
             const Component = buttons[key].icon;
+            if (Component === undefined || Component === null)
+                return null;
             return (
                 <Enclave key={`${Math.random().toString(36).substr(2, 5)}|${buttons[key].origin}`} domain={'extensions'} modelName={buttons[key].origin} >
                     <NavLink to={`/${buttons[key].path}`} activeClassName={style.active} >

@@ -7,7 +7,7 @@ class Account extends Component {
     static displayName = 'Account';
 
     // Custom properties for borderline model
-    static modelName = 'Account';
+    static modelName = 'account';
     static modelEpics = epics;
     static modelReducers = reducers;
 

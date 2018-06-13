@@ -2,30 +2,27 @@
 
 :root {
 
+    /* stylelint-disable-next-line */
+    --font-size: 12px;
     --font-family: 'Borderline', menu, sans-serif;
-
     --color-accent-h: 188;
     --color-accent-s: 64%;
     --color-accent-l: 44%;
     --color-accent: hsl(var(--color-accent-h), var(--color-accent-s), var(--color-accent-l));
-
     --color-error-h: 339;
     --color-error-s: 93%;
     --color-error-l: 27%;
     --color-error: hsl(var(--color-error-h), var(--color-error-s), var(--color-error-l));
-
     --color-background-h: 0;
     --color-background-s: 0%;
     --color-background-l: 13%;
     --color-background: hsl(var(--color-background-h), var(--color-background-s), var(--color-background-l));
-
     --color-font: rgba(173, 173, 173, 255);
     --color-font-active: rgba(255, 255, 255, 255);
 }
 
 * {
-
-    color: var(--color-font);
+    color: inherit;
     padding: 0;
     margin: 0;
     border: 0;
@@ -36,9 +33,10 @@
     cursor: default;
 }
 
-html, body {
-
-    font-size: 12px;
+html,
+body {
+    color: var(--color-font);
+    font-size: var(--font-size);
     font-family: var(--font-family);
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 0.8));
     user-select: none;
@@ -48,38 +46,43 @@ html, body {
 }
 
 body > div {
-
     display: grid;
-    grid: "navigation ariane" 5vh "navigation content" 95vh / 5vh calc(100vw - 5vh);
+    grid: "navigation ariane" 0 "navigation content" calc(100% - 2em) "status status" 2em / 4em calc(100% - 4em);
     width: 100%;
     height: 100%;
-
 }
 
-a:hover, a:hover * {
+a:hover,
+a:hover * {
     cursor: pointer;
 }
 
-input, button, textarea {
+input,
+button,
+textarea {
     font-family: var(--font-family);
+    font-size: 1em;
     display: inline-block;
-    height: 30px;
-    line-height: 20px;
+    height: 2.7em;
+    line-height: 2em;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 0.7em;
     outline: none;
 }
 
-input, textarea {
+input,
+textarea {
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2));
     color: var(--color-font-active);
 }
 
-input:hover, textarea:hover {
+input:hover,
+textarea:hover {
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2.2));
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
     color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 4));
 }
 

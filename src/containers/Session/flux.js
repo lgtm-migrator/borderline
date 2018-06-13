@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
+import { mergeMap, mapTo, map } from 'rxjs/operators';
 import { api } from 'api';
 import NavigationButton from './containers/NavigationButton';
 import View from './containers/View';
@@ -64,43 +65,43 @@ export const actions = {
 export const epics = {
 
     enclaveBoot:
-    (action) => action.ofType('START')
-        .mapTo(actions.sessionRecover()),
+        (action) => action.ofType('START')
+            .pipe(mapTo(actions.sessionRecover())),
 
     sessionRecover:
-    (action) => action.ofType(types.SESSION_RECOVER)
-        .mergeMap(() =>
-            api.fetchCurrentSession()
-                .map(response => response.ok === true ? actions.sessionLoginSuccess(response.data) : actions.sessionLoginFailure(response.data))
-        ),
+        (action) => action.ofType(types.SESSION_RECOVER)
+            .pipe(mergeMap(() =>
+                api.fetchCurrentSession()
+                    .pipe(map(response => response.ok === true ? actions.sessionLoginSuccess(response.data) : actions.sessionLoginFailure(response.data)))
+            )),
 
     sessionLogin:
-    (action) => action.ofType(types.SESSION_LOGIN)
-        .mergeMap((action) =>
-            api.userLogin(action.credentials)
-                .map(response => response.ok === true ? actions.sessionLoginSuccess(response.data) : actions.sessionLoginFailure(response.data))
-        ),
+        (action) => action.ofType(types.SESSION_LOGIN)
+            .pipe(mergeMap((action) =>
+                api.userLogin(action.credentials)
+                    .pipe(map(response => response.ok === true ? actions.sessionLoginSuccess(response.data) : actions.sessionLoginFailure(response.data)))
+            )),
 
     sessionLoginSuccess:
-    (action) => action.ofType(types.SESSION_LOGIN_SUCCESS)
-        .mapTo(actions.sessionValid()),
+        (action) => action.ofType(types.SESSION_LOGIN_SUCCESS)
+            .pipe(mapTo(actions.sessionValid())),
 
     sessionLogout:
-    (action) => action.ofType(types.SESSION_LOGOUT)
-        .mergeMap(() =>
-            api.userLogout()
-                .map(() => actions.sessionLogoutSuccess())
-        ),
+        (action) => action.ofType(types.SESSION_LOGOUT)
+            .pipe(mergeMap(() =>
+                api.userLogout()
+                    .pipe(map(() => actions.sessionLogoutSuccess()))
+            )),
 
     sessionFetch:
-    (action, state) => action.ofType(types.SESSION_FETCH)
-        .mergeMap((action) =>
-            Observable.of(actions.sessionFetch(action, state))
-        ),
+        (action, state) => action.ofType(types.SESSION_FETCH)
+            .pipe(mergeMap((action) =>
+                of(actions.sessionFetch(action, state))
+            )),
 
     dockToPager:
-    (action) => action.ofType('@@core/inspector/EXTENSIONS_DID_LOAD')
-        .mapTo(actions.dockToPager()),
+        (action) => action.ofType('@@core/inspector/EXTENSIONS_DID_LOAD')
+            .pipe(mapTo(actions.dockToPager())),
 
 };
 
@@ -112,29 +113,29 @@ const initial = {
 
 export const reducers = {
     sessionReducer:
-    (state = initial, action) => {
+        (state = initial, action) => {
 
-        switch (action.type) {
-            case types.SESSION_RECOVER:
-                return sessionRecover(state);
-            case types.SESSION_LOGIN:
-                return sessionLogin(state);
-            case types.SESSION_LOGIN_SUCCESS:
-                return sessionLoginSuccess(state, action);
-            case types.SESSION_LOGIN_FAILURE:
-                return sessionLoginFailure(state, action);
-            case types.SESSION_LOGOUT:
-                return sessionLogout(state);
-            case types.SESSION_LOGOUT_SUCCESS:
-                return sessionLogoutSuccess(state);
-            case types.SESSION_VALID:
-                return sessionValid(state);
-            case 'STOP':
-                return initial;
-            default:
-                return state;
+            switch (action.type) {
+                case types.SESSION_RECOVER:
+                    return sessionRecover(state);
+                case types.SESSION_LOGIN:
+                    return sessionLogin(state);
+                case types.SESSION_LOGIN_SUCCESS:
+                    return sessionLoginSuccess(state, action);
+                case types.SESSION_LOGIN_FAILURE:
+                    return sessionLoginFailure(state, action);
+                case types.SESSION_LOGOUT:
+                    return sessionLogout(state);
+                case types.SESSION_LOGOUT_SUCCESS:
+                    return sessionLogoutSuccess(state);
+                case types.SESSION_VALID:
+                    return sessionValid(state);
+                case 'STOP':
+                    return initial;
+                default:
+                    return state;
+            }
         }
-    }
 };
 
 const sessionRecover = (state) => {

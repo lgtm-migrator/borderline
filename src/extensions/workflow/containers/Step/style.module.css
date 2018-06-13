@@ -1,0 +1,16 @@
+.stepLayout {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid: "sidebar stage" 100% / 25em calc(100% - 25em);
+}
+
+.stepsCreateDescription,
+.stepsCreateForm {
+    padding: 2em;
+}
+
+.stepsCreateForm button {
+    display: block;
+    margin-bottom: 2em;
+}
