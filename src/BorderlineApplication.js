@@ -15,8 +15,8 @@ class BorderlineApplication extends React.Component {
             <Body>
                 <Enclave model={import('containers/Session')}>
                     <Switch>
-                        <Route exact path="/public" component={() => <h3>Public</h3>} />
-                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/public" render={() => <h3>Public</h3>} />
+                        <Route exact path="/login" render={Login} />
                         <PrivateRoute>
                             <Enclave model={import('containers/Pager')} />
                         </PrivateRoute>

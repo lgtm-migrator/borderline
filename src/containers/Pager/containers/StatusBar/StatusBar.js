@@ -13,7 +13,7 @@ class StatusBar extends Component {
         const items = Object.keys(statuses).map(key => {
             const Component = statuses[key].view;
             return (
-                <Enclave key={`${Math.random().toString(36).substr(2, 5)}|${statuses[key].origin}`} domain={'extensions'} modelName={statuses[key].origin} >
+                <Enclave key={`${statuses[key].origin}|${key}`} domain={'extensions'} modelName={statuses[key].origin} >
                     <div className={style.statusItem}>
                         <Component />
                     </div>
