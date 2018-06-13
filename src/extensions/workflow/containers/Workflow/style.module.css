@@ -81,6 +81,7 @@
     line-height: calc(3em - 0.8em);
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.4));
     width: 100%;
+    overflow: hidden;
 }
 
 .historyItem:hover {
