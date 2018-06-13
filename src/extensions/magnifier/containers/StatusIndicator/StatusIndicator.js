@@ -11,10 +11,12 @@ class StatusIndicator extends Component {
 
     constructor(props) {
         super(props);
-        this.handle = React.createRef();
         this.state = {
             zoomLevel: 100
         };
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zoomOut = this.zoomOut.bind(this);
+        this.zoomApply = this.zoomApply.bind(this);
     }
 
     zoomIn = () => {
@@ -52,11 +54,11 @@ class StatusIndicator extends Component {
     render() {
         return (
             <div className={style.status}>
-                <SVG src={outLogo} className={style.logo} onClick={this.zoomOut.bind(this)} />
-                <form className={style.zoomForm} onSubmit={this.zoomApply.bind(this)}>
-                    <input type="text" defaultValue={this.state.zoomLevel} ref="zoomLevelRequest" className={style.zoomValue} />
+                <SVG src={outLogo} className={style.logo} onClick={this.zoomOut} />
+                <form className={style.zoomForm} onSubmit={this.zoomApply}>
+                    <input type="text" value={this.state.zoomLevel} ref="zoomLevelRequest" onChange={() => { }} className={style.zoomValue} />
                 </form>
-                <SVG src={inLogo} className={style.logo} onClick={this.zoomIn.bind(this)} />
+                <SVG src={inLogo} className={style.logo} onClick={this.zoomIn} />
             </div>
         );
     }
