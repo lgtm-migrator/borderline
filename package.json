@@ -84,8 +84,8 @@
         "whatwg-fetch": "2.0.4"
     },
     "devDependencies": {
-        "react": "16.4.0",
-        "react-dom": "16.4.0"
+        "react": "16.4.1",
+        "react-dom": "16.4.1"
     },
     "optionalDependencies": {
         "fsevents": "1.2.4"
