@@ -3,6 +3,7 @@ export default [
     import('./workflow'),
     import('./account'),
     import('./magnifier'),
+    import('./theme'),
     import('./eae'),
     import('./file'),
     import('./transmart'),
