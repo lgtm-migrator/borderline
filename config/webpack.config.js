@@ -2,7 +2,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 let plugins = [];
 plugins.push(new MonacoWebpackPlugin({
-    languages: ['python', 'javascript']
+    languages: ['python', 'javascript', 'json']
 }));
 
 module.exports = () => ({
