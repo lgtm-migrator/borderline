@@ -10,6 +10,7 @@ class StatusIndicator extends Component {
 
     constructor(props) {
         super(props);
+        this.toogleInfo = this.toogleInfo.bind(this);
         this.handle = React.createRef();
         this.state = {
             showInfo: false,
@@ -28,7 +29,7 @@ class StatusIndicator extends Component {
         const { position: { x, width }, showInfo } = this.state;
         const left = x + width / 2 - 20;
         return (
-            <div className={style.status} onClick={this.toogleInfo.bind(this)} ref={this.handle}>
+            <div className={style.status} onClick={this.toogleInfo} ref={this.handle}>
                 <SVG src={logo} className={style.logo} />
                 <div className={`${showInfo === false ? style.infoHide : ''} ${style.infoBox}`} style={{ left: left }} >
                     <h2>Let us know what you think !</h2>
