@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
+import style from './style.module.css';
 
 @stateAware(state => ({
     stepTypes: state.stepTypes,
@@ -17,7 +18,9 @@ class Stage extends Component {
             return null;
         const Stage = stepTypes[currentStep.extension].stage;
         return (
-            <Route render={props => <Stage {...props} />} />
+            <div className={style.stage}>
+                <Route render={props => <Stage {...props} />} />
+            </div>
         );
     }
 }

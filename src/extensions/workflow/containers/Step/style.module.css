@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid: "sidebar stage" 100% / 25em calc(100% - 25em);
+    grid: "sidebar stage" calc(100% - 6em) "actions actions" 6em / 25em calc(100% - 25em);
 }
 
 .stepsCreateDescription,

@@ -3,6 +3,7 @@ import { default as T } from 'prop-types';
 import { stateAware } from 'utilities/storeManager';
 import Sidebar from './containers/Sidebar';
 import Stage from './containers/Stage';
+import Actions from './containers/Actions';
 import style from './style.module.css';
 
 @stateAware(state => ({
@@ -32,6 +33,7 @@ class StepRenderer extends Component {
             <div className={style.stepLayout}>
                 <Sidebar match={match} />
                 <Stage match={match} />
+                <Actions />
             </div>
         );
     }
