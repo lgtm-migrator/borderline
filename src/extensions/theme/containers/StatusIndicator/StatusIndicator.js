@@ -10,7 +10,7 @@ class StatusIndicator extends Component {
 
     constructor(props) {
         super(props);
-        this.documentStyle = document.querySelector('html').style;
+        this.documentHandle = document.querySelector('html');
         this.toogleInfo = this.toogleInfo.bind(this);
         this.colorOut = this.colorOut.bind(this);
         this.handle = React.createRef();
@@ -22,9 +22,9 @@ class StatusIndicator extends Component {
 
     toogleInfo = () => {
         this.colorBackup = [
-            Number.parseInt(this.documentStyle.getPropertyValue('--color-accent-h'), 10),
-            Number.parseInt(this.documentStyle.getPropertyValue('--color-accent-s'), 10),
-            Number.parseInt(this.documentStyle.getPropertyValue('--color-accent-l'), 10)
+            Number.parseInt(window.getComputedStyle(this.documentHandle).getPropertyValue('--color-accent-h'), 10),
+            Number.parseInt(window.getComputedStyle(this.documentHandle).getPropertyValue('--color-accent-s'), 10),
+            Number.parseInt(window.getComputedStyle(this.documentHandle).getPropertyValue('--color-accent-l'), 10)
         ];
         this.setState({
             showPalette: !this.state.showPalette,
@@ -49,9 +49,9 @@ class StatusIndicator extends Component {
     }
 
     colorApply = (color) => {
-        this.documentStyle.setProperty('--color-accent-h', color[0]);
-        this.documentStyle.setProperty('--color-accent-s', `${color[1]}%`);
-        this.documentStyle.setProperty('--color-accent-l', `${color[2]}%`);
+        this.documentHandle.style.setProperty('--color-accent-h', color[0]);
+        this.documentHandle.style.setProperty('--color-accent-s', `${color[1]}%`);
+        this.documentHandle.style.setProperty('--color-accent-l', `${color[2]}%`);
     }
 
     render() {
@@ -68,7 +68,7 @@ class StatusIndicator extends Component {
                     <h2>How is your mood today ?</h2>
                     <br /><br />
                     {colors.map((color, index) =>
-                        <span className={style.colorBubble} key={index} style={{ 'background-color': `hsl(${color[0]}, ${color[1]}%, ${color[2]}%)` }} onMouseOver={this.colorHover.bind(null, color)} onMouseOut={this.colorOut} onClick={this.colorSelect.bind(null, color)}></span>
+                        <span className={style.colorBubble} key={index} style={{ backgroundColor: `hsl(${color[0]}, ${color[1]}%, ${color[2]}%)` }} onMouseOver={this.colorHover.bind(null, color)} onMouseOut={this.colorOut} onClick={this.colorSelect.bind(null, color)}></span>
                     )}
                 </div>
             </div>
