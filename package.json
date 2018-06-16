@@ -23,7 +23,7 @@
     "dependencies": {
         "borderline-utils": "0.2.3",
         "connected-react-router": "4.3.0",
-        "dompurify": "1.0.4",
+        "dompurify": "1.0.5",
         "eslint": "5.0.0-rc.0",
         "immutable": "3.8.2",
         "monaco-editor": "0.13.1",
