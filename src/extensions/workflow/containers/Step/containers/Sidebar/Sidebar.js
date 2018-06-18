@@ -6,14 +6,12 @@ import StepList from './StepList';
 import logo from './images/logo.svg';
 import style from './style.module.css';
 
-@stateAware(state => {
-    return {
-        stepTypes: state.stepTypes,
-        stepsList: state.stepsList,
-        currentWorkflow: state.currentWorkflow,
-        currentStep: state.currentStep
-    }
-})
+@stateAware(state => ({
+    stepTypes: state.stepTypes,
+    stepsList: state.stepsList,
+    currentWorkflow: state.currentWorkflow,
+    currentStep: state.currentStep
+}))
 class Sidebar extends Component {
 
     // Custom name for container

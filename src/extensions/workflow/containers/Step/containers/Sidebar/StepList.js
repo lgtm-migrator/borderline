@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
 import style from './style.module.css';
 
@@ -18,7 +18,7 @@ class StepList extends Component {
             <Link to={`${url.substr(0, url.lastIndexOf('/'))}/${sid}`} className={`${style.stepButton} ${sid === currentStep ? style.stepActive : ''}`} key={sid}>
                 {stepsList[sid].extension}
             </Link>
-        )
+        );
         return <>{list}</>;
     }
 }
