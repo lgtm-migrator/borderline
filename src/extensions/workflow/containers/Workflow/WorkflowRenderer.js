@@ -32,10 +32,10 @@ class WorkflowRenderer extends Component {
     }
 
     render() {
-        const { currentWorkflow } = this.props;
-        if (currentWorkflow === null)
-            return null;
-        return <Route render={props => <StepNavigation {...props} />} />;
+        const { match, currentWorkflow, workflowLoading } = this.props;
+        if (currentWorkflow !== null && currentWorkflow === match.params.particule && workflowLoading === false)
+            return <Route render={props => <StepNavigation {...props} />} />;
+        return null;
     }
 }
 
