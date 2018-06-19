@@ -5,51 +5,61 @@ const prefix = '/api';
 
 export const api = {
 
-    fetchCurrentSession: () => query('/whoami', {
+    fetchCurrentSession: () => networkQuery('/whoami', {
         method: 'GET'
     }),
 
-    userLogin: (credentials) => query('/login', {
+    userLogin: (credentials) => networkQuery('/login', {
         method: 'POST',
         body: credentials
     }),
 
-    userLogout: () => query('/logout', {
+    userLogout: () => networkQuery('/logout', {
         method: 'POST'
     }),
 
-    fetchExtensionsList: () => query('/extension_store', {
+    fetchExtensionsList: () => networkQuery('/extension_store', {
         method: 'GET'
     }),
 
-    fetchExtension: (id) => query(`/extensions/${id}/client`, {
+    fetchExtension: (id) => networkQuery(`/extensions/${id}/client`, {
         method: 'GET'
     }),
 
-    fetchWorkflowsList: () => query('/workflow', {
+    fetchWorkflowsList: () => networkQuery('/workflow', {
         method: 'GET'
     }),
 
-    fetchStepsList: (workflow) => query(`/workflow/${workflow}/step`, {
+    fetchStepsList: (workflow) => networkQuery(`/workflow/${workflow}/step`, {
         method: 'GET'
     }),
 
-    createWorkflow: (workflow) => query('/workflow', {
+    createWorkflow: (workflow) => networkQuery('/workflow', {
         method: 'PUT',
         body: workflow
     }),
 
-    createStep: (workflow, step) => query(`/workflow/${workflow}/step`, {
+    createStep: (workflow, step) => networkQuery(`/workflow/${workflow}/step`, {
         method: 'PUT',
         body: step
     }),
 
-    loadWorkflow: (wid) => query(`/workflow/${wid}`, {
+    updateStep: (step) => networkQuery(`/workflow/${step.workflow}/step/${step._id}`, {
+        method: 'POST',
+        body: step
+    }),
+
+    loadWorkflow: (wid) => networkQuery(`/workflow/${wid}`, {
         method: 'GET'
-    })
+    }),
+
+    createQuery: (query) => networkQuery('/query/new', {
+        method: 'POST',
+        body: query
+    }),
 };
 
-const query = (url, params = {}) => from(fetch(`${prefix}${url}`, defaults(params)))
+const networkQuery = (url, params = {}) => from(fetch(`${prefix}${url}`, defaults(params)))
     .pipe(mergeMap(response =>
         forkJoin(
             of({
