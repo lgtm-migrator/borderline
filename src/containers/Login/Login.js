@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import LoadBar from './components/LoadBar';
+import LoadBar from 'components/LoadBar';
 import { stateAware } from 'utilities/storeManager';
 import { actions } from 'containers/Session/flux';
 import style from './style.module.css';
