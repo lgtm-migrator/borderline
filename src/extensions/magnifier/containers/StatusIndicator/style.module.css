@@ -6,6 +6,18 @@
     width: 8.5em;
 }
 
+.container {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.forced {
+    padding: 0.1em 1em;
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 1.1));
+    z-index: 10000;
+}
+
 .logo {
     --logo-height: 0.2em;
 
