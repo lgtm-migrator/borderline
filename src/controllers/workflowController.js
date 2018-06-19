@@ -149,8 +149,17 @@ WorkflowController.prototype.getStep = function (req, res) {
  * @param res Express.js response object
  */
 WorkflowController.prototype.putStep = function (req, res) {
-    let workflow_id = req.params.workflow_id;
-    this.step.create(workflow_id, req.body).then(function (result) {
+    if (req.body === null || req.body === undefined) {
+        res.status(400);
+        res.json(ErrorHelper('Cannot create an empty step'));
+        return;
+    }
+
+    let data = {};
+    data.workflow_id = req.params.workflow_id;
+    data.step_data = req.body;
+    data.user = req.user ? req.user._id : null;
+    this.step.create(data).then(function (result) {
         res.status(200);
         res.json(result);
     }, function (error) {

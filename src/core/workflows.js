@@ -112,6 +112,7 @@ Workflows.prototype.updateWorkflowByID = function (workflow_id, data) {
     return new Promise(function (resolve, reject) {
         delete data._id;
         delete data.create;
+        delete data.owner;
         data.update = time;
         let updated_workflow = Object.assign({}, Models.BL_MODEL_WORKFLOW, data);
         that.workflowCollection.findOneAndUpdate({ _id: new ObjectID(workflow_id) }, { $set: updated_workflow }, { returnOriginal: false })
