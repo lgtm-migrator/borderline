@@ -68,7 +68,7 @@ class StatusIndicator extends Component {
                     <h2>How is your mood today ?</h2>
                     <br /><br />
                     {colors.map((color, index) =>
-                        <span className={style.colorBubble} key={index} style={{ backgroundColor: `hsl(${color[0]}, ${color[1]}%, ${color[2]}%)` }} onMouseOver={this.colorHover.bind(null, color)} onMouseOut={this.colorOut} onClick={this.colorSelect.bind(null, color)}></span>
+                        <span className={style.colorBubble} key={index} style={{ backgroundColor: `hsl(${color[0]}, ${color[1]}%, ${color[2]}%)` }} onMouseEnter={this.colorHover.bind(null, color)} onMouseLeave={this.colorOut} onClick={this.colorSelect.bind(null, color)}></span>
                     )}
                 </div>
             </div>
