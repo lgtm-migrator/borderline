@@ -95,15 +95,11 @@ export const epics = {
 
     extensionPassthroughOnFail:
         (action) => action.ofType(types.EXTENSIONS_FAILURE)
-            .pipe(mergeMap(() =>
-                of(actions.extensionsDidLoad())
-            )),
+            .pipe(mergeMap(() => of(actions.extensionsDidLoad()))),
 
     extensionRetrieveSingle:
         (action) => action.ofType(types.EXTENSION_UNIT_LOAD)
-            .pipe(mergeMap(action =>
-                of(actions.extensionUnitSucces(action.extension))
-            )),
+            .pipe(mergeMap(action => of(actions.extensionUnitSucces(action.extension)))),
 
     extensionSingleComplete:
         (action, state) => action.ofType(types.EXTENSION_UNIT_SUCCESS)

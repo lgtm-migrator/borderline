@@ -95,9 +95,7 @@ export const epics = {
 
     sessionFetch:
         (action, state) => action.ofType(types.SESSION_FETCH)
-            .pipe(mergeMap((action) =>
-                of(actions.sessionFetch(action, state))
-            )),
+            .pipe(mergeMap((action) => of(actions.sessionFetch(action, state)))),
 
     dockToPager:
         (action) => action.ofType('@@core/inspector/EXTENSIONS_DID_LOAD')
