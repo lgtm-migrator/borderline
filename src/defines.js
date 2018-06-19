@@ -5,6 +5,7 @@ const registryModel = {
     version: '0.0.1',
     create: '',
     lastUpdate: '',
+    protocol: 'http',
     port: 4242,
     ip: 'localhost',
     hostname: 'localhost',

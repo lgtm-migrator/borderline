@@ -1,6 +1,6 @@
 {
   "name": "borderline-utils",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Utilities suite for the Borderline projects",
   "keywords": [
     "borderline",
@@ -17,8 +17,7 @@
   "license": "MIT",
   "contributors": [
     "Jean Grizet <jean.grizet16@imperial.ac.uk>",
-    "Florian Guitton <f.guitton@imperial.ac.uk>",
-    "Axel Oehmichen <axelfrancois.oehmichen11@imperial.ac.uk>"
+    "Florian Guitton <f.guitton@imperial.ac.uk>"
   ],
   "main": "./src/index.js",
   "scripts": {
