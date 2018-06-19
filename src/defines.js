@@ -3,6 +3,7 @@ const registryModel = {
     type: 'borderline-component',
     status: '',
     version: '0.0.1',
+    create: '',
     lastUpdate: '',
     port: 4242,
     ip: 'localhost',
@@ -105,13 +106,13 @@ const queryModel = {
 };
 
 module.exports = {
-    serverServiceName: 'borderline-server-panzer',
-    middlewareServiceName: 'borderline-middleware-flammenwerfer',
-    uiServiceName: 'borderline-ui-blitzkrieg',
+    serverServiceName: 'borderline-server',
+    middlewareServiceName: 'borderline-middleware',
+    uiServiceName: 'borderline-ui',
 
     statusServiceUnknown: 'borderline_service_unknown',
     statusServiceIdle: 'borderline_service_idle',
-    statusServiceBusy: 'borderline_service_kartoffelsalat',
+    statusServiceBusy: 'borderline_service_busy',
     statusServiceDead: 'borderline_service_dead',
 
     global_registryCollectionName: 'borderline_global_registry',

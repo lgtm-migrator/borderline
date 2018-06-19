@@ -16,7 +16,7 @@ const ErrorStack = require('./error.js');
 function Registry(serviceType, registryCollection) {
     // Init member vars
     this._type = serviceType;
-    this._model = Object.assign({}, defines.registryModel, { type: this._type });
+    this._model = Object.assign({}, defines.registryModel, { type: this._type, create: new Date() });
     this._interval_timer = null;
     this._registryCollection = registryCollection;
 
