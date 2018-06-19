@@ -47,7 +47,7 @@ MiddlewareController.prototype.getMiddlewareRouter = function () {
         { $unwind: '$middlewares' },
         { $replaceRoot: { newRoot: '$middlewares' } }
         ]).toArray().then(function (result) {
-            if (result) {
+            if (result && result.length > 0) {
                 // Todo: iterate through the middleware in case of failure.
                 result = result[0];
                 req.pipe(request(`${result.protocol}://${result.ip}:${result.port}${req.baseUrl}${req.url}`)).pipe(res);
