@@ -13,12 +13,12 @@
     transition: border 200ms, color 200ms;
 }
 
-.navigation > a:hover {
-    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2));
-}
-
 .navigation > a.active {
     color: var(--color-font-active);
     background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.5));
     border-left: 0.3em solid var(--color-accent);
+}
+
+.navigation > a:hover {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2));
 }

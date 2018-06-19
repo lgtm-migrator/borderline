@@ -44,6 +44,10 @@
     border-bottom: 0.2em solid var(--color-accent);
 }
 
+.button.active:hover {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.5));
+}
+
 .shiningButton {
     background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.5));
     color: var(--color-font-active);
