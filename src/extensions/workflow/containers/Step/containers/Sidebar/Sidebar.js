@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
+import Enclave from 'containers/Enclave';
 import SVG from 'components/SVG';
 import StepList from './StepList';
 import logo from './images/logo.svg';
@@ -30,13 +31,15 @@ class Sidebar extends Component {
         return (
             <div className={style.sidebar}>
                 <div className={style.menu}>
-                    {Object.keys(buttons).map((key) => {
-                        const Icon = buttons[key].icon;
-                        return <NavLink to={`${url}/${buttons[key].path}`} key={key} activeClassName={style.navActive} className={style.navButton}>
-                            <Icon className={style.logo} />
-                        </NavLink>;
-                    })}
-                    <NavLink exact to={`${url}`} activeClassName={style.navActive} className={style.navButton}>
+                    <Enclave domain={'extensions'} modelName={step.extension.split('/')[0]} >
+                        {Object.keys(buttons).map((key) => {
+                            const Icon = buttons[key].icon;
+                            return <NavLink to={`${url}/${buttons[key].path}`} key={key} activeClassName={style.navActive} className={style.navButton}>
+                                <Icon className={style.logo} />
+                            </NavLink>;
+                        })}
+                    </Enclave>
+                    <NavLink exact to={`${url}`} activeClassName={style.navActive} key={'stepList'} className={style.navButton}>
                         <SVG src={logo} className={style.logo} />
                     </NavLink>
                 </div>
@@ -44,9 +47,12 @@ class Sidebar extends Component {
                     <Switch>
                         {Object.keys(buttons).map((key) => {
                             const Panel = buttons[key].panel;
-                            return <Route path={`${url}/${buttons[key].path}`} key={key} component={Panel} />;
+                            return <Route path={`${url}/${buttons[key].path}`} key={key} component={props =>
+                                <Enclave domain={'extensions'} modelName={step.extension.split('/')[0]} >
+                                    <Panel {...props} />
+                                </Enclave>} />;
                         })}
-                        <Route render={StepList} />
+                        <Route key={'stepList'} render={StepList} />
                     </Switch>
                 </div>
             </div>
