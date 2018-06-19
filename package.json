@@ -21,7 +21,7 @@
         "test": "borderline-devutils test --env=jsdom --verbose --detectOpenHandles --forceExit"
     },
     "dependencies": {
-        "borderline-utils": "0.2.3",
+        "borderline-utils": "0.2.4",
         "connected-react-router": "4.3.0",
         "dompurify": "1.0.5",
         "eslint": "5.0.0-rc.0",
@@ -38,7 +38,7 @@
         "rxjs": "6.2.1"
     },
     "devDependencies": {
-        "borderline-devutils": "0.4.20",
+        "borderline-devutils": "0.4.22",
         "codacy-coverage": "3.0.0",
         "react-test-renderer": "16.4.1",
         "redux-logger": "3.0.6",
