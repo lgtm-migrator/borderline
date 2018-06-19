@@ -75,7 +75,9 @@ class Editor extends Component {
             }
         }
         if (prevProps.language !== this.props.language) {
-            Monaco.editor.setModelLanguage(this.editor.getModel(), this.props.language);
+            if (this.editor) {
+                this.editor.setModelLanguage(this.editor.getModel(), this.props.language);
+            }
         }
     }
 
