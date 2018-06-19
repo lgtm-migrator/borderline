@@ -9,6 +9,11 @@
     background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.4));
 }
 
-.actions button {
+.actions button,
+.loadbarContainer {
     width: 10em;
+}
+
+.loadbarContainer {
+    display: inline-block;
 }
