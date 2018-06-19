@@ -20,4 +20,3 @@ COPY ./test/*.js /usr/app/test/
 COPY ./config/borderline.test.config.js /usr/app/config/borderline.config.js
 
 EXPOSE 80
-
