@@ -1,6 +1,6 @@
 {
     "name": "borderline-devutils",
-    "version": "0.4.23",
+    "version": "0.4.24",
     "description": "Configuration and scripts for Borderline development.",
     "homepage": "https://github.com/dsi-icl/borderline-devutils#readme",
     "bugs": {
@@ -39,7 +39,7 @@
         "babel-plugin-named-asset-import": "1.0.0-next.3e165448",
         "babel-preset-react-app": "4.0.0-next.3e165448",
         "bfj": "6.1.1",
-        "borderline-server": "0.3.9",
+        "borderline-server": "0.3.10",
         "case-sensitive-paths-webpack-plugin": "2.1.2",
         "chalk": "2.4.1",
         "confusing-browser-globals": "2.0.0-next.3e165448",
