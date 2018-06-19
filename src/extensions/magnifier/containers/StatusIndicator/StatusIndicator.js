@@ -34,7 +34,6 @@ class StatusIndicator extends Component {
             this.refs.magnifierContainer.style.setProperty('height', `${this.lockingClientRect.height}px`);
             this.refs.magnifierContainer.style.setProperty('width', `${this.lockingClientRect.width}px`);
             this.refs.magnifierContainer.style.setProperty('font-size', `${this.lockingFontSize}px`);
-            console.log('magStyle', style)
             this.refs.magnifierContainer.classList.add(style.forced);
         }
     }
