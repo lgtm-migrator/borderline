@@ -6,6 +6,7 @@
     position: relative;
     padding: 1.5em;
     text-align: right;
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.4));
 }
 
 .actions button {
