@@ -48,9 +48,6 @@ function BorderlineServer(config) {
     }
     // Middleware imports
     this.userPermissionsMiddleware = require('./middlewares/userPermissions');
-    // Init third party middleware for parsing HTTP requests body
-    this.app.use(body_parser.urlencoded({ extended: true }));
-    this.app.use(body_parser.json());
 }
 
 /**
@@ -85,14 +82,20 @@ BorderlineServer.prototype.start = function () {
             // Setup Registry update
             _this._registryHandler();
 
-            //Setup route using controllers
+            // We setup the middleware broker before third parties to avoid disturbing the request stream
+            _this.setupMiddlware();
+
+            // Init third party middleware for parsing HTTP requests body
+            _this.app.use(body_parser.urlencoded({ extended: true }));
+            _this.app.use(body_parser.json());
+
+            // Setup remaining route using controllers
             _this.setupRegistry();
             _this.setupUserAccount();
             _this.setupDataStore();
             _this.setupExtensionStore();
             _this.setupUserExtensions();
             _this.setupWorkflows();
-            _this.setupMiddlware();
 
             _this.app.all('/*', function (__unused__req, res) {
                 res.status(400);
