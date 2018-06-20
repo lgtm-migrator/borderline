@@ -76,6 +76,12 @@ BorderlineServer.prototype.start = function () {
             _this.app.use(passport.initialize());
             _this.app.use(passport.session());
 
+            // Keeping a pointer to the original mounting point of the server
+            _this.app.use(function (req, __unused__res, next) {
+                req.borderlineRootUrl = req.baseUrl;
+                next();
+            });
+
             // Setup Registry update
             _this._registryHandler();
 
