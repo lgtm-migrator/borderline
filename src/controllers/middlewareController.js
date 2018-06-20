@@ -50,7 +50,7 @@ MiddlewareController.prototype.getMiddlewareRouter = function () {
             if (result && result.length > 0) {
                 // Todo: iterate through the middleware in case of failure.
                 result = result[0];
-                req.pipe(request(`${result.protocol}://${result.ip}:${result.port}${req.baseUrl}${req.url}`)).pipe(res);
+                req.pipe(request(`${result.protocol}://${result.ip}:${result.port}/query${req.url}`)).pipe(res);
             }
             else {
                 res.status(501);

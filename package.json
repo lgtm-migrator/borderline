@@ -1,6 +1,6 @@
 {
     "name": "borderline-server",
-    "version": "0.3.10",
+    "version": "0.3.11",
     "description": "Multi-browser visualization tool server",
     "keywords": [
         "borderline",
