@@ -3,6 +3,7 @@ import { default as T } from 'prop-types';
 import { stateAware } from 'utilities/storeManager';
 import Editor from 'components/Editor';
 import { actions } from '../../../../flux';
+import schema from './schema.json';
 
 @stateAware(state => ({
     stepObject: state.stepObject
@@ -19,7 +20,7 @@ class QueryPanel extends Component {
 
     componentDidMount() {
         const { stepObject } = this.props;
-        this.editorValue = stepObject.context.query || '';
+        this.editorValue = stepObject.context.apiQueryText || '';
         this.prevEditorValue = this.editorValue;
         this.autoSave = setInterval(this.saveQueryDescription, 5000);
     }
@@ -40,9 +41,21 @@ class QueryPanel extends Component {
         this.editorValue = value;
     }
 
-    render() {
+    editorWillMount = (engine) => {
         const { stepObject } = this.props;
-        return <Editor language="json" onChange={this.valueChange} value={stepObject.context.query || ''} />;
+        let marker = 'transmart_API_query.json';
+        engine.languages.json.jsonDefaults.setDiagnosticsOptions({
+            validate: true,
+            schemas: [{
+                fileMatch: [marker],
+                schema: schema
+            }]
+        });
+        return engine.editor.createModel(stepObject.context.apiQueryText || '', 'json', marker);
+    }
+
+    render() {
+        return <Editor language="json" onChange={this.valueChange} editorWillMount={this.editorWillMount} />;
     }
 }
 
