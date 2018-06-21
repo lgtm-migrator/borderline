@@ -476,6 +476,7 @@ module.exports = {
     node: {
         dgram: 'empty',
         fs: 'empty',
+        dns: 'empty',
         net: 'empty',
         tls: 'empty',
         child_process: 'empty',
