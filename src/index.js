@@ -41,7 +41,6 @@ module.exports = {
         BL_DEFAULT_EXTENSION_FREQUENCY: defines.extensionUpdateInterval,
         BL_DEFAULT_EXTENSION_MANIFEST: defines.extensionManifestFilename,
 
-
         BL_QUERY_TYPE_TS17_1: defines.queryTypeTransmart17_1,
         BL_QUERY_TYPE_EAE2_0: defines.queryTypeEAE2_0,
         BL_QUERY_TYPE_FILE: defines.queryTypeFile,
