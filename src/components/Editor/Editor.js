@@ -87,7 +87,7 @@ class Editor extends Component {
 
     editorWillMount(monaco) {
         const { editorWillMount } = this.props;
-        editorWillMount(monaco);
+        return editorWillMount(monaco);
     }
 
     editorDidMount(editor, monaco) {
@@ -110,12 +110,18 @@ class Editor extends Component {
         const { language, theme, options } = this.props;
         if (this.containerElement && typeof Monaco !== 'undefined') {
             // Before initializing monaco editor
-            this.editorWillMount(Monaco);
-            this.editor = Monaco.editor.create(this.containerElement, {
-                value,
-                language,
-                ...options,
-            });
+            this.model = this.editorWillMount(Monaco);
+            if (this.model !== undefined)
+                this.editor = Monaco.editor.create(this.containerElement, {
+                    model: this.model,
+                    ...options,
+                });
+            else
+                this.editor = Monaco.editor.create(this.containerElement, {
+                    value,
+                    language,
+                    ...options,
+                });
             if (theme)
                 Monaco.editor.setTheme(theme);
             // After initializing monaco editor
@@ -126,6 +132,8 @@ class Editor extends Component {
     }
 
     destroyMonaco() {
+        if (this.model !== undefined)
+            this.model.dispose();
         if (this.editor !== undefined)
             this.editor.dispose();
     }
