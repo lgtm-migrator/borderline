@@ -103,7 +103,7 @@ ExecutionController.prototype._internalExecutor = function (queryObject, request
         let init_staqe = [
             queryObject.updateExecutionStatus({
                 start: new Date(),
-                info: 'Preparing..',
+                info: 'Preparing...',
                 status: Constants.BL_QUERY_STATUS_INITIALIZE
             }),
             queryObject.initialize(request)
@@ -113,7 +113,7 @@ ExecutionController.prototype._internalExecutor = function (queryObject, request
             let exec_stage = [
                 queryObject.updateExecutionStatus({
                     stage: new Date(),
-                    info: 'Running..',
+                    info: 'Running...',
                     status: Constants.BL_QUERY_STATUS_EXECUTE
                 }),
                 queryObject.execute()
@@ -122,7 +122,7 @@ ExecutionController.prototype._internalExecutor = function (queryObject, request
                 let terminate_stage = [
                     queryObject.updateExecutionStatus({
                         stage: new Date(),
-                        info: 'Finishing..',
+                        info: 'Finishing...',
                         status: Constants.BL_QUERY_STATUS_TERMINATE
                     }),
                     queryObject.terminate()
