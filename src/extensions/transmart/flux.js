@@ -266,6 +266,8 @@ export const reducers = {
                     return queryUnitLoadSuccess(state, action);
                 case types.TRANSMART_QUERIES_DID_LOAD:
                     return queriesDidLoad(state);
+                case types.TRANSMART_STEP_CLEAR:
+                    return clearCurrentStep(state);
                 case 'STOP':
                     return initial;
                 default:
@@ -275,7 +277,6 @@ export const reducers = {
 };
 
 const hydrateTransmart = (state, action) => {
-
     state.stepObject = action.step;
     state.queryList = {};
     if (state.stepObject.context !== undefined && state.stepObject.context.queries !== undefined)
@@ -284,6 +285,12 @@ const hydrateTransmart = (state, action) => {
                 loaded: false
             };
         });
+    return state;
+};
+
+const clearCurrentStep = (state) => {
+    state.stepObject = {};
+    state.queryList = {};
     return state;
 };
 

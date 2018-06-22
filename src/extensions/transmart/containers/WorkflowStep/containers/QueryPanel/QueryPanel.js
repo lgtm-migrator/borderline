@@ -26,6 +26,7 @@ class QueryPanel extends Component {
     componentWillUnmount() {
         clearInterval(this.autoSave);
         this.saveQueryDescription();
+        this.context.dispatch(actions.clearCurrentStep());
     }
 
     saveQueryDescription = () => {
@@ -40,6 +41,7 @@ class QueryPanel extends Component {
     }
 
     editorWillMount = (engine) => {
+        const { apiQueryText } = this.props;
         let marker = 'transmart_API_query.json';
         engine.languages.json.jsonDefaults.setDiagnosticsOptions({
             validate: true,
@@ -48,7 +50,7 @@ class QueryPanel extends Component {
                 schema: schema
             }]
         });
-        return this.model = engine.editor.createModel('', 'json', marker);
+        return this.model = engine.editor.createModel(apiQueryText, 'json', marker);
     }
 
     render() {
