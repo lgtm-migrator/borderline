@@ -6,7 +6,7 @@ import { actions } from '../../../../flux';
 import schema from './schema.json';
 
 @stateAware(state => ({
-    stepObject: state.stepObject
+    apiQueryText: state.stepObject.context !== undefined ? state.stepObject.context.apiQueryText : ''
 }))
 class QueryPanel extends Component {
 
@@ -19,8 +19,6 @@ class QueryPanel extends Component {
     };
 
     componentDidMount() {
-        const { stepObject } = this.props;
-        this.editorValue = stepObject.context.apiQueryText || '';
         this.prevEditorValue = this.editorValue;
         this.autoSave = setInterval(this.saveQueryDescription, 5000);
     }
@@ -42,7 +40,6 @@ class QueryPanel extends Component {
     }
 
     editorWillMount = (engine) => {
-        const { stepObject } = this.props;
         let marker = 'transmart_API_query.json';
         engine.languages.json.jsonDefaults.setDiagnosticsOptions({
             validate: true,
@@ -51,11 +48,12 @@ class QueryPanel extends Component {
                 schema: schema
             }]
         });
-        return engine.editor.createModel(stepObject.context.apiQueryText || '', 'json', marker);
+        return this.model = engine.editor.createModel('', 'json', marker);
     }
 
     render() {
-        return <Editor language="json" onChange={this.valueChange} editorWillMount={this.editorWillMount} />;
+        const { apiQueryText } = this.props;
+        return <Editor language="json" onChange={this.valueChange} editorWillMount={this.editorWillMount} value={apiQueryText} />;
     }
 }
 
