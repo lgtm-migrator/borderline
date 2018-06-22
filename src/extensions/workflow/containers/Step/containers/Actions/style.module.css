@@ -12,6 +12,7 @@
 .actions button,
 .loadbarContainer {
     width: 10em;
+    margin-left: 1.5em;
 }
 
 .loadbarContainer {
