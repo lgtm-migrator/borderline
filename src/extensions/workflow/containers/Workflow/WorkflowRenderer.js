@@ -19,13 +19,13 @@ class WorkflowRenderer extends Component {
         dispatch: T.func
     };
 
-    shouldComponentUpdate(nextProps) {
-        if (this.props.currentWorkflow !== null)
-            return this.props.currentWorkflow !== nextProps.currentWorkflow;
-        return true;
+    componentDidMount() {
+        const { match, currentWorkflow, workflowLoading } = this.props;
+        if ((currentWorkflow === null || currentWorkflow !== match.params.particule) && workflowLoading === false)
+            this.context.dispatch(actions.workflowLoad(match.params.particule));
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
         const { match, currentWorkflow, workflowLoading } = this.props;
         if ((currentWorkflow === null || currentWorkflow !== match.params.particule) && workflowLoading === false)
             this.context.dispatch(actions.workflowLoad(match.params.particule));
