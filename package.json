@@ -38,7 +38,7 @@
         "rxjs": "6.2.1"
     },
     "devDependencies": {
-        "borderline-devutils": "0.4.22",
+        "borderline-devutils": "0.4.28",
         "codacy-coverage": "3.0.0",
         "react-test-renderer": "16.4.1",
         "redux-logger": "3.0.6",
