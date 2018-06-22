@@ -479,6 +479,7 @@ module.exports = {
         dns: 'empty',
         net: 'empty',
         tls: 'empty',
+        module: 'empty',
         child_process: 'empty',
     },
     // Turn off performance processing because we utilize
