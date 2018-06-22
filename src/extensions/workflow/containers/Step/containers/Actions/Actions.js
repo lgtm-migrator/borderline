@@ -26,9 +26,19 @@ class Actions extends Component {
 
         const { currentStepStatus } = this.props;
 
+        let buttons = [];
+        if (currentStepStatus === 'finished') {
+            buttons.push(<button key={'reexec'}>Re-execute</button>);
+            buttons.push(<button key={'next'}>See the next step</button>);
+        } else if (currentStepStatus === 'ready') {
+            buttons.push(<button key={'exec'} onClick={this.prepareNextStep}>Execute</button>);
+        } else {
+            buttons.push(<div key={'unknown'} className={style.loadbarContainer}><LoadBar /></div>);
+        }
+
         return (
             <div className={style.actions}>
-                {currentStepStatus !== 'ready' ? <div className={style.loadbarContainer}><LoadBar /></div> : <button onClick={this.prepareNextStep}>Next</button>}
+                {buttons}
             </div>
         );
     }

@@ -57,6 +57,22 @@ export const api = {
         method: 'POST',
         body: query
     }),
+
+    executeQuery: (qid) => networkQuery(`/query/${qid}/execute`, {
+        method: 'POST'
+    }),
+
+    fetchQuery: (qid) => networkQuery(`/query/${qid}`, {
+        method: 'GET'
+    }),
+
+    fetchQueryStatus: (qid) => networkQuery(`/query/${qid}/status`, {
+        method: 'GET'
+    }),
+
+    fetchQueryOutput: (qid) => networkQuery(`/query/${qid}/status`, {
+        method: 'GET'
+    }),
 };
 
 const networkQuery = (url, params = {}) => from(fetch(`${prefix}${url}`, defaults(params)))
