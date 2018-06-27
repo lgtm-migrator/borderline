@@ -1,19 +1,19 @@
 {
-    "name": "borderline-server",
-    "version": "0.3.12",
+    "name": "@borderline/server",
+    "version": "0.4.0",
     "description": "Multi-browser visualization tool server",
     "keywords": [
         "borderline",
         "etriks",
         "server"
     ],
-    "homepage": "https://github.com/dsi-icl/borderline-server#readme",
+    "homepage": "https://github.com/dsi-icl/borderline/tree/master/packages/borderline-server#readme",
     "bugs": {
-        "url": "https://github.com/dsi-icl/borderline-server/issues"
+        "url": "https://github.com/dsi-icl/borderline/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dsi-icl/borderline-server.git"
+        "url": "git+https://github.com/dsi-icl/borderline.git"
     },
     "license": "MIT",
     "contributors": [

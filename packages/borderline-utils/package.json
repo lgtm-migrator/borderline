@@ -1,44 +1,44 @@
 {
-  "name": "borderline-utils",
-  "version": "0.2.5",
-  "description": "Utilities suite for the Borderline projects",
-  "keywords": [
-    "borderline",
-    "utility"
-  ],
-  "homepage": "https://github.com/dsi-icl/borderline-utils#readme",
-  "bugs": {
-    "url": "https://github.com/dsi-icl/borderline-utils/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dsi-icl/borderline-utils.git"
-  },
-  "license": "MIT",
-  "contributors": [
-    "Jean Grizet <jean.grizet16@imperial.ac.uk>",
-    "Florian Guitton <f.guitton@imperial.ac.uk>"
-  ],
-  "main": "./src/index.js",
-  "scripts": {
-    "lint": "eslint ./",
-    "lint:fix": "eslint ./"
-  },
-  "dependencies": {
-    "bytes": "3.0.0",
-    "fs-extra": "6.0.1",
-    "ip": "1.1.5",
-    "mongodb": "3.0.10"
-  },
-  "devDependencies": {
-    "babel-core": "6.26.3",
-    "babel-eslint": "8.2.5",
-    "babel-preset-env": "1.7.0",
-    "eslint": "5.0.0"
-  },
-  "engines": {
-    "node": ">= 8.0.0",
-    "npm": ">= 6.0.0"
-  },
-  "readme": "README.md"
+    "name": "@borderline/utils",
+    "version": "0.3.0",
+    "description": "Utilities suite for the Borderline projects",
+    "keywords": [
+        "borderline",
+        "utility"
+    ],
+    "homepage": "https://github.com/dsi-icl/borderline/tree/master/packages/borderline-utils#readme",
+    "bugs": {
+        "url": "https://github.com/dsi-icl/borderline/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dsi-icl/borderline.git"
+    },
+    "license": "MIT",
+    "contributors": [
+        "Jean Grizet <jean.grizet16@imperial.ac.uk>",
+        "Florian Guitton <f.guitton@imperial.ac.uk>"
+    ],
+    "main": "./src/index.js",
+    "scripts": {
+        "lint": "eslint ./",
+        "lint:fix": "eslint ./"
+    },
+    "dependencies": {
+        "bytes": "3.0.0",
+        "fs-extra": "6.0.1",
+        "ip": "1.1.5",
+        "mongodb": "3.0.10"
+    },
+    "devDependencies": {
+        "babel-core": "6.26.3",
+        "babel-eslint": "8.2.5",
+        "babel-preset-env": "1.7.0",
+        "eslint": "5.0.0"
+    },
+    "engines": {
+        "node": ">= 8.0.0",
+        "npm": ">= 6.0.0"
+    },
+    "readme": "README.md"
 }

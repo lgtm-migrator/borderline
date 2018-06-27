@@ -1,14 +1,14 @@
 {
-    "name": "borderline-devutils",
-    "version": "0.4.28",
+    "name": "@borderline/devutils",
+    "version": "0.5.0",
     "description": "Configuration and scripts for Borderline development.",
-    "homepage": "https://github.com/dsi-icl/borderline-devutils#readme",
+    "homepage": "https://github.com/dsi-icl/borderline/tree/master/packages/borderline-devutils#readme",
     "bugs": {
-        "url": "https://github.com/dsi-icl/borderline-devutils/issues"
+        "url": "https://github.com/dsi-icl/borderline/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dsi-icl/borderline-devutils.git"
+        "url": "git+https://github.com/dsi-icl/borderline.git"
     },
     "license": "MIT",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",

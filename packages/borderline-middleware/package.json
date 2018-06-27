@@ -1,19 +1,19 @@
 {
-    "name": "borderline-middleware",
-    "version": "0.4.5",
+    "name": "@borderline/middleware",
+    "version": "0.5.0",
     "description": "Backend service responsible for data and source handling",
     "keywords": [
         "borderline",
         "etriks",
         "middleware"
     ],
-    "homepage": "https://github.com/dsi-icl/borderline-middleware#readme",
+    "homepage": "https://github.com/dsi-icl/borderline/tree/master/packages/borderline-middleware#readme",
     "bugs": {
-        "url": "https://github.com/dsi-icl/borderline-middleware/issues"
+        "url": "https://github.com/dsi-icl/borderline/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dsi-icl/borderline-middleware.git"
+        "url": "git+https://github.com/dsi-icl/borderline.git"
     },
     "license": "MIT",
     "contributors": [
