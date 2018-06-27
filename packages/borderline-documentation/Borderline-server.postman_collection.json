@@ -1,0 +1,2849 @@
+{
+	"info": {
+		"_postman_id": "dbf87bbe-6657-4fd6-8ea7-7d38ae227b81",
+		"name": "Borderline-server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Registry",
+			"description": null,
+			"item": [
+				{
+					"name": "GET status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/status",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET full details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/details",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Data store",
+			"description": null,
+			"item": [
+				{
+					"name": "List all data sources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post new  data source and save the data_source_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"data_source_id\", jsonData._id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\n      \"sourceType\": \"TS171\",\n      \"sourceName\": \"etriks dev\",\n      \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n      \"public\": false,\n      \"default\": false,\n      \"users\": [ ]\n    }"
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current data source from data_source_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update current data source from data_source_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"sourceType\": \"TS171\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ ]\n  }"
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get data sources by user ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe user to data source",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"{{user_id}}\",\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unsubscribe user from data source ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove current data source from its data_source_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"postman.clearEnvironmentVariable(\"data_source_id\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get data source with invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/notvalidid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"notvalidid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update data source from invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"sourceType\": \"etriks\",\n    \"sourceName\": \"etriks dev 2\",\n    \"sourceHost\": \"http://postgres-ci.transmartfoundation.org/transmart/\",\n    \"public\": true,\n    \"default\": true,\n    \"users\": [ \"588a12defed9e3372453ba3d\" ]\n  }"
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/coucouhibou",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"coucouhibou"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Remove data source from invalid data_source_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/data_sources/notavalidid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"data_sources",
+								"notavalidid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error]Subscribe current user to unknown data source",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 500\"] = responseCode.code === 500;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"{{user_id}}\",\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/data_sources/notavaliddatasourceid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"data_sources",
+								"notavaliddatasourceid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Unsubscribe invalid user from data source",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/NOPE/data_sources/{{data_source_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"NOPE",
+								"data_sources",
+								"{{data_source_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Extension Store",
+			"description": null,
+			"item": [
+				{
+					"name": "List extensions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.clearEnvironmentVariable(\"pluginID\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "dfaf48dc-453e-4359-91d1-7932f24e0ad5",
+							"name": "pluginList",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "1901",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 11:56:15 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"76d-Uzr4RiY/CPYTNrUGxBIXaQ\"",
+									"description": ""
+								},
+								{
+									"name": "X-Content-Type-Options",
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
+						},
+						{
+							"id": "11301083-36f3-4ecc-9123-26710e580096",
+							"name": "pluginList",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "1901",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 11:56:15 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"76d-Uzr4RiY/CPYTNrUGxBIXaQ\"",
+									"description": ""
+								},
+								{
+									"name": "X-Content-Type-Options",
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "{\"count\":5,\"plugins\":[{\"id\":\"9f0851a6167a\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b93c6c117c07\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"dummy\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"b74b4dd75b6e\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}},{\"id\":\"3b9febc1d233\",\"infos\":{\"name\":\"dummy-plugin\",\"version\":\"0.1.0\",\"private\":true,\"description\":\"Dummy borderline server plugin\",\"author\":\"Zirg\",\"license\":\"MIT\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/dsi-icl/borderline-ui.git\"},\"bugs\":{\"url\":\"https://github.com/dsi-icl/borderline-ui/issues\"},\"homepage\":\"https://github.com/dsi-icl/borderline-ui#readme\"}}]}"
+						}
+					]
+				},
+				{
+					"name": "Upload new extension and save plugin_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"No errors\"] = jsonData.hasOwnProperty('error') === false;",
+									"tests[\"New plugin ID is present\"] = jsonData[0].hasOwnProperty('_id');",
+									"",
+									"postman.setEnvironmentVariable(\"pluginID\", jsonData[0]._id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "plugin-zip",
+									"type": "file"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store"
+							]
+						},
+						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
+					},
+					"response": [
+						{
+							"id": "fcb445dc-bf73-4712-91c2-6c82bf11c147",
+							"name": "pluginUploaded",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 11:55:47 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-agRQRT6BI3xnOccrfflWBQ\"",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "[{\"id\":\"3b9febc1d233\"}]"
+						},
+						{
+							"id": "8b50ef70-16ce-45f4-981e-d41e28c8db1d",
+							"name": "pluginUpload",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 12:01:35 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-jag58ZyQFKaxf1ArOM+98w\"",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "[{\"id\":\"859ddffc98d7\"}]"
+						}
+					]
+				},
+				{
+					"name": "Get extension info for current plugin_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"{{pluginID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extension replace files identified by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Plugin has been updated\"] = jsonData._id === postman.getEnvironmentVariable('pluginID');",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "plugin-zip",
+									"type": "file"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"{{pluginID}}"
+							]
+						},
+						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
+					},
+					"response": [
+						{
+							"id": "f2ac5d8a-986a-452a-907d-ad07eb3f5772",
+							"name": "pluginUploaded",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 11:55:47 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-agRQRT6BI3xnOccrfflWBQ\"",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "[{\"id\":\"3b9febc1d233\"}]"
+						},
+						{
+							"id": "c5a89035-ecac-405d-af36-b21c16f4919e",
+							"name": "pluginUpload",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 12:01:35 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-jag58ZyQFKaxf1ArOM+98w\"",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "[{\"id\":\"859ddffc98d7\"}]"
+						}
+					]
+				},
+				{
+					"name": "Delete extension from it's unique ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"{{pluginID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Extension update with invalid extension id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 500\"] = responseCode.code === 500;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "plugin-zip",
+									"type": "file"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/notavliadpluginid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"notavliadpluginid"
+							]
+						},
+						"description": "Generated from a curl request: \ncurl \\\"{{server_url}}/plugin_store\\\" -H \\\"Origin: {{server_url}}\\\" -H \\\"Accept-Encoding: gzip, deflate, br\\\" -H \\\"Accept-Language: en-US,en;q=0.8,fr;q=0.6\\\" -H \\\"Upgrade-Insecure-Requests: 1\\\" -H \\\"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36\\\" -H \\\"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxFUlaPpsXgLyGi9y\\\" -H \\\"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\\\" -H \\\"Cache-Control: max-age=0\\\" -H \\\"Referer: {{server_url}}/plugin_store/upload\\\" -H \\\"Connection: keep-alive\\\" -H \\\"DNT: 1\\\" --data-binary ^\\\"------WebKitFormBoundaryxFUlaPpsXgLyGi9y^\n\nContent-Disposition: form-data; name=^\\^\\\"plugin-zip^\\^\\\"; filename=^\\^\\\"dummy.zip^\\^\\\"^\n\nContent-Type: application/x-zip-compressed^\n\n^\n\n^\n\n------WebKitFormBoundaryxFUlaPpsXgLyGi9y--^\n\n^\\\" --compressed"
+					},
+					"response": [
+						{
+							"id": "e434206c-d621-45e8-9e9c-9c3f3e90230e",
+							"name": "pluginUploaded",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 11:55:47 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-agRQRT6BI3xnOccrfflWBQ\"",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "[{\"id\":\"3b9febc1d233\"}]"
+						},
+						{
+							"id": "f08675e5-2951-4478-a7c3-5c95fa3ae0cf",
+							"name": "pluginUpload",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{server_url}}/plugin_store",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"plugin_store"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "keep-alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "23",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Thu, 19 Jan 2017 12:01:35 GMT",
+									"description": ""
+								},
+								{
+									"name": "ETag",
+									"key": "ETag",
+									"value": "W/\"17-jag58ZyQFKaxf1ArOM+98w\"",
+									"description": ""
+								},
+								{
+									"name": "X-Powered-By",
+									"key": "X-Powered-By",
+									"value": "Express",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "[{\"id\":\"859ddffc98d7\"}]"
+						}
+					]
+				},
+				{
+					"name": "[Error] Get plugin description from invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/notavalidplugin",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"notavalidplugin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Delete extension with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/extension_store/nonostillnotvalid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"extension_store",
+								"nonostillnotvalid"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Accounts",
+			"description": null,
+			"item": [
+				{
+					"name": "Login as admin and save user id for use",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"User has ID\"] = jsonData.hasOwnProperty('_id');",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"user_id\", jsonData._id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Cookie",
+								"value": "test=test;toto=toto"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "root",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "root",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/login",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List all users on the server. requires admin rights",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Who Am I",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/whoami",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"whoami"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout and close session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/logout",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current user from user_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"User has ID\"] = jsonData.hasOwnProperty('_id');",
+									"postman.setEnvironmentVariable(\"user_id\", jsonData._id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update current user from user_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"588b715469a1b64140e00b8a\",\n  \"username\": \"root\",\n  \"salt\": \"1fc162ade209d19e3db9ead000df7d2f\",\n  \"password\": \"1e3ec0ba8a479f3c16169bd2f31b0c5bdc022fbf3a5f4021eaa589c3891f5fa63453f38b1c0f404e183ab24ff47622328b58b9db0cf0d15e09f9f07ec189d717\",\n  \"admin\": true\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user from user_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Regenerate 2 Step  QR code",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/2step/{{user_id}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"2step",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] User login  with invalid credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "nope",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "root",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/login",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] List user without admin rights",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Connection",
+								"value": "close",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get current user with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/iamnotavalidid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"iamnotavalidid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"iamnotavaliduserid\",\n  \"username\": \"root\",\n  \"salt\": \"1fc162ade209d19e3db9ead000df7d2f\",\n  \"password\": \"1e3ec0ba8a479f3c16169bd2f31b0c5bdc022fbf3a5f4021eaa589c3891f5fa63453f38b1c0f404e183ab24ff47622328b58b9db0cf0d15e09f9f07ec189d717\",\n  \"admin\": true\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/users/nono",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"nono"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Delete unknown user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/nonoiamnotokay",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"nonoiamnotokay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get the user for the current session and save user id for use",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/whoami",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"whoami"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User extensions",
+			"description": null,
+			"item": [
+				{
+					"name": "List all plugins for user identifed by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clear all plugins for user defined by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe user identfied by ID to plugin identified by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions",
+								"{{pluginID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unsubscribe user identified by ID to plugin identified by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions",
+								"{{pluginID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] List all plugins for invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/invalidid/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"invalidid",
+								"extensions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Clear all plugins for invalid user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/invaliduserid/extensions",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"invaliduserid",
+								"extensions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Subscribe invalid user to valid plugin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/nonoinvalid/extensions/{{pluginID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"nonoinvalid",
+								"extensions",
+								"{{pluginID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Subscribe valid user to invalid plugin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/users/{{user_id}}/extensions/nonoinvalidplugin",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"extensions",
+								"nonoinvalidplugin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workflows",
+			"description": null,
+			"item": [
+				{
+					"name": "List workflows on the server",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new workflow and save its ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"workflow has been created\"] = jsonData.hasOwnProperty('_id');",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"workflow_ID\", jsonData._id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Postman Workflow",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a workflow from its unique identifier",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update name field for workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Updated name\"] = jsonData.name === \"Updated Workflow name\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"{{workflow_ID}}\",\n  \"name\": \"Updated Workflow name\",\n  \"create\": \"6405499313127948289\",\n  \"update\": \"6405499313127948290\",\n  \"owner\": \"58a198229bc4ca3bb81c937a\",\n  \"read\": [],\n  \"write\": [],\n  \"graph\": {}\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create root node in current workflow_id and store step_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Inserted has id\"] = jsonData.hasOwnProperty('_id');",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"step_ID\", jsonData._id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create child node under step_id in current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Inserted has id\"] = jsonData.hasOwnProperty('_id');",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"parent\": \"{{step_ID}}\",\n  \"extension\": \"child-extension\",\n  \"action\": \"@@/workflow/RESULT_CANVAS\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get step_id from current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"{{step_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update step_id inside current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Your test name\"] = jsonData.data.updated === true;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"{{step_ID}}\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"{{workflow_ID}}\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"{{step_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete step_id inside curent workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c9b0df3c-4e51-42a4-99bc-52b43bcebb50",
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/{{step_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"{{step_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete workflow based on workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get a workflow from invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/iamnotaworkflow",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"iamnotaworkflow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update name field for invalid workflow ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"{{workflow_ID}}\",\n  \"name\": \"Updated Workflow name\",\n  \"create\": \"6405499313127948289\",\n  \"update\": \"6405499313127948290\",\n  \"owner\": \"58a198229bc4ca3bb81c937a\",\n  \"read\": [],\n  \"write\": [],\n  \"graph\": {}\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/nonopasbon",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"nonopasbon"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Delete workflow with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/nonoworkflow",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"nonoworkflow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Create root node in invalid workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": true,\n    \"useless\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/nopenopenope/step/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"nopenopenope",
+								"step",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get invalid step_id from current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"nopnostep"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update invalid step_id inside current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"{{step_ID}}\",\n  \"create\": \"2017-04-06T09:54:50.044Z\",\n  \"update\": \"2017-04-06T09:54:55.286Z\",\n  \"workflow\": \"58e50d40f1072427c419b775\",\n  \"parent\": null,\n  \"extension\": \"toto-extension\",\n  \"action\": \"@@/workflow/ANALYSIS_INPUT\",\n  \"data\": {\n    \"custom\": false,\n    \"useless\": false,\n    \"updated\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/nopestepid",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"nopestepid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Delete invalid step_id inside curent workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/notavlidstep",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"notavlidstep"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get invalid step_id from current workflow_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server_url}}/workflow/{{workflow_ID}}/step/nopnostep",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"workflow",
+								"{{workflow_ID}}",
+								"step",
+								"nopnostep"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

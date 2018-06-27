@@ -1,0 +1,54 @@
+.sidebar {
+    grid-area: sidebar;
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.1));
+}
+
+.menu {
+    height: 3em;
+    width: 100%;
+    text-align: right;
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.8));
+}
+
+.logo * {
+    fill: var(--color-font-active);
+}
+
+.navButton {
+    display: inline-block;
+    text-align: center;
+    padding: 0.7em;
+    height: 3em;
+    width: 3em;
+}
+
+.navButton:hover {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2.4));
+}
+
+.navActive {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 2.2));
+}
+
+.stepButton {
+    display: block;
+    height: 2em;
+    line-height: 2em;
+    width: 100%;
+    padding: 0 1em;
+}
+
+.stepButton:hover {
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.45));
+}
+
+.stepActive,
+.stepActive:hover {
+    color: var(--color-font-active);
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.3));
+}
+
+.panel {
+    height: calc(100% - 3em);
+    width: 100%;
+}

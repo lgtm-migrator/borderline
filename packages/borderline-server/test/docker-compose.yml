@@ -1,0 +1,40 @@
+version: "3.2"
+services:
+    mongodb:
+        image: mongo:latest
+        environment:
+            - MONGO_DATA_DIR=/data/mongodb
+            - MONGO_LOG_DIR=/dev/null
+            - MONGODB_DBNAME=borderline
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
+
+    init_mongodb:
+        image: mongo:latest
+        volumes:
+            - type: bind
+              source: ./mongo_data
+              target: /mongo_data
+        command: /bin/sh /mongo_data/init_mongo.sh
+        depends_on:
+            - mongodb
+        links:
+            - mongodb
+
+    swift:
+        image: bouncestorage/swift-aio
+        ports:
+            - 8080:8080
+
+    tests:
+            build:
+                context: ../
+                dockerfile: ./test/Dockerfile
+            depends_on:
+                - init_mongodb
+                - swift
+            links:
+                - mongodb
+                - swift
+            ports:
+                - 80:80
+

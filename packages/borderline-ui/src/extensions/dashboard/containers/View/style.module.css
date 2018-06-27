@@ -1,0 +1,19 @@
+.menu {
+    height: 4em;
+    width: 100%;
+    background-color: var(--color-background);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.panel {
+    height: 100%;
+    width: 100%;
+    padding-top: 4em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}

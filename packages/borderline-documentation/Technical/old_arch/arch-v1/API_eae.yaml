@@ -1,0 +1,265 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: EAE - Borderline jobs API
+  description: |
+    #### Rest API to support the computing tasks of the borderline project
+schemes:
+  - http
+host: 127.0.0.1:3000
+basePath: /borderlineRestInterfaceWithEaeIfThatIsPossiblePlease
+paths:
+    /blob/:
+        post:
+            tags: [ blob ]
+            description: Creates a new blob from middleware query
+            parameters:
+                -
+                    name: query
+                    in: body
+                    required: true
+                    description: Query unique identifier on middleware
+                    schema:
+                        type: string
+            responses:
+                200:
+                    description: Created a new blob from a middleware query
+                    schema:
+                        $ref: '#/definitions/BlobModel'
+                default:
+                    description: Operation failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        put:
+            tags: [ blob ]
+            description: Create a new blob from raw data
+            parameters:
+                -
+                    name: raw
+                    in: body
+                    required: true
+                    description: Raw data structure
+                    schema:
+                        type: string
+                        format: binary
+            responses:
+                200:
+                    description: Created a new blob from raw data
+                    schema:
+                        $ref: '#/definitions/BlobModel'
+                default:
+                    description: Failed to create a new blob
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /blob/{blob_id}:
+        parameters:
+            -
+                name: blob_id
+                in: path
+                required: true
+                type: string
+        get:
+            tags: [ blob ]
+            description: Read a blob information from a unique identifier
+            responses:
+                200:
+                    description: Success, found the blob
+                    schema:
+                        $ref: '#/definitions/BlobModel'
+                default:
+                    description: Failure
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            tags: [ blob ]
+            description: Removes a blob from a unique identifier
+            responses:
+                200:
+                    description: Success, Blob is deleted
+                default:
+                    description: Nothing has been removed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /blob/{blob_id}/data:
+        parameters:
+            -
+                name: blob_id
+                in: path
+                required: true
+                type: string
+        get:
+            tags: [ blob ]
+            description: Get full data from a blob
+            responses:
+                200:
+                    description: Reading successful
+                    schema:
+                        type: string
+                        format: binary
+                        description: Data as a binary string
+                default:
+                    description: Cannot read blob
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        post:
+            tags: [ blob ]
+            description: Get part of a blob data
+            parameters:
+                -
+                    name: part
+                    required: true
+                    in: body
+                    description: Partition specifications
+                    schema:
+                        type: object
+                        properties:
+                            size:
+                                type: integer
+                                format: int64
+                                description: Size of the read to perform
+                            offset:
+                                type: integer
+                                format: int64
+                                description: Offset where the read begins
+            responses:
+                200:
+                    description: Reading successful
+                    schema:
+                        type: string
+                        format: binary
+                        description: Data as binary string
+                default:
+                    description: Cannot read blob
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /job/:
+        post:
+            tags: [ job ]
+            description: Submit a new job
+            parameters:
+                -
+                    name: job
+                    required: true
+                    in: body
+                    description: Job required data
+                    schema:
+                        type: object
+                        properties:
+                            code:
+                                type: string
+                                description: Script code to execute
+                            parameters:
+                                type: array
+                                description: Script arguments
+                                items:
+                                    type: string
+                            input:
+                                type: string
+                                description: Script input as a Blob unique identifer
+            responses:
+                200:
+                    description: Successfuly submited a new job
+                    schema:
+                        $ref: '#/definitions/JobModel'
+                default:
+                    description: Failed to submit a new job
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+    /job/{job_id}:
+        parameters:
+            -
+                name: job_id
+                type: string
+                required: true
+                in: path
+        get:
+            tags: [ job ]
+            description: Get a job from its unique identifier
+            responses:
+                200:
+                    description: Success, found job with this id
+                    schema:
+                        $ref: '#/definitions/JobModel'
+                default:
+                    description: Error, cannot get this job
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        post:
+            tags: [ job ]
+            description: Update a job from its unique identifier
+            parameters:
+                -
+                    name: job
+                    required: true
+                    description: Model to update from
+                    in: body
+                    schema:
+                        $ref: '#/definitions/JobModel'
+            responses:
+                200:
+                    description: Update successful
+                    schema:
+                        $ref: '#/definitions/JobModel'
+                default:
+                    description: Update failed
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+        delete:
+            tags: [ job ]
+            description: Cancel a job from its unique identifier
+            responses:
+                200:
+                    description: Job has been canceled
+                default:
+                    description: No job has been canceled
+                    schema:
+                        $ref: '#/definitions/ErrorModel'
+definitions:
+    ErrorModel:
+        type: object
+        properties:
+            error:
+                type: string
+                description: A more detailed error message
+    BlobModel:
+        type: object
+        properties:
+            _id:
+                type: string
+                description: Blob unique identifier
+            size:
+                type: integer
+                format: int64
+                description: Size of the blob in bytes
+            timestamp:
+                type: string
+                format: dateTime
+                description: Last update date & time of this blob
+    JobModel:
+        type: object
+        properties:
+            _id:
+                type: string
+                description: Job unique identifier
+            status:
+                type: string
+                description: Job status display name (Pending, Scheduled, Running, Cancelled or Done)
+            submit:
+                type: string
+                format: dateTime
+                description: Submission timestamp
+            code:
+                type: string
+                description: Script code to execute
+            parameters:
+                type: array
+                description: Script arguments
+                items:
+                    type: string
+            input:
+                type: string
+                description: Script input data, as blob unique identifier
+            output:
+                type: string
+                description: Script output data, as a blob unique identifier

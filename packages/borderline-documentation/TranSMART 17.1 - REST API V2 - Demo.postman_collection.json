@@ -1,0 +1,2264 @@
+{
+	"variables": [],
+	"info": {
+		"name": "TranSMART 17.1 - REST API V2 - Demo",
+		"_postman_id": "b18c4e8d-8df1-9989-344c-bb4a868a2868",
+		"description": "Testing scripts used by The Hyve to verify the 17.1 project API calls",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Essentials",
+			"description": "",
+			"item": [
+				{
+					"name": "get token as user (and store)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setGlobalVariable(\"access_token\", jsonData.access_token);",
+									"postman.setGlobalVariable(\"current_user\", 'user1');"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setEnvironmentVariable(\"url\", \"http://transmart.thehyve.net:80\");",
+									"postman.setEnvironmentVariable(\"username\", \"demo-user\");",
+									"postman.setEnvironmentVariable(\"password\", \"demo-user\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "{{url}}/oauth/token?grant_type=password&client_id=glowingbear-js&username={{username}}&password={{password}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"oauth",
+								"token"
+							],
+							"query": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "client_id",
+									"value": "glowingbear-js",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Using the glowingbear credentials we get an Oauth token to allow this REST client to use our credentials to access the tranSMART database."
+					},
+					"response": [
+						{
+							"id": "43f4ae8e-558a-4be1-8a5a-b11a300ab0c1",
+							"name": "token",
+							"originalRequest": {
+								"url": "{{url}}/oauth/token?grant_type=password&client_id=glowingbear-js&client_secret=&username=admin&password=admin",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Cache-Control",
+									"key": "Cache-Control",
+									"value": "no-store",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "close",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Encoding",
+									"key": "Content-Encoding",
+									"value": "gzip",
+									"description": "The type of encoding used on the data."
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Mon, 14 Nov 2016 19:04:50 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Pragma",
+									"key": "Pragma",
+									"value": "no-cache",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache-Coyote/1.1",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Accept-Encoding",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								},
+								{
+									"name": "Via",
+									"key": "Via",
+									"value": "1.1 transmart-pro-acc.thehyve.net, 1.1 transmart-pro-acc.thehyve.net",
+									"description": "Informs the client of proxies through which the response was sent."
+								},
+								{
+									"name": "X-Application-Context",
+									"key": "X-Application-Context",
+									"value": "application:production:8080",
+									"description": "Custom header"
+								}
+							],
+							"cookie": [],
+							"responseTime": "2381",
+							"body": "{\"access_token\":\"ccf1627d-c46a-4616-81b7-681c2a73a7d8\",\"token_type\":\"bearer\",\"expires_in\":11380,\"scope\":\"read write\"}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "2. Studies and tree",
+			"description": "",
+			"item": [
+				{
+					"name": "get all studies",
+					"request": {
+						"url": "{{url}}/v2/studies",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "get studies"
+					},
+					"response": []
+				},
+				{
+					"name": "query tree nodes with metadata",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?counts=true&tags=true",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all tree nodes"
+					},
+					"response": []
+				},
+				{
+					"name": "query tree nodes for specific part and depth",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?root=\\Public Studies\\EHR\\&depth=2",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return tree nodes"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Patients and patient sets",
+			"description": "",
+			"item": [
+				{
+					"name": "create patient set",
+					"request": {
+						"url": "{{url}}/v2/patient_sets?name=my_test_set",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"type\":\"study_name\",\"studyId\":\"EHR\"}"
+						},
+						"description": "Create a patient set"
+					},
+					"response": []
+				},
+				{
+					"name": "query patients on patient set ID",
+					"request": {
+						"url": "{{url}}/v2/patients?constraint={\"type\":\"patient_set\",\"patientSetId\":28929}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return patients for a patient set ID. From qt_patient_set_collection."
+					},
+					"response": []
+				},
+				{
+					"name": "query on patient IDs",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"patient_set\",\"patientIds\":[-62,-60]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return observations for a list of patientIDs"
+					},
+					"response": []
+				},
+				{
+					"name": "query on Study Patient ID",
+					"request": {
+						"url": "{{url}}/v2/patients?constraint={\"type\":\"field\",\"field\":{\"dimension\":\"patient\",\"fieldName\":\"sourcesystemCd\",\"type\":\"STRING\"},\"operator\":\"in\",\"value\":[\"EHR:1\", \"EHR:2\", \"EHR:3\"]}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returning tranSMART patient IDs based on study based patients IDs."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Observations",
+			"description": "",
+			"item": [
+				{
+					"name": "query observations for study",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"study_name\",\"studyId\":\"EHR\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified study"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations for concept path",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\EHR\\\\Vital Signs\\\\Heart Rate\\\\\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified concept"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. High-dimensional observations",
+			"description": "",
+			"item": [
+				{
+					"name": "query high dimensional observations for a concept path",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\CLINICAL_TRIAL_HIGHDIM\\\\High Dimensional data\\\\Expression Lung\\\\\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all high dimensional observations for a concept path"
+					},
+					"response": []
+				},
+				{
+					"name": "query high dimensional observations for a concept code",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\": \"concept\", \"conceptCode\": \"CTHD:HD:EXPLUNG\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all high dimensional observations for a concept code"
+					},
+					"response": []
+				},
+				{
+					"name": "query high dimensional observations for a concept and gene",
+					"request": {
+						"url": "{{url}}/v2/observations?biomarker_constraint={type: biomarker, biomarkerType: \"genes\", params: {names: ['TP53']}}&projection=zscore&constraint={type: concept, path: \"\\\\Public Studies\\\\CLINICAL_TRIAL_HIGHDIM\\\\High Dimensional data\\\\Expression Lung\\\\\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all high dimensional observations for a concept, filtered by gene symbol TP53, linked to gene id 7157 (in this case synthetically linked to probes 1007_s_at and 117_at)"
+					},
+					"response": []
+				},
+				{
+					"name": "query high dimensional observations for a concept and projection",
+					"request": {
+						"url": "{{url}}/v2/observations?projection=zscore&constraint={type: concept, path: \"\\\\Public Studies\\\\CLINICAL_TRIAL_HIGHDIM\\\\High Dimensional data\\\\Expression Lung\\\\\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all high dimensional observations for a concept and a certain projection"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. Aggregation",
+			"description": "",
+			"item": [
+				{
+					"name": "query for the minimal value",
+					"request": {
+						"url": "{{url}}/v2/observations/aggregate?constraint={type=concept, path='\\\\Public Studies\\\\EHR\\\\Vital Signs\\\\Heart Rate\\\\'}&type=min",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returns the minimal value for a specified concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query for the maximal value",
+					"request": {
+						"url": "{{url}}/v2/observations/aggregate?constraint={type=concept, path='\\\\Public Studies\\\\EHR\\\\Vital Signs\\\\Heart Rate\\\\'}&type=max",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returns the maximal value for a concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query for the average value",
+					"request": {
+						"url": "{{url}}/v2/observations/aggregate?constraint={type=concept, path='\\\\Public Studies\\\\EHR\\\\Vital Signs\\\\Heart Rate\\\\'}&type=average",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returns the average value for a concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query for the count of observations",
+					"request": {
+						"url": "{{url}}/v2/observations/count?constraint={\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\EHR\\\\Vital Signs\\\\Heart Rate\\\\\"}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returns the count of the number of observations"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "A - (Non) Study specific tree",
+			"description": "",
+			"item": [
+				{
+					"name": "query tree nodes for study node",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?root=\\Public Studies\\SHARED_CONCEPTS_STUDY_B\\&counts=true",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return tree nodes"
+					},
+					"response": []
+				},
+				{
+					"name": "query tree nodes for non-study specific node",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?root=\\Vital Signs\\&counts=true",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return tree nodes"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations for study specific tree node",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\SHARED_CONCEPTS_STUDY_B\\\\Demography\\\\Age\\\\\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations for non-study specific tree node",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"path\":\"\\\\Vital Signs\\\\Heart Rate\\\\\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified concept"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "A - Cross study / Ontologies / Security",
+			"description": "",
+			"item": [
+				{
+					"name": "query observations for cross-study concept code",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"conceptCode\":\"VSIGN:HR\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations"
+					},
+					"response": []
+				},
+				{
+					"name": "query patients for cross-study concept code",
+					"request": {
+						"url": "{{url}}/v2/patients?constraint={\"type\":\"concept\",\"conceptCode\":\"VSIGN:HR\"}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all patients"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations for private study",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"study_name\",\"studyId\":\"SHARED_CONCEPTS_STUDY_C_PRIV\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified study. The study is private and user1 shouldn't have access."
+					},
+					"response": []
+				},
+				{
+					"name": "query observations for private concept",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"path\":\"\\\\Private Studies\\\\SHARED_CONCEPTS_STUDY_C_PRIV\\\\Demography\\\\Age\\\\\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified concept. The study is private and user1 shouldn't have access."
+					},
+					"response": []
+				},
+				{
+					"name": "query tree nodes for private study",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?root=\\Private Studies\\SHARED_CONCEPTS_STUDY_C_PRIV\\&counts=true",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return tree nodes. The study is private and user1 shouldn't have access."
+					},
+					"response": []
+				},
+				{
+					"name": "query tree nodes for non-study specific tree node",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?root=\\Vital Signs\\&counts=true",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return tree nodes. The study is private and user1 shouldn't have access."
+					},
+					"response": []
+				},
+				{
+					"name": "NO ACCESS - query high dim cross-study observations by path",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"path\":\"\\\\High Dimensional\\\\Lung\\\\\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NO ACCESS - query high dim cross-study observations by code",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"conceptCode\":\"HD:LUNG:BIOPSY\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NO ACCESS - query observations for study with original ontology code modifier filled",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"study_name\",\"studyId\":\"TEST_17_1\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified study"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations on original ontology code",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"modifier\",\"modifierCode\":\"TRANSMART:ORIGINAL_VARIABLE\",\"values\":{\"type\":\"value\",\"valueType\":\"STRING\",\"operator\":\"=\",\"value\":\"Sex\"}}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Request only observations labeled with TRANSMART:ORIGINAL_VARIABLE modifier Sex"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "A - RNA-Seq transcript",
+			"description": "",
+			"item": [
+				{
+					"name": "query RNA-Seq transcript",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\RNASEQ_TRANSCRIPT\\\\HD\\\\Lung\\\\\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all RNA-Seq transcript data for a concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query RNA-Seq transcript on gene",
+					"request": {
+						"url": "{{url}}/v2/observations?biomarker_constraint={type: biomarker, biomarkerType: \"genes\", params: {names: ['TP53']}}&constraint={\"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\RNASEQ_TRANSCRIPT\\\\HD\\\\Lung\\\\\"}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all RNA-Seq transcript data for a concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query RNA-Seq transcript on transcript ID",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\RNASEQ_TRANSCRIPT\\\\HD\\\\Lung\\\\\"}&biomarker_constraint={\"type\":\"biomarker\",\"biomarkerType\":\"transcripts\",\"params\":{\"names\":[\"tr2\"]}}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all RNA-Seq transcript data for a concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query RNA-Seq transcript data for multiple concepts",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"or\",\"args\":[{\"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\RNASEQ_TRANSCRIPT\\\\HD\\\\Lung\\\\\"}, {\"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\RNASEQ_TRANSCRIPT\\\\HD\\\\Breast\\\\\"}]}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all RNA-Seq transcript data for a concept"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "B - Big study (NEW)",
+			"description": "",
+			"item": [
+				{
+					"name": "NO ACCESS - query tree for big study",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?root=\\Public Studies\\BIG_STUDY\\&counts=true",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return tree nodes"
+					},
+					"response": []
+				},
+				{
+					"name": "TOO BIG FOR POSTMAN query all observations for big study",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"StudyNameConstraint\",\"studyId\":\"BIG_STUDY\"}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified study"
+					},
+					"response": []
+				},
+				{
+					"name": "NO ACCESS - query numerical observations for big study concept path",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={ \"type\": \"and\", \"args\": [ {\"type\": \"concept\",\"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Subjects\\\\Blood diastolic\\\\\" }, {\"type\": \"study_name\",\"studyId\": \"BIG_STUDY\" } ] }&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified concept"
+					},
+					"response": []
+				},
+				{
+					"name": "NO ACCESS - query categorical observations for big study",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={ \"type\": \"or\", \"args\": [ { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\A\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\B\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\C\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\D\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\E\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\F\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\G\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\H\\\\\" } ] }&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified concept"
+					},
+					"response": []
+				},
+				{
+					"name": "NO ACCESS - count observations for big study",
+					"request": {
+						"url": "{{url}}/v2/observations/count?constraint={ \"type\": \"or\", \"args\": [ { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\A\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\B\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\C\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\D\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\E\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\F\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\G\\\\\" }, { \"type\": \"concept\", \"path\": \"\\\\Public Studies\\\\BIG_STUDY\\\\Categorical Value\\\\Cat 1\\\\H\\\\\" } ] }",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returns the count of the number of observations"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "B - Categorical values",
+			"description": "",
+			"item": [
+				{
+					"name": "query observations for split categorical concept",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={type=or, args=[{\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"},{\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"}]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for categorical concept"
+					},
+					"response": []
+				},
+				{
+					"name": "filter observations for split categorical concept",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return part of observations for split categorical concept"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations for direct categorical concept",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Race\\\\\"}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for categorical concept which has the values directly under the concept"
+					},
+					"response": []
+				},
+				{
+					"name": "filter observations for direct categorical concept",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={type=and, args=[{\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Race\\\\\"},{\"type\":\"value\",\"valueType\":\"STRING\",\"operator\":\"=\",\"value\":\"Latino\"}]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return part of observations for categorical concept which has the values directly under the concept"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "B - Clinical trial / Relative time series",
+			"description": "",
+			"item": [
+				{
+					"name": "query on TrialVisit",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"field\",\"field\":{\"dimension\":\"trial visit\",\"fieldName\":\"id\",\"type\":\"ID\"},\"operator\":\"=\",\"value\":-32}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returning observations attached to a specific TrialVisit"
+					},
+					"response": []
+				},
+				{
+					"name": "query on TrialVisit units",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={type=and, args=[{\"type\":\"field\",\"field\":{\"dimension\":\"trial visit\",\"fieldName\":\"relTimeUnit\",\"type\":\"STRING\"},\"operator\":\"=\",\"value\":\"days\"},{\"type\":\"field\",\"field\":{\"dimension\":\"trial visit\",\"fieldName\":\"relTime\",\"type\":\"NUMERIC\"},\"operator\":\">\",\"value\":0}]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returning only observations after Baseline"
+					},
+					"response": []
+				},
+				{
+					"name": "query high dimensional observations linked to a trial visit",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"and\",\"args\": [ {\"type\": \"concept\", \"conceptCode\": \"CTHD:HD:EXPLUNG\"}, {\"type\":\"field\",\"field\":{\"dimension\":\"trial visit\",\"fieldName\":\"id\",\"type\":\"ID\"},\"operator\":\"=\",\"value\":-402} ]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all high dimensional observations linked to a certain specific trial visit"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "B - EHR / Absolute time series",
+			"description": "",
+			"item": [
+				{
+					"name": "query observations on start date",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"time\",\"field\":{\"dimension\":\"start time\",\"fieldName\":\"startDate\",\"type\":\"DATE\"},\"operator\":\"->\",\"values\":[\"2016-05-01T00:00:00Z\"]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations after a specified start date"
+					},
+					"response": []
+				},
+				{
+					"name": "query patients on start date",
+					"request": {
+						"url": "{{url}}/v2/patients?constraint={\"type\":\"time\",\"field\":{\"dimension\":\"start time\",\"fieldName\":\"startDate\",\"type\":\"DATE\"},\"operator\":\"->\",\"values\":[\"2016-05-01T00:00:00Z\"]}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all patients having observations with a start date after a certain date."
+					},
+					"response": []
+				},
+				{
+					"name": "query observations on end date",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"time\",\"field\":{\"dimension\":\"end time\",\"fieldName\":\"endDate\",\"type\":\"DATE\"},\"operator\":\"->\",\"values\":[\"2016-01-01T00:00:00Z\"]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations after a specified end date"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations after event",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"temporal\",\"operator\":\"->\",\"eventConstraint\":{\"type\":\"value\",\"valueType\":\"NUMERIC\",\"operator\":\"<\",\"value\":60}}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Define an event and return only observations happening after that event"
+					},
+					"response": []
+				},
+				{
+					"name": "query high dimensional observations after start date",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"and\",\"args\": [ {\"type\": \"concept\", \"conceptCode\": \"EHRHD:HD:EXPLUNG\"}, {\"type\":\"time\",\"field\":{\"dimension\":\"start time\",\"fieldName\":\"startDate\",\"type\":\"DATE\"},\"operator\":\"->\",\"values\":[\"2016-05-01T00:00:00Z\"]} ]}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all high dimensional observations after a certain start date"
+					},
+					"response": []
+				},
+				{
+					"name": "query on Visit/Encounter",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"field\",\"field\":{\"dimension\":\"visit\",\"fieldName\":\"encounterNum\",\"type\":\"NUMERIC\"},\"operator\":\"=\",\"value\":-71}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returning observations attached to a specific Visit/Encounter"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations on Visit start date",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"time\",\"field\":{\"dimension\":\"visit\",\"fieldName\":\"startDate\",\"type\":\"DATE\"},\"operator\":\"->\",\"values\":[\"2016-05-01T00:00:00Z\"]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations after a specified Visit start date"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations on Visit end date",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"time\",\"field\":{\"dimension\":\"visit\",\"fieldName\":\"endDate\",\"type\":\"DATE\"},\"operator\":\"->\",\"values\":[\"2016-05-01T00:00:00Z\"]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations after a specified Visit end date"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "B - Samples",
+			"description": "",
+			"item": [
+				{
+					"name": "NEW query tree nodes for modifier in tree",
+					"request": {
+						"url": "{{url}}/v2/tree_nodes?root=\\Public Studies\\TUMOR_NORMAL_SAMPLES\\Sample Type\\",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return tree nodes"
+					},
+					"response": []
+				},
+				{
+					"name": "NEW query observations for modifier value on path",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"modifier\",\"path\":\"\\\\Public Studies\\\\TUMOR_NORMAL_SAMPLES\\\\Sample Type\\\\\",\"values\":{\"type\":\"value\",\"valueType\":\"STRING\",\"operator\":\"=\",\"value\":\"Tumor\"}}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Request only observations labeled with modifier Tumor"
+					},
+					"response": []
+				},
+				{
+					"name": "query observations for modifier value on modifier code",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"modifier\",\"modifierCode\":\"TNS:SMPL\",\"values\":{\"type\":\"value\",\"valueType\":\"STRING\",\"operator\":\"=\",\"value\":\"Tumor\"}}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Request only observations labeled with modifier Tumor"
+					},
+					"response": []
+				},
+				{
+					"name": "NEW query observations for modifier value on dimensionName",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"modifier\",\"dimensionName\":\"sample_type\",\"values\":{\"type\":\"value\",\"valueType\":\"STRING\",\"operator\":\"=\",\"value\":\"Tumor\"}}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Request only observations labeled with modifier Tumor"
+					},
+					"response": []
+				},
+				{
+					"name": "query high dimensional observations linked to modifier",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"and\",\"args\": [ {\"type\": \"concept\", \"conceptCode\": \"TNS:HD:EXPLUNG\"}, {\"type\":\"modifier\",\"modifierCode\":\"TNS:SMPL\",\"values\":{\"type\":\"value\",\"valueType\":\"STRING\",\"operator\":\"=\",\"value\":\"Tumor\"}} ]}&type=autodetect",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all high dimensional observations linked to a certain modifier, sample type in this case"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "C - Arvados file linking and workflows",
+			"description": "",
+			"item": [
+				{
+					"name": "List registered storage systems",
+					"request": {
+						"url": "{{url}}/v2/storage",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\":\"Arvbox at The Hyve\",\n    \"systemType\":\"Arvados\",\n  \"url\":\"http://arvbox-pro-dev.thehyve.net/\",\n    \"systemVersion\":\"v1\",\n    \"singleFileCollections\":false\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Register new storage system",
+					"request": {
+						"url": "{{url}}/v2/storage",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\":\"Arvbox at The Hyve\",\n    \"systemType\":\"Arvados\",\n  \"url\":\"http://arvbox-pro-dev.thehyve.net/\",\n    \"systemVersion\":\"v1\",\n    \"singleFileCollections\":false\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update storage system",
+					"request": {
+						"url": "{{url}}/v2/storage/100785",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\":\"New Arvbox at The Hyve\",\n    \"systemType\":\"Arvados\",\n  \"url\":\"http://arvbox-pro-dev.thehyve.net/\",\n    \"systemVersion\":\"v1\",\n    \"singleFileCollections\":false\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete storage system",
+					"request": {
+						"url": "{{url}}/v2/storage/100784",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\":\"New Arvbox at The Hyve\",\n    \"systemType\":\"Arvados\",\n  \"url\":\"http://arvbox-pro-dev.thehyve.net/\",\n    \"systemVersion\":\"v1\",\n    \"singleFileCollections\":false\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "List Arvados collections",
+					"request": {
+						"url": "{{arvadosurl}}/v1/collections",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "OAuth2 {{arvadostoken}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "List all Arvados collections (admin only)",
+					"request": {
+						"url": "{{url}}/v2/files",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\"        : \"new file Link\",\n    \"sourceSystem\": 100448, \n    \"study\"       : \"EHR\",\n    \"uuid\"        : \"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "List all Arvados collections linked to study",
+					"request": {
+						"url": "{{url}}/v2/studies/EHR/files",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all files linked to given study"
+					},
+					"response": []
+				},
+				{
+					"name": "List a specific Arvados collection",
+					"request": {
+						"url": "{{url}}/v2/files/100785",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\"        : \"new file Link\",\n    \"sourceSystem\": 100448, \n    \"study\"       : \"EHR\",\n    \"uuid\"        : \"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Link arvados collection to transmart study",
+					"request": {
+						"url": "{{url}}/v2/files",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\"        : \"new file Link\",\n    \"sourceSystem\": 100785, \n    \"study\"       : \"EHR\",\n    \"uuid\"        : \"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update link from arvados collection to transmart study",
+					"request": {
+						"url": "{{url}}/v2/files/100786",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\"        : \"new file Link2\",\n    \"sourceSystem\": 100785, \n    \"study\"       : \"EHR\",\n    \"uuid\"        : \"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete link from arvados collection to transmart study",
+					"request": {
+						"url": "{{url}}/v2/files/100788",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\"        : \"new file Link\",\n    \"sourceSystem\": 100785, \n    \"study\"       : \"EHR\",\n    \"uuid\"        : \"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "List  all workflows supported by transmart",
+					"request": {
+						"url": "{{url}}/v2/arvados/workflows",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{       \"uuid\":\"ys8ib-4zz18-5f6vvrluxq5z9u2\",\n        \"arvadosInstanceUrl\":\"http://arvbox-pro-dev.thehyve.net:8000\",\n        \"name\":\"Cat contents of chr Y VCF\",\n        \"description\":\"sc\",\n        \"arvadosVersion\":\"v1\",\n      \"defaultParams\": {\n    \n  \"command\":[  \n      \"cat\",\n      \"/1000genomes/ALL.chrY.phase3_integrated_v2a.20130502.genotypes.vcf\"\n   ],\n   \"container_image\":\"ubuntu\",\n   \"container_uuid\":null,\n   \"cwd\":\"/var/spool/cwl\",\n   \"description\":\"Module c tests\",\n   \"environment\":{  \n\n   },\n   \"etag\":\"7570w8rs7ewn8zjzel4lwbx6\",\n   \"expires_at\":null,\n   \"filters\":null,\n   \"href\":\"/container_requests/ys8ib-xvhdp-13ssag33m2dz18e\",\n   \"kind\":\"arvados#containerRequest\",\n   \"modified_at\":\"2016-12-14T15:34:54.869529000Z\",\n   \"modified_by_client_uuid\":\"ys8ib-ozdt8-0hjhx8tvreoka38\",\n   \"modified_by_user_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"mounts\":{  \n      \"/1000genomes\":{  \n         \"kind\":\"collection\",\n         \"uuid\":\"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n      },\n      \"/var/spool/cwl\":{  \n         \"kind\":\"collection\",\n         \"writable\":true\n      },\n      \"stdout\":{  \n         \"kind\":\"file\",\n         \"path\":\"/var/spool/cwl/cwl.output.json\"\n      }\n   },\n   \"name\":\"Module C test\",\n   \"output_path\":\"/var/spool/cwl\",\n   \"owner_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"priority\":1,\n   \"properties\":{  \n      \"template_uuid\":\"ys8ib-7fd4e-cwubj8toalmhmgp\"\n   },\n   \"requesting_container_uuid\":null,\n   \"runtime_constraints\":{  \n      \"API\":true,\n      \"ram\":256000000,\n      \"vcpus\":1\n   },\n   \"state\":\"Committed\",\n   \"use_existing\":true\n\n    }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "List specific workflow supported by transmart",
+					"request": {
+						"url": "{{url}}/v2/arvados/workflows/100757",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{       \"uuid\":\"ys8ib-4zz18-5f6vvrluxq5z9u2\",\n        \"arvadosInstanceUrl\":\"http://arvbox-pro-dev.thehyve.net:8000\",\n        \"name\":\"Cat contents of chr Y VCF\",\n        \"description\":\"sc\",\n        \"arvadosVersion\":\"v1\",\n      \"defaultParams\": {\n    \n  \"command\":[  \n      \"cat\",\n      \"/1000genomes/ALL.chrY.phase3_integrated_v2a.20130502.genotypes.vcf\"\n   ],\n   \"container_image\":\"ubuntu\",\n   \"container_uuid\":null,\n   \"cwd\":\"/var/spool/cwl\",\n   \"description\":\"Module c tests\",\n   \"environment\":{  \n\n   },\n   \"etag\":\"7570w8rs7ewn8zjzel4lwbx6\",\n   \"expires_at\":null,\n   \"filters\":null,\n   \"href\":\"/container_requests/ys8ib-xvhdp-13ssag33m2dz18e\",\n   \"kind\":\"arvados#containerRequest\",\n   \"modified_at\":\"2016-12-14T15:34:54.869529000Z\",\n   \"modified_by_client_uuid\":\"ys8ib-ozdt8-0hjhx8tvreoka38\",\n   \"modified_by_user_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"mounts\":{  \n      \"/1000genomes\":{  \n         \"kind\":\"collection\",\n         \"uuid\":\"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n      },\n      \"/var/spool/cwl\":{  \n         \"kind\":\"collection\",\n         \"writable\":true\n      },\n      \"stdout\":{  \n         \"kind\":\"file\",\n         \"path\":\"/var/spool/cwl/cwl.output.json\"\n      }\n   },\n   \"name\":\"Module C test\",\n   \"output_path\":\"/var/spool/cwl\",\n   \"owner_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"priority\":1,\n   \"properties\":{  \n      \"template_uuid\":\"ys8ib-7fd4e-cwubj8toalmhmgp\"\n   },\n   \"requesting_container_uuid\":null,\n   \"runtime_constraints\":{  \n      \"API\":true,\n      \"ram\":256000000,\n      \"vcpus\":1\n   },\n   \"state\":\"Committed\",\n   \"use_existing\":true\n\n    }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Register new workflow supported by transmart",
+					"request": {
+						"url": "{{url}}/v2/arvados/workflows",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{       \"uuid\":\"ys8ib-4zz18-5f6vvrluxq5z9u2\",\n        \"arvadosInstanceUrl\":\"http://arvbox-pro-dev.thehyve.net:8000\",\n        \"name\":\"Cat contents of chr Y VCF\",\n        \"description\":\"sc\",\n        \"arvadosVersion\":\"v1\",\n      \"defaultParams\": {\n    \n  \"command\":[  \n      \"cat\",\n      \"/1000genomes/ALL.chrY.phase3_integrated_v2a.20130502.genotypes.vcf\"\n   ],\n   \"container_image\":\"ubuntu\",\n   \"container_uuid\":null,\n   \"cwd\":\"/var/spool/cwl\",\n   \"description\":\"Module c tests\",\n   \"environment\":{  \n\n   },\n   \"etag\":\"7570w8rs7ewn8zjzel4lwbx6\",\n   \"expires_at\":null,\n   \"filters\":null,\n   \"href\":\"/container_requests/ys8ib-xvhdp-13ssag33m2dz18e\",\n   \"kind\":\"arvados#containerRequest\",\n   \"modified_at\":\"2016-12-14T15:34:54.869529000Z\",\n   \"modified_by_client_uuid\":\"ys8ib-ozdt8-0hjhx8tvreoka38\",\n   \"modified_by_user_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"mounts\":{  \n      \"/1000genomes\":{  \n         \"kind\":\"collection\",\n         \"uuid\":\"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n      },\n      \"/var/spool/cwl\":{  \n         \"kind\":\"collection\",\n         \"writable\":true\n      },\n      \"stdout\":{  \n         \"kind\":\"file\",\n         \"path\":\"/var/spool/cwl/cwl.output.json\"\n      }\n   },\n   \"name\":\"Module C test\",\n   \"output_path\":\"/var/spool/cwl\",\n   \"owner_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"priority\":1,\n   \"properties\":{  \n      \"template_uuid\":\"ys8ib-7fd4e-cwubj8toalmhmgp\"\n   },\n   \"requesting_container_uuid\":null,\n   \"runtime_constraints\":{  \n      \"API\":true,\n      \"ram\":256000000,\n      \"vcpus\":1\n   },\n   \"state\":\"Committed\",\n   \"use_existing\":true\n\n    }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update workflow supported by transmart",
+					"request": {
+						"url": "{{url}}/v2/arvados/workflows/100757",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{       \"uuid\":\"ys8ib-4zz18-5f6vvrluxq5z9u2\",\n        \"arvadosInstanceUrl\":\"http://arvbox-pro-dev.thehyve.net:8000\",\n        \"name\":\"Cat contents of chr Y VCF\",\n        \"description\":\"sc\",\n        \"arvadosVersion\":\"v1\",\n      \"defaultParams\": {\n    \n  \"command\":[  \n      \"cat\",\n      \"/1000genomes/ALL.chrY.phase3_integrated_v2a.20130502.genotypes.vcf\"\n   ],\n   \"container_image\":\"ubuntu\",\n   \"container_uuid\":null,\n   \"cwd\":\"/var/spool/cwl\",\n   \"description\":\"Module c tests\",\n   \"environment\":{  \n\n   },\n   \"etag\":\"7570w8rs7ewn8zjzel4lwbx6\",\n   \"expires_at\":null,\n   \"filters\":null,\n   \"href\":\"/container_requests/ys8ib-xvhdp-13ssag33m2dz18e\",\n   \"kind\":\"arvados#containerRequest\",\n   \"modified_at\":\"2016-12-14T15:34:54.869529000Z\",\n   \"modified_by_client_uuid\":\"ys8ib-ozdt8-0hjhx8tvreoka38\",\n   \"modified_by_user_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"mounts\":{  \n      \"/1000genomes\":{  \n         \"kind\":\"collection\",\n         \"uuid\":\"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n      },\n      \"/var/spool/cwl\":{  \n         \"kind\":\"collection\",\n         \"writable\":true\n      },\n      \"stdout\":{  \n         \"kind\":\"file\",\n         \"path\":\"/var/spool/cwl/cwl.output.json\"\n      }\n   },\n   \"name\":\"Module C test\",\n   \"output_path\":\"/var/spool/cwl\",\n   \"owner_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"priority\":1,\n   \"properties\":{  \n      \"template_uuid\":\"ys8ib-7fd4e-cwubj8toalmhmgp\"\n   },\n   \"requesting_container_uuid\":null,\n   \"runtime_constraints\":{  \n      \"API\":true,\n      \"ram\":256000000,\n      \"vcpus\":1\n   },\n   \"state\":\"Committed\",\n   \"use_existing\":true\n\n    }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create Arvados container_request (start a workflow)",
+					"request": {
+						"url": "{{arvadosurl}}/v1/container_requests",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "OAuth2 {{arvadostoken}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"command\":[  \n      \"cat\",\n      \"/1000genomes/ALL.chrY.phase3_integrated_v2a.20130502.genotypes.vcf\"\n   ],\n   \"container_image\":\"ubuntu\",\n   \"container_uuid\":null,\n   \"cwd\":\"/var/spool/cwl\",\n   \"description\":\"Module c tests\",\n   \"environment\":{  \n\n   },\n   \"etag\":\"7570w8rs7ewn8zjzel4lwbx6\",\n   \"expires_at\":null,\n   \"filters\":null,\n   \"href\":\"/container_requests/ys8ib-xvhdp-13ssag33m2dz18e\",\n   \"kind\":\"arvados#containerRequest\",\n\n   \"modified_by_client_uuid\":\"ys8ib-ozdt8-0hjhx8tvreoka38\",\n   \"modified_by_user_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"mounts\":{  \n      \"/1000genomes\":{  \n         \"kind\":\"collection\",\n         \"uuid\":\"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n      },\n      \"/var/spool/cwl\":{  \n         \"kind\":\"collection\",\n         \"writable\":true\n      },\n      \"stdout\":{  \n         \"kind\":\"file\",\n         \"path\":\"/var/spool/cwl/cwl.output.json\"\n      }\n   },\n   \"name\":\"Module C test\",\n   \"output_path\":\"/var/spool/cwl\",\n   \"owner_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"priority\":1,\n   \"properties\":{  \n      \"template_uuid\":\"ys8ib-7fd4e-cwubj8toalmhmgp\"\n   },\n   \"requesting_container_uuid\":null,\n   \"runtime_constraints\":{  \n      \"API\":true,\n      \"ram\":256000000,\n      \"vcpus\":1\n   },\n   \"state\":\"Committed\",\n   \"use_existing\":true\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "List Arvados container_requests",
+					"request": {
+						"url": "{{arvadosurl}}/v1/container_requests",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "OAuth2 {{arvadostoken}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"command\":[  \n      \"cat\",\n      \"/1000genomes/ALL.chrY.phase3_integrated_v2a.20130502.genotypes.vcf\"\n   ],\n   \"container_image\":\"ubuntu\",\n   \"container_uuid\":null,\n   \"cwd\":\"/var/spool/cwl\",\n   \"description\":\"Module c tests\",\n   \"environment\":{  \n\n   },\n   \"etag\":\"7570w8rs7ewn8zjzel4lwbx6\",\n   \"expires_at\":null,\n   \"filters\":null,\n   \"href\":\"/container_requests/ys8ib-xvhdp-13ssag33m2dz18e\",\n   \"kind\":\"arvados#containerRequest\",\n\n   \"modified_by_client_uuid\":\"ys8ib-ozdt8-0hjhx8tvreoka38\",\n   \"modified_by_user_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"mounts\":{  \n      \"/1000genomes\":{  \n         \"kind\":\"collection\",\n         \"uuid\":\"ys8ib-4zz18-b2n3t5jgnwrg61a\"\n      },\n      \"/var/spool/cwl\":{  \n         \"kind\":\"collection\",\n         \"writable\":true\n      },\n      \"stdout\":{  \n         \"kind\":\"file\",\n         \"path\":\"/var/spool/cwl/cwl.output.json\"\n      }\n   },\n   \"name\":\"Module C test\",\n   \"output_path\":\"/var/spool/cwl\",\n   \"owner_uuid\":\"ys8ib-tpzed-xzu137riyc3xrfv\",\n   \"priority\":1,\n   \"properties\":{  \n      \"template_uuid\":\"ys8ib-7fd4e-cwubj8toalmhmgp\"\n   },\n   \"requesting_container_uuid\":null,\n   \"runtime_constraints\":{  \n      \"API\":true,\n      \"ram\":256000000,\n      \"vcpus\":1\n   },\n   \"state\":\"Committed\",\n   \"use_existing\":true\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Other",
+			"description": "",
+			"item": [
+				{
+					"name": "query for all supported fields for the field constraint",
+					"request": {
+						"url": "{{url}}/v2/supported_fields",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "DEPRECATED get patient details",
+					"request": {
+						"url": "{{url}}/v2/patients/-62",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return details for a patient"
+					},
+					"response": []
+				},
+				{
+					"name": "DEPRECATED get patient set details",
+					"request": {
+						"url": "{{url}}/v2/patient_sets/28929",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return the details of a patient set"
+					},
+					"response": []
+				},
+				{
+					"name": "query with FieldConstraint",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"field\",\"field\":{\"dimension\":\"patient\",\"fieldName\":\"age\",\"type\":\"NUMERIC\"},\"operator\":\"<\",\"value\":100}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returning observations with a constraint on one of the supported fields."
+					},
+					"response": []
+				},
+				{
+					"name": "query with ValueConstraint",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"value\",\"valueType\":\"NUMERIC\",\"operator\":\">\",\"value\":176}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returning observations with a constraint on a numeric value."
+					},
+					"response": []
+				},
+				{
+					"name": "query with Negation",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={type=and, args=[{\"type\":\"negation\",\"arg\":{\"type\":\"patient_set\",\"patientSetId\":0,\"patientIds\":-62}}, {\"type\":\"study_name\",\"studyId\":\"EHR\"}]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Returning all observations except those matching the specified constraint (all but one patient in this case)."
+					},
+					"response": []
+				},
+				{
+					"name": "query for a combination of concept and value constraint",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={type=and, args=[{type=concept, path='\\\\Public Studies\\\\EHR\\\\Vital Signs\\\\Heart Rate\\\\'}, {type=value, valueType=NUMERIC, operator='>', value=80}]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified concept, where the values are greater than 176."
+					},
+					"response": []
+				},
+				{
+					"name": "query for a combination of patient and concept constraint",
+					"request": {
+						"url": "{{url}}/v2/observations?constraint={\"type\":\"and\",\"args\":[{\"type\":\"patient_set\",\"patientSetId\":0,\"patientIds\":-62},{\"type\":\"concept\",\"path\":\"\\\\Public Studies\\\\EHR\\\\Vital Signs\\\\Heart Rate\\\\\"}]}&type=clinical",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Return all observations for a specified patient and concept"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

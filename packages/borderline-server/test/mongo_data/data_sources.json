@@ -1,0 +1,14 @@
+{
+    "_id": {
+        "$oid": "592409efd3d8901d18974035"
+    },
+    "type": "TS171",
+    "name": "etriks dev 2",
+    "host": "postgres-ci.transmartfoundation.org",
+    "port": 80,
+    "protocol": "http",
+    "baseUrl": "/transmart/",
+    "public": true,
+    "users": [],
+    "default": true
+}

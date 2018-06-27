@@ -1,0 +1,7 @@
+{
+	ip: '211.152.59.220',
+	port: 22,
+	user: 'viacloud',
+	password: 'Password9988!',
+	os: 'Linux ubuntu 14.04.1- x86_64 GNU/Linux'
+}
