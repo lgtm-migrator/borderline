@@ -1,0 +1,74 @@
+{
+    "type": "object",
+    "properties": {
+        "uri": {
+            "type": "string",
+            "title": "Endpoint URI on the transmart server",
+            "enum": [
+                "/v2/observations?constraint="
+            ]
+        },
+        "params": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "title": "Type of composition",
+                    "enum": [
+                        "combination"
+                    ]
+                },
+                "operator": {
+                    "type": "string",
+                    "title": "Operator of the composition",
+                    "enum": [
+                        "and",
+                        "or",
+                        "xor"
+                    ]
+                },
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "title": "Argument type",
+                                "enum": [
+                                    "concept"
+                                ]
+                            },
+                            "path": {
+                                "type": "string",
+                                "title": "Concept path for your value"
+                            }
+                        },
+                        "required": [
+                            "type"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "type",
+                "operator",
+                "args"
+            ]
+        },
+        "type": {
+            "$id": "/properties/type",
+            "type": "string",
+            "title": "Type of data modality to use",
+            "default": "",
+            "enum": [
+                "clinical"
+            ]
+        }
+    },
+    "required": [
+        "uri",
+        "params",
+        "type"
+    ]
+}

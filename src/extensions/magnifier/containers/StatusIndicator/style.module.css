@@ -1,0 +1,61 @@
+.status {
+    height: 100%;
+    line-height: 100%;
+    padding: 0.1em 1em;
+    display: inline-block;
+    width: 8.5em;
+}
+
+.container {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.forced {
+    padding: 0.1em 1em;
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 1.1));
+    z-index: 10000;
+}
+
+.logo {
+    --logo-height: 0.2em;
+
+    padding-top: var(--logo-height);
+    height: calc(100% - var(--logo-height));
+}
+
+.logo:hover {
+    cursor: pointer;
+}
+
+.logo * {
+    fill: var(--color-font-active);
+}
+
+.zoomForm {
+    display: inline-block;
+    height: 100%;
+}
+
+.zoomValue {
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.9));
+    height: 65%;
+    width: 3.5em;
+    margin: 0.45em 0.8em;
+    font-size: 0.7em;
+    text-align: center;
+}
+
+.zoomValue::placeholder {
+    color: var(--font-color-active);
+}
+
+.zoomValue::selection {
+    color: var(--font-color-active);
+    background: red;
+}
+
+.zoomValue:hover {
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.8));
+}

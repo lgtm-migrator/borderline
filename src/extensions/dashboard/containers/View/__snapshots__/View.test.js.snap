@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing while empty 1`] = `
+Array [
+  <div
+    className="menu"
+  />,
+  <div
+    className="panel"
+  >
+    Dashboard
+  </div>,
+]
+`;
+
+exports[`renders without crashing with a child 1`] = `
+Array [
+  <div
+    className="menu"
+  />,
+  <div
+    className="panel"
+  >
+    Dashboard
+  </div>,
+]
+`;
+
+exports[`renders without crashing with multiple children 1`] = `
+Array [
+  <div
+    className="menu"
+  />,
+  <div
+    className="panel"
+  >
+    Dashboard
+  </div>,
+]
+`;

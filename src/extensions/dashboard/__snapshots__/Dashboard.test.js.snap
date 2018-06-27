@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing while empty 1`] = `null`;
+
+exports[`renders without crashing with a child 1`] = `null`;
+
+exports[`renders without crashing with multiple children 1`] = `null`;

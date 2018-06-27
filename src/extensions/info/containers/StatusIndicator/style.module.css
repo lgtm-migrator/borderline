@@ -1,0 +1,55 @@
+.status {
+    height: 100%;
+    width: 2.8em;
+    line-height: 100%;
+    padding: 0 0.6em;
+    display: inline-block;
+}
+
+.logo {
+    --logo-height: 0.2em;
+
+    padding-top: var(--logo-height);
+    height: calc(100% - var(--logo-height));
+}
+
+.logo * {
+    fill: var(--color-font-active);
+}
+
+.status:hover * {
+    cursor: pointer;
+}
+
+.infoBox {
+    position: fixed;
+    cursor: default;
+    height: 20em;
+    width: 40em;
+    bottom: 4em;
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.2));
+    border: solid 0.1em hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 0.8));
+    padding: 2em;
+}
+
+.infoBox::after {
+    content: "";
+    bottom: -1.1em;
+    left: 1em;
+    position: absolute;
+    border-left: 1em solid transparent;
+    border-right: 1em solid transparent;
+    border-top: 1em solid var(--color-accent);
+}
+
+.infoHide {
+    display: none;
+}
+
+.infoBox span {
+    white-space: normal;
+}
+
+.infoBox a {
+    color: var(--color-accent);
+}
