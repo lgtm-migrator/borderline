@@ -1,0 +1,1547 @@
+{
+	"info": {
+		"_postman_id": "9caed5aa-c0cf-4745-b0a6-8c34596d2a82",
+		"name": "Borderline-middleware",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Registry",
+			"description": null,
+			"item": [
+				{
+					"name": "GET status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/status",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET full details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/details",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create",
+			"description": null,
+			"item": [
+				{
+					"name": "Create empty query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create query and store id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"endpoint\": {\r\n    \"type\": \"TS171\",\r\n    \"name\": \"Transmart the hyve\",\r\n    \"protocol\": \"http\",\r\n    \"host\": \"glowingbear.thehyve.net\",\r\n    \"baseUrl\": \"\",\r\n    \"port\": 80,\r\n    \"public\": false\r\n  },\r\n  \"credentials\": {\r\n    \"username\": \"demo-user\",\r\n    \"password\": \"demo-user\"\r\n  },\r\n  \"input\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }],\r\n  \"output\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }]\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create query typed: TS171",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"non_used_field\": \"coucoutest\"\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/new/TS171",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new",
+								"TS171"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create query typed: File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.hasOwnProperty('_id') ;",
+									"",
+									"var query_id = jsonData['_id'];",
+									"postman.setEnvironmentVariable(\"current_query\", query_id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/new/File",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new",
+								"File"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get query  from {{current_id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update {{current_id}} query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "23021d41-1070-4f35-9ba3-8c9fc6f17082",
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"valid\"] = jsonData.value.hasOwnProperty('_id') ;",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"59a7ce455176401d286e1f65\",\n    \"credentials\": {\n        \"_id\": \"\",\n        \"username\": \"admin\",\n        \"password\": \"admin\"\n    },\n   \"endpoint\": {\n        \"type\": \"TS171\",\n        \"name\": \"Transmart\",\n        \"protocol\": \"http\",\n        \"host\": \"tm171-release-pg.thehyve.net\",\n        \"baseUrl\": \"\",\n        \"port\": 80,\n        \"public\": false\n    },\n    \"input\": [{\n        \"metadata\": {\n            \"uri\": \"/v2/observations?constraint=\",\n            \"params\": {\n                \"type\": \"or\",\n                \"args\": [\n                    {\n                        \"type\": \"concept\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\n                    },\n                    {\n                        \"type\": \"concept\",\n                        \"path\": \"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\n                    }\n                ]\n            },\n            \"type\": \"clinical\"\n        },\n        \"cache\": {}\n    }],\n    \"status\": {\n        \"status\": \"custom_status\",\n        \"start\": null,\n        \"end\": null,\n        \"info\": \"\"\n    },\n    \"output\": [{\n        \"metadata\": {},\n        \"cache\": {}\n    }],\n    \"non_used_field\": \"updated2\"\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Create query with missing endpoint",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"error\"] = jsonData.hasOwnProperty('error') ;",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"input\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }],\r\n  \"output\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }]\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Create query with invalid endpoint",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"error\"] = jsonData.hasOwnProperty('error') ;",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"credentials\": {\r\n    \"_id\": \"\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n  },\r\n  \"endpoint\": {\r\n    \"type\": \"thisshloudmakeitfail\",\r\n    \"name\": \"Transmart\",\r\n    \"protocol\": \"http\",\r\n    \"host\": \"transmart-pro-test.thehyve.net\",\r\n    \"baseUrl\": \"\",\r\n    \"port\": 80,\r\n    \"public\": false\r\n  },\r\n  \"input\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }],\r\n  \"output\": [{\r\n    \"metadata\": {},\r\n    \"cache\": {}\r\n  }]\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/new",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"new"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Credentials",
+			"description": null,
+			"item": [
+				{
+					"name": "Get query credentials from query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Username\"] = jsonData.hasOwnProperty('username');",
+									"tests[\"Password\"] = jsonData.hasOwnProperty('password');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update query credentials for query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Username\"] = jsonData.hasOwnProperty('username');",
+									"tests[\"Password\"] = jsonData.hasOwnProperty('password');",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setEnvironmentVariable(\"date_now\", new Date().toString());"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"demo-user\",\n  \"password\": \"demo-user\",\n  \"access_token\": \"0\",\n  \"expires_in\": 0,\n  \"generated\": \"{{date_now}}\"\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset credentials to default for query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is the query authenticated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Username\"] = jsonData.hasOwnProperty('username');",
+									"tests[\"Password\"] = jsonData.hasOwnProperty('password');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/credentials/isAuth",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"credentials",
+								"isAuth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get query credentials from invalid_query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 401;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"error\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/iamnotavalidqueryid/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"iamnotavalidqueryid",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Reset credentials to default for unknown_query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 401;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Error\"] = jsonData.hasOwnProperty(\"error\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/iamnotavliadquery/credentials",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"iamnotavliadquery",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Endpoint",
+			"description": null,
+			"item": [
+				{
+					"name": "Get the endpoint for query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit the endpoint for query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"type\": \"TS171\",\r\n  \"name\": \"Transmart the hyve\",\r\n  \"protocol\": \"http\",\r\n  \"host\": \"transmart.thehyve.net\",\r\n  \"baseUrl\": \"\",\r\n  \"port\": 80,\r\n  \"public\": false\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore default endpoint for query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get the endpoint for unknown query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty(\"error\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/notaquery_id/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"notaquery_id",
+								"endpoint"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Edit the endpoint for query_id with invalid informations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty(\"error\");",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"endpoint"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Restore default endpoint for unknown_query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty(\"error\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/notavalidideither/endpoint",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"notavalidideither",
+								"endpoint"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Input",
+			"description": null,
+			"item": [
+				{
+					"name": "Get standard format input",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Has std\"] = jsonData.hasOwnProperty('std');",
+									"tests[\"Has local\"] = jsonData.hasOwnProperty('local');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update standard input",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Has uri\"] = jsonData.hasOwnProperty('uri');",
+									"tests[\"Has params\"] = jsonData.hasOwnProperty('params');",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n \"uri\": \"/v2/observations?constraint=\",\r\n  \"params\": {\r\n    \"type\": \"combination\", \r\n    \"operator\": \"and\", \r\n    \"args\": [\r\n      {\r\n        \"type\":\"concept\",\r\n        \"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Male\\\\\"\r\n      },\r\n      {\r\n        \"type\":\"concept\",\r\n        \"path\":\"\\\\Public Studies\\\\CATEGORICAL_VALUES\\\\Demography\\\\Gender\\\\Female\\\\\"\r\n      }]\r\n   },\r\n   \"type\": \"clinical\"\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset standard input to defaults",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get standard format input for invalid query id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/heyholetsgo/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"heyholetsgo",
+								"input"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Update standard input with invalid format",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"coucou\": false,\n  \"hibou\": true\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"input"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Reset standard input for invalid query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/(  .  Y  . )/input",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"(  .  Y  . )",
+								"input"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Execution",
+			"description": null,
+			"item": [
+				{
+					"name": "Execute query TS171",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");",
+									"tests[\"isRunning\"] = jsonData.status === \"running\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"{{current_query}}\",\n  \"nocache\": true\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/execute",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"execute"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Execute query File upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");",
+									"tests[\"isRunning\"] = jsonData.status === \"running\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"value": ""
+								},
+								{
+									"key": "nocache",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/execute",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"execute"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get execution status TS171",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/status",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get execution status File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"hasStatus\"] = jsonData.hasOwnProperty(\"status\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "",
+									"type": "file"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/status",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get execution status for invalid query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty(\"error\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/execute/notaqueryi",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"execute",
+								"notaqueryi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Output",
+			"description": null,
+			"item": [
+				{
+					"name": "Get query standardized result for query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"output"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update query from standard data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n  \"coucou\": \"hibou\",\r\n  \"ZirgMaster\": true\r\n}"
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"output"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Removes query_result from strorage and reset pointer to default",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"has local\"] = jsonData.hasOwnProperty(\"local\");",
+									"tests[\"size 0\"] = jsonData.local.dataSize === 0;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/{{current_query}}/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"{{current_query}}",
+								"output"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Get query standardized result for invalid query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/(  . Y  .  )/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"(  . Y  .  )",
+								"output"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Error] Removes query_result for invalid query_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"isError\"] = jsonData.hasOwnProperty('error');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{middleware_url}}/query/nopenopenope/output",
+							"host": [
+								"{{middleware_url}}"
+							],
+							"path": [
+								"query",
+								"nopenopenope",
+								"output"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
