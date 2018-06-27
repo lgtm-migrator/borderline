@@ -1,6 +1,6 @@
 {
     "name": "borderline",
-    "version": "0.0.1",
+    "private": true,
     "description": "Master repo for all borderline packages.",
     "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
     "license": "MIT",
@@ -14,16 +14,16 @@
     "homepage": "https://github.com/dsi-icl/borderline#readme",
     "engines": {
         "node": ">= 7.10.1",
-        "yarn": ">= 0.17.8"
+        "npm": ">= 6.0.0"
     },
     "scripts": {
         "postinstall": "lerna bootstrap --stream",
         "build": "lerna run build --stream",
         "clean": "lerna run clean",
-        "start": "cd packages/borderline-ui && yarn start",
+        "start": "cd packages/borderline-ui && npm start",
         "test": "lerna run test --stream"
     },
     "devDependencies": {
-        "lerna": "^2.4.0"
+        "lerna": "2.11.0"
     }
 }
