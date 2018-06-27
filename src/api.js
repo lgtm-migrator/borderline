@@ -1,5 +1,6 @@
 import { forkJoin, from, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
+import { bolt, unbolt } from './crypto';
 
 const prefix = '/api';
 
@@ -93,14 +94,6 @@ const defaults = (params) => {
     if (params.body)
         params.body = bolt(params.body);
     return params;
-};
-
-const unbolt = (payload) => {
-    return payload;
-};
-
-const bolt = (payload) => {
-    return JSON.stringify(payload);
 };
 
 export default api;
