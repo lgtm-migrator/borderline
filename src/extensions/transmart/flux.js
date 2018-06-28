@@ -12,6 +12,8 @@ const types = {
     TRANSMART_STEP_CLEAR: 'TRANSMART_STEP_CLEAR',
     TRANSMART_STEP_EXECUTE_SUCCESS: 'TRANSMART_STEP_EXECUTE_SUCCESS',
     TRANSMART_STEP_EXECUTE_FAILURE: 'TRANSMART_STEP_EXECUTE_FAILURE',
+    TRANSMART_FETCH_RESULT_SUCCESS: 'TRANSMART_FETCH_RESULT_SUCCESS',
+    TRANSMART_FETCH_RESULT_FAILURE: 'TRANSMART_FETCH_RESULT_FAILURE',
     TRANSMART_QUERY_PANEL_UPDATE: 'TRANSMART_QUERY_PANEL_UPDATE',
     TRANSMART_QUERY_EXECUTE: 'TRANSMART_QUERY_EXECUTE',
     TRANSMART_QUERY_EXECUTE_SUCCESS: 'TRANSMART_QUERY_EXECUTE_SUCCESS',
@@ -32,8 +34,8 @@ export const actions = {
         profile: {
             name: 'Transmart Cohort',
             identifier: 'cohort',
-            input: [],
-            output: ['tm_result'],
+            inputs: [null],
+            outputs: ['tm_object_result', 'text_result'],
             sidebar: {
                 analyses: {
                     path: 'van',
@@ -132,6 +134,15 @@ export const actions = {
 
     receiveStepSuccess: () => ({
         type: types.TRANSMART_STEP_HYDRATE_SUCCESS
+    }),
+
+    fetchResultSuccess: (data) => ({
+        type: types.TRANSMART_FETCH_RESULT_SUCCESS,
+        data: data
+    }),
+
+    fetchResultFailure: () => ({
+        type: types.TRANSMART_FETCH_RESULT_SUCCESS
     })
 };
 
@@ -241,9 +252,33 @@ export const epics = {
                 of(actions.updateStepStatus(state.stepObject._id, 'finished')),
                 of(actions.saveStep(state.stepObject))
             ))),
+
+    fetchResult:
+        (action, state) => action.ofType('FETCH_STEP_RESULT')
+            .pipe(mergeMap((action) => {
+                let qid;
+                let status;
+                let last = new Date(0);
+                Object.keys(state.previousStepObject.context.queries).forEach((key) => {
+                    status = state.previousStepObject.context.queries[key].status;
+                    if (new Date(status.end).getTime() > last.getTime()) {
+                        qid = key;
+                        last = new Date(status.end);
+                    }
+                });
+                if (action.format === 'tm_object_result')
+                    return of(actions.fetchResultSuccess({ result: state.previousStepObject.context.queries[qid].output, to: action.__origin__ }));
+                return api.fetchQueryOutput(qid)
+                    .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: response.data, to: action.__origin__ }) : actions.fetchResultFailure()))
+            })),
+
+    fetchResultSuccess:
+        (action) => action.ofType(types.TRANSMART_FETCH_RESULT_SUCCESS)
+            .pipe(mergeMap((action) => of({ type: `@@extensions/${action.data.to}/STEP_RESULT`, result: action.data.result })))
 };
 
 const initial = {
+    previousStepObject: null,
     stepObject: null,
     queryList: {}
 };
@@ -280,7 +315,7 @@ const hydrateTransmart = (state, action) => {
     state.stepObject = action.step;
     state.queryList = {};
     if (state.stepObject.context !== undefined && state.stepObject.context.queries !== undefined)
-        Object.keys(state.stepObject.context.queries).map((key) => {
+        Object.keys(state.stepObject.context.queries).forEach((key) => {
             state.queryList[key] = {
                 loaded: false
             };
@@ -289,6 +324,7 @@ const hydrateTransmart = (state, action) => {
 };
 
 const clearCurrentStep = (state) => {
+    state.previousStepObject = state.stepObject;
     state.stepObject = {};
     state.queryList = {};
     return state;

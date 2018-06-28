@@ -13,6 +13,7 @@ const types = {
     STEP_LOAD_SUCCESS: 'STEP_LOAD_SUCCESS',
     STEP_LOAD_FAILURE: 'STEP_LOAD_FAILURE',
     STEP_CREATE: 'STEP_CREATE',
+    STEP_CREATE_FOLLOWUP: 'STEP_CREATE_FOLLOWUP',
     STEP_CREATE_SUCCESS: 'STEP_CREATE_SUCCESS',
     STEP_CREATE_FAILURE: 'STEP_CREATE_FAILURE',
     STEP_UPDATE: 'STEP_UPDATE',
@@ -21,6 +22,7 @@ const types = {
     STEP_TYPE_DOCK: 'STEP_TYPE_DOCK',
     STEP_STATUS_UPDATE: 'STEP_STATUS_UPDATE',
     STEP_FETCH: 'STEP_FETCH',
+    STEP_RESULT: 'STEP_RESULT',
     STEP_PREPARE_NEXT: 'STEP_PREPARE_NEXT',
     WORKFLOWS_LIST_LOAD: 'WORKFLOWS_LIST_LOAD',
     WORKFLOWS_LIST_LOAD_SUCCESS: 'WORKFLOWS_LIST_LOAD_SUCCESS',
@@ -58,11 +60,20 @@ export const actions = {
         type: types.STEP_PREPARE_NEXT
     }),
 
+    stepProcessResults: () => ({
+        type: types.STEP_PROCESS_RESULTS
+    }),
+
     stepCreate: (eid) => ({
         type: types.STEP_CREATE,
         step: {
             extension: eid
         }
+    }),
+
+    stepCreateFollowup: (eid) => ({
+        type: types.STEP_CREATE_FOLLOWUP,
+        eid: eid
     }),
 
     stepCreateAborted: () => ({
@@ -181,11 +192,21 @@ export const epics = {
     stepCreate:
         (action, state) => action.ofType(types.STEP_CREATE)
             .pipe(mergeMap((action) => {
-                const step = Object.assign({}, action.step, { parent: state.currentStep });
+                const step = Object.assign({}, action.step, { parent: state.currentStep, context: { input: state.followingStepInput } });
                 if (state.workflowLoading === true || state.workflowsListLoading === true || state.stepsListLoading === true)
                     return of(actions.stepCreateAborted());
                 return api.createStep(state.currentWorkflow, step)
                     .pipe(map(response => response.ok === true ? actions.stepCreateSuccess(response.data) : actions.stepCreateFailure(response.data)));
+            })),
+
+    stepCreateFollowup:
+        (action, state) => action.ofType(types.STEP_CREATE_FOLLOWUP)
+            .pipe(mergeMap((action) => {
+                const inputs = state.stepTypes[action.eid].inputs;
+                const compat = inputs.filter(value => -1 !== state.currentOutputs.indexOf(value));
+                if (compat.length <= 0)
+                    return of(actions.stepCreateAborted());
+                return of({ type: `@@extensions/${state.stepsList[state.currentWorkflow][state.currentStep].extension.split('/')[0]}/FETCH_STEP_RESULT`, format: compat[0] });
             })),
 
     workflowsListLoad:
@@ -223,13 +244,19 @@ export const epics = {
     stepPrepareNext:
         (action, state) => action.ofType(types.STEP_PREPARE_NEXT)
             .pipe(mergeMap(() => of({ type: `@@extensions/${state.stepsList[state.currentWorkflow][state.currentStep].extension.split('/')[0]}/EXECUTE_STEP` }))),
+
+    stepResult:
+        (action, state) => action.ofType(types.STEP_RESULT)
+            .pipe(mergeMap(() => of(actions.stepCreate(state.followingStepType))))
 };
 
 const initial = {
-    currentOutput: null,
+    currentOutputs: [null],
     currentWorkflow: null,
     currentStep: null,
     currentStepStatus: null,
+    followingStepType: null,
+    followingStepInput: null,
     newWorkflow: null,
     stepsListLoading: false,
     stepsLastLoaded: new Date(0),
@@ -259,6 +286,10 @@ export const reducers = {
                     return stepsListLoadFailure(state, action);
                 case types.STEP_LOAD:
                     return stepLoad(state, action);
+                case types.STEP_RESULT:
+                    return stepResult(state, action);
+                case types.STEP_CREATE_FOLLOWUP:
+                    return stepCreateFollowup(state, action);
                 case types.STEP_CREATE_SUCCESS:
                     return stepCreateSuccess(state, action);
                 case types.STEP_CREATE_FAILURE:
@@ -318,6 +349,8 @@ const stepsListLoadSuccess = (state, action) => {
         state.stepsList[step.workflow][step._id] = step;
         if (state.currentStep === null || new Date(step.create) > maxDate) {
             state.currentStep = step._id;
+            state.currentStepStatus = null;
+            state.currentOutputs = state.stepTypes[step.extension].outputs;
             maxDate = new Date(step.create);
         }
     });
@@ -334,23 +367,37 @@ const stepsListLoadFailure = (state, action) => {
 const stepLoad = (state, action) => {
     state.currentStep = action.step;
     state.currentStepStatus = null;
-    state.currentOutput = null;
+    state.followingStepType = null;
+    state.followingStepInput = null;
+    if (state.stepsList[state.currentWorkflow][action.step]) {
+        state.currentOutputs = state.stepTypes[state.stepsList[state.currentWorkflow][action.step].extension].outputs;
+    }
+    return state;
+};
+
+const stepResult = (state, action) => {
+    state.followingStepInput = action.result;
+    return state;
+};
+
+const stepCreateFollowup = (state, action) => {
+    state.followingStepType = action.eid;
+    state.followingStepInput = null;
     return state;
 };
 
 const stepCreateSuccess = (state, action) => {
     if (state.stepsList[action.data.workflow] === undefined)
         state.stepsList[action.data.workflow] = {};
+    state.followingStepType = null;
+    state.followingStepInput = null;
     state.stepsList[action.data.workflow][action.data._id] = action.data;
     state.currentStep = action.data._id;
-    state.currentOutput = state.stepTypes[action.data.extension].output;
+    state.currentOutputs = state.stepTypes[action.data.extension].outputs;
     return state;
 };
 
 const stepCreateFailure = (state, action) => {
-    state.currentStep = null;
-    state.currentStepStatus = null;
-    state.currentOutput = null;
     state.error = action.data.error;
     return state;
 };
@@ -390,7 +437,7 @@ const workflowLoadSuccess = (state, action) => {
     state.stepsLastLoaded = new Date(0);
     state.currentStep = null;
     state.currentStepStatus = null;
-    state.currentOutput = null;
+    state.currentOutputs = [null];
     return state;
 };
 
@@ -414,7 +461,7 @@ const workflowCreateSuccess = (state, action) => {
     state.stepsLastLoaded = new Date(0);
     state.currentStep = null;
     state.currentStepStatus = null;
-    state.currentOutput = null;
+    state.currentOutputs = [null];
     return state;
 };
 
@@ -445,8 +492,8 @@ const stepExtensionDock = (state, action) => {
     if (typeof profile.name !== 'string' ||
         typeof profile.identifier !== 'string' ||
         profile.identifier.length <= 0 ||
-        Array.isArray(profile.input) !== true ||
-        Array.isArray(profile.output) !== true)
+        Array.isArray(profile.inputs) !== true ||
+        Array.isArray(profile.outputs) !== true)
         return state;
     state.stepTypes[`${action.__origin__}/${profile.identifier}`] = profile;
     return state;

@@ -23,8 +23,9 @@ export const actions = {
         type: '@@extensions/workflow/STEP_TYPE_DOCK',
         profile: {
             name: 'EAE Analysis',
-            input: ['tm_result', 'file_result', 'eae_result'],
-            output: ['eae_result'],
+            identifier: 'text',
+            inputs: ['tm_object_result', 'text_result', 'eae_result'],
+            outputs: ['eae_result'],
             sidebar: {
                 analyses: {
                     path: 'analyses',

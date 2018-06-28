@@ -71,7 +71,7 @@ export const api = {
         method: 'GET'
     }),
 
-    fetchQueryOutput: (qid) => networkQuery(`/query/${qid}/status`, {
+    fetchQueryOutput: (qid) => networkQuery(`/query/${qid}/output`, {
         method: 'GET'
     }),
 };

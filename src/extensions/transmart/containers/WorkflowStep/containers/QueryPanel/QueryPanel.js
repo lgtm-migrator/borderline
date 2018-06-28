@@ -6,7 +6,7 @@ import { actions } from '../../../../flux';
 import schema from './schema.json';
 
 @stateAware(state => ({
-    apiQueryText: state.stepObject.context !== undefined ? state.stepObject.context.apiQueryText : ''
+    apiQueryText: state.stepObject !== undefined && state.stepObject.context !== undefined ? state.stepObject.context.apiQueryText : ''
 }))
 class QueryPanel extends Component {
 

@@ -10,8 +10,8 @@ export const actions = {
         profile: {
             name: 'File Upload',
             identifier: 'upload',
-            input: [],
-            output: ['file_result'],
+            inputs: [null],
+            outputs: ['text_result'],
             stage: UploadStage
         }
     }),
@@ -21,8 +21,8 @@ export const actions = {
         profile: {
             name: 'Free Text',
             identifier: 'text',
-            input: [],
-            output: ['file_result'],
+            inputs: [null, 'text_result'],
+            outputs: ['text_result'],
             stage: TextStage
         }
     })

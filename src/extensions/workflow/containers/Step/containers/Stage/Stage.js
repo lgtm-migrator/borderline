@@ -23,10 +23,11 @@ class Stage extends Component {
         if (step === undefined || stepTypes[step.extension] === undefined)
             return null;
         const Stage = stepTypes[step.extension].stage || {};
+        const model = step.extension.split('/')[0];
 
         return (
             <div className={style.stage}>
-                <Enclave domain={'extensions'} modelName={step.extension.split('/')[0]} >
+                <Enclave domain={'extensions'} modelName={model} key={model} >
                     <Route render={props => <Stage {...props} />} />
                 </Enclave>
             </div>

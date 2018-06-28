@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { default as T } from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import { stateAware } from 'utilities/storeManager';
 import { actions } from '../../flux';
 import style from './style.module.css';
 
 @stateAware(state => ({
     stepTypes: state.stepTypes,
-    currentOutput: state.currentOutput
+    currentStep: state.currentStep,
+    currentOutputs: state.currentOutputs
 }))
 class StepCreator extends Component {
 
@@ -15,18 +17,28 @@ class StepCreator extends Component {
 
     // Types for available context
     static contextTypes = {
-        dispatch: T.func
+        dispatch: T.func,
+        router: T.object
     };
 
     createStep = (eid) => {
-        this.context.dispatch(actions.stepCreate(eid));
+        const { root } = this.props;
+        if (root === true)
+            this.context.dispatch(actions.stepCreate(eid));
+        else
+            this.context.dispatch(actions.stepCreateFollowup(eid));
     }
 
     render() {
-        const { root, stepTypes, currentOutput } = this.props;
+        const { root, stepTypes, currentOutputs, currentStep } = this.props;
+        const { router: { route: { match: { path } } } } = this.context;
+
+        if (root !== true && currentStep === null)
+            return <Redirect to={path.substr(0, path.lastIndexOf('/'))} />;
+
         const typeList = Object.keys(stepTypes).map((eid) => {
-            const { input, name } = stepTypes[eid];
-            if (input !== undefined && input.length > 0 && input.includes(currentOutput) === false)
+            const { inputs, name } = stepTypes[eid];
+            if (currentOutputs !== null && inputs.filter(value => -1 !== currentOutputs.indexOf(value)).length === 0)
                 return null;
             return <button key={eid} onClick={() => this.createStep(eid)}>{name}</button>;
         });

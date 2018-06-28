@@ -15,11 +15,17 @@ class Actions extends Component {
 
     // Types for available context
     static contextTypes = {
-        dispatch: T.func
+        dispatch: T.func,
+        router: T.object
     };
 
     prepareNextStep = () => {
         this.context.dispatch(actions.stepPrepareNext());
+    }
+
+    processResults = () => {
+        const { history } = this.context.router;
+        history.push(`${history.location.pathname.substr(0, history.location.pathname.lastIndexOf('/'))}/new`);
     }
 
     render() {
@@ -28,8 +34,8 @@ class Actions extends Component {
 
         let buttons = [];
         if (currentStepStatus === 'finished') {
-            buttons.push(<button key={'reexec'}>Re-execute</button>);
-            buttons.push(<button key={'next'}>See the next step</button>);
+            buttons.push(<button key={'reexec'} onClick={this.prepareNextStep}>Re-execute</button>);
+            buttons.push(<button key={'next'} onClick={this.processResults}>Process results</button>);
         } else if (currentStepStatus === 'ready') {
             buttons.push(<button key={'exec'} onClick={this.prepareNextStep}>Execute</button>);
         } else {
