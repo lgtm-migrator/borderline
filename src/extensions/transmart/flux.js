@@ -269,7 +269,7 @@ export const epics = {
                 if (action.format === 'tm_object_result')
                     return of(actions.fetchResultSuccess({ result: state.previousStepObject.context.queries[qid].output, to: action.__origin__ }));
                 return api.fetchQueryOutput(qid)
-                    .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: response.data, to: action.__origin__ }) : actions.fetchResultFailure()))
+                    .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: JSON.stringify(JSON.parse(response.data), null, 4), to: action.__origin__ }) : actions.fetchResultFailure()))
             })),
 
     fetchResultSuccess:
