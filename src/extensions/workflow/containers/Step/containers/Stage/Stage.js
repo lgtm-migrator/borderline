@@ -27,7 +27,7 @@ class Stage extends Component {
 
         return (
             <div className={style.stage}>
-                <Enclave domain={'extensions'} modelName={model} key={model} >
+                <Enclave domain={'extensions'} modelName={model} key={currentStep} >
                     <Route render={props => <Stage {...props} />} />
                 </Enclave>
             </div>
