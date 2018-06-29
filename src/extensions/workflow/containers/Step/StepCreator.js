@@ -8,7 +8,8 @@ import style from './style.module.css';
 @stateAware(state => ({
     stepTypes: state.stepTypes,
     currentStep: state.currentStep,
-    currentOutputs: state.currentOutputs
+    currentOutputs: state.currentOutputs,
+    newStep: state.newStep
 }))
 class StepCreator extends Component {
 
@@ -30,11 +31,14 @@ class StepCreator extends Component {
     }
 
     render() {
-        const { root, stepTypes, currentOutputs, currentStep } = this.props;
+        const { root, stepTypes, currentOutputs, currentStep, newStep } = this.props;
         const { router: { route: { match: { path } } } } = this.context;
 
         if (root !== true && currentStep === null)
             return <Redirect to={path.substr(0, path.lastIndexOf('/'))} />;
+
+        if (newStep !== null)
+            return <Redirect to={`${path.substr(0, path.lastIndexOf('/'))}/${newStep}`} />;
 
         const typeList = Object.keys(stepTypes).map((eid) => {
             const { inputs, name } = stepTypes[eid];

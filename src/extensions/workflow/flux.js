@@ -258,6 +258,7 @@ const initial = {
     followingStepType: null,
     followingStepInput: null,
     newWorkflow: null,
+    newStep: null,
     stepsListLoading: false,
     stepsLastLoaded: new Date(0),
     stepsList: {},
@@ -365,6 +366,7 @@ const stepsListLoadFailure = (state, action) => {
 };
 
 const stepLoad = (state, action) => {
+    state.newStep = null;
     state.currentStep = action.step;
     state.currentStepStatus = null;
     state.followingStepType = null;
@@ -393,6 +395,7 @@ const stepCreateSuccess = (state, action) => {
     state.followingStepInput = null;
     state.stepsList[action.data.workflow][action.data._id] = action.data;
     state.currentStep = action.data._id;
+    state.newStep = action.data._id;
     state.currentOutputs = state.stepTypes[action.data.extension].outputs;
     return state;
 };
@@ -456,6 +459,7 @@ const workflowCreateSuccess = (state, action) => {
     state.workflowLoading = false;
     state.workflowsList[action.workflow._id] = action.workflow;
     state.newWorkflow = action.workflow._id;
+    state.newStep = null;
     state.stepsList = {};
     state.stepsListLoading = false;
     state.stepsLastLoaded = new Date(0);
@@ -484,6 +488,7 @@ const workflowUnpin = (state, action) => {
 
 const workflowForgetNew = (state) => {
     state.newWorkflow = null;
+    state.newStep = null;
     return state;
 };
 
