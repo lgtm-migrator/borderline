@@ -1,5 +1,5 @@
 import { of, concat, interval, from } from 'rxjs';
-import { mergeMap, map, mapTo, skipWhile, first, defaultIfEmpty, every, filter, tap } from 'rxjs/operators';
+import { mergeMap, map, mapTo, skipWhile, first, defaultIfEmpty, every, filter } from 'rxjs/operators';
 import { Constants } from 'borderline-utils';
 import { api } from 'api';
 import { VennIcon, VennPanel, StepStage } from './containers/WorkflowStep';
