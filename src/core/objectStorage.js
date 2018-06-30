@@ -9,24 +9,27 @@ const MemoryStream = require('memorystream');
  *
  * @constructor
  */
-function ObjectStorage(
-    options = {
+function ObjectStorage(options) {
+    options = Object.assign({
         url: 'http://127.0.0.1',
         username: 'admin',
         password: 'admin',
-        chunkSize: 1024 * 1024 * 1024 - 1 // 1 Go
-    }) {
+        chunkSize: 1024 * 1024 * 1024 - 1, // 1 Go
+        containerName: Constants.BL_GLOBAL_COLLECTION_STORAGE
+    }, options);
+
     // Init member vars
     // Destructuring options to private attributes
     this._url = options.url;
     this._username = options.username;
     this._password = options.password;
     this._chunkSize = options.chunkSize;
+    this._containerName = options.containerName;
 
     // Creates os2 instances
     this._store = new os2.Store(this._url);
     this._account = new os2.Account(this._store, this._username, this._password);
-    this._container = new os2.Container(this._account, Constants.BL_GLOBAL_COLLECTION_STORAGE);
+    this._container = new os2.Container(this._account, this._containerName);
 
     // Internal ready status
     this._storage_ready = false;
