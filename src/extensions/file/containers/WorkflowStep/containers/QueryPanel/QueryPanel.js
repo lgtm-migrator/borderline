@@ -5,7 +5,7 @@ import Editor from 'components/Editor';
 import { actions } from '../../../../flux';
 
 @stateAware(state => ({
-    fileText: state.stepObject !== undefined && state.stepObject.context !== undefined ? state.stepObject.context.fileText : ''
+    fileText: state.stepObject !== undefined && state.stepObject !== null && state.stepObject.context !== undefined ? state.stepObject.context.fileText : ''
 }))
 class QueryPanel extends Component {
 
