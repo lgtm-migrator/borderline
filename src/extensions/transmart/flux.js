@@ -237,7 +237,8 @@ export const epics = {
                         skipWhile(result => result === null || [
                             Constants.BL_QUERY_STATUS_UNKNOWN,
                             Constants.BL_QUERY_STATUS_INITIALIZE,
-                            Constants.BL_QUERY_STATUS_EXECUTE
+                            Constants.BL_QUERY_STATUS_EXECUTE,
+                            Constants.BL_QUERY_STATUS_TERMINATE
                         ].includes(result.status)),
                         first(),
                         mergeMap(() => api.fetchQuery(action.qid)
@@ -370,7 +371,8 @@ const queriesDidLoad = (state) => {
             if ([
                 Constants.BL_QUERY_STATUS_UNKNOWN,
                 Constants.BL_QUERY_STATUS_INITIALIZE,
-                Constants.BL_QUERY_STATUS_EXECUTE
+                Constants.BL_QUERY_STATUS_EXECUTE,
+                Constants.BL_QUERY_STATUS_TERMINATE
             ].includes(query.status))
                 state.currentState = 'querying';
             else
