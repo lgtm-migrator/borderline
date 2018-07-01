@@ -1,4 +1,4 @@
-import UploadStageHandle from './TextStage';
+import UploadStageHandle from './UploadStage';
 import TextStageHandle from './TextStage';
 
 export const UploadStage = UploadStageHandle;
