@@ -15,6 +15,12 @@ class WorkflowNavigation extends Component {
         const { match: { url } } = this.props;
         return (
             <>
+                <div key='panel' className={style.panel}>
+                    <Switch>
+                        <Route path={`${url}/history`} render={WorkflowHistory} />
+                        <Route component={WorkflowDispatch} />
+                    </Switch>
+                </div>
                 <div key='menu' className={style.menu}>
                     <NavLink to={`${url}/new`} className={`${style.button} ${style.shiningButton}`}>
                         New +
@@ -23,12 +29,6 @@ class WorkflowNavigation extends Component {
                         Workflow history
                     </NavLink>
                     <Route path={`${url}/:particule`} render={WorkflowPins} />
-                </div>
-                <div key='panel' className={style.panel}>
-                    <Switch>
-                        <Route path={`${url}/history`} render={WorkflowHistory} />
-                        <Route component={WorkflowDispatch} />
-                    </Switch>
                 </div>
             </>
         );
