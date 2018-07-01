@@ -7,5 +7,6 @@ export default [
     import('./eae'),
     import('./file'),
     import('./transmart'),
-    import('./info')
+    import('./info'),
+    import('./demo')
 ];
