@@ -1,3 +1,16 @@
 .logo * {
     fill: var(--color-font-active);
 }
+
+.analysisButton {
+    display: block;
+    height: 2em;
+    line-height: 2em;
+    width: 100%;
+    padding: 0 1em;
+}
+
+.analysisButton:hover {
+    cursor: pointer;
+    background-color: hsl(var(--color-background-h), var(--color-background-s), calc(var(--color-background-l) * 1.45));
+}

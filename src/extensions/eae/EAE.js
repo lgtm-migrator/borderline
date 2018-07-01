@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { epics } from './flux';
+import { epics, reducers } from './flux';
 
 class EAE extends Component {
 
@@ -9,6 +9,7 @@ class EAE extends Component {
     // Custom properties for borderline model
     static modelName = 'eae';
     static modelEpics = epics;
+    static modelReducers = reducers;
 
     render() {
         return null;
