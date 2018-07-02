@@ -51,8 +51,8 @@ export const actions = {
         profile: {
             name: 'EAE Analysis',
             identifier: 'text',
-            inputs: ['tm_object_result', 'text_result', 'eae_result'],
-            outputs: ['eae_object_result', 'text_result'],
+            inputs: ['object_result', 'text_result', 'eae_result'],
+            outputs: ['object_result', 'text_result'],
             sidebar: {
                 analyses: {
                     path: 'analyses',
@@ -280,7 +280,7 @@ export const epics = {
                                 if (response.data.status.status === Constants.BL_QUERY_STATUS_ERROR) {
                                     return actions.finishedQueryFailure(response.data.status.error);
                                 }
-                                return actions.finishedQuerySuccess(response.data)
+                                return actions.finishedQuerySuccess(response.data);
                             }))),
                 ),
                 )
@@ -315,7 +315,7 @@ export const epics = {
                         last = new Date(status.end);
                     }
                 });
-                if (action.format === 'eae_object_result')
+                if (action.format === 'object_result')
                     return of(actions.fetchResultSuccess({ result: state.previousStepObject.context.queries[qid].output, to: action.__origin__ }));
                 return api.fetchQueryOutput(qid)
                     .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: response.data, to: action.__origin__ }) : actions.fetchResultFailure()));
@@ -407,7 +407,7 @@ const executeStepSuccess = (state, action) => {
 };
 
 const finisedQuerySuccess = (state, action) => {
-    state.stepObject.context.queries[action.data._id]['output'] = action.data.output;
+    state.stepObject.context.queries[action.data._id] = action.data;
     return state;
 };
 
@@ -441,7 +441,7 @@ const queriesDidLoad = (state) => {
 const eaeCodeSwitch = (state, action) => {
     state.stepObject.context.analysisCodeText = state.adhocAnalysis[action.name].code;
     return state;
-}
+};
 
 const dockAnalysis = (state, action) => {
     state.adhocAnalysis[action.analysis.name] = action.analysis;

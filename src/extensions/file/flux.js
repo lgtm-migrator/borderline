@@ -285,7 +285,7 @@ export const epics = {
                                 if (response.data.status.status === Constants.BL_QUERY_STATUS_ERROR) {
                                     return actions.finishedQueryFailure(response.data.status.error);
                                 }
-                                return actions.finishedQuerySuccess(response.data)
+                                return actions.finishedQuerySuccess(response.data);
                             }))),
                 ),
                 )
@@ -400,7 +400,7 @@ const fileUploadPathUpdate = (state, action) => {
     state.stepObject.context.fileState = action.fileState;
     state.stepObject.context.changeFromOriginal = true;
     return state;
-}
+};
 
 const queryPanelUpdate = (state, action) => {
     if (state.stepObject.context === undefined)
@@ -422,7 +422,7 @@ const executeStepSuccess = (state, action) => {
 };
 
 const finisedQuerySuccess = (state, action) => {
-    state.stepObject.context.queries[action.data._id]['output'] = action.data.output;
+    state.stepObject.context.queries[action.data._id] = action.data;
     return state;
 };
 

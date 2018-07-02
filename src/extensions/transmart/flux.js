@@ -35,7 +35,7 @@ export const actions = {
             name: 'Transmart Cohort',
             identifier: 'cohort',
             inputs: [null],
-            outputs: ['tm_object_result', 'text_result'],
+            outputs: ['object_result', 'text_result'],
             sidebar: {
                 analyses: {
                     path: 'van',
@@ -267,10 +267,10 @@ export const epics = {
                         last = new Date(status.end);
                     }
                 });
-                if (action.format === 'tm_object_result')
+                if (action.format === 'object_result')
                     return of(actions.fetchResultSuccess({ result: state.previousStepObject.context.queries[qid].output, to: action.__origin__ }));
                 return api.fetchQueryOutput(qid)
-                    .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: JSON.stringify(JSON.parse(response.data), null, 4), to: action.__origin__ }) : actions.fetchResultFailure()))
+                    .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: JSON.stringify(JSON.parse(response.data), null, 4), to: action.__origin__ }) : actions.fetchResultFailure()));
             })),
 
     fetchResultSuccess:
@@ -350,7 +350,7 @@ const executeStepSuccess = (state, action) => {
 };
 
 const finisedQuerySuccess = (state, action) => {
-    state.stepObject.context.queries[action.data._id]['output'] = action.data.output;
+    state.stepObject.context.queries[action.data._id] = action.data;
     return state;
 };
 
