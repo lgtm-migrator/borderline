@@ -1,5 +1,5 @@
-import { of, concat, from } from 'rxjs';
-import { mergeMap, map, mapTo, defaultIfEmpty, every, filter } from 'rxjs/operators';
+import { of, concat, from, interval } from 'rxjs';
+import { mergeMap, map, mapTo, skipWhile, first, defaultIfEmpty, every, filter } from 'rxjs/operators';
 import { Constants } from 'borderline-utils';
 import { api } from 'api';
 import { UploadStage, TextStage } from './containers/WorkflowStep';
@@ -36,7 +36,7 @@ export const actions = {
             name: 'File Upload',
             identifier: 'upload',
             inputs: [null],
-            outputs: ['text_result'],
+            outputs: ['object_result', 'text_result'],
             stage: UploadStage
         }
     }),
@@ -259,16 +259,82 @@ export const epics = {
             })),
 
     executeQuerySuccess:
-        (action, state) => action.ofType(types.FILE_QUERY_EXECUTE_SUCCESS)
-            .pipe(mergeMap((action) => concat(
-                of(actions.queryUnitLoad(action.qid)),
+        (action) => action.ofType(types.FILE_QUERY_EXECUTE_SUCCESS)
+            .pipe(mergeMap((action) => of(actions.pollQuery(action.qid)))),
+
+    pollQuery:
+        (action) => action.ofType(types.FILE_QUERY_POLL)
+            .pipe(
+                mergeMap((action) => interval(1000)
+                    .pipe(
+                        mergeMap(() =>
+                            api.fetchQueryStatus(action.qid)
+                                .pipe(map(response => response.ok === true ? response.data : null))
+                        ),
+                        skipWhile(result => result === null || [
+                            Constants.BL_QUERY_STATUS_UNKNOWN,
+                            Constants.BL_QUERY_STATUS_INITIALIZE,
+                            Constants.BL_QUERY_STATUS_EXECUTE,
+                            Constants.BL_QUERY_STATUS_TERMINATE
+                        ].includes(result.status)),
+                        first(),
+                        mergeMap(() => api.fetchQuery(action.qid)
+                            .pipe(map(response => {
+                                if (response.ok !== true)
+                                    return actions.finishedQueryFailure(response.data);
+                                if (response.data.status.status === Constants.BL_QUERY_STATUS_ERROR) {
+                                    return actions.finishedQueryFailure(response.data.status.error);
+                                }
+                                return actions.finishedQuerySuccess(response.data)
+                            }))),
+                ),
+                )
+            ),
+
+    finishedQuerySuccess:
+        (action, state) => action.ofType(types.FILE_QUERY_FINISHED_SUCCESS)
+            .pipe(mergeMap(() => concat(
                 of(actions.updateStepStatus(state.stepObject._id, 'finished')),
+                of(actions.saveStep(state.stepObject))
             ))),
 
+    finishedQueryFailure:
+        (action, state) => action.ofType(types.FILE_QUERY_FINISHED_FAILURE)
+            .pipe(mergeMap((action) => concat(
+                of(actions.updateStepStatus(state.stepObject._id, 'finished')),
+                of({
+                    type: '@@core/pager/ERROR_DISPLAY',
+                    error: action.error
+                })))),
 
     fetchResult:
         (action, state) => action.ofType('FETCH_STEP_RESULT')
-            .pipe(mergeMap((action) => of({ type: `@@extensions/${action.__origin__}/STEP_RESULT`, result: state.previousStepObject.context.fileText })))
+            .pipe(mergeMap((action) => {
+
+                if (state.previousStepObject.extension === 'file/upload') {
+                    let qid;
+                    let status;
+                    let last = new Date(0);
+                    Object.keys(state.previousStepObject.context.queries).forEach((key) => {
+                        status = state.previousStepObject.context.queries[key].status;
+                        if (new Date(status.end).getTime() > last.getTime()) {
+                            qid = key;
+                            last = new Date(status.end);
+                        }
+                    });
+
+                    if (action.format === 'object_result')
+                        return of(actions.fetchResultSuccess({ result: state.previousStepObject.context.queries[qid].output, to: action.__origin__ }));
+                    return api.fetchQueryOutput(qid)
+                        .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: response.data, to: action.__origin__ }) : actions.fetchResultFailure()));
+                }
+
+                return of(actions.fetchResultSuccess({ result: state.previousStepObject.context.fileText, to: action.__origin__ }));
+            })),
+
+    fetchResultSuccess:
+        (action) => action.ofType(types.FILE_FETCH_RESULT_SUCCESS)
+            .pipe(mergeMap((action) => of({ type: `@@extensions/${action.data.to}/STEP_RESULT`, result: action.data.result })))
 };
 
 const initial = {
@@ -361,8 +427,6 @@ const finisedQuerySuccess = (state, action) => {
 };
 
 const queryUnitLoadSuccess = (state, action) => {
-    if (state.queryList[action.data._id] === undefined)
-        state.queryList[action.data._id] = {};
     state.queryList[action.data._id].loaded = true;
     state.stepObject.context.queries[action.data._id] = {
         _id: action.data._id,
