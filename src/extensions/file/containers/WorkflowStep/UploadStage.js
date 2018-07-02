@@ -28,6 +28,10 @@ class UploadStage extends Component {
         this.context.dispatch(actions.getCurrentStep());
     }
 
+    componentWillUnmount() {
+        this.context.dispatch(actions.clearCurrentStep());
+    }
+
     fileChanged = (e) => {
         let fileState = {
             filename: e.target.value,
