@@ -102,7 +102,6 @@ const defaults = (params) => {
         });
     if (params.body)
         params.body = bolt(params.body);
-    console.log('DefiniteHole', params);
     return params;
 };
 
