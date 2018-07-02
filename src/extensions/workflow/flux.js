@@ -358,7 +358,7 @@ const inspectStepTree = (state) => {
                 if (complex[level + 1] === undefined)
                     complex[level + 1] = 0;
                 complex[level + 1]++;
-                leafs = leafs.concat(constructLevel(element, level + 1))
+                leafs = leafs.concat(constructLevel(element, level + 1));
             });
         if (branch !== null) {
             let struct = {
@@ -381,7 +381,7 @@ const inspectStepTree = (state) => {
     };
 
     return constructLevel();
-}
+};
 
 const stepsListLoad = (state) => {
     state.stepsListLoading = true;

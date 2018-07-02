@@ -282,7 +282,7 @@ export const epics = {
                                 }
                                 return actions.finishedQuerySuccess(response.data);
                             }))),
-                ),
+                    ),
                 )
             ),
 

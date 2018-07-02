@@ -243,7 +243,7 @@ export const epics = {
                         first(),
                         mergeMap(() => api.fetchQuery(action.qid)
                             .pipe(map(response => response.ok === true ? actions.finishedQuerySuccess(response.data) : actions.finishedQueryFailure(response.data)))),
-                ),
+                    ),
                 )
             ),
 
@@ -367,7 +367,7 @@ const queryUnitLoadSuccess = (state, action) => {
 const queriesDidLoad = (state) => {
     state.currentState = 'ready';
     if (state.stepObject.context !== undefined && state.stepObject.context.queries !== undefined)
-        Object.values(state.stepObject.context.queries).map((query) => {
+        Object.values(state.stepObject.context.queries).forEach((query) => {
             if ([
                 Constants.BL_QUERY_STATUS_UNKNOWN,
                 Constants.BL_QUERY_STATUS_INITIALIZE,

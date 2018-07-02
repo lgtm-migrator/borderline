@@ -23,7 +23,7 @@ class StepList extends Component {
                 default:
                     return null;
             }
-        })
+        });
     }
 
     render() {
