@@ -49,12 +49,14 @@ class WorkflowHistory extends Component {
                 <Helmet>
                     <title>Workflow History</title>
                 </Helmet>
-                <div className={style.workflowsDescription}>
-                    <h1>Workflow History {status}</h1><br />
-                    <div>Here is the list of previous workflow you have worked with or have access too.</div>
-                </div>
-                <div className={style.workflowsList}>
-                    {list}
+                <div className={style.wrap}>
+                    <div className={style.workflowsDescription}>
+                        <h1>Workflow History {status}</h1><br />
+                        <div>Here is the list of previous workflow you have worked with or have access too.</div>
+                    </div>
+                    <div className={style.workflowsList}>
+                        {list}
+                    </div>
                 </div>
             </>
         );

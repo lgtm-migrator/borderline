@@ -16,6 +16,12 @@
     left: 0;
 }
 
+.wrap {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
 .button {
     display: inline-block;
     text-align: center;
