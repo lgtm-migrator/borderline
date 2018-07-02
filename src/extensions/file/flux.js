@@ -255,12 +255,16 @@ export const epics = {
                     of(actions.updateStepStatus(state.stepObject._id, 'querying')),
                     api.executeFormDataQuery(action.query._id, form)
                         .pipe(map(response => response.ok === true ? actions.executeQuerySuccess(action.query._id, response.data) : actions.executeQueryFailure(action.query._id)))
-                )
+                );
             })),
 
     executeQuerySuccess:
-        (action) => action.ofType(types.FILE_QUERY_EXECUTE_SUCCESS)
-            .pipe(mergeMap((action) => of(actions.pollQuery(action.qid)))),
+        (action, state) => action.ofType(types.FILE_QUERY_EXECUTE_SUCCESS)
+            .pipe(mergeMap((action) => concat(
+                of(actions.queryUnitLoad(action.qid)),
+                of(actions.updateStepStatus(state.stepObject._id, 'finished')),
+            ))),
+
 
     fetchResult:
         (action, state) => action.ofType('FETCH_STEP_RESULT')
@@ -307,6 +311,13 @@ const hydrateFile = (state, action) => {
     state.stepObject = action.step;
     if (state.stepObject.context.fileText === undefined)
         state.stepObject.context.fileText = state.stepObject.context.input || '';
+    state.queryList = {};
+    if (state.stepObject.context !== undefined && state.stepObject.context.queries !== undefined)
+        Object.keys(state.stepObject.context.queries).forEach((key) => {
+            state.queryList[key] = {
+                loaded: false
+            };
+        });
     return state;
 };
 
@@ -350,6 +361,8 @@ const finisedQuerySuccess = (state, action) => {
 };
 
 const queryUnitLoadSuccess = (state, action) => {
+    if (state.queryList[action.data._id] === undefined)
+        state.queryList[action.data._id] = {};
     state.queryList[action.data._id].loaded = true;
     state.stepObject.context.queries[action.data._id] = {
         _id: action.data._id,

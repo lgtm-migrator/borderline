@@ -63,6 +63,12 @@ export const api = {
         method: 'POST'
     }),
 
+    executeFormDataQuery: (qid, data) => networkQuery(`/query/${qid}/execute`, {
+        method: 'POST',
+        headers: null,
+        body: data
+    }),
+
     fetchQuery: (qid) => networkQuery(`/query/${qid}`, {
         method: 'GET'
     }),
@@ -88,11 +94,15 @@ const networkQuery = (url, params = {}) => from(fetch(`${prefix}${url}`, default
 
 const defaults = (params) => {
     params.credentials = 'include';
-    params.headers = Object.assign(params.headers || {}, {
-        'Content-Type': 'application/json; charset=UTF-8'
-    });
+    if (params.headers === null)
+        delete params.headers;
+    else
+        params.headers = Object.assign({}, params.headers || {
+            'Content-Type': 'application/json; charset=UTF-8'
+        });
     if (params.body)
         params.body = bolt(params.body);
+    console.log('DefiniteHole', params);
     return params;
 };
 

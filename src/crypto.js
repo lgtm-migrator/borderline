@@ -5,6 +5,8 @@ const unboltHook = (payload) => {
 };
 
 const boltHook = (payload) => {
+    if (payload instanceof FormData)
+        return payload;
     return JSON.stringify(payload);
 };
 
