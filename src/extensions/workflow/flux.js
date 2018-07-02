@@ -262,6 +262,7 @@ const initial = {
     stepsListLoading: false,
     stepsLastLoaded: new Date(0),
     stepsList: {},
+    stepsTree: [],
     stepsStatuses: {},
     stepTypes: {},
     workflowsListLoading: false,
@@ -335,6 +336,53 @@ export default {
     reducers
 };
 
+const inspectStepTree = (state) => {
+    if (state.currentWorkflow === null || state.stepsList[state.currentWorkflow] === undefined)
+        return [];
+    let rel = {};
+    Object.keys(state.stepsList[state.currentWorkflow]).forEach(sid => {
+        if (rel[sid] === undefined)
+            rel[sid] = [];
+        if (rel[state.stepsList[state.currentWorkflow][sid].parent] === undefined)
+            rel[state.stepsList[state.currentWorkflow][sid].parent] = [];
+        rel[state.stepsList[state.currentWorkflow][sid].parent].push(sid);
+    });
+    let complex = [];
+    const constructLevel = (id, level = 0) => {
+        let branch = id === undefined ? null : id;
+        let leafs = [];
+        if (complex[level] === undefined)
+            complex[level] = 0;
+        if (rel[branch] !== undefined)
+            rel[branch].forEach(element => {
+                if (complex[level + 1] === undefined)
+                    complex[level + 1] = 0;
+                complex[level + 1]++;
+                leafs = leafs.concat(constructLevel(element, level + 1))
+            });
+        if (branch !== null) {
+            let struct = {
+                level,
+                padding: complex[level],
+                _id: branch
+            };
+            let shifts = 1;
+            struct.padding = '';
+            while (shifts <= complex[level]) {
+                if (shifts === complex[level])
+                    struct.padding += '°';
+                else
+                    struct.padding += '|';
+                shifts++;
+            }
+            leafs.push(struct);
+        }
+        return leafs;
+    };
+
+    return constructLevel();
+}
+
 const stepsListLoad = (state) => {
     state.stepsListLoading = true;
     return state;
@@ -355,6 +403,7 @@ const stepsListLoadSuccess = (state, action) => {
             maxDate = new Date(step.create);
         }
     });
+    state.stepsTree = inspectStepTree(state);
     state.stepsLastLoaded = new Date();
     return state;
 };
@@ -394,6 +443,7 @@ const stepCreateSuccess = (state, action) => {
     state.followingStepType = null;
     state.followingStepInput = null;
     state.stepsList[action.data.workflow][action.data._id] = action.data;
+    state.stepsTree = inspectStepTree(state);
     state.currentStep = action.data._id;
     state.newStep = action.data._id;
     state.currentOutputs = state.stepTypes[action.data.extension].outputs;
