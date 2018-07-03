@@ -36,18 +36,15 @@ f.close()
 """
 Demonstration of coclustering.
 """
-
-### IMPORTS
-import sys
-import pandas as pd
-
 """
 From * Ailem M., Role F., Nadif M., Co-clustering Document-term Matrices by
 Direct Maximization of Graph Modularity. CIKM 2015: 1807-1810
 """
-
+### IMPORTS
+import sys
+import pandas as pd
 import numpy as np
-from sklearn.utils import check_random_state, check_array
+from sklearn.utils import check_random_state
 
 class ClusterLabelling(object):
     """Contains cluster results"""
@@ -133,12 +130,6 @@ class Cocluster(object):
       """
 
         random_state = check_random_state(self.random_state)
-
-        check_array(X, accept_sparse=True, dtype="numeric", order=None,
-                    copy=False, force_all_finite=True, ensure_2d=True,
-                    allow_nd=False, ensure_min_samples=self.n_clusters,
-                    ensure_min_features=self.n_clusters,
-                    warn_on_dtype=False, estimator=None)
 
         if type(X) == np.ndarray:
             X = np.matrix(X)
