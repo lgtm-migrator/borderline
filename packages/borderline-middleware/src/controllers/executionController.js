@@ -94,7 +94,8 @@ ExecutionController.prototype._internalExecutor = function (queryObject, request
         let error_callback = function (error_object) {
             queryObject.updateExecutionStatus({
                 end: new Date(),
-                info: JSON.stringify(error_object),
+                info: 'Errored :(',
+                error: error_object,
                 status: Constants.BL_QUERY_STATUS_ERROR
             });
             reject(ErrorHelper('Execution failed', error_object));

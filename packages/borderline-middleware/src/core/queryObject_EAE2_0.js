@@ -1,6 +1,9 @@
 const request = require('request');
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models, Constants } = require('borderline-utils');
 const QueryAbstract = require('./queryAbstract.js');
+const Options = require('./options.js');
+const ObjectStorage = require('./objectStorage.js');
+const config = require('../../config/borderline.config.js');
 
 /**
  * @fn QueryEAE2_0
@@ -28,9 +31,6 @@ function QueryEAE2_0(queryModel, queryCollection, storage) {
     this.getOutput = QueryEAE2_0.prototype.getOutput.bind(this);
     this.setOutput = QueryEAE2_0.prototype.setOutput.bind(this);
 
-    // Bind private member functions
-    this._stdToTransmart = QueryEAE2_0.prototype._stdToTransmart.bind(this);
-    this._transmartToStd = QueryEAE2_0.prototype._transmartToStd.bind(this);
 }
 QueryEAE2_0.prototype = Object.create(QueryAbstract.prototype); //Inherit Js style
 QueryEAE2_0.prototype.constructor = QueryEAE2_0;
@@ -55,29 +55,35 @@ QueryEAE2_0.prototype.execute = function () {
         let credentials = _this.getModel().credentials;
         let endpoint = _this.getModel().endpoint;
         let input = _this.getInputModel()[0].metadata;
-        _this._query_request = request.post({
-            baseUrl: endpoint.protocol + '://' + endpoint.host + ':' + endpoint.port + endpoint.baseUrl,
-            uri: '/job/create/swift',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            json: true,
-            body: {
-                eaeUsername: credentials.username,
-                eaeUserToken: credentials.password,
-                job: JSON.stringify(input.job)
-            }
-        }, function (error, response, body) {
-            if (error !== null || response === null || response.statusCode !== 200) {
-                if (body !== null)
-                    error = ErrorHelper('Execute error body', body);
-                reject(ErrorHelper('Execute request failed', error));
-            }
-            else {
-                // Wait for the analysis to be finished
-                console.debug("Job has been created");
-                resolve(_this._awaitResult(body));
-            }
+        _this._storage.createObject(input.code).then(function (storage_id) {
+            input.job.main = storage_id;
+            input.job.swiftData[Constants.BL_GLOBAL_COLLECTION_STORAGE].push(storage_id);
+            _this._query_request = request.post({
+                baseUrl: endpoint.protocol + '://' + endpoint.host + ':' + endpoint.port + endpoint.baseUrl,
+                uri: '/job/create/swift',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                json: true,
+                body: {
+                    eaeUsername: credentials.username,
+                    eaeUserToken: credentials.password,
+                    job: JSON.stringify(input.job)
+                }
+            }, function (error, response, body) {
+                if (error !== null || response === null || response.statusCode !== 200) {
+                    if (body !== null)
+                        error = ErrorHelper('Execute error body', body);
+                    reject(ErrorHelper('Execute request failed', error));
+                }
+                else {
+                    // Wait for the analysis to be finished
+                    console.debug('Job has been created');
+                    resolve(_this._awaitResult(body));
+                }
+            });
+        }, function (storage_error) {
+            reject(ErrorHelper('Caching output in storage failed', storage_error));
         });
     });
 };
@@ -133,7 +139,7 @@ QueryEAE2_0.prototype.getInput = function () {
             let input_model = _this._model.input[0]; // Only one input for EAE2_0 queries
             if (input_model.metadata) {
                 // Input is stored in Transmart format, so we convert back to std
-                resolve(_this._transmartToStd(input_model.metadata));
+                resolve(input_model.metadata);
             }
             else {
                 reject(ErrorHelper('Query EAE2_0 input is empty'));
@@ -157,7 +163,7 @@ QueryEAE2_0.prototype.setInput = function (data) {
     return new Promise(function (resolve, reject) {
         let data_model = Object.assign({}, Models.BL_MODEL_DATA,
             {
-                metadata: _this._stdToTransmart(data) // Transform std query to transmart
+                metadata: data
             });
         _this.setInputModel(data_model);
         _this._pushModel().then(function () {
@@ -206,9 +212,7 @@ QueryEAE2_0.prototype.getOutput = function () {
 QueryEAE2_0.prototype.setOutput = function (data) {
     let _this = this;
     return new Promise(function (resolve, reject) {
-        // Store the data in STD format
-        let std_data = _this._transmartToStd(data);
-        let bytes_data = JSON.stringify(std_data);
+        let bytes_data = JSON.stringify(data);
         // Todo: Should erase of the old storage object if any
         _this._storage.createObject(bytes_data).then(function (storage_id) {
             // Update model to remember where we stored the data
@@ -239,10 +243,8 @@ QueryEAE2_0.prototype.setOutput = function (data) {
  */
 QueryEAE2_0.prototype._awaitResult = function (job_info) {
     let _this = this;
-    console.debug("Waiting 1 seconds _awaitResult", job_info);
     return new Promise(function (resolve) {
         let timer = setTimeout(() => resolve(new Promise(function (resolve, reject) {
-            console.debug("_awaitResult trigger");
             let credentials = _this.getModel().credentials;
             let endpoint = _this.getModel().endpoint;
             request.post({
@@ -272,11 +274,10 @@ QueryEAE2_0.prototype._awaitResult = function (job_info) {
                         reject(ErrorHelper('The job errored or is dead', body.message));
                     else if (body.status.filter(value => -1 !== ['eae_job_cancelled'].indexOf(value)).length > 0)
                         reject(ErrorHelper('The job was cancelled', body.message));
-                    else if (body.status.filter(value => -1 !== ['eae_job_done', 'eae_job_completed', 'eae_job_archived'].indexOf(value)).length === 0)
+                    else if (body.status.filter(value => -1 !== ['eae_job_completed'].indexOf(value)).length === 0)
                         resolve(_this._awaitResult(job_info));
                     else {
                         clearTimeout(timer);
-                        console.debug("Gonna fetch result now", body._id);
                         resolve(_this._fetchResult(body));
                     }
                 }
@@ -294,7 +295,6 @@ QueryEAE2_0.prototype._awaitResult = function (job_info) {
 QueryEAE2_0.prototype._fetchResult = function (job_info) {
     let _this = this;
     return new Promise(function (resolve, reject) {
-        console.debug("_fetchResult trigger");
         let credentials = _this.getModel().credentials;
         let endpoint = _this.getModel().endpoint;
         request.post({
@@ -317,35 +317,25 @@ QueryEAE2_0.prototype._fetchResult = function (job_info) {
             }
             else {
                 // Store locally the result
-                console.debug("Finish and resolve", body);
-                _this._query_result = body;
-                resolve(true);
+                if (body.status !== 'OK' || body.outputContainer === undefined || body.output.length !== 1)
+                    reject(ErrorHelper('Do not have enough information to proceed with fetching', body));
+
+                let options = new Options(config);
+                let storage = new ObjectStorage({
+                    url: options.swiftURL,
+                    username: options.swiftUsername,
+                    password: options.swiftPassword,
+                    containerName: body.outputContainer
+                });
+                storage.getObject(body.output[0]).then(function (data) {
+                    _this._query_result = data;
+                    resolve(true);
+                }, function (storage_error) {
+                    reject(ErrorHelper('Getting EAE output from storage failed', storage_error));
+                });
             }
         });
     });
-};
-
-
-/**
- * @fn _stdToTransmart
- * @param std_data Chunk on standar query data to convert
- * @return Chunk of transmart specific data
- * @warning This method does nothing because we don't have a standard query language yet
- * @private
- */
-QueryEAE2_0.prototype._stdToTransmart = function (std_data) {
-    return std_data;
-};
-
-/**
- * @fn _transmartToStd
- * @param transmart_data Chunk on trasnmart extracted data to convert
- * @return Chunk of data in the standard query format
- * @warning This method does nothing because we don't have a standard query language yet
- * @private
- */
-QueryEAE2_0.prototype._transmartToStd = function (transmart_data) {
-    return transmart_data;
 };
 
 module.exports = QueryEAE2_0;
