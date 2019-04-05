@@ -1,5 +1,0 @@
-# Set the default behavior, in case people don't have core.autocrlf set.
-* text=auto
-
-# Node binaries must not contain carriage return or they will break on UNIX
-bin/* eol=lf
