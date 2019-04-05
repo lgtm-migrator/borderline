@@ -37,24 +37,28 @@ class WorkflowHistory extends Component {
                 status = '(Updating ...)';
             else
                 status = '(Loading ...)';
-        let list = Object.keys(workflowsList).map((key) =>
-            <Link key={key} to={`/workflow/${key}`}>
-                <div className={style.historyItem}>
-                    <b>{workflowsList[key].name}</b> by {workflowsList[key].owner} last updated {new Date(workflowsList[key].update).toDateString()}
-                </div>
-            </Link>
-        );
+        let list = Object.keys(workflowsList)
+            .sort((a, b) => new Date(workflowsList[b].update).getTime() - new Date(workflowsList[a].update).getTime())
+            .map((key) =>
+                <Link key={key} to={`/workflow/${key}`}>
+                    <div className={style.historyItem}>
+                        <b>{workflowsList[key].name}</b> by {workflowsList[key].owner} last updated {new Date(workflowsList[key].update).toDateString()}
+                    </div>
+                </Link>
+            );
         return (
             <>
                 <Helmet>
                     <title>Workflow History</title>
                 </Helmet>
-                <div className={style.workflowsDescription}>
-                    <h1>Workflow History {status}</h1><br />
-                    <div>Here is the list of previous workflow you have worked with or have access too.</div>
-                </div>
-                <div className={style.workflowsList}>
-                    {list}
+                <div className={style.wrap}>
+                    <div className={style.workflowsDescription}>
+                        <h1>Workflow History {status}</h1><br />
+                        <div>Here is the list of previous workflow you have worked with or have access too.</div>
+                    </div>
+                    <div className={style.workflowsList}>
+                        {list}
+                    </div>
                 </div>
             </>
         );

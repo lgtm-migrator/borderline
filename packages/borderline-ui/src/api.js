@@ -1,5 +1,6 @@
 import { forkJoin, from, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
+import { bolt, unbolt } from './crypto';
 
 const prefix = '/api';
 
@@ -62,6 +63,12 @@ export const api = {
         method: 'POST'
     }),
 
+    executeFormDataQuery: (qid, data) => networkQuery(`/query/${qid}/execute`, {
+        method: 'POST',
+        headers: null,
+        body: data
+    }),
+
     fetchQuery: (qid) => networkQuery(`/query/${qid}`, {
         method: 'GET'
     }),
@@ -70,7 +77,7 @@ export const api = {
         method: 'GET'
     }),
 
-    fetchQueryOutput: (qid) => networkQuery(`/query/${qid}/status`, {
+    fetchQueryOutput: (qid) => networkQuery(`/query/${qid}/output`, {
         method: 'GET'
     }),
 };
@@ -87,20 +94,15 @@ const networkQuery = (url, params = {}) => from(fetch(`${prefix}${url}`, default
 
 const defaults = (params) => {
     params.credentials = 'include';
-    params.headers = Object.assign(params.headers || {}, {
-        'Content-Type': 'application/json; charset=UTF-8'
-    });
+    if (params.headers === null)
+        delete params.headers;
+    else
+        params.headers = Object.assign({}, params.headers || {
+            'Content-Type': 'application/json; charset=UTF-8'
+        });
     if (params.body)
         params.body = bolt(params.body);
     return params;
-};
-
-const unbolt = (payload) => {
-    return payload;
-};
-
-const bolt = (payload) => {
-    return JSON.stringify(payload);
 };
 
 export default api;

@@ -22,10 +22,6 @@ class Login extends Component {
         dispatch: T.func
     };
 
-    state = {
-        redirectToReferrer: false
-    }
-
     login = (e) => {
         e.preventDefault();
         this.context.dispatch(actions.sessionLogin({

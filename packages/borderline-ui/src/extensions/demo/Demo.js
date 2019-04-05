@@ -1,19 +1,18 @@
 import { Component } from 'react';
-import { epics, reducers } from './flux';
+import { epics } from './flux';
 
-class EAE extends Component {
+class Info extends Component {
 
     // Custom name for container
-    static displayName = 'EAE';
+    static displayName = 'DemoAnalysis';
 
     // Custom properties for borderline model
-    static modelName = 'eae';
+    static modelName = 'info';
     static modelEpics = epics;
-    static modelReducers = reducers;
 
     render() {
         return null;
     }
 }
 
-export default EAE;
+export default Info;

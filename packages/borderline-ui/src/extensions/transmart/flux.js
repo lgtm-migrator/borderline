@@ -1,5 +1,5 @@
 import { of, concat, interval, from } from 'rxjs';
-import { mergeMap, map, mapTo, skipWhile, first, defaultIfEmpty, every, filter, tap } from 'rxjs/operators';
+import { mergeMap, map, mapTo, skipWhile, first, defaultIfEmpty, every, filter } from 'rxjs/operators';
 import { Constants } from 'borderline-utils';
 import { api } from 'api';
 import { VennIcon, VennPanel, StepStage } from './containers/WorkflowStep';
@@ -12,6 +12,8 @@ const types = {
     TRANSMART_STEP_CLEAR: 'TRANSMART_STEP_CLEAR',
     TRANSMART_STEP_EXECUTE_SUCCESS: 'TRANSMART_STEP_EXECUTE_SUCCESS',
     TRANSMART_STEP_EXECUTE_FAILURE: 'TRANSMART_STEP_EXECUTE_FAILURE',
+    TRANSMART_FETCH_RESULT_SUCCESS: 'TRANSMART_FETCH_RESULT_SUCCESS',
+    TRANSMART_FETCH_RESULT_FAILURE: 'TRANSMART_FETCH_RESULT_FAILURE',
     TRANSMART_QUERY_PANEL_UPDATE: 'TRANSMART_QUERY_PANEL_UPDATE',
     TRANSMART_QUERY_EXECUTE: 'TRANSMART_QUERY_EXECUTE',
     TRANSMART_QUERY_EXECUTE_SUCCESS: 'TRANSMART_QUERY_EXECUTE_SUCCESS',
@@ -32,8 +34,8 @@ export const actions = {
         profile: {
             name: 'Transmart Cohort',
             identifier: 'cohort',
-            input: [],
-            output: ['tm_result'],
+            inputs: [null],
+            outputs: ['object_result', 'text_result'],
             sidebar: {
                 analyses: {
                     path: 'van',
@@ -132,6 +134,15 @@ export const actions = {
 
     receiveStepSuccess: () => ({
         type: types.TRANSMART_STEP_HYDRATE_SUCCESS
+    }),
+
+    fetchResultSuccess: (data) => ({
+        type: types.TRANSMART_FETCH_RESULT_SUCCESS,
+        data: data
+    }),
+
+    fetchResultFailure: () => ({
+        type: types.TRANSMART_FETCH_RESULT_SUCCESS
     })
 };
 
@@ -226,12 +237,13 @@ export const epics = {
                         skipWhile(result => result === null || [
                             Constants.BL_QUERY_STATUS_UNKNOWN,
                             Constants.BL_QUERY_STATUS_INITIALIZE,
-                            Constants.BL_QUERY_STATUS_EXECUTE
+                            Constants.BL_QUERY_STATUS_EXECUTE,
+                            Constants.BL_QUERY_STATUS_TERMINATE
                         ].includes(result.status)),
                         first(),
                         mergeMap(() => api.fetchQuery(action.qid)
                             .pipe(map(response => response.ok === true ? actions.finishedQuerySuccess(response.data) : actions.finishedQueryFailure(response.data)))),
-                ),
+                    ),
                 )
             ),
 
@@ -241,9 +253,33 @@ export const epics = {
                 of(actions.updateStepStatus(state.stepObject._id, 'finished')),
                 of(actions.saveStep(state.stepObject))
             ))),
+
+    fetchResult:
+        (action, state) => action.ofType('FETCH_STEP_RESULT')
+            .pipe(mergeMap((action) => {
+                let qid;
+                let status;
+                let last = new Date(0);
+                Object.keys(state.previousStepObject.context.queries).forEach((key) => {
+                    status = state.previousStepObject.context.queries[key].status;
+                    if (new Date(status.end).getTime() > last.getTime()) {
+                        qid = key;
+                        last = new Date(status.end);
+                    }
+                });
+                if (action.format === 'object_result')
+                    return of(actions.fetchResultSuccess({ result: state.previousStepObject.context.queries[qid].output, to: action.__origin__ }));
+                return api.fetchQueryOutput(qid)
+                    .pipe(map(response => response.ok === true ? actions.fetchResultSuccess({ result: JSON.stringify(JSON.parse(response.data), null, 4), to: action.__origin__ }) : actions.fetchResultFailure()));
+            })),
+
+    fetchResultSuccess:
+        (action) => action.ofType(types.TRANSMART_FETCH_RESULT_SUCCESS)
+            .pipe(mergeMap((action) => of({ type: `@@extensions/${action.data.to}/STEP_RESULT`, result: action.data.result })))
 };
 
 const initial = {
+    previousStepObject: null,
     stepObject: null,
     queryList: {}
 };
@@ -280,7 +316,7 @@ const hydrateTransmart = (state, action) => {
     state.stepObject = action.step;
     state.queryList = {};
     if (state.stepObject.context !== undefined && state.stepObject.context.queries !== undefined)
-        Object.keys(state.stepObject.context.queries).map((key) => {
+        Object.keys(state.stepObject.context.queries).forEach((key) => {
             state.queryList[key] = {
                 loaded: false
             };
@@ -289,6 +325,7 @@ const hydrateTransmart = (state, action) => {
 };
 
 const clearCurrentStep = (state) => {
+    state.previousStepObject = state.stepObject;
     state.stepObject = {};
     state.queryList = {};
     return state;
@@ -313,7 +350,7 @@ const executeStepSuccess = (state, action) => {
 };
 
 const finisedQuerySuccess = (state, action) => {
-    state.stepObject.context.queries[action.data._id]['output'] = action.data.output;
+    state.stepObject.context.queries[action.data._id] = action.data;
     return state;
 };
 
@@ -330,11 +367,12 @@ const queryUnitLoadSuccess = (state, action) => {
 const queriesDidLoad = (state) => {
     state.currentState = 'ready';
     if (state.stepObject.context !== undefined && state.stepObject.context.queries !== undefined)
-        Object.values(state.stepObject.context.queries).map((query) => {
+        Object.values(state.stepObject.context.queries).forEach((query) => {
             if ([
                 Constants.BL_QUERY_STATUS_UNKNOWN,
                 Constants.BL_QUERY_STATUS_INITIALIZE,
-                Constants.BL_QUERY_STATUS_EXECUTE
+                Constants.BL_QUERY_STATUS_EXECUTE,
+                Constants.BL_QUERY_STATUS_TERMINATE
             ].includes(query.status))
                 state.currentState = 'querying';
             else

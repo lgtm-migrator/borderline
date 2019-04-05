@@ -52,3 +52,10 @@
     height: calc(100% - 3em);
     width: 100%;
 }
+
+.pad {
+    display: inline-block;
+    height: 100%;
+    width: 2em;
+    text-align: center;
+}

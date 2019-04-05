@@ -1,0 +1,49 @@
+.statusBar {
+    grid-area: status;
+    background-color: var(--color-accent);
+}
+
+.statusItem {
+    display: inline-block;
+    height: 100%;
+    max-width: 30em;
+    overflow: hidden;
+    position: relative;
+    color: var(--color-font-active);
+}
+
+.statusItem:hover {
+    background-color: hsl(var(--color-accent-h), var(--color-accent-s), calc(var(--color-accent-l) * 1.1));
+}
+
+.errorsContainer {
+    position: fixed;
+    height: 100%;
+    width: 0.01em;
+    top: 0;
+    right: 0;
+    overflow: visible;
+    vertical-align: bottom;
+    z-index: 10000;
+}
+
+.error {
+    width: 30em;
+    background-color: hsl(var(--color-error-h), var(--color-error-s), calc(var(--color-error-l) * 0.4));
+    border: solid 0.1em var(--color-error);
+    margin: 2em 2em 2em -32em;
+    padding: 1em;
+    overflow: hidden;
+}
+
+.error pre {
+    width: calc(100% + 2em);
+    overflow: scroll;
+    white-space: pre-wrap;
+    display: contents;
+}
+
+.error:hover {
+    cursor: pointer;
+    background-color: hsl(var(--color-error-h), var(--color-error-s), calc(var(--color-error-l) * 0.6));
+}

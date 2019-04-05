@@ -3,10 +3,9 @@ import { default as T } from 'prop-types';
 import { stateAware } from 'utilities/storeManager';
 import Editor from 'components/Editor';
 import { actions } from '../../../../flux';
-import schema from './schema.json';
 
 @stateAware(state => ({
-    apiQueryText: state.stepObject !== undefined && state.stepObject.context !== undefined ? state.stepObject.context.apiQueryText : ''
+    analysisCodeText: state.stepObject !== undefined && state.stepObject !== null && state.stepObject.context !== undefined ? state.stepObject.context.analysisCodeText : ''
 }))
 class QueryPanel extends Component {
 
@@ -40,22 +39,9 @@ class QueryPanel extends Component {
         this.editorValue = value;
     }
 
-    editorWillMount = (engine) => {
-        const { apiQueryText } = this.props;
-        let marker = 'transmart_API_query.json';
-        engine.languages.json.jsonDefaults.setDiagnosticsOptions({
-            validate: true,
-            schemas: [{
-                fileMatch: [marker],
-                schema: schema
-            }]
-        });
-        return this.model = engine.editor.createModel(apiQueryText, 'json', marker);
-    }
-
     render() {
-        const { apiQueryText } = this.props;
-        return <Editor language="json" onChange={this.valueChange} editorWillMount={this.editorWillMount} value={apiQueryText} />;
+        const { analysisCodeText } = this.props;
+        return <Editor language="python" onChange={this.valueChange} value={analysisCodeText} />;
     }
 }
 

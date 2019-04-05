@@ -4,6 +4,7 @@ import Enclave from 'containers/Enclave';
 import Navigation from './containers/Navigation';
 import Content from './containers/Content';
 import StatusBar from './containers/StatusBar';
+import Errors from './containers/Errors';
 import { reducers } from './flux';
 
 class Pager extends Component {
@@ -21,6 +22,7 @@ class Pager extends Component {
                 <Helmet>
                     <title>Borderline Interface</title>
                 </Helmet>
+                <Errors />
                 <Navigation key={'navigation'} />
                 <Content key={'content'} />
                 <StatusBar key={'status'} />

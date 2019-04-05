@@ -1,0 +1,15 @@
+.uploadForm {
+    padding: 2em;
+}
+
+.uploadForm button {
+    width: 20em;
+}
+
+.uploadForm input {
+    display: none;
+}
+
+.uploadForm span {
+    display: block;
+}
