@@ -29,7 +29,7 @@
         "monaco-editor": "0.16.2",
         "monaco-editor-webpack-plugin": "1.7.0",
         "react": "16.4.1",
-        "react-dom": "16.4.1",
+        "react-dom": "16.8.6",
         "react-helmet": "5.2.0",
         "react-redux": "5.0.7",
         "react-router-dom": "4.3.1",
