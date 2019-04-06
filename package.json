@@ -1,29 +1,65 @@
 {
-    "name": "borderline",
-    "private": true,
-    "description": "Master repo for all borderline packages.",
-    "author": "Florian Guitton <f.guitton@imperial.ac.uk>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/dsi-icl/borderline.git"
-    },
-    "bugs": {
-        "url": "https://github.com/dsi-icl/borderline/issues"
-    },
-    "homepage": "https://github.com/dsi-icl/borderline#readme",
-    "engines": {
-        "node": ">= 7.10.1",
-        "npm": ">= 6.0.0"
-    },
-    "scripts": {
-        "postinstall": "lerna bootstrap --stream",
-        "build": "lerna run build --stream",
-        "clean": "lerna run clean",
-        "start": "cd packages/borderline-ui && npm start",
-        "test": "lerna run test --stream"
-    },
-    "devDependencies": {
-        "lerna": "3.13.1"
-    }
+	"name": "borderline",
+	"private": true,
+	"description": "Master repo for all borderline packages.",
+	"author": "Florian Guitton <f.guitton@imperial.ac.uk>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dsi-icl/borderline.git"
+	},
+	"bugs": {
+		"url": "https://github.com/dsi-icl/borderline/issues"
+	},
+	"homepage": "https://github.com/dsi-icl/borderline#readme",
+	"engines": {
+		"node": ">= 7.10.1",
+		"npm": ">= 6.0.0"
+	},
+	"devDependencies": {
+		"lerna": "3.13.1"
+	},
+	"dependencies": {
+		"adm-zip": "0.4.13",
+		"babel-core": "6.26.3",
+		"babel-eslint": "8.2.5",
+		"babel-preset-env": "1.7.0",
+		"body-parser": "1.18.3",
+		"borderline-devutils": "0.4.28",
+		"borderline-utils": "0.2.5",
+		"bytes": "3.1.0",
+		"codacy-coverage": "3.4.0",
+		"connect-mongo": "2.0.3",
+		"connected-react-router": "4.5.0",
+		"dompurify": "1.0.10",
+		"eslint": "5.0.0",
+		"express": "4.16.4",
+		"express-session": "1.15.6",
+		"fs-extra": "6.0.1",
+		"immutable": "3.8.2",
+		"ip": "1.1.5",
+		"jest": "23.6.0",
+		"memorystream": "0.3.1",
+		"monaco-editor": "0.16.2",
+		"monaco-editor-webpack-plugin": "1.7.0",
+		"mongodb": "3.2.3",
+		"multer": "1.4.1",
+		"os2": "0.0.13",
+		"passport": "0.4.0",
+		"react": "16.4.1",
+		"react-dom": "16.4.1",
+		"react-helmet": "5.2.0",
+		"react-redux": "5.0.7",
+		"react-router-dom": "4.3.1",
+		"react-test-renderer": "16.4.1",
+		"redux": "4.0.0",
+		"redux-logger": "3.0.6",
+		"redux-observable": "1.0.0",
+		"request": "2.87.0",
+		"rxjs": "6.2.1",
+		"speakeasy": "2.0.0",
+		"stylelint": "9.3.0",
+		"stylelint-config-standard": "18.2.0",
+		"uuid": "3.3.2"
+	}
 }
