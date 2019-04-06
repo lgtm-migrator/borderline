@@ -1,6 +1,6 @@
 {
     "name": "@borderline/utils",
-    "version": "0.3.0",
+    "version": "1.0.1-alpha.0",
     "description": "Utilities suite for the Borderline projects",
     "keywords": [
         "borderline",
