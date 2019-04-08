@@ -12,4 +12,7 @@ steps:
   displayName: "Install Node.js"
 
 - script: yarn install
-  displayName: "Install Yarn dependencies"
+  displayName: "Install Borderline dependencies"
+  
+- script: yarn run test
+  displayName: "Test Borderline"

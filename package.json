@@ -16,6 +16,9 @@
 		"node": ">= 7.10.1",
 		"npm": ">= 6.0.0"
 	},
+	"scripts": {
+		"test": "echo 'Nothing to test'"
+	},
 	"devDependencies": {
 		"lerna": "3.13.1"
 	},
