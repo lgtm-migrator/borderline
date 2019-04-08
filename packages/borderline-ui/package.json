@@ -28,7 +28,7 @@
         "immutable": "3.8.2",
         "monaco-editor": "0.16.2",
         "monaco-editor-webpack-plugin": "1.7.0",
-        "react": "16.4.1",
+        "react": "16.8.6",
         "react-dom": "16.8.6",
         "react-helmet": "5.2.0",
         "react-redux": "5.0.7",
@@ -40,7 +40,7 @@
     "devDependencies": {
         "borderline-devutils": "0.4.28",
         "codacy-coverage": "3.4.0",
-        "react-test-renderer": "16.4.1",
+        "react-test-renderer": "16.8.6",
         "redux-logger": "3.0.6",
         "stylelint": "9.3.0",
         "stylelint-config-standard": "18.2.0"
