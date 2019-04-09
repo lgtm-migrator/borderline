@@ -15,6 +15,6 @@
         "graphql": "14.2.1",
         "graphql-tools": "4.0.4",
         "open": "6.1.0",
-        "subscriptions-transport-ws": "0.9.15"
+        "subscriptions-transport-ws": "0.9.16"
     }
 }
