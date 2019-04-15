@@ -42,7 +42,7 @@
         "codacy-coverage": "3.4.0",
         "react-test-renderer": "16.8.6",
         "redux-logger": "3.0.6",
-        "stylelint": "9.10.1",
+        "stylelint": "10.0.0",
         "stylelint-config-standard": "18.3.0"
     },
     "engines": {
