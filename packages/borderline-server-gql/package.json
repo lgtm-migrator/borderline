@@ -12,7 +12,7 @@
         "body-parser": "1.19.0",
         "cors": "2.8.5",
         "express": "4.17.1",
-        "graphql": "14.3.1",
+        "graphql": "14.4.2",
         "graphql-tools": "4.0.4",
         "open": "6.3.0",
         "subscriptions-transport-ws": "0.9.16"
