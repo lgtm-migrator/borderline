@@ -11,9 +11,9 @@
         "apollo-client": "2.6.3",
         "graphql": "14.4.2",
         "raf": "3.4.1",
-        "react": "16.8.6",
+        "react": "16.9.0",
         "react-apollo": "3.0.0",
-        "react-dom": "16.8.6"
+        "react-dom": "16.9.0"
     },
     "browserslist": {
         "development": [
