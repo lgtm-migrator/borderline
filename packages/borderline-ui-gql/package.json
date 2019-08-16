@@ -12,7 +12,7 @@
         "graphql": "14.4.2",
         "raf": "3.4.1",
         "react": "16.9.0",
-        "react-apollo": "3.0.0",
+        "react-apollo": "3.0.1",
         "react-dom": "16.9.0"
     },
     "browserslist": {
