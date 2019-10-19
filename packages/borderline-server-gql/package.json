@@ -14,7 +14,7 @@
         "express": "4.17.1",
         "graphql": "14.5.8",
         "graphql-tools": "4.0.5",
-        "open": "6.4.0",
+        "open": "7.0.0",
         "subscriptions-transport-ws": "0.9.16"
     }
 }
