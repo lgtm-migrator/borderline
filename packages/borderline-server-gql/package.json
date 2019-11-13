@@ -7,7 +7,7 @@
         "build": "zen build"
     },
     "dependencies": {
-        "apollo-server-express": "2.9.8",
+        "apollo-server-express": "2.9.9",
         "apollo-server-module-graphiql": "1.4.0",
         "body-parser": "1.19.0",
         "cors": "2.8.5",
