@@ -24,7 +24,7 @@
     "scripts": {
         "lint": "eslint ./",
         "lint:fix": "eslint ./",
-        "start": "node ./src/index.js",
+        "start": "node --unhandled-rejections=strict ./src/index.js",
         "test": "jest --runInBand --colors --verbose --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN"
     },
     "dependencies": {

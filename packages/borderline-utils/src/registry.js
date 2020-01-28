@@ -116,19 +116,16 @@ Registry.prototype.stopPeriodicUpdate = function () {
  */
 Registry.prototype._sync = function () {
     let _this = this;
-    return new Promise(function (resolve, reject) {
-        let model_update = Object.assign({}, _this.getModel());
-        let mongo_id = model_update._id;
-        delete model_update._id; // Let mongoDB handle ids
-        _this._registryCollection.findOneAndUpdate({ _id: new ObjectID(mongo_id) }, model_update, { returnOriginal: false, upsert: true }).then(function (result) {
-            // Assign global identifier value of this process
-            _global_process_identifier = result.value._id.toHexString();
-            // Update local model with whats inside the DB
-            _this.setModel(result.value);
-            resolve(true); // All good, update successful
-        }, function (update_error) {
-            reject(ErrorStack('Update registry failed', update_error));
-        });
+    let model_update = Object.assign({}, _this.getModel());
+    let mongo_id = model_update._id;
+    delete model_update._id; // Let mongoDB handle ids
+    _this._registryCollection.findOneAndReplace({ _id: new ObjectID(mongo_id) }, model_update, { returnOriginal: false, upsert: true }).then(function (result) {
+        // Assign global identifier value of this process
+        _global_process_identifier = result.value._id.toHexString();
+        // Update local model with whats inside the DB
+        _this.setModel(result.value);
+    }, function (update_error) {
+        console.error(ErrorStack('Update registry failed', update_error).toString());
     });
 };
 

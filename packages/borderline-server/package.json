@@ -25,7 +25,7 @@
         "lint": "eslint --ext .jsx --ext .js ./",
         "lint:fix": "eslint --ext .jsx --ext .js --fix ./",
         "plugin": "webpack --config ./tools/plugin-build/webpack.config.js --colors",
-        "start": "node ./src/index.js",
+        "start": "node --unhandled-rejections=strict ./src/index.js",
         "test": "jest --runInBand --colors --detectOpenHandles --forceExit --verbose --coverage && cat ./coverage/lcov.info | codacy-coverage --token $CODACY_COVERAGE_TOKEN"
     },
     "dependencies": {

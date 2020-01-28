@@ -206,7 +206,9 @@ BorderlineMiddleware.prototype._connectDb = function () {
         let promises = [];
         for (let i = 0; i < urls_list.length; i++) {
             let p = new Promise(function (resolve, reject) {
-                mongodb.connect(urls_list[i], {}, function (err, client) {
+                mongodb.connect(urls_list[i], {
+                    useUnifiedTopology: true
+                }, function (err, client) {
                     if (err !== null)
                         reject(ErrorHelper('Database connection failure', err));
                     else
