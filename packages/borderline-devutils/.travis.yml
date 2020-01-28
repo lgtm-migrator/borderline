@@ -1,0 +1,15 @@
+sudo: false
+
+language: node_js
+node_js:
+  - 10
+
+install:
+  - npm --versions
+  - npm ci
+
+script:
+  - true
+
+after_success:
+  - 'if [ $TRAVIS_BRANCH = "master" ]; then node ./bin/borderline-devutils.js publish; fi'
