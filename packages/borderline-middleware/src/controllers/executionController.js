@@ -1,5 +1,5 @@
 const QueryFactory = require('../core/queryFactory.js');
-const { ErrorHelper, Constants } = require('borderline-utils');
+const { ErrorHelper, Constants } = require('@borderline/utils');
 
 /**
  * @fn ExecutionController

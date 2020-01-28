@@ -1,5 +1,5 @@
 let userExtensionModule = require('../core/userExtensions');
-const { ErrorHelper } = require('borderline-utils');
+const { ErrorHelper } = require('@borderline/utils');
 
 /**
  * @fn UserExtensionController

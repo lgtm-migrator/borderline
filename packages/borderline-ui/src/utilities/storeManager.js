@@ -6,7 +6,7 @@ import { createLogger } from 'redux-logger';
 import { BehaviorSubject } from 'rxjs';
 import { mergeMap, mapTo } from 'rxjs/operators';
 import { Map } from 'immutable';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import ParentTracer from 'containers/ParentTracer';
 
 class StoreManager {
@@ -19,7 +19,8 @@ class StoreManager {
     setDefaults() {
 
         this.asyncReducers = {
-            default: (state = Map({})) => state
+            default: (state = Map({})) => state,
+            router: connectRouter(history)
         };
         this.asyncEpics = {
             default: (action) => action.ofType('@@NULL').pipe(mapTo({ type: '@@TERMINATED' }))
@@ -34,10 +35,10 @@ class StoreManager {
 
     configure() {
 
+        history = createBrowserHistory();
+
         this.setDefaults();
         this.clearRootEpics();
-
-        history = createHistory();
 
         this.middleware = {
             router: routerMiddleware(history),
@@ -76,14 +77,14 @@ class StoreManager {
 
         }
 
-        store = createStore(connectRouter(history)(combineReducers(this.asyncReducers)), mutateCompose(applyMiddleware(...Object.values(this.middleware))));
+        store = createStore(combineReducers(this.asyncReducers), mutateCompose(applyMiddleware(...Object.values(this.middleware))));
         this.middleware.epic.run(this.rootEpic);
 
     }
 
     injectAsyncReducer(modelName, asyncReducer) {
         this.asyncReducers[modelName] = asyncReducer;
-        store.replaceReducer(connectRouter(history)(combineReducers(this.asyncReducers)));
+        store.replaceReducer(combineReducers(this.asyncReducers));
     }
 
     injectAsyncEpic = (modelName, asyncEpic) => {

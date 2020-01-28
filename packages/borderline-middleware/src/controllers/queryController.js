@@ -1,4 +1,4 @@
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models } = require('@borderline/utils');
 const ObjectID = require('mongodb').ObjectID;
 const defines = require('../defines.js');
 

@@ -1,4 +1,3 @@
-/* eslint no-console: "off" */
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
@@ -8,26 +7,56 @@ process.env.PUBLIC_URL = '';
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
 process.on('unhandledRejection', err => {
-    console.error(err.stack);
     throw err;
 });
 
 // Ensure environment variables are read.
 require('../config/env');
+// @remove-on-eject-begin
+// Do the preflight check (only happens before eject).
+const verifyPackageTree = require('./utils/verifyPackageTree');
+if (process.env.SKIP_PREFLIGHT_CHECK !== 'true') {
+    verifyPackageTree();
+}
+const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
+verifyTypeScriptSetup();
+// @remove-on-eject-end
 
 const jest = require('jest');
+const execSync = require('child_process').execSync;
 let argv = process.argv.slice(2);
 
-// Watch unless on CI, in coverage mode, or explicitly running all tests
-if (
-    !process.env.CI &&
-    argv.indexOf('--coverage') === -1 &&
-    argv.indexOf('--watchAll') === -1
-) {
-    argv.push('--watch');
+function isInGitRepository() {
+    try {
+        execSync('git rev-parse --is-inside-work-tree', { stdio: 'ignore' });
+        return true;
+    } catch (e) {
+        return false;
+    }
 }
 
-// We create the Jest configuration
+function isInMercurialRepository() {
+    try {
+        execSync('hg --cwd . root', { stdio: 'ignore' });
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Watch unless on CI or explicitly running all tests
+if (
+    !process.env.CI &&
+    argv.indexOf('--watchAll') === -1 &&
+    argv.indexOf('--watchAll=false') === -1
+) {
+    // https://github.com/facebook/create-react-app/issues/5210
+    const hasSourceControl = isInGitRepository() || isInMercurialRepository();
+    argv.push(hasSourceControl ? '--watch' : '--watchAll');
+}
+
+// @remove-on-eject-begin
+// This is not necessary after eject because we embed config into package.json.
 const createJestConfig = require('./utils/createJestConfig');
 const path = require('path');
 const paths = require('../config/paths');
@@ -37,14 +66,14 @@ argv.push(
         createJestConfig(
             relativePath => path.resolve(__dirname, '..', relativePath),
             path.resolve(paths.appSrc, '..'),
-            paths.srcPaths
+            false
         )
     )
 );
 
 // This is a very dirty workaround for https://github.com/facebook/jest/issues/5913.
 // We're trying to resolve the environment ourselves because Jest does it incorrectly.
-// TODO: remove this (and the `resolve` dependency) as soon as it's fixed in Jest.
+// TODO: remove this as soon as it's fixed in Jest.
 const resolve = require('resolve');
 function resolveJestDefaultEnvironment(name) {
     const jestDir = path.dirname(
@@ -67,7 +96,7 @@ function resolveJestDefaultEnvironment(name) {
     });
 }
 let cleanArgv = [];
-let env = 'node';
+let env = 'jsdom';
 let next;
 do {
     next = argv.shift();
@@ -95,6 +124,5 @@ if (!resolvedEnv) {
 }
 const testEnvironment = resolvedEnv || env;
 argv.push('--env', testEnvironment);
-
-
+// @remove-on-eject-end
 jest.run(argv);

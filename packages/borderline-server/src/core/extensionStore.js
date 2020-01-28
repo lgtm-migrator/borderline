@@ -4,7 +4,7 @@ const path = require('path');
 
 //Local modules
 let Extension = require('./extension');
-const { ErrorHelper, Constants } = require('borderline-utils');
+const { ErrorHelper, Constants } = require('@borderline/utils');
 
 /**
  * @fn ExtensionStore

@@ -1,4 +1,4 @@
-const { ErrorHelper } = require('borderline-utils');
+const { ErrorHelper } = require('@borderline/utils');
 
 /**
  * @fn adminPrivileges

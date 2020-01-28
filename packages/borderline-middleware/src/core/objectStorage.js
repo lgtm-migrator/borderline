@@ -1,4 +1,4 @@
-const { ErrorHelper, Constants } = require('borderline-utils');
+const { ErrorHelper, Constants } = require('@borderline/utils');
 const uuid = require('uuid');
 const os2 = require('os2');
 const MemoryStream = require('memorystream');

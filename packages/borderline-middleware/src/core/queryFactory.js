@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const { ErrorHelper, Constants } = require('borderline-utils');
+const { ErrorHelper, Constants } = require('@borderline/utils');
 
 const Query_TS17_1 = require('./queryObject_TS17_1.js');
 const Query_EAE2_0 = require('./queryObject_EAE2_0.js');

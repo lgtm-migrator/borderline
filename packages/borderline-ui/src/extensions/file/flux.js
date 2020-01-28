@@ -1,6 +1,6 @@
 import { of, concat, from, interval } from 'rxjs';
 import { mergeMap, map, mapTo, skipWhile, first, defaultIfEmpty, every, filter } from 'rxjs/operators';
-import { Constants } from 'borderline-utils';
+import { Constants } from '@borderline/utils';
 import { api } from 'api';
 import { UploadStage, TextStage } from './containers/WorkflowStep';
 import BusinessHandler from './business';

@@ -1,4 +1,4 @@
-import { Constants } from 'borderline-utils';
+import { Constants } from '@borderline/utils';
 
 class BusinessHandler {
 

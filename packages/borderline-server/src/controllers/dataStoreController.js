@@ -1,5 +1,5 @@
 const dataStoreModule = require('../core/dataStore');
-const { ErrorHelper } = require('borderline-utils');
+const { ErrorHelper } = require('@borderline/utils');
 
 /**
  * @fn dataStoreController

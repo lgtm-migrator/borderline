@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
 const ObjectID = require('mongodb').ObjectID;
-const { ErrorHelper, Models, Constants, RegistryIdentifier } = require('borderline-utils');
+const { ErrorHelper, Models, Constants, RegistryIdentifier } = require('@borderline/utils');
 
 /**
  * @fn Extension

@@ -1,6 +1,6 @@
 const QueryFactory = require('../core/queryFactory.js');
 const defines = require('../defines.js');
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models } = require('@borderline/utils');
 
 /**
  * @fn EndpointController

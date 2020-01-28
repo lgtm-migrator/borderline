@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const { ErrorHelper } = require('borderline-utils');
+const { ErrorHelper } = require('@borderline/utils');
 
 /**
  * @fn userExtensions

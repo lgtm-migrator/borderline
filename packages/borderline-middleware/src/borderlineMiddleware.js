@@ -2,7 +2,7 @@ const express = require('express');
 const mongodb = require('mongodb').MongoClient;
 const multer = require('multer');
 const body_parser = require('body-parser');
-const { ErrorHelper, Constants, RegistryHelper } = require('borderline-utils');
+const { ErrorHelper, Constants, RegistryHelper } = require('@borderline/utils');
 
 const package_file = require('../package.json');
 const Options = require('./core/options.js');

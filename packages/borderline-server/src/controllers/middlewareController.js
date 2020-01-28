@@ -1,7 +1,7 @@
 
 const express = require('express');
 const request = require('request');
-const { ErrorHelper, Constants } = require('borderline-utils');
+const { ErrorHelper, Constants } = require('@borderline/utils');
 
 /**
  * @fn middlewareConttroller

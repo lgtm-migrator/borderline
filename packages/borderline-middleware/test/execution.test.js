@@ -3,7 +3,7 @@
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
-const { Constants } = require('borderline-utils');
+const { Constants } = require('@borderline/utils');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 12000; // 12 seconds
 

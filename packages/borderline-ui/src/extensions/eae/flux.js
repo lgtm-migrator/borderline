@@ -1,6 +1,6 @@
 import { of, concat, interval, from } from 'rxjs';
 import { mergeMap, map, mapTo, skipWhile, first, defaultIfEmpty, every, filter } from 'rxjs/operators';
-import { Constants } from 'borderline-utils';
+import { Constants } from '@borderline/utils';
 import { api } from 'api';
 // import NavigationButton from './containers/NavigationButton';
 import StatusIndicator from './containers/StatusIndicator';

@@ -1,6 +1,6 @@
 const speakeasy = require('speakeasy');
 let userAccounts = require('../core/userAccounts');
-const { ErrorHelper } = require('borderline-utils');
+const { ErrorHelper } = require('@borderline/utils');
 
 /**
  * @fn UserAccountController

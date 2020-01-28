@@ -1,4 +1,4 @@
-const { Constants } = require('borderline-utils');
+const { Constants } = require('@borderline/utils');
 
 module.exports = {
     endpointTypes: [

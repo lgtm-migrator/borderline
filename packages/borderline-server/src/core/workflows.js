@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models } = require('@borderline/utils');
 
 /**
  * @fn Workflows

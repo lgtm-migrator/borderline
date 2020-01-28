@@ -1,5 +1,5 @@
 const request = require('request');
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models } = require('@borderline/utils');
 const QueryAbstract = require('./queryAbstract.js');
 
 /**

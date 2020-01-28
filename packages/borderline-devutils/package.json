@@ -15,6 +15,7 @@
     "files": [
         "bin",
         "config",
+        "lib",
         "extra",
         "scripts",
         "utils"
@@ -27,23 +28,20 @@
         "lint:fix": "eslint --fix ./",
         "prepublishOnly": "node ./scripts/publish.js"
     },
+    "types": "./lib/react-app.d.ts",
     "dependencies": {
         "@babel/core": "7.8.3",
         "@babel/plugin-proposal-decorators": "7.8.3",
-        "@babel/runtime": "7.8.3",
         "@svgr/webpack": "5.1.0",
-        "autoprefixer": "9.7.4",
-        "babel-core": "7.0.0-bridge.0",
+        "@typescript-eslint/eslint-plugin": "2.18.0",
+        "@typescript-eslint/parser": "2.18.0",
         "babel-eslint": "10.0.3",
         "babel-jest": "25.1.0",
         "babel-loader": "8.0.6",
-        "babel-plugin-named-asset-import": "1.0.0-next.3e165448",
+        "babel-plugin-named-asset-import": "1.0.0-next.103",
         "babel-preset-react-app": "9.1.0",
-        "bfj": "7.0.2",
-        "@borderline/server": "1.0.1-alpha.0",
+        "camelcase": "5.3.1",
         "case-sensitive-paths-webpack-plugin": "2.3.0",
-        "chalk": "3.0.0",
-        "confusing-browser-globals": "2.0.0-next.3e165448",
         "css-loader": "3.4.2",
         "dotenv": "8.2.0",
         "dotenv-expand": "5.1.0",
@@ -54,34 +52,37 @@
         "eslint-plugin-import": "2.20.0",
         "eslint-plugin-jsx-a11y": "6.2.3",
         "eslint-plugin-react": "7.18.0",
+        "eslint-plugin-react-hooks": "2.3.0",
         "file-loader": "5.0.2",
-        "find-pkg": "2.0.0",
         "fs-extra": "8.1.0",
-        "graphql": "14.6.0",
-        "graphql-tag": "2.10.1",
-        "html-webpack-plugin": "3.2.0",
+        "html-webpack-plugin": "4.0.0-beta.11",
         "identity-obj-proxy": "3.0.0",
         "jest": "25.1.0",
-        "loader-utils": "1.2.3",
+        "jest-environment-jsdom-fourteen": "1.0.1",
+        "jest-resolve": "25.1.0",
+        "jest-watch-typeahead": "0.4.2",
         "mini-css-extract-plugin": "0.9.0",
-        "object-assign": "4.1.1",
         "optimize-css-assets-webpack-plugin": "5.0.3",
+        "pnp-webpack-plugin": "1.6.0",
         "postcss-flexbugs-fixes": "4.1.0",
         "postcss-loader": "3.0.0",
-        "promise": "8.0.3",
-        "raf": "3.4.1",
+        "postcss-normalize": "8.0.1",
+        "postcss-preset-env": "6.7.0",
+        "postcss-safe-parser": "4.0.1",
+        "react-app-polyfill": "1.0.5",
         "react-dev-utils": "10.0.0",
         "resolve": "1.15.0",
+        "resolve-url-loader": "3.1.1",
         "sass-loader": "8.0.2",
+        "semver": "7.1.1",
         "style-loader": "1.1.3",
-        "sw-precache-webpack-plugin": "1.0.0",
-        "thread-loader": "2.1.3",
-        "uglifyjs-webpack-plugin": "2.2.0",
+        "terser-webpack-plugin": "2.3.2",
+        "ts-pnp": "1.1.5",
         "url-loader": "3.0.0",
         "webpack": "4.41.5",
         "webpack-dev-server": "3.10.1",
         "webpack-manifest-plugin": "2.2.0",
-        "whatwg-fetch": "3.0.0"
+        "workbox-webpack-plugin": "4.3.1"
     },
     "devDependencies": {
         "react": "16.12.0",
@@ -90,8 +91,16 @@
     "optionalDependencies": {
         "fsevents": "2.1.2"
     },
+    "peerDependencies": {
+        "typescript": "3.7.5"
+    },
+    "peerDependenciesMeta": {
+        "typescript": {
+            "optional": true
+        }
+    },
     "engines": {
-        "node": ">= 8.0.0",
+        "node": ">=8.10",
         "npm": ">= 6.0.0"
     },
     "browserslist": {

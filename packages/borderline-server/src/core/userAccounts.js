@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const ObjectID = require('mongodb').ObjectID;
 const speakeasy = require('speakeasy');
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models } = require('@borderline/utils');
 
 /**
  * @fn UserAccounts

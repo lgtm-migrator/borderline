@@ -9,7 +9,7 @@ const passport = require('passport');
 const multer = require('multer');
 
 const borderlineOptions = require('./core/options');
-const { ErrorHelper, Constants, RegistryHelper } = require('borderline-utils');
+const { ErrorHelper, Constants, RegistryHelper } = require('@borderline/utils');
 const package_json = require('../package.json');
 
 function BorderlineServer(config) {

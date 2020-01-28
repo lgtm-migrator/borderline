@@ -1,6 +1,6 @@
 let ExtensionStore = require('../core/extensionStore');
 const ObjectID = require('mongodb').ObjectID;
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models } = require('@borderline/utils');
 
 
 /**

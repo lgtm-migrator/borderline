@@ -1,6 +1,6 @@
 const workflowModule = require('../core/workflows.js');
 const stepModule = require('../core/steps.js');
-const { ErrorHelper } = require('borderline-utils');
+const { ErrorHelper } = require('@borderline/utils');
 
 /**
  * @fn WorkflowController

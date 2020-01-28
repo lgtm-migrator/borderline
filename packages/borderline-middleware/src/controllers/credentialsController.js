@@ -1,5 +1,5 @@
 const QueryFactory = require('../core/queryFactory.js');
-const { ErrorHelper, Models } = require('borderline-utils');
+const { ErrorHelper, Models } = require('@borderline/utils');
 
 /**
  * @fn CredentialsController

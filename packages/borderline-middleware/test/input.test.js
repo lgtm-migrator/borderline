@@ -3,7 +3,7 @@
 const request = require('request');
 const TestServer = require('./testserver.js');
 let config = require('../config/borderline.config.js');
-const { Constants } = require('borderline-utils');
+const { Constants } = require('@borderline/utils');
 
 let test_server = new TestServer();
 let g_query_id = '';

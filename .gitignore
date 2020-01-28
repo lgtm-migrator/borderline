@@ -60,3 +60,6 @@ typings/
 # Lock files
 package-lock.json
 yarn.lock
+
+# React build folder
+**/build/

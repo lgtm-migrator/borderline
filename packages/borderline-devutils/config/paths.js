@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
-const findMonorepo = require('react-dev-utils/workspaceUtils').findMonorepo;
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
@@ -37,6 +36,33 @@ function getServedPath(appPackageJson) {
     return ensureSlash(servedUrl, true);
 }
 
+const moduleFileExtensions = [
+    'web.mjs',
+    'mjs',
+    'web.js',
+    'js',
+    'web.ts',
+    'ts',
+    'web.tsx',
+    'tsx',
+    'json',
+    'web.jsx',
+    'jsx',
+];
+
+// Resolve file paths in the same order as webpack
+const resolveModule = (resolveFn, filePath) => {
+    const extension = moduleFileExtensions.find(extension =>
+        fs.existsSync(resolveFn(`${filePath}.${extension}`))
+    );
+
+    if (extension) {
+        return resolveFn(`${filePath}.${extension}`);
+    }
+
+    return resolveFn(`${filePath}.js`);
+};
+
 // config after eject: we're in ./config/
 module.exports = {
     dotenv: resolveApp('.env'),
@@ -44,31 +70,83 @@ module.exports = {
     appBuild: resolveApp('build'),
     appPublic: resolveApp('public'),
     appHtml: resolveApp('public/index.html'),
-    appIndexJs: resolveApp('src/index.js'),
+    appIndexJs: resolveModule(resolveApp, 'src/index'),
     appPackageJson: resolveApp('package.json'),
     appSrc: resolveApp('src'),
-    testsSetup: resolveApp('src/setupTests.js'),
+    appTsConfig: resolveApp('tsconfig.json'),
+    appJsConfig: resolveApp('jsconfig.json'),
+    yarnLockFile: resolveApp('yarn.lock'),
+    testsSetup: resolveModule(resolveApp, 'src/setupTests'),
+    proxySetup: resolveApp('src/setupProxy.js'),
     appNodeModules: resolveApp('node_modules'),
-    webpackExtraConfig: resolveApp('config/webpack.config.js'),
-    borderlineServerConfig: resolveApp('config/borderline.config.js'),
     publicUrl: getPublicUrl(resolveApp('package.json')),
     servedPath: getServedPath(resolveApp('package.json')),
 };
 
-let checkForMonorepo = true;
+// @remove-on-eject-begin
+const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
 
-module.exports.srcPaths = [module.exports.appSrc];
+// config before eject: we're in ./node_modules/react-scripts/config/
+module.exports = {
+    dotenv: resolveApp('.env'),
+    appPath: resolveApp('.'),
+    appBuild: resolveApp('build'),
+    appPublic: resolveApp('public'),
+    appHtml: resolveApp('public/index.html'),
+    appIndexJs: resolveModule(resolveApp, 'src/index'),
+    appPackageJson: resolveApp('package.json'),
+    appSrc: resolveApp('src'),
+    appTsConfig: resolveApp('tsconfig.json'),
+    appJsConfig: resolveApp('jsconfig.json'),
+    yarnLockFile: resolveApp('yarn.lock'),
+    testsSetup: resolveModule(resolveApp, 'src/setupTests'),
+    proxySetup: resolveApp('src/setupProxy.js'),
+    appNodeModules: resolveApp('node_modules'),
+    publicUrl: getPublicUrl(resolveApp('package.json')),
+    servedPath: getServedPath(resolveApp('package.json')),
+    // These properties only exist before ejecting:
+    ownPath: resolveOwn('.'),
+    ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
+    appTypeDeclarations: resolveApp('src/react-app-env.d.ts'),
+    ownTypeDeclarations: resolveOwn('lib/react-app.d.ts'),
+};
 
-module.exports.useYarn = fs.existsSync(
-    path.join(module.exports.appPath, 'yarn.lock')
-);
+const ownPackageJson = require('../package.json');
+const reactScriptsPath = resolveApp(`node_modules/${ownPackageJson.name}`);
+const reactScriptsLinked =
+    fs.existsSync(reactScriptsPath) &&
+    fs.lstatSync(reactScriptsPath).isSymbolicLink();
 
-if (checkForMonorepo) {
-    // if app is in a monorepo (lerna or yarn workspace), treat other packages in
-    // the monorepo as if they are app source
-    const mono = findMonorepo(appDirectory);
-    if (mono.isAppIncluded) {
-        Array.prototype.push.apply(module.exports.srcPaths, mono.pkgs);
-    }
-    module.exports.useYarn = module.exports.useYarn || mono.isYarnWs;
+// config before publish: we're in ./packages/react-scripts/config/
+if (
+    !reactScriptsLinked &&
+    __dirname.indexOf(path.join('packages', 'react-scripts', 'config')) !== -1
+) {
+    const templatePath = '../cra-template/template';
+    module.exports = {
+        dotenv: resolveOwn(`${templatePath}/.env`),
+        appPath: resolveApp('.'),
+        appBuild: resolveOwn('../../build'),
+        appPublic: resolveOwn(`${templatePath}/public`),
+        appHtml: resolveOwn(`${templatePath}/public/index.html`),
+        appIndexJs: resolveModule(resolveOwn, `${templatePath}/src/index`),
+        appPackageJson: resolveOwn('package.json'),
+        appSrc: resolveOwn(`${templatePath}/src`),
+        appTsConfig: resolveOwn(`${templatePath}/tsconfig.json`),
+        appJsConfig: resolveOwn(`${templatePath}/jsconfig.json`),
+        yarnLockFile: resolveOwn(`${templatePath}/yarn.lock`),
+        testsSetup: resolveModule(resolveOwn, `${templatePath}/src/setupTests`),
+        proxySetup: resolveOwn(`${templatePath}/src/setupProxy.js`),
+        appNodeModules: resolveOwn('node_modules'),
+        publicUrl: getPublicUrl(resolveOwn('package.json')),
+        servedPath: getServedPath(resolveOwn('package.json')),
+        // These properties only exist before ejecting:
+        ownPath: resolveOwn('.'),
+        ownNodeModules: resolveOwn('node_modules'),
+        appTypeDeclarations: resolveOwn(`${templatePath}/src/react-app-env.d.ts`),
+        ownTypeDeclarations: resolveOwn('lib/react-app.d.ts'),
+    };
 }
+// @remove-on-eject-end
+
+module.exports.moduleFileExtensions = moduleFileExtensions;
