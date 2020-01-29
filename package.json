@@ -18,8 +18,8 @@
 	},
 	"scripts": {
 		"test": "echo 'Nothing to test'",
-		"build": "lerna run build --scope @borderline/server --scope @borderline/ui --stream",
-		"start": "lerna run start --scope @borderline/server --scope @borderline/ui --stream"
+		"build": "lerna run build --scope @borderline/server --scope @borderline/middleware --scope @borderline/ui --stream",
+		"start": "lerna run start --scope @borderline/server --scope @borderline/middleware --scope @borderline/ui --stream"
 	},
 	"workspaces": {
 		"packages": [
@@ -33,51 +33,6 @@
 		]
 	},
 	"devDependencies": {
-		"cross-env": "7.0.0",
 		"lerna": "3.20.2"
-	},
-	"dependencies": {
-		"adm-zip": "0.4.13",
-		"babel-core": "6.26.3",
-		"babel-eslint": "10.0.3",
-		"babel-preset-env": "1.7.0",
-		"body-parser": "1.19.0",
-		"@borderline/devutils": "1.0.1-alpha.0",
-		"@borderline/utils": "1.0.1-alpha.0",
-		"bytes": "3.1.0",
-		"codacy-coverage": "3.4.0",
-		"connect-mongo": "3.2.0",
-		"connected-react-router": "6.6.1",
-		"dompurify": "2.0.7",
-		"eslint": "6.8.0",
-		"express": "4.17.1",
-		"express-session": "1.17.0",
-		"fs-extra": "8.1.0",
-		"immutable": "3.8.2",
-		"ip": "1.1.5",
-		"jest": "25.1.0",
-		"memorystream": "0.3.1",
-		"monaco-editor": "0.19.3",
-		"monaco-editor-webpack-plugin": "1.8.2",
-		"mongodb": "3.5.2",
-		"mongodb-client-encryption": "1.0.1",
-		"multer": "1.4.2",
-		"os2": "0.0.13",
-		"passport": "0.4.1",
-		"react": "16.12.0",
-		"react-dom": "16.12.0",
-		"react-helmet": "5.2.1",
-		"react-redux": "7.1.3",
-		"react-router-dom": "5.1.2",
-		"react-test-renderer": "16.12.0",
-		"redux": "4.0.5",
-		"redux-logger": "3.0.6",
-		"redux-observable": "1.2.0",
-		"request": "2.88.0",
-		"rxjs": "6.5.4",
-		"speakeasy": "2.0.0",
-		"stylelint": "13.0.0",
-		"stylelint-config-standard": "19.0.0",
-		"uuid": "3.4.0"
 	}
 }
