@@ -1,4 +1,4 @@
-FROM node:latest@sha256:5873c2bfb853d551b2636e89927d4473590fbc7228a2a37d60c9b41e6f980c9c
+FROM node:latest@sha256:079a042e59e2e02666380937d3207190b8a8831f4fe671f42c4e463787132772
 LABEL maintainer="f.guitton@imperial.ac.uk"
 
 # Create app directory
