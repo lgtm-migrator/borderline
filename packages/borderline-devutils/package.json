@@ -21,14 +21,14 @@
         "utils"
     ],
     "bin": {
-        "borderline-devutils": "./bin/borderline-devutils.js"
+        "borderline-devutils": "bin/borderline-devutils.js"
     },
     "scripts": {
         "lint": "eslint ./",
         "lint:fix": "eslint --fix ./",
-        "prepublishOnly": "node ./scripts/publish.js"
+        "prepublishOnly": "node scripts/publish.js"
     },
-    "types": "./lib/react-app.d.ts",
+    "types": "lib/react-app.d.ts",
     "dependencies": {
         "@babel/core": "7.8.4",
         "@babel/plugin-proposal-decorators": "7.8.3",
