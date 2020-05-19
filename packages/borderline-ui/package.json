@@ -46,7 +46,7 @@
         "http-proxy-middleware": "1.0.4",
         "react-test-renderer": "16.13.1",
         "redux-logger": "3.0.6",
-        "stylelint": "13.4.1",
+        "stylelint": "13.5.0",
         "stylelint-config-standard": "20.0.0",
         "webpack": "4.43.0"
     },
