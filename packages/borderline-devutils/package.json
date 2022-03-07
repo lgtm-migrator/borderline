@@ -40,7 +40,7 @@
         "babel-loader": "8.1.0",
         "babel-plugin-named-asset-import": "1.0.0-next.103",
         "babel-preset-react-app": "9.1.2",
-        "camelcase": "6.0.0",
+        "camelcase": "6.3.0",
         "case-sensitive-paths-webpack-plugin": "2.3.0",
         "css-loader": "3.6.0",
         "dotenv": "8.2.0",
